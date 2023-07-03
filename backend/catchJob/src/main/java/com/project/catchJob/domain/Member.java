@@ -10,11 +10,15 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 
-
-@Table(name = "member")
+@Getter
+@Setter
+@ToString(exclude = {"communityList","c_CommentsList"})
 @Entity
 public class Member {
 
@@ -33,5 +37,12 @@ public class Member {
 	
 	private boolean hasCareer; // 경력여부(f=신입/t=경력)
 
+	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+	private List<Community> communityList = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+	private List<C_comments> c_CommentsList = new ArrayList<>();
+	
+	
 
 }
