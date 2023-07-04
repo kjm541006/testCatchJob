@@ -1,0 +1,145 @@
+body{
+  background:#F9FAFB;
+  font-family: 'Inter';
+  display:grid;
+  place-content: center;
+  position: relative;
+}
+section {
+  width: 640px;
+  height: 890px;
+  border-radius: 32px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.entire-box-social{
+  display: flex;
+  padding: 0px 2px 80px 2px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 332px;
+  height: 740px;
+  /* background-color: #999999; */
+}
+
+.catchJob-social{
+
+  color: #000;
+  text-align: center;
+  font-size: 56px;
+  font-weight: bold;
+  position: fixed;
+  top: 80px;
+}
+
+.catchJob-social .red-letter{
+  color:#E2432E;
+}
+
+.hi-text{
+  color: #0D0D0D;
+  font-size: 19px;
+  font-weight: bold;
+  position: fixed;
+  top: 300px;
+}
+
+.social-buttons-social {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+}
+
+.button{
+  display: flex;
+  width: 342px;
+  border-radius: 4px;
+  height: 50px;
+  border: none;
+  justify-content: center;
+  align-items: center;
+}
+
+#kakao-button{
+  position: fixed;
+  top:450px;
+  background: #F9DA49;
+}
+
+#google-button{
+  position: fixed;
+  top:510px;
+  background: #ffffff;
+  border: 1px solid #CCC;
+}
+
+#basic-button{
+  position: fixed;
+  top:570px;
+  background: #ffffff;
+  border: 1px solid #CCC;
+}
+
+.button:active {
+  background: #ffffff;
+  border: 2.5px solid #E2432E;
+}
+
+.button-icon-kakao{
+  width: 24px;
+  height: 24px;
+  background: url("../img/ico-kakao.png"), 0px 0px / 100% 100% no-repeat;
+  margin-right: 10px;
+}
+
+.button-icon-google{
+  width: 24px;
+  height: 24px;
+  background: url("../img/ico-google.png"), 0px 0px / 100% 100% no-repeat;
+  margin-right: 10px;
+}
+
+.button-text{
+  color: #000;
+  text-align: center;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: bold;
+}
+
+.entire-text-social{
+  color: #444444;
+  font-size: 15px;
+  font-weight: normal;
+}
+
+.log-in{
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 40px;
+  position: fixed;
+  top:720px;
+}
+
+.log-in-now{
+  color: #0D0D0D;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration-line: underline;
+  background: none;
+  border: none;
+}
+.log-in-now:active {
+  color: #ffffff;
+}

@@ -146,6 +146,7 @@ section{
   display: inline-flex;
   align-items: flex-start;
   gap: 40px;
+  margin-top: 90px;
 }
 
 .sign-in-now{
