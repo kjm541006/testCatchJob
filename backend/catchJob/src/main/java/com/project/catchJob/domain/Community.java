@@ -18,7 +18,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(exclude = {"member","comConList"})
+@ToString(exclude = {"member","communityCommentsList"})
 @Entity
 public class Community {
 
@@ -47,6 +47,6 @@ public class Community {
 	}
 
 	@OneToMany(mappedBy = "community")
-	private List<C_comments> comConList= new ArrayList<>();
+	private List<C_comments> communityCommentsList= new ArrayList<>();
 	
 }

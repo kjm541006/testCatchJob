@@ -1,10 +1,15 @@
 package com.project.catchJob.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,21 +17,12 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(exclude = {"member", "board"})
+@ToString(exclude = {"board","tagList"})
 @Entity
-public class B_like {
+public class B_tag {
 
-	@Id @GeneratedValue
-	private Long bLikId; // 보드 좋아요 아이디
-	
-	@ManyToOne
-	@JoinColumn(name = "member_id", nullable = false, updatable = false)
-	private Member member;
-	
-	public void setMember(Member member) {
-		this.member = member;
-		member.getB_LikeList().add(this);
-	}
+	@Id @GeneratedValue @Column(name = "b_tag_id")
+	private Long bTagId;
 	
 	@ManyToOne
 	@JoinColumn(name = "board_id", nullable = false, updatable = false)
@@ -34,8 +30,9 @@ public class B_like {
 	
 	public void setBoard(Board board) {
 		this.board = board;
-		board.getBoardLikeList().add(this);
+		board.getBoardTagList().add(this);
 	}
 	
-	
+	@OneToMany(mappedBy = "b_tag")
+	private List<Tag> tagList = new ArrayList<>();
 }

@@ -12,21 +12,16 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(exclude = {"member", "project"})
+@ToString(exclude = "project")
 @Entity
-public class P_like {
+public class P_member {
 
 	@Id @GeneratedValue
-	private Long pLikId; // 프로젝트 좋아요 아이디
+	private Long pMemId; // 스터디모집인원 아이디
 	
-	@ManyToOne
-	@JoinColumn(name = "member_id", nullable = false, updatable = false)
-	private Member member;
+	private String pMemJob; // 직무
 	
-	public void setMember(Member member) {
-		this.member = member;
-		member.getP_LikeList().add(this);
-	}
+	private int pMemCnt; // 모집인원
 	
 	@ManyToOne
 	@JoinColumn(name = "project_id", nullable = false, updatable = false)
@@ -34,6 +29,6 @@ public class P_like {
 	
 	public void setProject(Project project) {
 		this.project = project;
-		project.getProjectLikeList().add(this);
+		project.getProjectMemberList().add(this);
 	}
 }
