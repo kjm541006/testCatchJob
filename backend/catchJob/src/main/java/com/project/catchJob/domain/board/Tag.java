@@ -1,4 +1,4 @@
-package com.project.catchJob.domain;
+package com.project.catchJob.domain.board;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

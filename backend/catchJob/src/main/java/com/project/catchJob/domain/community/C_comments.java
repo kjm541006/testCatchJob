@@ -1,4 +1,4 @@
-package com.project.catchJob.domain;
+package com.project.catchJob.domain.community;
 
 import java.util.Date;
 
@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.project.catchJob.domain.Member;
 
 import lombok.Getter;
 import lombok.Setter;

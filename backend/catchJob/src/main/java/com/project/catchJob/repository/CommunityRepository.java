@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.project.catchJob.domain.Community;
+import com.project.catchJob.domain.community.Community;
 
 public interface CommunityRepository extends JpaRepository<Community, Long> {
 

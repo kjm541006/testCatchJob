@@ -1,4 +1,4 @@
-package com.project.catchJob.domain;
+package com.project.catchJob.domain.board;
 
 import java.util.ArrayList;
 import java.util.List;

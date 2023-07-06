@@ -1,4 +1,4 @@
-package com.project.catchJob.domain;
+package com.project.catchJob.domain.board;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.springframework.web.multipart.MultipartFile;
+
+import com.project.catchJob.domain.Member;
 
 import lombok.Getter;
 import lombok.Setter;

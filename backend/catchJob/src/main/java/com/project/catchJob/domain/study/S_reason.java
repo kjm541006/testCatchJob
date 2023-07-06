@@ -1,13 +1,12 @@
-package com.project.catchJob.domain;
+package com.project.catchJob.domain.study;
 
-import java.util.Date;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.project.catchJob.domain.Member;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,15 +16,12 @@ import lombok.ToString;
 @Setter
 @ToString(exclude = {"member", "study"})
 @Entity
-public class S_comments {
+public class S_reason {
 
 	@Id @GeneratedValue
-	private Long sComId; // 스터디댓글 아이디
+	private Long sReasonId;
 	
-	private String sComContent; // 댓글 내용
-	
-	@Column(insertable = false, updatable = false, columnDefinition = "date default now()")
-	private Date sComDate; // 댓글 작성날짜
+	private String sRContents; // 모집사유
 	
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
@@ -33,7 +29,7 @@ public class S_comments {
 	
 	public void setMember(Member member) {
 		this.member = member;
-		member.getS_CommentsList().add(this);
+		member.getS_ReasonList().add(this);
 	}
 	
 	@ManyToOne
@@ -42,6 +38,6 @@ public class S_comments {
 	
 	public void setStudy(Study study) {
 		this.study = study;
-		study.getStudyCommentsList().add(this);
-	}	
+		study.getStudyReasonList().add(this);
+	}
 }

@@ -1,5 +1,5 @@
 package com.project.catchJob.service;
 
-public interface C_commentsService {
+public class C_commentsService {
 
 }

@@ -1,10 +1,15 @@
-package com.project.catchJob.domain;
+package com.project.catchJob.domain.board;
 
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.project.catchJob.domain.Member;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,10 +19,15 @@ import lombok.ToString;
 @Setter
 @ToString(exclude = {"member", "board"})
 @Entity
-public class B_like {
+public class B_comments {
 
 	@Id @GeneratedValue
-	private Long bLikId; // 보드 좋아요 아이디
+	private Long bComId; // 보드댓글 아이디
+	
+	private String bComContent; // 댓글 내용
+	
+	@Column(insertable = false, updatable = false, columnDefinition = "date default now()")
+	private Date bComDate; // 댓글 작성날짜
 	
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
@@ -25,7 +35,7 @@ public class B_like {
 	
 	public void setMember(Member member) {
 		this.member = member;
-		member.getB_LikeList().add(this);
+		member.getB_CommentsList().add(this);
 	}
 	
 	@ManyToOne
@@ -34,8 +44,6 @@ public class B_like {
 	
 	public void setBoard(Board board) {
 		this.board = board;
-		board.getBoardLikeList().add(this);
+		board.getBoardCommentsList().add(this);
 	}
-	
-	
 }
