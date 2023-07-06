@@ -3,6 +3,8 @@ import "./reset.css";
 import "./App.css";
 import Header from "./components/header/Header";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Footer from "./components/footer/Footer";
+import Temp from "./pages/Temp";
 
 function App() {
   return (
@@ -15,6 +17,9 @@ function App() {
       </BrowserRouter>
       {/* 헤더 컴포넌트 */}
       <Header />
+      {/* 아래는 푸터 컴포넌트 확인용 임시 컴포넌트 입니다. */}
+      <Temp />
+      <Footer />
     </div>
   );
 }
