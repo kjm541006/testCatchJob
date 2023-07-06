@@ -3,6 +3,7 @@ import Login from "./pages/LoginPage";
 import HeaderFile from "./pages/HeaderFile";
 import SocialSigninPage from "./pages/SocialSigninPage";
 import BasicSigninPage from "./pages/BasicSigninPage";
+import EditSigninPage from './pages/EditSigninPage';
 // import "./reset.css";
 // import Header from "./components/header/Header";
 // import { BrowserRouter, Route, Routes } from "react-router-dom";

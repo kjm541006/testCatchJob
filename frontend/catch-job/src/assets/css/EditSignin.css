@@ -1,13 +1,13 @@
-.body-basic{
+.body-edit{
   background:#F9FAFB;
   font-family: 'Inter';
   display:grid;
   place-content: center;
   position: relative;
 }
-.section-basic {
+.section-edit {
   width: 640px;
-  height: 1200px; 
+  height: 890px; 
   border-radius: 32px;
   background: #ffffff;
   display: flex;
@@ -22,19 +22,19 @@
   margin: 40px 0 150px 0;
 }
 
-.entire-box-basic{
+.entire-box-edit{
   display: flex;
   padding: 0px 2px 0px 2px;
-  margin-top: 70px;
+  margin-top: 150px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 332px;
-  height: 1030px;
+  height: 800px;
   /* background-color: #999999; */
 }
 
-.catchJob-basic{
+.catchJob-edit{
 
   color: #000;
   text-align: center;
@@ -44,11 +44,11 @@
   top: 80px;
 }
 
-.catchJob-basic .red-letter{
+.catchJob-edit .red-letter{
   color:#E2432E;
 }
 
-.input-box-basic {
+.input-box-edit {
   width: 320px;
   height: 42px;
   border-radius: 4px;
@@ -58,7 +58,7 @@
   padding-left: 10px;
 }
 
-.input-text-basic{
+.input-text-edit{
   height: 30px;
   color: #0D0D0D;
   font-size: 13px;
@@ -69,61 +69,53 @@
   margin: 10px auto 0 5px;
 }
 
-.input-container-basic {
+.input-container-edit {
   position: relative;
   display: inline-block;
 }
 
-.eye-icon-basic {
-  position: absolute;
-  top:40%;
-  right: 10px;
-  transform: translateY(-50%);
-  cursor: pointer;
-}
-
-.entire-text-basic{
+.entire-text-edit{
   color: #444444;
   font-size: 15px;
   font-weight: normal;
 }
 
-.choosejob {
+.choosejob-edit {
   display: flex;
   align-items: center; 
   margin-bottom: 15px;
 }
 
-#carrer{
+#carrer-edit{
   margin: 0 20px 0 20px;
 }
 
-.custom-checkbox{
+.custom-checkbox-edit{
   width: 16px;
   height: 16px;
   margin: 0 5px 0 7px;
 }
 
-.choosejob-text-basic{
+.choosejob-text-basic-edit{
   color: #000000;
   font-size: 15px;
   font-weight: normal;
   margin: 5px;
 }
 
-.choosejobone{
+.choosejobone-edit{
   display: flex;
   align-items: center;
   width: 112px;
 }
 
-.enrollbutton{
+.enrollbutton-edit{
   display: flex;
   align-items: center; 
   margin-top:50px; 
 }
 
-.cancel-basic{
+.cancel-edit{
   display: flex;
   width: 75px;
   height: 44px;
@@ -138,13 +130,13 @@
   margin: 0px 30px 10px 30px;
 }
 
-.cancel-basic:active {
+.cancel-edit:active {
   background-color: #ffffff;
   border: none;
   color: #ffffff;
 }
 
-.enroll-basic{
+.enroll-edit{
   display: flex;
   width: 75px;
   height: 44px;
@@ -160,27 +152,7 @@
   margin: 0px 30px 10px 30px;
 }
 
-.enroll-basic:active{
+.enroll-edit:active{
   background-color: #ffffff;
   border: none;
-}
-
-.log-in-basic{
-  display: inline-flex;
-  align-items: flex-start;
-  gap: 40px;
-  position: fixed;
-  top:1100px;
-}
-
-.log-in-now-basic{
-  color: #0D0D0D;
-  font-size: 15px;
-  font-weight: 500;
-  text-decoration-line: underline;
-  background: none;
-  border: none;
-}
-.log-in-now-basic:active {
-  color: #ffffff;
 }

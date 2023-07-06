@@ -1,4 +1,4 @@
-body{
+.body-login{
   background:#F9FAFB;
   font-family: 'Inter';
   display:grid;
@@ -6,7 +6,7 @@ body{
   position: relative;
 }
 
-section{
+.section-login{
   width: 640px;
   height: 890px;
   border-radius: 32px;
@@ -87,11 +87,6 @@ section{
 
 .login-button:active {
   background: #ffffff;
-  border: 2.5px solid #E2432E;
-}
-
-.login-button:active .login-text {
-  color: #000000;
 }
 
 .login-text{

@@ -5,6 +5,7 @@ body{
   place-content: center;
   position: relative;
 }
+
 section {
   width: 640px;
   height: 890px;
@@ -15,7 +16,7 @@ section {
   justify-content: center;
   align-items: center;
   position: fixed;
-  top: 47%;
+  top: 54%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -91,9 +92,18 @@ section {
   border: 1px solid #CCC;
 }
 
-.button:active {
-  background: #ffffff;
-  border: 2.5px solid #E2432E;
+#kakao-button:active {
+  background-color: #ffffff;
+}
+
+#google-button:active {
+  background-color: #ffffff;
+  border: none;
+}
+
+#basic-button:active {
+  background-color: #ffffff;
+  border: none;
 }
 
 .button-icon-kakao{

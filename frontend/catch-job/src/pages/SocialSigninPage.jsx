@@ -4,7 +4,7 @@ import "../assets/css/SocialSignin.css";
 
 const SocialSigninPage = () => {
   return (
-    <body>
+    <bo>
     <section>
       <div className="entire-box-social">
         <h1 className="catchJob-social">
@@ -33,7 +33,7 @@ const SocialSigninPage = () => {
           </div>
       </div>      
     </section>
-  </body>
+  </bo>
   );
 };
 

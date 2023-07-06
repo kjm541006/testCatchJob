@@ -11,8 +11,8 @@ const Login = () => {
   };
 
   return (
-    <body>
-      <section>
+    <div className="body-login">
+      <div className="section-login">
         <div className="entire-box">
           <h1 className="catchJob">
             catch<span className="red-letter">J</span>ob
@@ -46,8 +46,8 @@ const Login = () => {
             <button className="sign-in-now">회원가입 하기</button>
           </div>
         </div>      
-      </section>
-    </body>
+      </div>
+    </div>
   );
 };
 
