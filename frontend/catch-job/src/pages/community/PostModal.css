@@ -1,0 +1,26 @@
+.postmodal {
+  width: 990px;
+  height: 790px;
+  border-radius: 8px;
+}
+
+.postcategory {
+  margin-top: 30px;
+}
+
+.postTitle {
+  width: 780px;
+  height: 50px;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.postText {
+  width: 780px;
+  height: 450px;
+}
+
+.postButton {
+  margin-top: 30px;
+  justify-content: space-between;
+}

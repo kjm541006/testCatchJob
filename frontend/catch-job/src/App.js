@@ -1,8 +1,9 @@
 import logo from "./logo.svg";
 import "./reset.css";
 import "./App.css";
-import Header from "./components/header/Header";
+// import Header from "./components/header/Header";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Card from "./pages/community/Card.jsx";
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
         </Routes>
       </BrowserRouter>
       {/* 헤더 컴포넌트 */}
-      <Header />
+      {/* <Header /> */}
+      <Card />
     </div>
   );
 }

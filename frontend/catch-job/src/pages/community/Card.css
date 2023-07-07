@@ -1,0 +1,181 @@
+.communityCenter {
+  width: 1300px;
+
+  height: auto;
+  flex-shrink: 0;
+  margin: auto;
+}
+
+.communitySection {
+  width: 842px;
+  height: auto;
+  display: inline-flex;
+  padding: 18px 39px 10px 0px;
+  flex-direction: column;
+  grid-gap: 6px;
+  gap: 6px;
+  border-bottom: 1px solid #dfe3e4;
+}
+
+.coummunityCard {
+  width: 842px;
+  height: 316px;
+  padding: 10px 12px;
+}
+
+.userSection {
+  width: 205px;
+  height: 60px;
+  margin-top: 29px;
+  margin-left: 19px;
+  flex-direction: row;
+  margin-bottom: 24px;
+}
+
+.cardContentsComponents {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardContentsComponents_Title {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.cardContentsComponents_TextArea {
+  max-height: 210px;
+  overflow: hidden;
+  font-size: 14px;
+}
+
+.cardContentsComponents_morebutton {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.cardContentsComponents_bottom {
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 50px;
+}
+.commentContainer {
+  width: 803px;
+  height: auto;
+  flex-direction: column;
+  margin-top: 35px;
+}
+
+.commentment {
+  width: 810px;
+  height: 125px;
+  padding: 10px 15px;
+  border-bottom: 1px solid #dfe3e4;
+}
+.commentmentuser {
+  margin-bottom: 25px;
+}
+.commentmentment {
+  width: 600px;
+  height: 30px;
+  padding-left: 40px;
+}
+
+.moreButton {
+  color: #2f80ed;
+  cursor: pointer;
+}
+
+.modal {
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #dfe3e4;
+  padding: 16px 24px;
+  box-sizing: border-box;
+  border-radius: 6px;
+}
+
+.ment {
+  color: #b2b2b2;
+  font-family: Roboto;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 21px;
+  cursor: pointer;
+}
+
+.mentment {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  grid-gap: 12px;
+  gap: 12px;
+}
+.mentmentment {
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  resize: none;
+  border: 0;
+}
+
+.작성하기 {
+  width: 300px;
+  height: 400px;
+  display: inline-flex;
+  padding: 39px 50px 79px 50px;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.writeButton {
+  width: 200px;
+  height: 50px;
+  border-radius: 4px;
+  border: 1px solid #ed6653;
+  background: #e2432e;
+  color: #fff;
+  text-align: center;
+  font-size: 24px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 21px;
+}
+
+.ccategory {
+  width: 150px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+  gap: 15px;
+  margin-top: 35px;
+}
+
+.postmodaltop {
+  width: 338px;
+  height: 140px;
+}
+
+.postmodalmid {
+  width: 784px;
+  height: 440px;
+  border-radius: 5px;
+  border: 1px solid #444;
+  box-sizing: border-box;
+  resize: none;
+  margin-top: 36px;
+}
+.postmodalbottom {
+  margin-top: 40px;
+}
