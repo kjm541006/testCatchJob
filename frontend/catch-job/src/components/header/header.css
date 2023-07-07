@@ -1,0 +1,100 @@
+.header {
+  border-bottom: 5px solid #e2432e;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 1500px;
+  font-weight: 600;
+  z-index: 999;
+  background-color: #fff;
+}
+
+.header-nav {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0 100px;
+  width: 1700px;
+}
+
+.logo {
+  max-width: 235px;
+  width: 100%;
+  /* padding-left: 50px; */
+  font-size: 20px;
+  font-weight: 600;
+}
+
+#logo-j {
+  color: #e2432e;
+  font-size: 30px;
+}
+
+.nav {
+  margin-left: 114px;
+}
+
+.nav-lists {
+  min-width: 300px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-list {
+  text-align: center;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 800px;
+  width: 100%;
+  padding-left: 400px;
+}
+
+.search-box {
+  width: 310px;
+  height: 32px;
+  border-radius: 50px;
+  border: 2px solid #444;
+  margin-right: 30px;
+  padding-left: 20px;
+  font-size: 14px;
+}
+
+.search-bar-icon {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.joinAndLogin {
+  margin-left: 170px;
+  display: flex;
+  /* justify-content: space-between; */
+  gap: 40px;
+  width: 100%;
+  max-width: 250px;
+  padding: 0 30px;
+}
+
+.link {
+  text-decoration: none;
+  color: #444;
+}
+
+.link:hover {
+  color: #e2432e;
+}
+
+.submit-btn {
+  border: 0;
+  background-color: transparent;
+}
