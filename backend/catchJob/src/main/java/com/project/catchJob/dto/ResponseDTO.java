@@ -1,4 +1,4 @@
-package com.project.catchJob.domain;
+package com.project.catchJob.dto;
 
 import java.util.List;
 

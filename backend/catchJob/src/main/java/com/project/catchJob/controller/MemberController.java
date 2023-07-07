@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.catchJob.domain.Member;
-import com.project.catchJob.domain.ResponseDTO;
 import com.project.catchJob.dto.MemberDTO;
+import com.project.catchJob.dto.ResponseDTO;
 import com.project.catchJob.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
