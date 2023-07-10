@@ -10,33 +10,43 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.catchJob.domain.Member;
 import com.project.catchJob.dto.MemberDTO;
 import com.project.catchJob.dto.ResponseDTO;
+import com.project.catchJob.security.PasswordEncoder;
+import com.project.catchJob.security.TokenProvider;
 import com.project.catchJob.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping
+@RequestMapping("/")
 public class MemberController {
 
 	@Autowired
 	private MemberService memberService;
 	
+	@Autowired
+	private TokenProvider tokenProvider;
+	
+	private PasswordEncoder pwdEncoder = new PasswordEncoder();
+	
 	@PostMapping("/register")
 	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
 		try {
 			if(memberDTO == null || memberDTO.getPwd() == null) {
-				throw new RuntimeException("ºñ¹Ð¹øÈ£ °ø¶õ");
+				throw new RuntimeException("ï¿½ï¿½Ð¹ï¿½È£ ï¿½ï¿½ï¿½ï¿½");
 			}
-			// ¿äÃ»À» ÀÌ¿ëÇØ ÀúÀåÇÒ ¸â¹ö ¸¸µé±â
+			//if(memberDTO.getEmail().)
+			
+			// ï¿½ï¿½Ã»ï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 			Member member = Member.builder()
 					.email(memberDTO.getEmail())
-					.pwd(memberDTO.getPwd())
+					//.pwd(pwdEncoder.encrypt(memberDTO.getPwd())) pwdï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ pwdï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ pwdï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾î¼­ emailï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+					.pwd(pwdEncoder.encrypt(memberDTO.getEmail(), memberDTO.getPwd())) 
 					.name(memberDTO.getName())
 					.job(memberDTO.getJob())
 					.hasCareer(memberDTO.getHasCareer())
 					.build();
-			// ¼­ºñ½º¸¦ ÀÌ¿ëÇØ ¸®Æ÷ÁöÅä¸®¿¡ ¸â¹ö ÀúÀåÇÏ±â
+			// ï¿½ï¿½ï¿½ñ½º¸ï¿½ ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
 			Member registerMember = memberService.createMember(member);
 			MemberDTO responseMemberDTO = MemberDTO.builder()
 					.email(registerMember.getEmail())
@@ -47,10 +57,65 @@ public class MemberController {
 					.build();
 			return ResponseEntity.ok().body(responseMemberDTO);
 		} catch (Exception e) {
-			// ¸â¹ö Á¤º¸´Â Ç×»ó ÇÏ³ªÀÌ¹Ç·Î ¸®½ºÆ®·Î ¸¸µé¾î¾ßÇÏ´Â ResponseDTO¸¦ »ç¿ëÇÏÁö ¾Ê°í ±×³É member ¸®ÅÏ
-			ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
-			return ResponseEntity.badRequest().body(responseDTO);
+			// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×»ï¿½ ï¿½Ï³ï¿½ï¿½Ì¹Ç·ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ResponseDTOï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½ ï¿½×³ï¿½ member ï¿½ï¿½ï¿½ï¿½
+//			 ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
+//			 return ResponseEntity.badRequest().body(registerMember(memberDTO));
+			 return ResponseEntity.badRequest().body("ï¿½Ø´ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½. ï¿½Ù¸ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½.");
 		}
 	}
 	
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO) {
+		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
+		
+		// log.info("{} ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½", member.toString());
+		
+		if(member != null) {
+			
+			// ï¿½ï¿½Å« ï¿½ï¿½ï¿½ï¿½
+			final String token = tokenProvider.createToken(member);
+			log.info("token ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½", token);
+			
+			final MemberDTO responseMemberDTO = MemberDTO.builder()
+					.name(member.getName())
+					.email(member.getEmail())
+					.pwd(member.getPwd())
+					.job(member.getJob())
+					.hasCareer(member.getHasCareer())
+					.token(token)
+					.build();
+			
+			return ResponseEntity.ok().body(responseMemberDTO);
+		}
+		else {
+			return ResponseEntity.badRequest().body("ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
+		}
+	}
+	
+	@PostMapping("/memberInfo")
+	public ResponseEntity<?> memberInfo(@RequestBody MemberDTO memberDTO) {
+		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
+		
+		if(member != null) {
+			// ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ 
+			member.setJob(memberDTO.getJob());
+			member.setHasCareer(memberDTO.getHasCareer());
+			
+			Member updateMember = memberService.updateMember(member);
+			
+			MemberDTO responseMemberDTO = memberDTO.builder()
+					.name(updateMember.getName())
+					.email(updateMember.getEmail())
+					.pwd(updateMember.getPwd())
+					.job(updateMember.getJob())
+					.hasCareer(updateMember.getHasCareer())
+					.token(memberDTO.getToken()) // ï¿½ï¿½Å«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß±Þ¹ï¿½ï¿½ï¿½ ï¿½ï¿½Å« ï¿½ï¿½ï¿½
+					.build();
+			
+			return ResponseEntity.ok().body(responseMemberDTO);
+		} else {
+			return ResponseEntity.badRequest().body("È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
+		}
+		
+	}
 }

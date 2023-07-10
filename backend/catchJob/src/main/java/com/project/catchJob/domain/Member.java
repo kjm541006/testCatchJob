@@ -30,11 +30,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {
+		"communityList", "c_CommentsList", 
+		"boardList", "b_CommentsList", "b_LikeList",
+		"studyList", "s_CommentsList", "s_LikeList", "s_ReasonList",
+		"projectList", "p_CommentsList", "p_LikeList", "p_ReasonList"})
 @Entity
 public class Member {
 

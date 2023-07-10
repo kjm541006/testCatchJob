@@ -19,4 +19,5 @@ public class MemberDTO {
 	private String pwd;
 	private List<String> job;
 	private String hasCareer;
+	private String token;
 }
