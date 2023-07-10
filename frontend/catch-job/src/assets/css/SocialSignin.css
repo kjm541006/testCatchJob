@@ -1,12 +1,12 @@
-body{
-  background:#F9FAFB;
-  font-family: 'Inter';
-  display:grid;
+.signInPage {
+  background: #f9fafb;
+  font-family: "Inter";
+  display: grid;
   place-content: center;
   position: relative;
 }
 
-section {
+.section {
   width: 640px;
   height: 890px;
   border-radius: 32px;
@@ -21,8 +21,7 @@ section {
   transform: translate(-50%, -50%);
 }
 
-
-.entire-box-social{
+.entire-box-social {
   display: flex;
   padding: 0px 2px 80px 2px;
   flex-direction: column;
@@ -33,8 +32,7 @@ section {
   /* background-color: #999999; */
 }
 
-.catchJob-social{
-
+.catchJob-social {
   color: #000;
   text-align: center;
   font-size: 56px;
@@ -43,12 +41,12 @@ section {
   top: 80px;
 }
 
-.catchJob-social .red-letter{
-  color:#E2432E;
+.catchJob-social .red-letter {
+  color: #e2432e;
 }
 
-.hi-text{
-  color: #0D0D0D;
+.hi-text {
+  color: #0d0d0d;
   font-size: 19px;
   font-weight: bold;
   position: fixed;
@@ -59,10 +57,9 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
 }
 
-.button{
+.button {
   display: flex;
   width: 342px;
   border-radius: 4px;
@@ -72,24 +69,24 @@ section {
   align-items: center;
 }
 
-#kakao-button{
+#kakao-button {
   position: fixed;
-  top:450px;
-  background: #F9DA49;
+  top: 450px;
+  background: #f9da49;
 }
 
-#google-button{
+#google-button {
   position: fixed;
-  top:510px;
+  top: 510px;
   background: #ffffff;
-  border: 1px solid #CCC;
+  border: 1px solid #ccc;
 }
 
-#basic-button{
+#basic-button {
   position: fixed;
-  top:570px;
+  top: 570px;
   background: #ffffff;
-  border: 1px solid #CCC;
+  border: 1px solid #ccc;
 }
 
 #kakao-button:active {
@@ -106,21 +103,21 @@ section {
   border: none;
 }
 
-.button-icon-kakao{
+.button-icon-kakao {
   width: 24px;
   height: 24px;
   background: url("../img/ico-kakao.png"), 0px 0px / 100% 100% no-repeat;
   margin-right: 10px;
 }
 
-.button-icon-google{
+.button-icon-google {
   width: 24px;
   height: 24px;
   background: url("../img/ico-google.png"), 0px 0px / 100% 100% no-repeat;
   margin-right: 10px;
 }
 
-.button-text{
+.button-text {
   color: #000;
   text-align: center;
   font-size: 13px;
@@ -128,22 +125,22 @@ section {
   font-weight: bold;
 }
 
-.entire-text-social{
+.entire-text-social {
   color: #444444;
   font-size: 15px;
   font-weight: normal;
 }
 
-.log-in{
+.log-in {
   display: inline-flex;
   align-items: flex-start;
   gap: 40px;
   position: fixed;
-  top:720px;
+  top: 720px;
 }
 
-.log-in-now{
-  color: #0D0D0D;
+.log-in-now {
+  color: #0d0d0d;
   font-size: 15px;
   font-weight: 500;
   text-decoration-line: underline;
