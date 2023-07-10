@@ -33,20 +33,20 @@ public class MemberController {
 	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
 		try {
 			if(memberDTO == null || memberDTO.getPwd() == null) {
-				throw new RuntimeException("ºñ¹Ð¹øÈ£ °ø¶õ");
+				throw new RuntimeException("ï¿½ï¿½Ð¹ï¿½È£ ï¿½ï¿½ï¿½ï¿½");
 			}
 			//if(memberDTO.getEmail().)
 			
-			// ¿äÃ»À» ÀÌ¿ëÇØ ÀúÀåÇÒ ¸â¹ö ¸¸µé±â
+			// ï¿½ï¿½Ã»ï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 			Member member = Member.builder()
 					.email(memberDTO.getEmail())
-					//.pwd(pwdEncoder.encrypt(memberDTO.getPwd())) pwd·ÎÇÏ¸é °°Àº pwd³¢¸® µ¿ÀÏÇÑ pwd·Î ÀúÀåµÇ¾î¼­ emailº°·Î ´Ù¸£°Ô ÀúÀå
+					//.pwd(pwdEncoder.encrypt(memberDTO.getPwd())) pwdï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ pwdï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ pwdï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾î¼­ emailï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 					.pwd(pwdEncoder.encrypt(memberDTO.getEmail(), memberDTO.getPwd())) 
 					.name(memberDTO.getName())
 					.job(memberDTO.getJob())
 					.hasCareer(memberDTO.getHasCareer())
 					.build();
-			// ¼­ºñ½º¸¦ ÀÌ¿ëÇØ ¸®Æ÷ÁöÅä¸®¿¡ ¸â¹ö ÀúÀåÇÏ±â
+			// ï¿½ï¿½ï¿½ñ½º¸ï¿½ ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
 			Member registerMember = memberService.createMember(member);
 			MemberDTO responseMemberDTO = MemberDTO.builder()
 					.email(registerMember.getEmail())
@@ -57,10 +57,10 @@ public class MemberController {
 					.build();
 			return ResponseEntity.ok().body(responseMemberDTO);
 		} catch (Exception e) {
-			// ¸â¹ö Á¤º¸´Â Ç×»ó ÇÏ³ªÀÌ¹Ç·Î ¸®½ºÆ®·Î ¸¸µé¾î¾ßÇÏ´Â ResponseDTO¸¦ »ç¿ëÇÏÁö ¾Ê°í ±×³É member ¸®ÅÏ
+			// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×»ï¿½ ï¿½Ï³ï¿½ï¿½Ì¹Ç·ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ResponseDTOï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½ ï¿½×³ï¿½ member ï¿½ï¿½ï¿½ï¿½
 //			 ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
 //			 return ResponseEntity.badRequest().body(registerMember(memberDTO));
-			 return ResponseEntity.badRequest().body("ÇØ´ç ÀÌ¸ÞÀÏÀº ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù. ´Ù¸¥ ÀÌ¸ÞÀÏÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+			 return ResponseEntity.badRequest().body("ï¿½Ø´ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½. ï¿½Ù¸ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½.");
 		}
 	}
 	
@@ -68,13 +68,13 @@ public class MemberController {
 	public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO) {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		
-		// log.info("{} ·Î±×ÀÎ ¼º°ø", member.toString());
+		// log.info("{} ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½", member.toString());
 		
 		if(member != null) {
 			
-			// ÅäÅ« »ý¼º
+			// ï¿½ï¿½Å« ï¿½ï¿½ï¿½ï¿½
 			final String token = tokenProvider.createToken(member);
-			log.info("token »ý¼º ¼º°ø", token);
+			log.info("token ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½", token);
 			
 			final MemberDTO responseMemberDTO = MemberDTO.builder()
 					.name(member.getName())
@@ -88,7 +88,7 @@ public class MemberController {
 			return ResponseEntity.ok().body(responseMemberDTO);
 		}
 		else {
-			return ResponseEntity.badRequest().body("·Î±×ÀÎ ½ÇÆÐ");
+			return ResponseEntity.badRequest().body("ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 		}
 	}
 	
@@ -97,7 +97,7 @@ public class MemberController {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		
 		if(member != null) {
-			// ±âÁ¸ È¸¿ø Á¤º¸¿¡¼­ ¼öÁ¤ °¡´ÉÇÑ ÄÃ·³¸¸ 
+			// ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ 
 			member.setJob(memberDTO.getJob());
 			member.setHasCareer(memberDTO.getHasCareer());
 			
@@ -109,12 +109,12 @@ public class MemberController {
 					.pwd(updateMember.getPwd())
 					.job(updateMember.getJob())
 					.hasCareer(updateMember.getHasCareer())
-					.token(memberDTO.getToken()) // ÅäÅ«Àº ±âÁ¸ÀÇ ¹ß±Þ¹ÞÀº ÅäÅ« »ç¿ë
+					.token(memberDTO.getToken()) // ï¿½ï¿½Å«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß±Þ¹ï¿½ï¿½ï¿½ ï¿½ï¿½Å« ï¿½ï¿½ï¿½
 					.build();
 			
 			return ResponseEntity.ok().body(responseMemberDTO);
 		} else {
-			return ResponseEntity.badRequest().body("È¸¿ø ¼öÁ¤ ½ÇÆÐ");
+			return ResponseEntity.badRequest().body("È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 		}
 		
 	}
