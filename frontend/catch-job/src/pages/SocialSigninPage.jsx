@@ -30,14 +30,12 @@ const SocialSigninPage = () => {
           </Link>
         </div>
 
-        <div className="log-in">
-          <div className="entire-text-social">이미 계정이 있으신가요?</div>
-          <button className="log-in-now">로그인 하기</button>
+          <div className="log-in">
+            <div className="entire-text-social">이미 계정이 있으신가요?</div>
+            <Link to="/login" className="log-in-now">로그인 하기</Link>
+          </div>
         </div>
-        {/* </div>
-      </div> */}
       </div>
-    </div>
   );
 };
 
