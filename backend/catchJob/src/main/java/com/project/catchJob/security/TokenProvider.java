@@ -18,23 +18,24 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class TokenProvider {
 	
-	// °­»ç´Ô ÄÚµå lec02_todo_auth Âü°í
-	// https://velog.io/@kjy0302014/Spring-Security-%EC%97%86%EC%9D%B4-Spring-JWT-%EC%9D%B8%EC%A6%9D-%EC%9D%B8%EA%B0%80-%EA%B5%AC%ED%98%84%ED%95%B4%EB%B3%B4%EA%B8%B0 Âü°í
+	// ê°•ì‚¬ë‹˜ ì½”ë“œ lec02_todo_auth ì°¸ê³ 
+	// https://velog.io/@kjy0302014/Spring-Security-%EC%97%86%EC%9D%B4-Spring-JWT-%EC%9D%B8%EC%A6%9D-%EC%9D%B8%EA%B0%80-%EA%B5%AC%ED%98%84%ED%95%B4%EB%B3%B4%EA%B8%B0 ì°¸ê³ 
 	
 	private static final String SECRET_KEY = "catchJobSecretKeycatchJobSecretKeycatchJobSecretKeycatchJobSecretKeycatchJobSecretKey";
 	
 	public String createToken(Member member) {
-		// ±âÇÑ Áö±İÀ¸·ÎºÎÅÍ 1ÀÏ·Î ¼³Á¤
+		// ê¸°í•œ ì§€ê¸ˆìœ¼ë¡œë¶€í„° 1ì¼ë¡œ ì„¤ì •
 		Date expireDate = Date.from(
 			Instant.now()
 				.plus(1, ChronoUnit.DAYS));
 		
 		return Jwts.builder()
 				.signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY)))
-				.setSubject(member.getEmail()) // sub ÅäÅ«Á¦¸ñ(ÅäÅ«¿¡¼­ »ç¿ëÀÚ¿¡ ´ëÇÑ ½Äº° °ª)
-				.setIssuer("Token by catchJob") // iss ÅäÅ«¹ß±ŞÀÚ
-				.setIssuedAt(new Date()) // iat ÅäÅ«¹ß±Ş½Ã°£
-				.setExpiration(expireDate) // exp ÅäÅ«¸¸·á½Ã°£
+				.setSubject(member.getEmail()) // sub í† í°ì œëª©(í† í°ì—ì„œ ì‚¬ìš©ìì— ëŒ€í•œ ì‹ë³„ ê°’)
+				.setIssuer("Token by catchJob") // iss í† í°ë°œê¸‰ì
+				.setIssuedAt(new Date()) // iat í† í°ë°œê¸‰ì‹œê°„
+				.setExpiration(expireDate) // exp í† í°ë§Œë£Œì‹œê°„
+				.claim("member_id", member.getMemberId()) // member_id ì €ì¥
 				.compact();
 	}
 

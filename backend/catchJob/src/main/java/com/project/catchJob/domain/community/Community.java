@@ -20,24 +20,24 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(exclude = {"member","communityCommentsList"})
+@ToString(exclude = {"member","communityCommentsList", "communityLikeList"})
 @Entity
 public class Community {
 
 	@Id @GeneratedValue @Column(name = "community_id")
 	private Long communityId;
 	
-	private String cType; // ºÐ·ù
+	private String cType; // ë¶„ë¥˜
 	
-	private String cTitle; // Á¦¸ñ
+	private String cTitle; // ì œëª©
 	
-	private String cContents; // ³»¿ë
+	private String cContents; // ë‚´ìš©
 	
 	@Column(insertable = false, updatable = false, columnDefinition = "date default now()")
-	private Date cDate; // ÀÛ¼º³¯Â¥
+	private Date cDate; // ìž‘ì„±ë‚ ì§œ
 	
 	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
-	private Long cLike; // ÁÁ¾Æ¿ä
+	private Long cLike; // ì¢‹ì•„ìš”
 	
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
@@ -51,4 +51,6 @@ public class Community {
 	@OneToMany(mappedBy = "community")
 	private List<C_comments> communityCommentsList= new ArrayList<>();
 	
+	@OneToMany(mappedBy = "community")
+	private List<C_like> communityLikeList= new ArrayList<>();
 }
