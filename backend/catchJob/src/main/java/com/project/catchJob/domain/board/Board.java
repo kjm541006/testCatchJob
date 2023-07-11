@@ -33,23 +33,23 @@ public class Board {
 	private String bTitle;
 	
 	@Lob
-	private String bContents; // editor»ç¿ë(´ë¿ë·®)
+	private String bContents; // editorì‚¬ìš©(ëŒ€ìš©ëŸ‰)
 	
 	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
-	private int bCnt; // Á¶È¸¼ö
+	private int bCnt; // ì¡°íšŒìˆ˜
 	
 	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
-	private int bLike; // ÁÁ¾Æ¿ä°¹¼ö
+	private int bLike; // ì¢‹ì•„ìš”ê°¯ìˆ˜
 	
-	private String bFileName; // ÆÄÀÏ¸í 
-	
-	@Transient
-	private MultipartFile bUploadFile; // ½ÇÁ¦°æ·Î?(¾Æ¸¶µµ)
-	
-	private String bCoverFileName; // Ä¿¹ö(½æ³×ÀÏ) ÆÄÀÏ¸í
+	private String bFileName; // íŒŒì¼ëª…
 	
 	@Transient
-	private MultipartFile bCoverUploadFile; // Ä¿¹ö ½ÇÁ¦°æ·Î(¾Æ¸¶µµ)
+	private MultipartFile bUploadFile; // ì‹¤ì œê²½ë¡œ
+	
+	private String bCoverFileName; // ì»¤ë²„(ì¸ë„¤ì¼) íŒŒì¼ëª…
+	
+	@Transient
+	private MultipartFile bCoverUploadFile; // ì»¤ë²„(ì¸ë„¤ì¼) ì‹¤ì œê²½ë¡œ
 	
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)

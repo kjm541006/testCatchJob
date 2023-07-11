@@ -16,6 +16,7 @@ import com.project.catchJob.domain.board.B_comments;
 import com.project.catchJob.domain.board.B_like;
 import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.community.C_comments;
+import com.project.catchJob.domain.community.C_like;
 import com.project.catchJob.domain.community.Community;
 import com.project.catchJob.domain.project.P_comments;
 import com.project.catchJob.domain.project.P_like;
@@ -37,7 +38,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = {
-		"communityList", "c_CommentsList", 
+		"communityList", "c_CommentsList", "c_LikeList", 
 		"boardList", "b_CommentsList", "b_LikeList",
 		"studyList", "s_CommentsList", "s_LikeList", "s_ReasonList",
 		"projectList", "p_CommentsList", "p_LikeList", "p_ReasonList"})
@@ -47,7 +48,7 @@ public class Member {
 	@Id
 	@GeneratedValue
 	@Column(name = "member_id")
-	private Long memberId; // email ³Ñ ±æ¾î¼­ ½Äº°ÇÏ·Á°í ¸¸µç ¾ÆÀÌµğ
+	private Long memberId; // email ë„˜ ê¸¸ì–´ì„œ ì‹ë³„í•˜ë ¤ê³  ë§Œë“  ì•„ì´ë””
 	
 	private String name;
 	
@@ -55,16 +56,21 @@ public class Member {
 	
 	private String pwd;
 	
-	@ElementCollection
-	private List<String> job; // Á÷¹«
+//	@ElementCollection
+//	private List<String> job; // ì§ë¬´ ì—¬ëŸ¬ê°œ ë°›ì„ ê²½ìš°
 	
-	private String hasCareer; // °æ·Â¿©ºÎ
+	private String job; // ì§ë¬´
+	
+	private String hasCareer; // ê²½ë ¥ì—¬ë¶€
 
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<Community> communityList = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<C_comments> c_CommentsList = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+	private List<C_like> c_LikeList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<Board> boardList = new ArrayList<>();
