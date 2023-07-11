@@ -1,5 +1,6 @@
 import React from "react";
 import "../assets/css/SocialSignin.css";
+import { Link } from "react-router-dom";
 
 const SocialSigninPage = () => {
   return (
@@ -28,7 +29,7 @@ const SocialSigninPage = () => {
 
           <div className="log-in">
             <div className="entire-text-social">이미 계정이 있으신가요?</div>
-            <button className="log-in-now">로그인 하기</button>
+            <Link to="/login" className="log-in-now">로그인 하기</Link>
           </div>
         </div>
       </div>

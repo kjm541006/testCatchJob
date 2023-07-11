@@ -1,5 +1,5 @@
 .signInPage {
-  background: #f9fafb;
+  background:#F9FAFB;
   font-family: "Inter";
   display: grid;
   place-content: center;
@@ -15,10 +15,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: fixed;
-  top: 54%;
+  /* position: fixed; */
+  /* top: 54%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); */
 }
 
 .entire-box-social {
