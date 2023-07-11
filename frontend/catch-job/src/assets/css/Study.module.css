@@ -1,0 +1,70 @@
+.studyPage {
+  width: 1200px;
+  margin: 0 auto;
+  margin-top: 100px;
+  min-height: 100vh;
+}
+
+.studySort {
+  margin-bottom: 20px;
+}
+
+.checkIcon {
+  margin-right: 10px;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.invisible {
+  display: none;
+}
+
+.topRated {
+  margin-right: 30px;
+}
+
+.studyGridView {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+}
+
+.studyGridElement {
+  width: 255px;
+  height: 150px;
+  border-radius: 8px;
+  border: 1px solid #ebebeb;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+}
+
+.type {
+  position: absolute;
+}
+
+.typeWord {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  color: #444;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 22px;
+  transform: translate(-50%, -50%);
+}
+
+.heart {
+  position: absolute;
+  right: 16px;
+  top: 10px;
+}
+
+.subject {
+  height: 23px;
+  margin: 35px 16px 17px;
+  text-overflow: ellipsis;
+  font-size: 14px;
+}
