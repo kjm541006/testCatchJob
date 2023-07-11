@@ -1,6 +1,7 @@
 package com.project.catchJob.domain.project;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -26,23 +27,26 @@ public class Project {
 	@Id @GeneratedValue @Column(name = "project_id")
 	private Long projectId;
 	
-	private String pType; // ºĞ¾ß
+	private String pType; // ë¶„ì•¼
 	
 	private String pTitle;
 	
 	private String pContents;
 	
-	private String pLoc; // Áö¿ª
+	private String pLoc; // ì§€ì—­
 	
-	private String pPeriod; // ¸ğÁı±â°£
+	private String pPeriod; // ëª¨ì§‘ê¸°ê°„
 	
-	private String pPlatform; // Ãâ½ÃÇÃ·§Æû
-	
-	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
-	private int pCnt; // Á¶È¸¼ö
+	private String pPlatform; // ì¶œì‹œí”Œë«í¼
 	
 	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
-	private int pLike; // ÁÁ¾Æ¿ä°¹¼ö	
+	private int pCnt; // ì¡°íšŒìˆ˜
+	
+	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
+	private int pLike; // ì¢‹ì•„ìš”ê°¯ìˆ˜
+	
+	@Column(insertable = false, updatable = false, columnDefinition = "date default now()")
+	private Date pDate; // ì‘ì„±ë‚ ì§œ
 	
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)

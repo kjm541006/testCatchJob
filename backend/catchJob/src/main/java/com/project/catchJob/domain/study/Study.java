@@ -1,6 +1,7 @@
 package com.project.catchJob.domain.study;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -26,23 +27,26 @@ public class Study {
 	@Id @GeneratedValue @Column(name = "study_id")
 	private Long studyId;
 	
-	private String sType; // ºĞ¾ß
+	private String sType; // ë¶„ì•¼
 	
 	private String sTitle;
 	
 	private String sContents;
 	
-	private String sLoc; // Áö¿ª
+	private String sLoc; // ì§€ì—­
 	
-	private String sPeriod; // ¸ğÁı±â°£
+	private String sPeriod; // ëª¨ì§‘ê¸°ê°„
 	
-	private int sMemCnt; // ¸ğÁıÀÎ¿ø
-	
-	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
-	private int sCnt; // Á¶È¸¼ö
+	private int sMemCnt; // ëª¨ì§‘ì¸ì›
 	
 	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
-	private int sLike; // ÁÁ¾Æ¿ä°¹¼ö	
+	private int sCnt; // ì¡°íšŒìˆ˜
+	
+	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
+	private int sLike; // ì¢‹ì•„ìš”ê°¯ìˆ˜	
+	
+	@Column(insertable = false, updatable = false, columnDefinition = "date default now()")
+	private Date sDate; // ì‘ì„±ë‚ ì§œ
 	
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)

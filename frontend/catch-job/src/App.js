@@ -9,6 +9,7 @@ import SocialSigninPage from "./pages/SocialSigninPage";
 import BasicSigninPage from "./pages/BasicSigninPage";
 import EditSigninPage from "./pages/EditSigninPage";
 import Portfolio from "./pages/Portfolio";
+import StudyPage from "./pages/StudyPage";
 import Google from "./pages/Google";
 import { GoogleOAuthProvider } from '@react-oauth/google'
 
@@ -17,17 +18,17 @@ function App() {
     <div className="App">
       <Header />
       <Routes>
+        <Route element={<Footer />}>
+          {/* <Route path="/userInfo/:userId" element={<UserInfo />} /> */}
+          <Route path="/" element={<Portfolio />} />
+          {/* <Route path="/recruit" element={<Recruit />} /> */}
+          <Route path="/study/*" element={<StudyPage />} />
+          {/* <Route path="/community/*" element={<CommunityRoutes />} /> */}
+        </Route>
         <Route path="/join" element={<SocialSigninPage />} />
+        <Route path="/signin" element={<BasicSigninPage />} />
         <Route path="/login" element={<LoginPage />} />
-        {/* <Route path="/userInfo/:userId" element={<UserInfo />} /> */}
-        <Route path="/" element={<Portfolio />} />
-        {/* <Route path="/recruit" element={<Recruit />} /> */}
-        {/* <Route path="/study/*" element={<StudyRoutes />} /> */}
-        {/* <Route path="/community/*" element={<CommunityRoutes />} /> */}
-        <Route path="/social-signin" element={<SocialSigninPage/>} />
       </Routes>
-      <Google/>
-      <Footer />
     </div>
   );
 }

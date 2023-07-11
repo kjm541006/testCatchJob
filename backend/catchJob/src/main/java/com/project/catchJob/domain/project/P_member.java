@@ -17,11 +17,11 @@ import lombok.ToString;
 public class P_member {
 
 	@Id @GeneratedValue
-	private Long pMemId; // ½ºÅÍµğ¸ğÁıÀÎ¿ø ¾ÆÀÌµğ
+	private Long pMemId; // í”„ë¡œì íŠ¸ëª¨ì§‘ì¸ì› ì•„ì´ë””
 	
-	private String pMemJob; // Á÷¹«
+	private String pMemJob; // ì§ë¬´
 	
-	private int pMemCnt; // ¸ğÁıÀÎ¿ø
+	private int pMemCnt; // ëª¨ì§‘ì¸ì›
 	
 	@ManyToOne
 	@JoinColumn(name = "project_id", nullable = false, updatable = false)
