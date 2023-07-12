@@ -1,10 +1,12 @@
 import React from "react";
 import "../assets/css/SocialSignin.css";
 import { Link } from "react-router-dom";
+import Google from "../pages/Google";
 
 const SocialSigninPage = () => {
   return (
     <div className="signInPage">
+      <Google />
       <div className="signIn">
         {/* <div className="section">
         <div className="entire-box-social"> */}
@@ -30,12 +32,14 @@ const SocialSigninPage = () => {
           </Link>
         </div>
 
-          <div className="log-in">
-            <div className="entire-text-social">이미 계정이 있으신가요?</div>
-            <Link to="/login" className="log-in-now">로그인 하기</Link>
-          </div>
+        <div className="log-in">
+          <div className="entire-text-social">이미 계정이 있으신가요?</div>
+          <Link to="/login" className="log-in-now">
+            로그인 하기
+          </Link>
         </div>
       </div>
+    </div>
   );
 };
 
