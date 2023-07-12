@@ -1,14 +1,12 @@
 import React from "react";
 import "../assets/css/SocialSignin.css";
 import { Link } from "react-router-dom";
-import Google from "../pages/Google";
 import GoogleLoginButton_long from "../components/GoogleLoginButton_long";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const SocialSigninPage = () => {
   return (
     <div className="signInPage">
-      <Google />
       <div className="signIn">
         {/* <div className="section">
         <div className="entire-box-social"> */}
