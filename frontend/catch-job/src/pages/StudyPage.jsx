@@ -8,19 +8,19 @@ const StudyPage = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get("https://jsonplaceholder.typicode.com/posts").then((res) => setData(res.data));
+    axios.get("https://jsonplaceholder.typicode.com/posts/99").then((res) => setData(res.data));
   }, []);
 
-  const dummyTags = [
-    { name: "온라인" },
-    { name: "프로그래밍" },
-    { name: "3개월" },
-    { name: "온라인" },
-    { name: "온라인" },
-    { name: "온라인" },
-    { name: "온라인" },
-    { name: "온라인" },
-  ];
+  // const dummyTags = [
+  //   { location: "온라인" },
+  //   { name: "프로그래밍" },
+  //   { name: "3개월" },
+  //   { name: "온라인" },
+  //   { name: "온라인" },
+  //   { name: "온라인" },
+  //   { name: "온라인" },
+  //   { name: "온라인" },
+  // ];
 
   return (
     <div className={styles.studyPage}>
@@ -31,6 +31,7 @@ const StudyPage = () => {
         <span className={styles.new}>최신순</span>
       </div>
       <div className={styles.studyGridView}>
+        {/* key db id로 변경해야함 */}
         {data.map((v, i) => {
           return (
             <div key={i} className={styles.studyGridElement}>
@@ -69,7 +70,11 @@ const StudyPage = () => {
               <div className={styles.subject}>
                 <h2>{v.title}</h2>
               </div>
-              <div className={styles.tags}></div>
+              <div className={styles.tagsWrap}>
+                <div className={`${styles.tag} ${styles.tag1}`}>온라인</div>
+                <div className={`${styles.tag} ${styles.tag2}`}>프로그래밍</div>
+                <div className={`${styles.tag} ${styles.tag3}`}>3개월</div>
+              </div>
             </div>
           );
         })}

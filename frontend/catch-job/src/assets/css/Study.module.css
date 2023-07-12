@@ -68,3 +68,37 @@
   text-overflow: ellipsis;
   font-size: 14px;
 }
+
+.tagsWrap {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  margin-top: 18px;
+  gap: 7px;
+  margin-left: 16px;
+}
+
+.tag {
+  border-radius: 100px;
+  height: 15px;
+  font-size: 8px;
+  width: 50px;
+  color: #fff;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tag1 {
+  background-color: rgba(229, 137, 137, 0.45);
+}
+
+.tag2 {
+  background-color: rgba(177, 191, 119, 0.45);
+}
+.tag3 {
+  background-color: rgba(133, 187, 226, 0.45);
+}
