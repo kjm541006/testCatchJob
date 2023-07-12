@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import GoogleLoginButton from "../components/GoogleLoginButton";
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -61,7 +63,9 @@ const LoginPage = () => {
 
           <div className="social-buttons">
             <button className="kakao-button"></button>
-            <button className="google-button"></button>
+            <GoogleOAuthProvider clientId="226990065119-dh4qnntmuprddppr3hoi6umt9k99vkvb.apps.googleusercontent.com">
+              <GoogleLoginButton/>
+            </GoogleOAuthProvider>
           </div>
 
           <div className="sign-in">
