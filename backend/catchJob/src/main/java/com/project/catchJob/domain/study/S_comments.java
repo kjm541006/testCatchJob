@@ -22,12 +22,12 @@ import lombok.ToString;
 public class S_comments {
 
 	@Id @GeneratedValue
-	private Long sComId; // ½ºÅÍµğ´ñ±Û ¾ÆÀÌµğ
+	private Long sComId; // ìŠ¤í„°ë””ëŒ“ê¸€ì•„ì´ë””
 	
-	private String sComContent; // ´ñ±Û ³»¿ë
+	private String sComContent; // ëŒ“ê¸€ ë‚´ìš©
 	
 	@Column(insertable = false, updatable = false, columnDefinition = "date default now()")
-	private Date sComDate; // ´ñ±Û ÀÛ¼º³¯Â¥
+	private Date sComDate; // ëŒ“ê¸€ ì‘ì„±ë‚ ì§œ
 	
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)

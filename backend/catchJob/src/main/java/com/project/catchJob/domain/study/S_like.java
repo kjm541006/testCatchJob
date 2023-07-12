@@ -19,7 +19,7 @@ import lombok.ToString;
 public class S_like {
 	
 	@Id @GeneratedValue
-	private Long sLikId; // ½ºÅÍµğ ÁÁ¾Æ¿ä ¾ÆÀÌµğ
+	private Long sLikId; // ìŠ¤í„°ë””ì¢‹ì•„ìš”ì•„ì´ë””
 	
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)

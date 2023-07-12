@@ -10,6 +10,8 @@ import BasicSigninPage from "./pages/BasicSigninPage";
 import EditSigninPage from "./pages/EditSigninPage";
 import Portfolio from "./pages/Portfolio";
 import StudyPage from "./pages/StudyPage";
+import Google from "./pages/Google";
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 function App() {
   return (

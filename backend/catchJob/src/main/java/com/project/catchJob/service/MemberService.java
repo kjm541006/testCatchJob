@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.catchJob.domain.Member;
+import com.project.catchJob.dto.MemberDTO;
 import com.project.catchJob.repository.MemberRepository;
 import com.project.catchJob.security.PasswordEncoder;
 
@@ -16,43 +17,63 @@ public class MemberService {
 	@Autowired
 	private MemberRepository memberRepo;
 	
-	// È¸¿ø°¡ÀÔ
+	// íšŒì›ê°€ì…
 	public Member createMember(Member member) {
 		if(member == null || member.getEmail() == null) {
-			throw new RuntimeException("°ø¶õ ÀÔ·ÂÇÏ¿´½À´Ï´Ù!");
+			throw new RuntimeException("ê³µë€ ì…ë ¥í•˜ì˜€ìŠµë‹ˆë‹¤!");
 		}
 		final String email =  member.getEmail();
 		if(memberRepo.existsByEmail(email)) {
-			log.warn("{} ÇØ´ç ÀÌ¸ŞÀÏÀº ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù!", email);
-			throw new RuntimeException("ÀÌ¹Ì Á¸ÀçÇÏ´Â ÀÌ¸ŞÀÏÀÔ´Ï´Ù!");
+			log.warn("{} í•´ë‹¹ ì´ë©”ì¼ì€ ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤!", email);
+			throw new RuntimeException("ì´ë¯¸ ì¡´ì¬í•˜ëŠ” ì´ë©”ì¼ì…ë‹ˆë‹¤!");
 		}
 		return memberRepo.save(member);
 	}
 	
-	// ·Î±×ÀÎ
+	// ë¡œê·¸ì¸
 	public Member getByCredentials(final String email, final String pwd, final PasswordEncoder pwdEncoder) {
 		
 		final Member originMember = memberRepo.findByEmail(email);
-		// matches ¸Ş¼­µå¸¦ ÀÌ¿ëÇØ¼­ ÆĞ½º¿öµå °°ÀºÁö È®ÀÎ
+		// matches ë©”ì„œë“œë¥¼ ì´ìš©í•´ì„œ íŒ¨ìŠ¤ì›Œë“œ ê°™ì€ì§€ í™•ì¸
 		if(originMember != null && pwdEncoder.matches(pwdEncoder.encrypt(email, pwd), originMember.getPwd())) {
 			return originMember;
 		}
 		return null;
 	}
 	
-	// È¸¿ø¼öÁ¤
-	public Member updateMember(Member member) {
+	// íšŒì›ìˆ˜ì •
+	public Member updateMember(MemberDTO member) {
 		
 		Member findMember = memberRepo.findByEmail(member.getEmail());
+		PasswordEncoder pwdEncoder = new PasswordEncoder();
 		
 		if(findMember != null) {
-			// Á÷¹«¿Í °æ·Â¿©ºÎ¸¸ ¼öÁ¤ °¡´É
+			// ì´ë©”ì¼ì€ ìˆ˜ì • ë¶ˆê°€
+			findMember.setName(member.getName());
+			findMember.setPwd(pwdEncoder.encrypt(member.getEmail(), member.getPwd()));
 			findMember.setJob(member.getJob());
 			findMember.setHasCareer(member.getHasCareer());
 			
 			return memberRepo.save(findMember);
 		} else {
-			throw new RuntimeException("´Ù½Ã ·Î±×ÀÎ ÇØÁÖ¼¼¿ä");
+			throw new RuntimeException("ë‹¤ì‹œ ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”");
 		}
 	}
+//	public Member updateMember(Member member) {
+//		
+//		Member findMember = memberRepo.findByEmail(member.getEmail());
+//		PasswordEncoder pwdEncoder = new PasswordEncoder();
+//		
+//		if(findMember != null) {
+//			// ì´ë©”ì¼ì€ ìˆ˜ì • ë¶ˆê°€
+//			findMember.setName(member.getName());
+//			findMember.setPwd(pwdEncoder.encrypt(member.getEmail(), member.getPwd()));
+//			findMember.setJob(member.getJob());
+//			findMember.setHasCareer(member.getHasCareer());
+//			
+//			return memberRepo.save(findMember);
+//		} else {
+//			throw new RuntimeException("ë‹¤ì‹œ ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”");
+//		}
+//	}
 }

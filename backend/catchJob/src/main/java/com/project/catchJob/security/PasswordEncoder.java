@@ -3,7 +3,6 @@ package com.project.catchJob.security;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
@@ -18,7 +17,7 @@ import com.project.catchJob.dto.MemberDTO;
 @Component
 public class PasswordEncoder {
 	
-	// https://wonchan.tistory.com/4 Âü°í
+	// https://wonchan.tistory.com/4ì°¸ê³ 
 	
 	public String encrypt(String email, String pwd) {
 		

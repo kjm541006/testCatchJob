@@ -21,7 +21,7 @@ public class S_reason {
 	@Id @GeneratedValue
 	private Long sReasonId;
 	
-	private String sRContents; // ¸ðÁý»çÀ¯
+	private String sRContents; // ëª¨ì§‘ì‚¬ìœ 
 	
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
