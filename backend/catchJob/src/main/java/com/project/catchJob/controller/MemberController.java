@@ -2,6 +2,7 @@ package com.project.catchJob.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import com.project.catchJob.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 @RestController
 @RequestMapping("/")
