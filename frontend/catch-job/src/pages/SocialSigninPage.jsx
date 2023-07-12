@@ -2,6 +2,8 @@ import React from "react";
 import "../assets/css/SocialSignin.css";
 import { Link } from "react-router-dom";
 import Google from "../pages/Google";
+import GoogleLoginButton_long from "../components/GoogleLoginButton_long";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const SocialSigninPage = () => {
   return (
@@ -23,10 +25,9 @@ const SocialSigninPage = () => {
             <div className="button-icon-kakao"></div>
             <div className="button-text">카카오로 3초만에 가입하기</div>
           </button>
-          <button className="button" id="google-button">
-            <div className="button-icon-google"></div>
-            <div className="button-text">구글 계정으로 가입하기</div>
-          </button>
+          <GoogleOAuthProvider clientId="226990065119-dh4qnntmuprddppr3hoi6umt9k99vkvb.apps.googleusercontent.com">
+            <GoogleLoginButton_long />
+          </GoogleOAuthProvider>
           <Link to={"/signin"} className="button" id="basic-button">
             <div className="button-text">이메일로 가입하기</div>
           </Link>
