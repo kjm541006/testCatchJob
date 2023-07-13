@@ -3,7 +3,7 @@ package com.project.catchJob.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.project.catchJob.domain.Member;
+import com.project.catchJob.domain.member.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
