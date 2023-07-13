@@ -3,12 +3,24 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import "./header.css";
+import axios from "axios";
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const toggleLogin = () => {
-    setIsLoggedIn(false);
+    axios.post("http://43.202.98.45:8089/logout") 
+      .then((response) => {
+        if (response.status === 200) {
+          localStorage.removeItem("token");
+          setIsLoggedIn(false);
+        } else {
+         
+        }
+      })
+      .catch((error) => {
+        console.error("로그아웃 에러:", error);
+      });
   };
 
   return (
