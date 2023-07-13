@@ -19,7 +19,6 @@ const GoogleLoginButton_long = () => {
     flow: 'auth-code',
   });
   
-
   return (
     <div className={`${Style.button}`} onClick={() => googleSocialLogin()}>
        <div className={`${Style.buttonIconGoogle}`}></div>

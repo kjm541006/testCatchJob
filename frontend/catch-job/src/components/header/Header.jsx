@@ -9,6 +9,7 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const toggleLogin = () => {
+    setIsLoggedIn(false);
     axios.post("http://43.202.98.45:8089/logout") 
       .then((response) => {
         if (response.status === 200) {
@@ -72,7 +73,7 @@ const Header = () => {
             {/* 로그인 했을 경우 */}
             {isLoggedIn && (
               <div className="header-user-info">
-                <span className="header-username">김주민 님</span>
+                <Link to="/edit" className="header-username">김주민 님</Link>
                 <div className="header-logout-btn" onClick={toggleLogin}>
                   로그아웃
                 </div>

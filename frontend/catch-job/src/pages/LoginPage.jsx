@@ -39,7 +39,7 @@ const LoginPage = () => {
     <div className="body-login">
       <div className="section-login">
         <div className="entire-box">
-          <h1 className="catchJob">
+          <h1 className="catchJob-login">
             catch<span className="red-letter">J</span>ob
           </h1>
           <div className="input-text">이메일</div>
