@@ -16,7 +16,7 @@ function Modal({ onCommentSubmit, onCancel, comment, onCommentChange }) {
           className="mentmentment"
           maxLength={1000}
           placeholder="댓글을 입력해주세요."
-          style={{ height: 21 }}
+          style={{ height: 20 }}
           value={comment}
           onChange={onCommentChange}
         />
