@@ -1,11 +1,24 @@
 import { useGoogleLogin } from '@react-oauth/google'
 import Style from '../assets/css/GoogleLoginButton_long.module.css'
+import axios from 'axios';
+
 
 const GoogleLoginButton_long = () => {
   const googleSocialLogin = useGoogleLogin({
-    onSuccess: (codeResponse) => console.log(codeResponse),
+    onSuccess: (codeResponse) => {
+      axios.post('http://43.202.98.45:8089/googlelogin', { code: codeResponse.code }) 
+        .then((response) => {
+          // 서버 응답 처리
+          console.log(response.data);
+        })
+        .catch((error) => {
+          // 오류 처리
+          console.error(error);
+        });
+    },
     flow: 'auth-code',
-  })
+  });
+  
 
   return (
     <div className={`${Style.button}`} onClick={() => googleSocialLogin()}>
