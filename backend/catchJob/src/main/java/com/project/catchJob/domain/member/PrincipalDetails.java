@@ -12,7 +12,8 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class PrincipalDetails implements UserDetails, OAuth2User { 
+public class PrincipalDetails { //implements UserDetails, OAuth2User { 
+	/*
 	// 일반회원로그인과 소셜로그인 방법 구분없이 한 객체로 관리하기위해
 	// PrincipalDetails에 OAuth2User도 implements
 	
@@ -82,5 +83,5 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+	*/
 }

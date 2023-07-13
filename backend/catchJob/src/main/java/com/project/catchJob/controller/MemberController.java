@@ -3,7 +3,6 @@ package com.project.catchJob.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -135,6 +134,7 @@ public class MemberController {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		
 		if(member != null) {
+
 			return tokenProvider.deleteToken(memberDTO);
 		}
 		return ResponseEntity.badRequest().body("회원 로그아웃 실패");
