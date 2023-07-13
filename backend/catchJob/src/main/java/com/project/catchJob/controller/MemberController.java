@@ -71,7 +71,7 @@ public class MemberController {
 	@PostMapping("/login") 
 	public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO) {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
-		System.out.println("==========" + member);
+		System.out.println("=====control=====" + member.toString());
 		// log.info("{} 로그인 성공", member.toString());
 		
 		if(member != null) {
