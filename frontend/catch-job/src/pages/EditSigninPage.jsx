@@ -10,7 +10,7 @@ const EditSigninPage = () => {
         <h1 className="catchJob-edit">
           catch<span className="red-letter">J</span>ob
         </h1>
-        <h3>회원정보수정</h3>
+        <h3 className="edit-inform">회원정보수정</h3>
         
         <div className="input-text-edit">이메일</div>
         <input type="text" className="input-box-edit" tabIndex="1"/>
