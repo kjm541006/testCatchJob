@@ -3,7 +3,7 @@ package com.project.catchJob.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.project.catchJob.domain.Member;
+import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.MemberDTO;
 import com.project.catchJob.repository.MemberRepository;
 import com.project.catchJob.security.PasswordEncoder;
