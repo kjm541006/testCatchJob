@@ -34,6 +34,7 @@ public class MemberService {
 	public Member getByCredentials(final String email, final String pwd, final PasswordEncoder pwdEncoder) {
 		
 		final Member originMember = memberRepo.findByEmail(email);
+		System.out.println("-------------서비스---------" + originMember.toString());
 		// matches 메서드를 이용해서 패스워드 같은지 확인
 		if(originMember != null && pwdEncoder.matches(pwdEncoder.encrypt(email, pwd), originMember.getPwd())) {
 			return originMember;
