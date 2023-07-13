@@ -1,24 +1,30 @@
 .signInPage {
   background: #f9fafb;
-  font-family: "Inter";
-  display: grid;
-  place-content: center;
-  position: relative;
-}
-
-.section {
-  width: 640px;
-  height: 890px;
-  border-radius: 32px;
-  background: #ffffff;
+  width: 100%;
+  height: calc(100vh - 90px);
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: fixed;
-  top: 54%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+}
+
+.signIn {
+  width: 640px;
+  height: 750px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 120px;
+  background: #fff;
+  border-radius: 32px;
+}
+
+/* .section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  width: 640px;
+  height: 890px;
 }
 
 .entire-box-social {
@@ -29,16 +35,15 @@
   justify-content: center;
   width: 332px;
   height: 740px;
-  /* background-color: #999999; */
-}
+  background-color: #999999;
+} */
 
 .catchJob-social {
   color: #000;
   text-align: center;
   font-size: 56px;
   font-weight: bold;
-  position: fixed;
-  top: 80px;
+  padding-top: 40px;
 }
 
 .catchJob-social .red-letter {
@@ -49,14 +54,13 @@
   color: #0d0d0d;
   font-size: 19px;
   font-weight: bold;
-  position: fixed;
-  top: 300px;
 }
 
 .social-buttons-social {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 20px;
 }
 
 .button {
@@ -70,20 +74,20 @@
 }
 
 #kakao-button {
-  position: fixed;
+  /* position: fixed; */
   top: 450px;
   background: #f9da49;
 }
 
 #google-button {
-  position: fixed;
+  /* position: fixed; */
   top: 510px;
   background: #ffffff;
   border: 1px solid #ccc;
 }
 
 #basic-button {
-  position: fixed;
+  /* position: fixed; */
   top: 570px;
   background: #ffffff;
   border: 1px solid #ccc;
@@ -135,7 +139,7 @@
   display: inline-flex;
   align-items: flex-start;
   gap: 40px;
-  position: fixed;
+  /* position: fixed; */
   top: 720px;
 }
 

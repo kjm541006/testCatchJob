@@ -2,6 +2,7 @@ import React, { useState,useEffect  } from 'react';
 import "../assets/css/BasicSignin.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash   } from "@fortawesome/free-regular-svg-icons";
+import axios from 'axios';
 
 
 const BasicSigninPage = () => {
@@ -11,9 +12,8 @@ const BasicSigninPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [selectedJobs, setSelectedJobs] = useState([]);
-  const [selectedCarrers, setSelectedCarrers] = useState([]);
-  const [data, setData] = useState([]);
+  const [selectedJobs, setSelectedJobs] = useState('');
+  const [selectedCarrers, setSelectedCarrers] = useState('');
 
   const handleClick = (e) => {
     const {name} = e.target;
@@ -44,20 +44,44 @@ const BasicSigninPage = () => {
   };
 
   const handleJobCheckboxChange = (job) => {
-    if (selectedJobs.includes(job)) {
-      setSelectedJobs(selectedJobs.filter((selectedJob) => selectedJob !== job));
-    } else {
-      setSelectedJobs([...selectedJobs, job]);
-    }
+    setSelectedJobs(job);
   };
+  
 
   const handleCarrerChange = (carrer) => {
-    setSelectedCarrers([carrer]);
+    setSelectedCarrers(carrer);
   };
 
-  const handleData = () => {
-    setData([email, name, password,confirmPassword,selectedJobs,selectedCarrers]);
+
+  
+  const registerUser = () => {
+
+    if(password !== confirmPassword){
+      return alert('비밀번호와 비밀번호 확인이 같지 않습니다.')
   }
+    // 회원가입 데이터 생성
+    const userData = {
+      email: email,
+      pwd: password,
+      name: name,
+      job: selectedJobs,
+      hasCarrer: selectedCarrers
+    };
+    
+    console.log(userData);
+  
+    axios.post('서버의 URL', userData)
+      .then(response => {
+        // 요청이 성공한 경우에 대한 처리
+        console.log(response.data); // 서버 응답 데이터 출력
+        // 추가적인 로직을 여기에 작성하세요.
+      })
+      .catch(error => {
+        // 요청이 실패한 경우에 대한 처리
+        console.error(error); // 에러 출력
+        // 추가적인 에러 처리를 여기에 작성하세요.
+      });
+  };
   
   useEffect(() => {
     console.log(selectedJobs);
@@ -67,9 +91,6 @@ const BasicSigninPage = () => {
     console.log(selectedCarrers);
   }, [selectedCarrers]);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   return (
     <div className="body-basic">
@@ -109,29 +130,29 @@ const BasicSigninPage = () => {
         <div className="input-text-basic">직무</div>
           <div className="choosejob" id="pick">
             <div className="choosejobone">
-              <input type="checkbox" className="custom-checkbox" onChange={() => handleJobCheckboxChange('웹디자이너')}/>
+              <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange('웹디자이너')}/>
               <div className="choosejob-text-basic">웹디자이너</div>
             </div>
             <div className="choosejobone">
-              <input type="checkbox" className="custom-checkbox" onChange={() => handleJobCheckboxChange('웹퍼블리셔')}/>
+              <input type="radio" className="custom-checkbox"  name="job" onChange={() => handleJobCheckboxChange('웹퍼블리셔')}/>
               <div className="choosejob-text-basic">웹퍼블리셔</div>
             </div>
             <div className="choosejobone">
-              <input type="checkbox" className="custom-checkbox" onChange={() => handleJobCheckboxChange('프론트엔드')}/>
+              <input type="radio" className="custom-checkbox" name="job"  onChange={() => handleJobCheckboxChange('프론트엔드')}/>
               <div className="choosejob-text-basic">프론트엔드</div>
             </div>
           </div>
           <div className="choosejob">
             <div className="choosejobone">
-              <input type="checkbox" className="custom-checkbox" onChange={() => handleJobCheckboxChange('백엔드')}/>
+              <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange('백엔드')}/>
               <div className="choosejob-text-basic">백엔드</div>
             </div>
             <div className="choosejobone">
-              <input type="checkbox" className="custom-checkbox" onChange={() => handleJobCheckboxChange('PM')}/>
+              <input type="radio" className="custom-checkbox"  name="job" onChange={() => handleJobCheckboxChange('PM')}/>
               <div className="choosejob-text-basic">PM</div>
             </div>
             <div className="choosejobone">
-              <input type="checkbox" className="custom-checkbox" onChange={() => handleJobCheckboxChange('기타')}/>
+              <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange('기타')}/>
               <div className="choosejob-text-basic">기타</div>
             </div>
           </div>
@@ -139,18 +160,18 @@ const BasicSigninPage = () => {
         <div className="input-text-basic">경력 여부</div>
         <div className="choosejob" id="pick">
             <div className="choosejobone" id="carrer">
-              <input type="radio" className="custom-checkbox"  name="job"  onChange={() => handleCarrerChange('신입')}/>
+              <input type="radio" className="custom-checkbox"  name="career"  onChange={() => handleCarrerChange('신입')}/>
               <div className="choosejob-text-basic">신입</div>
             </div>
             <div className="choosejobone" id="carrer">
-              <input type="radio" className="custom-checkbox" name="job" onChange={() => handleCarrerChange('경력')}/>
+              <input type="radio" className="custom-checkbox" name="career" onChange={() => handleCarrerChange('경력')}/>
               <div className="choosejob-text-basic">경력</div>
             </div>
         </div>
 
         <div className="enrollbutton">
           <button className="cancel-basic">취소</button>
-          <button className="enroll-basic" onClick={handleData} >등록</button>
+          <button className="enroll-basic" onClick={registerUser} >등록</button>
         </div>
 
         <div className="log-in-basic">

@@ -12,7 +12,7 @@
 
 .postmodal {
   width: 990px;
-  height: 790px;
+  height: 820px;
   border-radius: 8px;
   background-color: white;
   padding: 20px 50px;
@@ -22,6 +22,7 @@
   text-align: center;
   font-size: 36px;
   font-weight: bold;
+  margin-top: 0px;
 }
 .red-letter {
   font-size: 56px;

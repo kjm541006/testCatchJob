@@ -9,14 +9,26 @@ import SocialSigninPage from "./pages/SocialSigninPage";
 import BasicSigninPage from "./pages/BasicSigninPage";
 import EditSigninPage from "./pages/EditSigninPage";
 import Portfolio from "./pages/Portfolio";
-import CommunityRoutes from "./pages/community/CommunityRoutes";
+import CommunityRoutes from "./pages/community/CommunityPage";
+import StudyPage from "./pages/StudyPage";
+import GoogleLoginButton from "./components/GoogleLoginButton";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import GoogleLoginButton_long from "./components/GoogleLoginButton_long";
 
 function App() {
   return (
     <div className="App">
       <Header />
       <Routes>
-        <Route path="/join" element={<BasicSigninPage />} />
+        <Route element={<Footer />}>
+          {/* <Route path="/userInfo/:userId" element={<UserInfo />} /> */}
+          <Route path="/" element={<Portfolio />} />
+          {/* <Route path="/recruit" element={<Recruit />} /> */}
+          <Route path="/study/*" element={<StudyPage />} />
+          {/* <Route path="/community/*" element={<CommunityRoutes />} /> */}
+        </Route>
+        <Route path="/join" element={<SocialSigninPage />} />
+        <Route path="/signin" element={<BasicSigninPage />} />
         <Route path="/login" element={<LoginPage />} />
         {/* <Route path="/userInfo/:userId" element={<UserInfo />} /> */}
         <Route path="/" element={<Portfolio />} />
@@ -24,7 +36,6 @@ function App() {
         {/* <Route path="/study/*" element={<StudyRoutes />} /> */}
         <Route path="/community/*" element={<CommunityRoutes />} />
       </Routes>
-      <Footer />
     </div>
   );
 }

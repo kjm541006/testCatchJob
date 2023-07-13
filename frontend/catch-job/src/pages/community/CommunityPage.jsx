@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "./CommunityRoutes.css";
-import Modal from "./Modal";
-import PostModal from "./PostModal";
-import "./PostModal.css";
+import "../../assets/css/CommunityPage.css";
+import Modal from "./CommunityModal";
+import PostModal from "./CommunityPostModal";
+import "../../assets/css/CommunityPostModal.css";
 
 function Card(props) {
   const [commentModalOpen, setCommentModalOpen] = useState([]);
@@ -195,7 +195,7 @@ function Card(props) {
         ))}
       </div>
 
-      <div className="작성하기">
+      <div className="jacksung">
         <div>
           <button className="writeButton" onClick={togglePostModal}>
             글작성하기

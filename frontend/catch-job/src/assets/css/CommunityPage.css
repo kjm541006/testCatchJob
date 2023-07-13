@@ -1,7 +1,7 @@
 .communityCenter {
   width: 1300px;
   height: auto;
-  margin: 95px auto;
+  margin: 10px auto;
   display: flex;
   justify-content: center;
   display: block;
@@ -147,7 +147,7 @@
   border: 0;
 }
 
-.작성하기 {
+.jacksung {
   width: 300px;
   height: 400px;
   display: inline-flex;
