@@ -18,6 +18,7 @@ import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.security.PasswordEncoder;
 import com.project.catchJob.security.TokenProvider;
 import com.project.catchJob.service.MemberService;
+import com.project.catchJob.service.OAuthService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,6 +39,9 @@ public class MemberController {
 	
 	@Autowired
 	private GoogleOAuth googleoauth;
+	
+	@Autowired
+	private OAuthService oAuthService;
 	
 	// 회원등록
 	@PostMapping("/register") 
@@ -104,9 +108,20 @@ public class MemberController {
 	}
 	
 	// 구글 로그인
-	@GetMapping("googlelogin")
+	@GetMapping("/google")
 	public void getGoogleAuthUrl(HttpServletResponse res) throws Exception {
 		res.sendRedirect(googleoauth.getOauthRedirectURL());
+	}
+	
+	@GetMapping("/api/oauth2/callback/google")
+	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String accessCode) {
+		return googleoauth.requestAccessToken(accessCode);
+	}
+	
+	@GetMapping("/google/login")
+	public ResponseEntity<?> successGoogleLogin2(@RequestParam("code") String accessCode) {
+		return null;
+		// return oAuthService.googleLogin(accessCode);
 	}
 
 	// 회원조회
