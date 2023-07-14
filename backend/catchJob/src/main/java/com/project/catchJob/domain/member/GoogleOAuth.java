@@ -2,6 +2,7 @@ package com.project.catchJob.domain.member;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -13,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class GoogleOAuth {
+	
+	@Autowired
+	StringBuilder builder;
 
 	// https://developers.google.com/identity/protocols/oauth2/web-server?hl=ko 참고
 	
@@ -35,19 +39,32 @@ public class GoogleOAuth {
 	@Value("${google.redirect-uri}")
 	private String LOGIN_REDIRECT_URL;
 
-	@PostConstruct
 	public String getOauthRedirectURL() {
-	    String redirectUrl = "https://accounts.google.com/o/oauth2/auth";
+
+		String redirectUrl = "https://accounts.google.com/o/oauth2/auth";
 	    String clientId = GOOGLE_CLIENT_ID;
 	    String redirectUri = LOGIN_REDIRECT_URL;
 	    String responseType = "code";
 	    String scope = "openid email profile";
 	    String state = "your-state-value"; // 선택 사항: CSRF 보호를 위한 상태 값 추가
-	    
+	  /*  
 	    String oauthUrl = String.format("%s?client_id=%s&redirect_uri=%s&response_type=%s&scope=%s&state=%s",
 	            redirectUrl, clientId, redirectUri, responseType, scope, state);
 	    
 	    return oauthUrl;
+	    */
+		
+		builder.append(redirectUrl)
+	    .append("?client_id=").append(clientId)
+	    .append("&redirect_uri=").append(redirectUri)
+	    .append("&response_type=").append(responseType)
+	    .append("&scope=").append(scope)
+	    .append("&state=").append(state);
+		
+		String oauthUrl = builder.toString();
+		
+		return oauthUrl;
+
 	}
 	
 }
