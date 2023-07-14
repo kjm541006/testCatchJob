@@ -12,7 +12,7 @@ import com.project.catchJob.domain.member.PrincipalDetails;
 import com.project.catchJob.repository.MemberRepository;
 import com.project.catchJob.security.PasswordEncoder;
 
-@Service
+//@Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 /*
 	@Autowired

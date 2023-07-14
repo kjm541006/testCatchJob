@@ -10,7 +10,7 @@ import com.project.catchJob.service.PrincipalOauth2UserService;
 
 //@Configuration
 //@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig { /*extends WebSecurityConfigurerAdapter {
 /*
 	@Autowired
 	private PrincipalOauth2UserService principalOath;

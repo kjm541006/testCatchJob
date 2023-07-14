@@ -36,13 +36,13 @@ public class MemberController {
 	
 	@Autowired
 	private PasswordEncoder pwdEncoder;
-	
+/*	
 	@Autowired
 	private GoogleOAuth googleoauth;
 	
 	@Autowired
 	private OAuthService oAuthService;
-	
+*/	
 	// 회원등록
 	@PostMapping("/register") 
 	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
