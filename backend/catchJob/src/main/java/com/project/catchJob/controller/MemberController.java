@@ -2,12 +2,14 @@ package com.project.catchJob.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.catchJob.domain.Member;
+import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.MemberDTO;
 import com.project.catchJob.security.PasswordEncoder;
 import com.project.catchJob.security.TokenProvider;
@@ -15,6 +17,7 @@ import com.project.catchJob.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 @RestController
 @RequestMapping("/")
@@ -126,4 +129,14 @@ public class MemberController {
 		}
 	}
 	
+	// 로그아웃
+	@PostMapping("/logout")
+	public ResponseEntity<?> logout(@RequestBody MemberDTO memberDTO) {
+		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
+		
+		if(member != null) {
+			return tokenProvider.deleteToken(memberDTO);
+		}
+		return ResponseEntity.badRequest().body("회원 로그아웃 실패");
+	}
 }

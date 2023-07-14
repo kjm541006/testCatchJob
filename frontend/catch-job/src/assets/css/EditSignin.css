@@ -38,7 +38,7 @@
 
   color: #000;
   text-align: center;
-  font-size: 56px;
+  font-size: 46px;
   font-weight: bold;
   position: fixed;
   top: 80px;
@@ -46,6 +46,11 @@
 
 .catchJob-edit .red-letter{
   color:#E2432E;
+  font-size: 56px;
+}
+
+.edit-inform{
+  margin-bottom: 50px;
 }
 
 .input-box-edit {

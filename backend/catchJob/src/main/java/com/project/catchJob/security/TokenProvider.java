@@ -4,11 +4,16 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import com.project.catchJob.domain.Member;
+import com.project.catchJob.domain.member.Member;
+import com.project.catchJob.dto.MemberDTO;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -23,6 +28,7 @@ public class TokenProvider {
 	
 	private static final String SECRET_KEY = "catchJobSecretKeycatchJobSecretKeycatchJobSecretKeycatchJobSecretKeycatchJobSecretKey";
 	
+	// 로그인 시 토큰 생성
 	public String createToken(Member member) {
 		// 기한 지금으로부터 1일로 설정
 		Date expireDate = Date.from(
@@ -39,6 +45,7 @@ public class TokenProvider {
 				.compact();
 	}
 
+	// 토큰 검증
 	public String validateToken(String token) {
 		Claims claims = Jwts.parserBuilder()
 							.setSigningKey(Decoders.BASE64.decode(SECRET_KEY))
@@ -48,4 +55,54 @@ public class TokenProvider {
 		
 		return claims.getSubject();
 	}
+	
+	// 로그아웃 시 토큰 무효화
+	public ResponseEntity<?> deleteToken(@RequestBody MemberDTO memberDTO) {
+	    // 토큰을 무효화 처리하는 로직 구현
+	    // 여기에서는 예시로 token을 null로 설정합니다.
+	    memberDTO.setToken(null);
+
+	    return ResponseEntity.ok().body(memberDTO);
+	}
+
+	
+	/*
+	// 로그아웃 시 토큰 무효화
+	public ResponseEntity<String> deleteToken(@RequestBody MemberDTO memberDTO) {
+		기존 토큰
+		String myToken = memberDTO.getToken();
+		
+		try {
+			
+			// 기존 토큰 파싱
+			Jws<Claims> jws = Jwts.parserBuilder()
+					.setSigningKey(Decoders.BASE64.decode(SECRET_KEY))
+					.build()
+					.parseClaimsJws(myToken);
+			
+			Claims claims = jws.getBody();
+			
+			// 토큰 기한을 현재보다 이전 시간으로 설정
+			Date expireDate = Date.from(
+					Instant.now()
+						.minus(1, ChronoUnit.HOURS));
+			
+			// 새로운 토큰 생성시켜서 기존 토큰을 무효화시킴
+			String newToken = Jwts.builder()
+					.setClaims(claims)
+					.setExpiration(expireDate)
+					.signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY)))
+					.compact();
+			
+			memberDTO.setToken(null);		
+			
+			return ResponseEntity.ok().body("로그아웃이 완료되었습니다.");
+			
+		} catch (JwtException | IllegalArgumentException e) {
+			// 토큰이 유효하지 않은 경우
+			return ResponseEntity.badRequest().body("유효하지 않은 토큰입니다.");
+		}
+		
+	}
+	 */
 }

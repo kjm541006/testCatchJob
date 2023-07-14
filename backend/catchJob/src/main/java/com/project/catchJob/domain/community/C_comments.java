@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.project.catchJob.domain.Member;
+import com.project.catchJob.domain.member.Member;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,12 +22,12 @@ import lombok.ToString;
 public class C_comments {
 
 	@Id @GeneratedValue
-	private Long cComId; // Ä¿¹Â´ÏÆ¼´ñ±Û ¾ÆÀÌµð
+	private Long cComId; // Ä¿ï¿½Â´ï¿½Æ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½
 	
-	private String cComContent; // ´ñ±Û ³»¿ë
+	private String cComContent; // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	
 	@Column(insertable = false, updatable = false, columnDefinition = "date default now()")
-	private Date cComDate; // ´ñ±Û ÀÛ¼º³¯Â¥
+	private Date cComDate; // ï¿½ï¿½ï¿½ ï¿½Û¼ï¿½ï¿½ï¿½Â¥
 	
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)

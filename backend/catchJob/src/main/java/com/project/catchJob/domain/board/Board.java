@@ -15,7 +15,7 @@ import javax.persistence.Transient;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.project.catchJob.domain.Member;
+import com.project.catchJob.domain.member.Member;
 
 import lombok.Getter;
 import lombok.Setter;

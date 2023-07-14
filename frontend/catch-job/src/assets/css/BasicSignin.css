@@ -24,7 +24,6 @@
 .entire-box-basic {
   display: flex;
   padding: 0px 2px 0px 2px;
-  margin-top: 70px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -36,7 +35,7 @@
 .catchJob-basic {
   color: #000;
   text-align: center;
-  font-size: 56px;
+  font-size: 46px;
   font-weight: bold;
   position: fixed;
   top: 80px;
@@ -44,6 +43,7 @@
 
 .catchJob-basic .red-letter {
   color: #e2432e;
+  font-size: 56px;
 }
 
 .input-box-basic {

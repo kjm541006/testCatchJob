@@ -65,21 +65,21 @@ const BasicSigninPage = () => {
       pwd: password,
       name: name,
       job: selectedJobs,
-      hasCarrer: selectedCarrers
+      hasCareer: selectedCarrers
     };
     
     console.log(userData);
   
-    axios.post('서버의 URL', userData)
+    axios.post('http://43.202.98.45:8089/register', userData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
       .then(response => {
-        // 요청이 성공한 경우에 대한 처리
         console.log(response.data); // 서버 응답 데이터 출력
-        // 추가적인 로직을 여기에 작성하세요.
       })
       .catch(error => {
-        // 요청이 실패한 경우에 대한 처리
         console.error(error); // 에러 출력
-        // 추가적인 에러 처리를 여기에 작성하세요.
       });
   };
   

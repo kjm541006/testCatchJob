@@ -19,15 +19,16 @@ const LoginPage = () => {
   const handleLogin = () => {
     const userData = {
       email: email,
-      password: password,
+      pwd: password,
     };
 
-    axios.post("서버의 로그인 API 엔드포인트 URL", userData)
+    axios.post("http://43.202.98.45:8089/login", userData)
       .then(response => {
         const token = response.data.token; 
 
         localStorage.setItem("token", token);
-        console.log(response.data); 
+        console.log(userData);
+        console.log(token);
       })
       .catch(error => {
         console.error(error); 
@@ -38,7 +39,7 @@ const LoginPage = () => {
     <div className="body-login">
       <div className="section-login">
         <div className="entire-box">
-          <h1 className="catchJob">
+          <h1 className="catchJob-login">
             catch<span className="red-letter">J</span>ob
           </h1>
           <div className="input-text">이메일</div>
