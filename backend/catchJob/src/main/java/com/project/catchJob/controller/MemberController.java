@@ -18,7 +18,6 @@ import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.security.PasswordEncoder;
 import com.project.catchJob.security.TokenProvider;
 import com.project.catchJob.service.MemberService;
-import com.project.catchJob.service.OAuthService;
 
 import lombok.extern.slf4j.Slf4j;
 

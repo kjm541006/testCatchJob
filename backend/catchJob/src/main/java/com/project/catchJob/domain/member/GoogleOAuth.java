@@ -28,15 +28,15 @@ public class GoogleOAuth {
 	
 	private RestTemplate restTemplate;
 	
-	@Value("${google.clientId}")
+	@Value("${spring.security.oauth2.client.registration.google.clientId}")
 	//private String GOOGLE_CLIENT_ID;
 	private String googleClientId;
 	
-	@Value("${google.clientSecret}")
+	@Value("${spring.security.oauth2.client.registration.google.clientSecret}")
 	//private String GOOGLE_CLIENT_SECRET;
 	private String googleClientSecret;
 	
-	@Value("${google.redirect}")
+	@Value("${spring.security.oauth2.client.registration.google.redirect}")
 	//private String LOGIN_REDIRECT_URL;
 	private String googleRedirectUrl;
 
