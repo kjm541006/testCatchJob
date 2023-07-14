@@ -3,16 +3,19 @@ package com.project.catchJob.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.catchJob.domain.member.Member;
-import com.project.catchJob.dto.MemberDTO;
+import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.security.PasswordEncoder;
 import com.project.catchJob.security.TokenProvider;
 import com.project.catchJob.service.MemberService;
+import com.project.catchJob.service.OAuthService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,6 +34,8 @@ public class MemberController {
 	@Autowired
 	private PasswordEncoder pwdEncoder;
 	
+	
+	
 	// 회원등록
 	@PostMapping("/register") 
 	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
@@ -38,7 +43,6 @@ public class MemberController {
 			if(memberDTO == null || memberDTO.getPwd() == null) {
 				throw new RuntimeException("비밀번호 공란");
 			}
-			//if(memberDTO.getEmail().)
 			
 			// 요청을 이용해 저장할 멤버 만들기
 			Member member = Member.builder()
@@ -71,7 +75,7 @@ public class MemberController {
 	@PostMapping("/login") 
 	public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO) {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
-		System.out.println("=====control=====" + member.toString());
+		
 		// log.info("{} 로그인 성공", member.toString());
 		
 		if(member != null) {
@@ -95,6 +99,12 @@ public class MemberController {
 			return ResponseEntity.badRequest().body("로그인 실패");
 		}
 	}
+	
+	// 구글 로그인
+//	@GetMapping("api/oauth2/callback/google")
+//	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String accessCode) {
+//		return OAuthService.getGoogleAccessToken(accessCode);
+//	}
 
 	// 회원조회
 	@PostMapping("/memberInfo")
@@ -135,7 +145,8 @@ public class MemberController {
 		
 		if(member != null) {
 
-			return tokenProvider.deleteToken(memberDTO);
+			tokenProvider.deleteToken(memberDTO);
+			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.badRequest().body("회원 로그아웃 실패");
 	}

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.catchJob.domain.member.Member;
-import com.project.catchJob.dto.MemberDTO;
+import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.repository.MemberRepository;
 import com.project.catchJob.security.PasswordEncoder;
 
@@ -37,8 +37,6 @@ public class MemberService {
 		
 		// matches 메서드를 이용해서 패스워드 같은지 확인
 		if(originMember != null && pwdEncoder.matches(pwdEncoder.encrypt(email, pwd), originMember.getPwd())) {
-			System.out.println("=========1======" + pwdEncoder.encrypt(email, pwd));
-			System.out.println("=========2======" + originMember.getPwd());
 			return originMember;
 		}
 		return null;

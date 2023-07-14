@@ -50,6 +50,9 @@ public class Member {
 	@Column(name = "member_id")
 	private Long memberId; // email 넘 길어서 식별하려고 만든 아이디
 	
+	@Column(columnDefinition = "varchar(255) default '일반'")
+	private String type; // 일반 / 구글 / 카카오
+	
 	private String name;
 	
 	private String email;
@@ -62,7 +65,21 @@ public class Member {
 	private String job; // 직무
 	
 	private String hasCareer; // 경력여부
-
+	
+	/*
+	// 일반회원(memberDetailRegister), 구글(OAuth2Register)
+	@Builder(builderClassName = "memberDetailRegister", builderMethodName = "memberDetailRegister")
+	public Member(Long memberId, String type, String name, String email, String pwd, String job, String hasCareer) {
+		this.memberId = memberId;
+		this.type = type;
+		this.name = name;
+		this.email = email;
+		this.pwd = pwd;
+		this.job = job;
+		this.hasCareer = hasCareer;
+	}
+	*/
+	
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<Community> communityList = new ArrayList<>();
 	
