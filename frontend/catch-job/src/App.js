@@ -10,11 +10,18 @@ import BasicSigninPage from "./pages/BasicSigninPage";
 import EditSigninPage from "./pages/EditSigninPage";
 import Portfolio from "./pages/Portfolio";
 import StudyPage from "./pages/StudyPage";
+import BuildStudyPage from "./pages/BuildStudyPage";
 import GoogleLoginButton from "./components/GoogleLoginButton";
-import { GoogleOAuthProvider } from '@react-oauth/google'
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleLoginButton_long from "./components/GoogleLoginButton_long";
+import { useDispatch, useSelector } from "react-redux";
+import Loading from "./components/Loading";
+import { useEffect } from "react";
+import { startLoading, stopLoading } from "./redux/store";
 
 function App() {
+  const isLoading = useSelector((state) => state.loading.isLoading);
+  console.log(isLoading);
   return (
     <div className="App">
       <Header />
@@ -23,7 +30,8 @@ function App() {
           {/* <Route path="/userInfo/:userId" element={<UserInfo />} /> */}
           <Route path="/" element={<Portfolio />} />
           {/* <Route path="/recruit" element={<Recruit />} /> */}
-          <Route path="/study/*" element={<StudyPage />} />
+          <Route path="/study" element={<StudyPage />} />
+          <Route path="/study/build/*" element={<BuildStudyPage />} />
           {/* <Route path="/community/*" element={<CommunityRoutes />} /> */}
         </Route>
         <Route path="/join" element={<SocialSigninPage />} />
