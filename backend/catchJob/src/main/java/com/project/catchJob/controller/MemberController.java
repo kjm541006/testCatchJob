@@ -1,5 +1,7 @@
 package com.project.catchJob.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.catchJob.domain.member.GoogleOAuth;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.security.PasswordEncoder;
@@ -34,7 +37,8 @@ public class MemberController {
 	@Autowired
 	private PasswordEncoder pwdEncoder;
 	
-	
+	@Autowired
+	private GoogleOAuth googleoauth;
 	
 	// 회원등록
 	@PostMapping("/register") 
@@ -101,10 +105,10 @@ public class MemberController {
 	}
 	
 	// 구글 로그인
-//	@GetMapping("api/oauth2/callback/google")
-//	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String accessCode) {
-//		return OAuthService.getGoogleAccessToken(accessCode);
-//	}
+	@GetMapping("googlelogin")
+	public void getGoogleAuthUrl(HttpServletResponse res) throws Exception {
+		res.sendRedirect(googleoauth.getOauthRedirectURL());
+	}
 
 	// 회원조회
 	@PostMapping("/memberInfo")
