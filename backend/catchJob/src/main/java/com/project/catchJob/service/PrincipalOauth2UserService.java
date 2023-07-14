@@ -13,7 +13,7 @@ import com.project.catchJob.repository.MemberRepository;
 import com.project.catchJob.security.PasswordEncoder;
 
 //@Service
-public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
+public class PrincipalOauth2UserService {/*extends DefaultOAuth2UserService {
 /*
 	@Autowired
 	private MemberRepository memberRepo;
