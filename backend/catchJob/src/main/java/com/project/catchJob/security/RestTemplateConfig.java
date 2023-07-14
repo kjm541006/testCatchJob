@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class RestTemplateConfig {
-
+/*
 	// HTTP get, post 요청을 날릴 때 일정한 형식에 맞춰주는 template
 	
 	@Bean
@@ -24,6 +24,6 @@ public class RestTemplateConfig {
 				.build();
 	}
 	
-
+*/
 
 }

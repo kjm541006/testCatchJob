@@ -11,7 +11,7 @@ import com.project.catchJob.dto.member.GoogleUserInfoDTO;
 
 @Service
 public class OAuthService {
-	
+	/*
 	@Autowired
 	private GoogleOAuth googleOauth;
 	
@@ -23,5 +23,5 @@ public class OAuthService {
 		GoogleUserInfoDTO googleUser = googleOauth.getUserInfo(userInfoRes);
 		return googleUser;
 	}
-	
+*/	
 }

@@ -14,7 +14,7 @@ import com.project.catchJob.security.PasswordEncoder;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
-
+/*
 	@Autowired
 	private MemberRepository memberRepo;
 	
@@ -49,5 +49,5 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		}
 		return new PrincipalDetails(findMember, oAuth2User.getAttributes());
 	}
-
+*/
 }

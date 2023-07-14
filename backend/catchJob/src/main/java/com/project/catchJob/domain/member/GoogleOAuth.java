@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @PropertySource("classpath:application-oauth.properties")
 public class GoogleOAuth {
-
+/*
 	// https://velog.io/@hwsa1004/Spring-%EA%B5%AC%EA%B8%80-%EB%A1%9C%EA%B7%B8%EC%9D%B8-REST-API-%EA%B5%AC%ED%98%84-OAuth2
 	// https://developers.google.com/identity/protocols/oauth2/web-server?hl=ko 참고
 	
@@ -116,4 +116,5 @@ public class GoogleOAuth {
 		return googleUserInfoDTO;
 		// GoogleUserInfoDTO : json형태를 자바 객체 형식으로 변경 후 저장해서 담을 곳
 	}
+	*/
 }

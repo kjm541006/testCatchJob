@@ -106,7 +106,7 @@ public class MemberController {
 			return ResponseEntity.badRequest().body("로그인 실패");
 		}
 	}
-	
+	/*
 	// 구글 로그인
 	@GetMapping("/google")
 	public void getGoogleAuthUrl(HttpServletResponse res) throws Exception {
@@ -123,7 +123,7 @@ public class MemberController {
 		return null;
 		// return oAuthService.googleLogin(accessCode);
 	}
-
+*/
 	// 회원조회
 	@PostMapping("/memberInfo")
 	public ResponseEntity<?> memberInfo(@RequestBody MemberDTO memberDTO) {

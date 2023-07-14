@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GoogleOAuthTokenDTO {
-
+/*
 	// 구글에서 얻은 token 담을 DTO
 	
 	private String access_token;
@@ -16,4 +16,5 @@ public class GoogleOAuthTokenDTO {
 	private String scope;
 	private String token_type;
 	private String id_token;
+	*/
 }
