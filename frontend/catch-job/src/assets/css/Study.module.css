@@ -7,12 +7,12 @@
 
 .studyPage {
   width: 1200px;
-  min-height: 100vh;
+  min-height: 500vh;
   position: relative;
 }
 
 .makeProject {
-  width: 150px;
+  width: 145px;
   height: 65px;
   position: sticky;
   top: 850px;
@@ -39,7 +39,10 @@
   opacity: 1;
 }
 
-.studySort {
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -57,6 +60,19 @@
 
 .topRated {
   margin-right: 30px;
+}
+
+.showSelected {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  gap: 7px;
+}
+
+.selected {
+  border: none;
 }
 
 .studyGridView {
