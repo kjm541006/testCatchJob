@@ -2,11 +2,11 @@ package com.project.catchJob.domain.member;
 
 import java.util.Collection;
 import java.util.Map;
-
+/*
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-
+*/
 import lombok.Getter;
 import lombok.ToString;
 
