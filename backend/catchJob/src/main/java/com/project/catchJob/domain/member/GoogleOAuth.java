@@ -1,5 +1,7 @@
 package com.project.catchJob.domain.member;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -33,6 +35,7 @@ public class GoogleOAuth {
 	@Value("${google.redirect-uri}")
 	private String LOGIN_REDIRECT_URL;
 
+	@PostConstruct
 	public String getOauthRedirectURL() {
 	    String redirectUrl = "https://accounts.google.com/o/oauth2/auth";
 	    String clientId = GOOGLE_CLIENT_ID;
@@ -46,9 +49,5 @@ public class GoogleOAuth {
 	    
 	    return oauthUrl;
 	}
-
-	
-
-	
 	
 }
