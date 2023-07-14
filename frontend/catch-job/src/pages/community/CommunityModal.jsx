@@ -1,8 +1,21 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 
-function Modal({ onCommentSubmit, onCancel, comment, onCommentChange }) {
+function Modal({ postId, onCommentSubmit, onCancel, comment, onCommentChange }) {
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = () => {
-    onCommentSubmit();
+    setLoading(true);
+    axios
+      .post(`/api/comments/${postId}`, { content: comment })
+      .then((response) => {
+        setLoading(false);
+        onCommentSubmit();
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error("Error submitting comment", error);
+      });
   };
 
   const handleCancel = () => {

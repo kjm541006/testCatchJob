@@ -1,45 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../assets/css/CommunityPage.css";
 import Modal from "./CommunityModal";
 import PostModal from "./CommunityPostModal";
 import "../../assets/css/CommunityPostModal.css";
+import axios from "axios";
 
 function Card(props) {
   const [commentModalOpen, setCommentModalOpen] = useState([]);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
-  const [postContent, setPostContent] = useState("");
+
   const [expanded, setExpanded] = useState([]);
   const [postModalOpen, setPostModalOpen] = useState(false);
   const [showComments, setShowComments] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("전체");
 
-  const [communityData, setCommunityData] = useState([
-    {
-      id: 1,
-      title: "First Post",
-      content: "This is the first post.",
-      category: "기술 질문",
-      instUser: "김상원",
-      instDate: "2023-07-13 12:00",
-      profileImg: "이미지 저장 경로",
-      comment: [
-        { id: 1, user: "윤희영", content: "ㅋㅋ븅신" },
-        { id: 2, user: "윤희영2", content: "ㅋㅋㅋㅋㅋㅋ222" },
-      ],
-    },
-    {
-      id: 2,
-      title: "Second Post",
-      content: "This is the second post.",
-      category: "취업 고민",
-      comment: [
-        { id: 1, user: "박찬수2", content: "ㅋㅋ븅신222" },
-        { id: 2, user: "박찬수2", content: "ㅋㅋㅋㅋㅋㅋ333" },
-      ],
-    },
-    { id: 3, title: "Third Post", content: "This is the third post.", category: "기타" },
-  ]);
+  const [communityData, setCommunityData] = useState([]);
+
+  const fetchCommunityData = async () => {
+    try {
+      const response = await axios.get("/api/community"); //replace "api/community" actual API endpoint
+      setCommunityData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCommunityData();
+  }, [selectedCategory]);
 
   const toggleCommentModal = (i) => {
     setCommentModalOpen((prevCommentModalOpen) => {
@@ -66,19 +55,36 @@ function Card(props) {
     setComment(event.target.value);
   };
 
-  const handleSubmitComment = () => {
+  const handleSubmitComment = async (i) => {
     const newComment = { id: Date.now(), content: comment };
-    setComments((prevComments) => [...prevComments, newComment]);
-    setComment("");
+    const postId = filteredData[i].id;
+
+    try {
+      const response = await axios.post(`/api/community/${postId}/comments`, newComment);
+      setCommunityData((prevData) => {
+        const newData = [...prevData];
+        const postIndex = newData.findIndex((post) => post.id === postId);
+        newData[postIndex].comment.push(response.data);
+        return newData;
+      });
+      setComment("");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const togglePostModal = () => {
     setPostModalOpen(!postModalOpen);
   };
 
-  const handlePostSubmit = (newPost) => {
-    setCommunityData((prevData) => [...prevData, newPost]);
-    togglePostModal();
+  const handlePostSubmit = async (newPost) => {
+    try {
+      const response = await axios.post("/api/community", newPost);
+      setCommunityData((prevData) => [...prevData, newPost]);
+      togglePostModal();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleCategoryClick = (category) => {
@@ -95,24 +101,21 @@ function Card(props) {
   };
 
   const renderComments = (comments) => {
-    console.log(comments);
-    // if (comments.length === 0 || !showComments) {
-    //   return null;
-    // }
+    if (comments.length === 0 || !showComments) {
+      return null;
+    }
 
     return (
       <>
         <div className="commentsContainer">
-          {comments
-            ? comments.map((comment) => (
-                <div key={comment.id} className="commentment">
-                  <div className="commentmentuser">{comment.id}</div>
-                  <div className="commentmentment">
-                    <p>{comment.content}</p>
-                  </div>
-                </div>
-              ))
-            : ""}
+          {comments.map((comment) => (
+            <div key={comment.id} className="commentment">
+              <div className="commentmentuser">{comment.user}</div>
+              <div className="commentmentment">
+                <p>{comment.content}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </>
     );
@@ -182,7 +185,7 @@ function Card(props) {
               {commentModalOpen[i] && (
                 <>
                   <Modal
-                    onCommentSubmit={handleSubmitComment}
+                    onCommentSubmit={() => handleSubmitComment(i)}
                     onCancel={toggleCommentModal}
                     comment={comment}
                     onCommentChange={handleCommentChange}

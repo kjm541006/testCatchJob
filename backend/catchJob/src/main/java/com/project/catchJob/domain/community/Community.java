@@ -4,13 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.project.catchJob.domain.member.Member;
 
@@ -20,37 +14,51 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(exclude = {"member","communityCommentsList", "communityLikeList"})
+@ToString(exclude = {"member","comments"})
 @Entity
+@Table(name ="community")
 public class Community {
 
-	@Id @GeneratedValue @Column(name = "community_id")
-	private Long communityId;
-	
-	private String cType; // 분류
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "community_id")
+	private Long cId;
+		
 	private String cTitle; // 제목
+	
+	private String ccategory; // 분류
 	
 	private String cContents; // 내용
 	
-	@Column(insertable = false, updatable = false, columnDefinition = "date default now()")
-	private Date cDate; // 작성날짜
+	private String instUser; // 작성유저
 	
-	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
-	private Long cLike; // 좋아요
+	private String instDate; // 작성날짜
 	
-	@ManyToOne
-	@JoinColumn(name = "member_id", nullable = false, updatable = false)
-	private Member member;
+	private String profileImg; // 프로필이미지
 	
-	public void setMember(Member member) {
-		this.member = member;
-		member.getCommunityList().add(this);
+	
+	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Comment> comments = new ArrayList<>();
+	
+	public Community() {
+		
 	}
+	public Community(String title, String category, String content, String instUser, String instDate, String profileImg) {
+		this.cTitle= title;
+		this.ccategory = category;
+		this.cContents = content;
+		this.instUser = instUser;
+		this.instDate = instDate;
+		this.profileImg = profileImg;
+		
+	}
+	public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setCommunity(this);
+    }
 
-	@OneToMany(mappedBy = "community")
-	private List<C_comments> communityCommentsList= new ArrayList<>();
-	
-	@OneToMany(mappedBy = "community")
-	private List<C_like> communityLikeList= new ArrayList<>();
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
+        comment.setCommunity(null);
+    }
 }

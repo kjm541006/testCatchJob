@@ -10,12 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.project.catchJob.domain.community.Community;
 
-public interface CommunityRepository extends JpaRepository<Community, Long> {
+public interface CommunityRepository extends JpaRepository<CommunityPostRepository, Long> {
 
-	@Modifying
-	@Transactional
-	@Query("update Community c set c.cLike = c.cLike + 1 where c.communityId = :communityId")
-	int updateCommunityLike(@Param("communityId")Long communityId);
-	
-	Page<Community> findByCTypeContaining(String cType, Pageable pageable);
 }
