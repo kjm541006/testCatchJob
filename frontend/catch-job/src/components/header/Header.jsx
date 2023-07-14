@@ -8,21 +8,21 @@ import axios from "axios";
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
-  const toggleLogin = () => {
-    setIsLoggedIn(false);
-    axios.post("http://43.202.98.45:8089/logout") 
-      .then((response) => {
-        if (response.status === 200) {
-          localStorage.removeItem("token");
-          setIsLoggedIn(false);
-        } else {
-         
-        }
-      })
-      .catch((error) => {
-        console.error("로그아웃 에러:", error);
-      });
-  };
+  // const toggleLogin = () => {
+  //   setIsLoggedIn(false);
+  //   axios.post("http://43.202.98.45:8089/logout")
+  //     .then((response) => {
+  //       if (response.status === 200) {
+  //         localStorage.removeItem("token");
+  //         setIsLoggedIn(false);
+  //       } else {
+
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("로그아웃 에러:", error);
+  //     });
+  // };
 
   return (
     <>
@@ -49,6 +49,8 @@ const Header = () => {
               </Link>
             </ul>
           </div>
+        </div>
+        <div className="nav-right">
           <form action="/search" method="post">
             <div className="search-bar">
               <input type="text" placeholder="검색어를 입력하세요." className="search-box" required name="search" />
@@ -73,10 +75,10 @@ const Header = () => {
             {/* 로그인 했을 경우 */}
             {isLoggedIn && (
               <div className="header-user-info">
-                <Link to="/edit" className="header-username">김주민 님</Link>
-                <div className="header-logout-btn" onClick={toggleLogin}>
-                  로그아웃
-                </div>
+                <Link to="/edit" className="header-username">
+                  김주민 님
+                </Link>
+                <div className="header-logout-btn">로그아웃</div>
               </div>
             )}
           </div>
