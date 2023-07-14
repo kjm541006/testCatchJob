@@ -24,13 +24,13 @@ public class GoogleOAuth {
 	
 	private RestTemplate restTemplate;
 	
-	@Value("${oauth2.google.client-id}")
+	@Value("${google.client-id}")
 	private String GOOGLE_CLIENT_ID;
 	
-	@Value("${oauth2.google.client-secret}")
+	@Value("${google.client-secret}")
 	private String GOOGLE_CLIENT_SECRET;
 	
-	@Value("${oauth2.google.redirect-uri}")
+	@Value("${google.redirect-uri}")
 	private String LOGIN_REDIRECT_URL;
 
 	public String getOauthRedirectURL() {
