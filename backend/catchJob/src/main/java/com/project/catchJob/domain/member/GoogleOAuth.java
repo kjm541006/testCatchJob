@@ -27,21 +27,24 @@ public class GoogleOAuth {
 	
 	private RestTemplate restTemplate;
 	
-	@Value("${google.client-id}")
-	private String GOOGLE_CLIENT_ID;
+	@Value("${google.clientId}")
+	//private String GOOGLE_CLIENT_ID;
+	private String googleClientId;
 	
-	@Value("${google.client-secret}")
-	private String GOOGLE_CLIENT_SECRET;
+	@Value("${google.clientSecret}")
+	//private String GOOGLE_CLIENT_SECRET;
+	private String googleClientSecret;
 	
-	@Value("${google.redirect-uri}")
-	private String LOGIN_REDIRECT_URL;
+	@Value("${google.redirect}")
+	//private String LOGIN_REDIRECT_URL;
+	private String googleRedirectUrl;
 
 	@PostConstruct
 	public String getOauthRedirectURL() {
 
 		String redirectUrl = "https://accounts.google.com/o/oauth2/auth";
-	    String clientId = GOOGLE_CLIENT_ID;
-	    String redirectUri = LOGIN_REDIRECT_URL;
+	    String clientId = googleClientId;
+	    String redirectUri = googleRedirectUrl;
 	    String responseType = "code";
 	    String scope = "openid email profile";
 	    String state = "your-state-value"; // 선택 사항: CSRF 보호를 위한 상태 값 추가
