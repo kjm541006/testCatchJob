@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class OAuthService {
 
 	// https://developers.google.com/identity/protocols/oauth2/web-server?hl=ko 참고
-	
+	/*
 	private final String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 	// 엑세스 토큰에 대한 승인 코드를 교환하려면 엔드포인트 호출 후 매개변수 설정
 	
@@ -55,5 +55,5 @@ public class OAuthService {
 		return null;
 		
 	}
-	
+	*/
 }
