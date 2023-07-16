@@ -1,5 +1,7 @@
 package com.project.catchJob.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -7,13 +9,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.catchJob.domain.member.GoogleOAuth;
 import com.project.catchJob.domain.member.Member;
-import com.project.catchJob.dto.MemberDTO;
+import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.security.PasswordEncoder;
 import com.project.catchJob.security.TokenProvider;
 import com.project.catchJob.service.MemberService;
+import com.project.catchJob.service.OAuthService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +36,42 @@ public class MemberController {
 	
 	@Autowired
 	private PasswordEncoder pwdEncoder;
+/*	
+	@Autowired
+	private GoogleOAuth googleoauth;
 	
+	@Autowired
+	private OAuthService oAuthService;
+*/	
+	
+	// 회원등록
+	@PostMapping("/register")
+	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
+		try {
+			if(memberDTO == null || memberDTO.getPwd() == null) {
+				throw new RuntimeException("비밀번호 공란");
+			}
+			MemberDTO responseMemberDTO = MemberDTO.builder()
+					.email(memberDTO.getEmail())
+					.pwd(pwdEncoder.encrypt(memberDTO.getEmail(), memberDTO.getPwd()))
+//					.pwd(memberDTO.getPwd())
+					.name(memberDTO.getName())
+					.job(memberDTO.getJob())
+					.hasCareer(memberDTO.getHasCareer())
+					.type("일반")
+					.build();
+			memberService.createMember(responseMemberDTO);
+			return ResponseEntity.ok().body(responseMemberDTO);
+		} catch (Exception e) {
+			// 멤버 정보는 항상 하나이므로 리스트로 만들어야하는 ResponseDTO를 사용하지 않고 그냥 member 리턴
+//			 ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
+//			 return ResponseEntity.badRequest().body(registerMember(memberDTO));
+			 return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
+		}		
+	}
+	
+	
+	/*
 	// 회원등록
 	@PostMapping("/register") 
 	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
@@ -39,7 +79,6 @@ public class MemberController {
 			if(memberDTO == null || memberDTO.getPwd() == null) {
 				throw new RuntimeException("비밀번호 공란");
 			}
-			//if(memberDTO.getEmail().)
 			
 			// 요청을 이용해 저장할 멤버 만들기
 			Member member = Member.builder()
@@ -67,14 +106,14 @@ public class MemberController {
 			 return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
 		}
 	}
-	
+	*/
 	// 로그인
 	@PostMapping("/login") 
 	public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO) {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		
 		// log.info("{} 로그인 성공", member.toString());
-		
+		System.out.println("==========" + member.toString());
 		if(member != null) {
 			
 			// 토큰 생성
@@ -84,7 +123,7 @@ public class MemberController {
 			final MemberDTO responseMemberDTO = MemberDTO.builder()
 					.name(member.getName())
 					.email(member.getEmail())
-					.pwd(member.getPwd())
+					.pwd(pwdEncoder.encrypt(member.getEmail(), member.getPwd()))
 					.job(member.getJob())
 					.hasCareer(member.getHasCareer())
 					.token(token)
@@ -96,14 +135,32 @@ public class MemberController {
 			return ResponseEntity.badRequest().body("로그인 실패");
 		}
 	}
-
+	/*
+	// 구글 로그인
+	@GetMapping("/google")
+	public void getGoogleAuthUrl(HttpServletResponse res) throws Exception {
+		res.sendRedirect(googleoauth.getOauthRedirectURL());
+	}
+	
+	@GetMapping("/api/oauth2/callback/google")
+	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String accessCode) {
+		return googleoauth.requestAccessToken(accessCode);
+	}
+	
+	@GetMapping("/google/login")
+	public ResponseEntity<?> successGoogleLogin2(@RequestParam("code") String accessCode) {
+		return null;
+		// return oAuthService.googleLogin(accessCode);
+	}
+*/
 	// 회원조회
 	@PostMapping("/memberInfo")
 	public ResponseEntity<?> memberInfo(@RequestBody MemberDTO memberDTO) {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		
 		if(member != null) {
-			return ResponseEntity.ok().body(member);
+			MemberDTO responseMemberDTO = MemberDTO.toMemberDTO(member);
+			return ResponseEntity.ok().body(responseMemberDTO);
 		}
 		return ResponseEntity.badRequest().body("회원 조회 실패");
 	}
@@ -121,6 +178,8 @@ public class MemberController {
 				.job(updateMember.getJob())
 				.hasCareer(updateMember.getHasCareer())
 				.token(memberDTO.getToken()) // 토큰은 기존의 발급받은 토큰 사용
+				.type(memberDTO.getType())
+				.fileAttached(updateMember.getFileAttached())
 				.build();
 		
 			return ResponseEntity.ok().body(responseMemberDTO);
@@ -133,9 +192,13 @@ public class MemberController {
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(@RequestBody MemberDTO memberDTO) {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
-		
+		System.out.println("-------------" + memberDTO.getEmail());
+		System.out.println("-------------" + memberDTO.getPwd());
+		System.out.println("-------------" + pwdEncoder);
 		if(member != null) {
-			return tokenProvider.deleteToken(memberDTO);
+
+			tokenProvider.deleteToken(memberDTO);
+			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.badRequest().body("회원 로그아웃 실패");
 	}

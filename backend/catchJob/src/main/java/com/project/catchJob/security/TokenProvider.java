@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.project.catchJob.domain.member.Member;
-import com.project.catchJob.dto.MemberDTO;
+import com.project.catchJob.dto.member.MemberDTO;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
