@@ -43,6 +43,37 @@ public class MemberController {
 	@Autowired
 	private OAuthService oAuthService;
 */	
+
+	
+	// 회원등록
+	@PostMapping("/register")
+	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
+		try {
+			if(memberDTO == null || memberDTO.getPwd() == null) {
+				throw new RuntimeException("비밀번호 공란");
+			}
+			MemberDTO responseMemberDTO = MemberDTO.builder()
+					.email(memberDTO.getEmail())
+					.pwd(pwdEncoder.encrypt(memberDTO.getEmail(), memberDTO.getPwd()))
+//					.pwd(memberDTO.getPwd())
+					.name(memberDTO.getName())
+					.job(memberDTO.getJob())
+					.hasCareer(memberDTO.getHasCareer())
+					.type("일반")
+					.build();
+			memberService.createMember(responseMemberDTO);
+			return ResponseEntity.ok().body(responseMemberDTO);
+		} catch (Exception e) {
+			// 멤버 정보는 항상 하나이므로 리스트로 만들어야하는 ResponseDTO를 사용하지 않고 그냥 member 리턴
+//			 ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
+//			 return ResponseEntity.badRequest().body(registerMember(memberDTO));
+			 return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
+		}		
+	}
+	
+	
+	/*
+>>>>>>> 226a55db1e3b3cb985f2feb38fec422c29f749d0
 	// 회원등록
 	@PostMapping("/register") 
 	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
@@ -77,14 +108,14 @@ public class MemberController {
 			 return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
 		}
 	}
-	
+	*/
 	// 로그인
 	@PostMapping("/login") 
 	public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO) {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		
 		// log.info("{} 로그인 성공", member.toString());
-		
+		System.out.println("==========" + member.toString());
 		if(member != null) {
 			
 			// 토큰 생성
@@ -94,7 +125,7 @@ public class MemberController {
 			final MemberDTO responseMemberDTO = MemberDTO.builder()
 					.name(member.getName())
 					.email(member.getEmail())
-					.pwd(member.getPwd())
+					.pwd(pwdEncoder.encrypt(member.getEmail(), member.getPwd()))
 					.job(member.getJob())
 					.hasCareer(member.getHasCareer())
 					.token(token)
@@ -130,7 +161,8 @@ public class MemberController {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		
 		if(member != null) {
-			return ResponseEntity.ok().body(member);
+			MemberDTO responseMemberDTO = MemberDTO.toMemberDTO(member);
+			return ResponseEntity.ok().body(responseMemberDTO);
 		}
 		return ResponseEntity.badRequest().body("회원 조회 실패");
 	}
@@ -148,6 +180,8 @@ public class MemberController {
 				.job(updateMember.getJob())
 				.hasCareer(updateMember.getHasCareer())
 				.token(memberDTO.getToken()) // 토큰은 기존의 발급받은 토큰 사용
+				.type(memberDTO.getType())
+				.fileAttached(updateMember.getFileAttached())
 				.build();
 		
 			return ResponseEntity.ok().body(responseMemberDTO);
@@ -160,7 +194,9 @@ public class MemberController {
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(@RequestBody MemberDTO memberDTO) {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
-		
+		System.out.println("-------------" + memberDTO.getEmail());
+		System.out.println("-------------" + memberDTO.getPwd());
+		System.out.println("-------------" + pwdEncoder);
 		if(member != null) {
 
 			tokenProvider.deleteToken(memberDTO);

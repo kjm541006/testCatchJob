@@ -21,8 +21,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.catchJob.dto.member.GoogleOAuthTokenDTO;
 import com.project.catchJob.dto.member.GoogleUserInfoDTO;
-import com.project.catchJob.repository.MemberRepository;
-
+import com.project.catchJob.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 
 @Component

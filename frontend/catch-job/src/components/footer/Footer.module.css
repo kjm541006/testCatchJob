@@ -2,11 +2,11 @@
   height: 250px;
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  padding: 0 350px;
+  padding: 0 50px;
   /* border-top: 1px solid black; */
-  background-color: lightgray;
+  background-color: #ffffff;
 }
 
 .FooterLeft {
@@ -16,13 +16,14 @@
 }
 
 .FooterLogo {
-  font-size: 56px;
+  font-size: 46px;
   color: #444;
   font-weight: 600;
 }
 
 .LogoJ {
   color: #e2432e;
+  font-size: 56px;
 }
 
 .FooterRight {
@@ -31,6 +32,8 @@
   align-items: center;
   line-height: 1.5;
   gap: 70px;
+  min-width: 600px;
+  padding-left: 100px;
   /* padding-right: 50px; */
 }
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 */
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.domain.member.PrincipalDetails;
-import com.project.catchJob.repository.MemberRepository;
+import com.project.catchJob.repository.member.MemberRepository;
 import com.project.catchJob.security.PasswordEncoder;
 
 //@Service

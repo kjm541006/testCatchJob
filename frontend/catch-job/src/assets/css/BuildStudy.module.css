@@ -1,0 +1,166 @@
+.buildPage {
+  width: 1200px;
+  min-height: 100vh;
+  margin: 100px auto;
+}
+
+.buildType {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 47px;
+  cursor: pointer;
+  border: 1px solid #b2b2b2;
+  border-radius: 8px;
+}
+
+.type {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 22px;
+}
+
+.type:first-child {
+  border-radius: 8px 0 0 8px;
+  /* border-right: 1px solid black; */
+}
+
+.active {
+  background-color: #e2432e !important;
+  color: #fff !important;
+}
+
+.type:last-child {
+  border-radius: 0 8px 8px 0;
+}
+/* 
+.titleWrapper {
+  margin-top: 64px;
+} */
+
+.title {
+  /* margin-top: 50px; */
+  margin-bottom: 30px;
+  color: #000;
+  font-family: Inter;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 22px;
+}
+
+.titleInput {
+  width: 100%;
+  height: 48px;
+  padding: 13px 10px;
+  border-radius: 5px;
+  border: 1px solid #444;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+.wrapper {
+  margin-top: 64px;
+}
+
+.items {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.select {
+  width: 120px;
+  height: 45px;
+  border: 1px solid #e2432e;
+  border-radius: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #444;
+  font-family: NanumGothic;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 16.95px;
+  letter-spacing: -0.4px;
+}
+
+.radioBtn {
+  display: none;
+}
+
+/* YourStyles.module.css */
+
+.selects {
+  width: 150px;
+  height: 45px;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #444;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 16.95px;
+  letter-spacing: -0.4px;
+}
+
+.selects option {
+  padding: 5px;
+  background-color: #fff;
+  color: #333;
+}
+
+.crewList {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.crewItems {
+  margin-bottom: 30px;
+}
+
+.plusMinusBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  font-size: 20px;
+}
+
+.plusMinusBtn button {
+  border: none;
+  background-color: inherit;
+  font-size: 20px;
+}
+
+.btnContainer {
+  margin-left: 300px;
+}
+
+.crewAddBtn {
+  width: 80px;
+  padding: 8px 10px;
+  border: 1px solid #e2e2e2;
+  background-color: #fff;
+  border-radius: 4px;
+}
+
+.minusBtn {
+  cursor: pointer;
+}
+
+.plusBtn {
+  cursor: pointer;
+}

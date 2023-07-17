@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.project.catchJob.domain.board.B_comments;
 import com.project.catchJob.domain.board.B_like;
@@ -37,7 +38,7 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {
+@ToString(exclude = { 
 		"communityList", "c_CommentsList", "c_LikeList", 
 		"boardList", "b_CommentsList", "b_LikeList",
 		"studyList", "s_CommentsList", "s_LikeList", "s_ReasonList",
@@ -66,6 +67,8 @@ public class Member {
 	
 	private String hasCareer; // 경력여부
 	
+	private int fileAttached; // 프로필사진 첨부 유무(첨부:1 / 미첨부:0)
+
 	/*
 	// 일반회원(memberDetailRegister), 구글(OAuth2Register)
 	@Builder(builderClassName = "memberDetailRegister", builderMethodName = "memberDetailRegister")
@@ -79,6 +82,10 @@ public class Member {
 		this.hasCareer = hasCareer;
 	}
 	*/
+	
+
+	@OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private M_profile mProfile;
 	
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<Community> communityList = new ArrayList<>();
