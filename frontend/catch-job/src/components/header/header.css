@@ -104,6 +104,7 @@
 .header-user-info {
   display: flex;
   align-items: center;
+  min-width: 250px;
 }
 
 .header-logout-btn {
@@ -114,6 +115,8 @@
   padding: 5px 12px;
   background-color: lightgray;
   font-weight: normal;
+  min-width: 100px;
+  text-align: center;
 }
 
 .header-logout-btn:hover {
