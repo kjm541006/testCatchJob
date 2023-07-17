@@ -9,14 +9,15 @@
   width: 1200px;
   min-height: 500vh;
   position: relative;
+  margin-top: 100px;
 }
 
 .makeProject {
   width: 145px;
   height: 65px;
   position: sticky;
-  top: 850px;
   left: 1500px;
+  bottom: 5%;
   z-index: 98;
   border-radius: 32px;
   background-color: #e2432e;
