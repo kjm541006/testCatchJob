@@ -84,6 +84,23 @@ function Card(props) {
         { id: 8, user: "User6", content: "인터뷰어에게 궁금한 점을 질문하는 것도 좋은 인상을 남길 수 있습니다." },
       ],
     },
+    {
+      id: 5,
+      profileImg: "https://example.com/profile2.jpg",
+      instUser: "User4",
+      instDate: "2023-07-16",
+      category: "기타",
+      title: "면접 팁을 주세요",
+      content: "면접에서 성공하기 위한 팁이 있을까요?",
+      comment: [
+        {
+          id: 1,
+          user: "User5",
+          content: "면접 전에는 꼼꼼한 준비와 연습이 중요합니다. 자신의 경험에 대해 자세히 알고, 자주 묻는 질문에 대해 준비해보세요.",
+        },
+        { id: 2, user: "User6", content: "인터뷰어에게 궁금한 점을 질문하는 것도 좋은 인상을 남길 수 있습니다." },
+      ],
+    },
     // 추가적인 데이터를 여기에 추가할 수 있습니다.
   ];
 
