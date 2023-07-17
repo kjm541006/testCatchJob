@@ -68,7 +68,7 @@ public class Member {
 	private String hasCareer; // 경력여부
 	
 	private int fileAttached; // 프로필사진 첨부 유무(첨부:1 / 미첨부:0)
-	
+
 	/*
 	// 일반회원(memberDetailRegister), 구글(OAuth2Register)
 	@Builder(builderClassName = "memberDetailRegister", builderMethodName = "memberDetailRegister")
@@ -83,6 +83,7 @@ public class Member {
 	}
 	*/
 	
+
 	@OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private M_profile mProfile;
 	

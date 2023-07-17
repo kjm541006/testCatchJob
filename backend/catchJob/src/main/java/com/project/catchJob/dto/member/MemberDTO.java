@@ -1,11 +1,8 @@
 package com.project.catchJob.dto.member;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.multipart.MultipartFile;
-
 import com.project.catchJob.domain.member.Member;
-import com.project.catchJob.security.PasswordEncoder;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,8 +20,8 @@ public class MemberDTO {
 	private String pwd;
 	private String job;
 	private String hasCareer;
-	private String type;
 	private String token;
+	private String type;
 	
 	private MultipartFile mProfile;
 	private String mOriginalFileName;
