@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 import com.project.catchJob.domain.board.B_comments;
 import com.project.catchJob.domain.board.B_like;
 import com.project.catchJob.domain.board.Board;
-import com.project.catchJob.domain.community.C_comments;
+import com.project.catchJob.domain.community.Comment;
 import com.project.catchJob.domain.community.C_like;
 import com.project.catchJob.domain.community.Community;
 import com.project.catchJob.domain.project.P_comments;
@@ -91,7 +91,7 @@ public class Member {
 	private List<Community> communityList = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	private List<C_comments> c_CommentsList = new ArrayList<>();
+	private List<Comment> c_CommentsList = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<C_like> c_LikeList = new ArrayList<>();
