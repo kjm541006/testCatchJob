@@ -1,28 +1,27 @@
-import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import "./header.css";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut, selectLoggedIn, selectUser } from "../../redux/login";
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const dispatch = useDispatch();
+  let user = useSelector(selectUser);
+  const isLoggedIn = useSelector(selectLoggedIn);
 
-  // const toggleLogin = () => {
-  //   setIsLoggedIn(false);
-  //   axios.post("http://43.202.98.45:8089/logout")
-  //     .then((response) => {
-  //       if (response.status === 200) {
-  //         localStorage.removeItem("token");
-  //         setIsLoggedIn(false);
-  //       } else {
+  console.log(user);
+  console.log(isLoggedIn);
 
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("로그아웃 에러:", error);
-  //     });
-  // };
+  if (user === undefined) {
+    user = localStorage.getItem("name");
+  }
+
+  const logOutBtn = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("name");
+    dispatch(logOut());
+  };
 
   return (
     <>
@@ -75,10 +74,12 @@ const Header = () => {
             {/* 로그인 했을 경우 */}
             {isLoggedIn && (
               <div className="header-user-info">
-                <Link to="/edit" className="header-username">
-                  김주민 님
+                <Link to="/mypage" className="header-username">
+                  {user} 님
                 </Link>
-                <div className="header-logout-btn">로그아웃</div>
+                <div className="header-logout-btn" onClick={logOutBtn}>
+                  로그아웃
+                </div>
               </div>
             )}
           </div>
