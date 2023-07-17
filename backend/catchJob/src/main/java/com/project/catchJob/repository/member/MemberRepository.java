@@ -1,4 +1,4 @@
-package com.project.catchJob.repository;
+package com.project.catchJob.repository.member;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

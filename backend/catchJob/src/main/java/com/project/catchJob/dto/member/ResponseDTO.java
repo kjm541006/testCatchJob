@@ -1,4 +1,4 @@
-package com.project.catchJob.dto;
+package com.project.catchJob.dto.member;
 
 import java.util.List;
 

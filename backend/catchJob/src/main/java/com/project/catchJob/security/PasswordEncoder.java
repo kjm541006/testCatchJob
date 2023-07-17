@@ -12,7 +12,7 @@ import javax.crypto.spec.PBEKeySpec;
 
 import org.springframework.stereotype.Component;
 
-import com.project.catchJob.dto.MemberDTO;
+import com.project.catchJob.dto.member.MemberDTO;
 
 @Component
 public class PasswordEncoder {
