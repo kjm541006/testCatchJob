@@ -1,36 +1,46 @@
 package com.project.catchJob.domain.community;
 
-import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 
-
-import javax.persistence.*;
-
-import com.project.catchJob.domain.member.Member;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
-@Getter
-@Setter
-@ToString(exclude = {"member","community"})
 @Entity
+@Table
 public class Comment {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id; 
+	private Long id;
 	
-	private String user; 
+	@Lob
+	private String content;
 	
-	@Column(columnDefinition ="TEXT")
-	private Date content; 
+	public Comment() {
+		// Default constructor
+	}
+
+	public Comment(String content) {
+		this.content = content;
+	}
+
+	// Getters and setters
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "post_id")
-	private Community community;
-	private CommunityPost post;
-	
-	
-	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
 }
