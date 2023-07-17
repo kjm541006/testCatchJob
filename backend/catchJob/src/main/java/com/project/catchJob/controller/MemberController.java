@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.catchJob.domain.member.GoogleOAuth;
 import com.project.catchJob.domain.member.Member;
+import com.project.catchJob.dto.member.GoogleOAuthTokenDTO;
+import com.project.catchJob.dto.member.GoogleUserInfoDTO;
 import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.security.PasswordEncoder;
 import com.project.catchJob.security.TokenProvider;
@@ -36,13 +38,13 @@ public class MemberController {
 	
 	@Autowired
 	private PasswordEncoder pwdEncoder;
-/*	
+	
 	@Autowired
 	private GoogleOAuth googleoauth;
 	
 	@Autowired
 	private OAuthService oAuthService;
-*/	
+	
 
 	
 	// 회원등록
@@ -73,7 +75,7 @@ public class MemberController {
 	
 	
 	/*
->>>>>>> 226a55db1e3b3cb985f2feb38fec422c29f749d0
+
 	// 회원등록
 	@PostMapping("/register") 
 	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
@@ -139,24 +141,32 @@ public class MemberController {
 	}
 	/*
 	// 구글 로그인
-	@GetMapping("/google")
+	@GetMapping("/googlelogin")
 	public void getGoogleAuthUrl(HttpServletResponse res) throws Exception {
 		res.sendRedirect(googleoauth.getOauthRedirectURL());
 	}
-	
-	@GetMapping("/api/oauth2/callback/google")
-	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String accessCode) {
-		return googleoauth.requestAccessToken(accessCode);
+	*/
+	//@PostMapping("/api/oauth2/callback/google")
+	@PostMapping("/googlelogin")
+	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String accessCode) throws Exception {
+		System.out.println("---------1.accessCode------" + accessCode);
+		ResponseEntity<String> tokenEntity = googleoauth.requestAccessToken(accessCode);
+		System.out.println("---------2.tokenEntity------" + tokenEntity);
+		GoogleOAuthTokenDTO googleOAuthTokenDTO = googleoauth.getAccessToken(tokenEntity);
+		System.out.println("---------3.googleOAuthTokenDTO------" + googleOAuthTokenDTO);
+		ResponseEntity<String> requsetUser = googleoauth.requestUserInfo(googleOAuthTokenDTO);
+		System.out.println("---------4.requsetUser------" + requsetUser);
+		GoogleUserInfoDTO getUser = googleoauth.getUserInfo(requsetUser);
+		System.out.println("---------5.getUser------" + getUser);
+		
+		MemberDTO createMember = oAuthService.createGoogleUser(accessCode);
+		System.out.println("---------6.createMember------" + createMember.toString());
+		return ResponseEntity.ok().body(createMember.getToken());
 	}
-	
-	@GetMapping("/google/login")
-	public ResponseEntity<?> successGoogleLogin2(@RequestParam("code") String accessCode) {
-		return null;
-		// return oAuthService.googleLogin(accessCode);
-	}
-*/
+
+/*
 	// 회원조회
-	@PostMapping("/memberInfo")
+	@GetMapping("/memberInfo")
 	public ResponseEntity<?> memberInfo(@RequestBody MemberDTO memberDTO) {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		
@@ -165,6 +175,16 @@ public class MemberController {
 			return ResponseEntity.ok().body(responseMemberDTO);
 		}
 		return ResponseEntity.badRequest().body("회원 조회 실패");
+	}
+	*/
+	@GetMapping("/memberInfo")
+	public ResponseEntity<?> memberInfo(@RequestParam("email") String email, @RequestParam("pwd") String pwd) {
+	    Member member = memberService.getByCredentials(email, pwd, pwdEncoder);
+	    if (member != null) {
+	        MemberDTO responseMemberDTO = MemberDTO.toMemberDTO(member);
+	        return ResponseEntity.ok().body(responseMemberDTO);
+	    }
+	    return ResponseEntity.badRequest().body("회원 조회 실패");
 	}
 	
 	// 회원수정
@@ -189,14 +209,12 @@ public class MemberController {
 			return ResponseEntity.badRequest().body("회원 수정 실패");
 		}
 	}
-	
+
+	/*
 	// 로그아웃
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(@RequestBody MemberDTO memberDTO) {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
-		System.out.println("-------------" + memberDTO.getEmail());
-		System.out.println("-------------" + memberDTO.getPwd());
-		System.out.println("-------------" + pwdEncoder);
 		if(member != null) {
 
 			tokenProvider.deleteToken(memberDTO);
@@ -204,4 +222,5 @@ public class MemberController {
 		}
 		return ResponseEntity.badRequest().body("회원 로그아웃 실패");
 	}
+	*/
 }

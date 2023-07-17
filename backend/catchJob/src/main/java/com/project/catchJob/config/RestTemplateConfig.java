@@ -1,4 +1,4 @@
-package com.project.catchJob.security;
+package com.project.catchJob.config;
 
 import java.nio.charset.Charset;
 
@@ -12,18 +12,19 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class RestTemplateConfig {
-/*
+
 	// HTTP get, post 요청을 날릴 때 일정한 형식에 맞춰주는 template
 	
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
-		
-		return restTemplateBuilder
-				.requestFactory(() -> new SimpleClientHttpRequestFactory())
+		RestTemplate restTemplate = restTemplateBuilder
+				.requestFactory(() -> new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()))
 				.additionalMessageConverters(new StringHttpMessageConverter(Charset.forName("UTF-8")))
 				.build();
+		
+		restTemplate.setRequestFactory(new BufferingClientHttpRequestFactory(restTemplate.getRequestFactory()));
+		
+		return restTemplate;
 	}
-	
-*/
 
 }

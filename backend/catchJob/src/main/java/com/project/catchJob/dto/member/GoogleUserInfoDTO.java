@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GoogleUserInfoDTO {
-	/*
+	
 	// 구글 사용자 정보 담을 DTO
 	
 	private String id;
@@ -18,5 +18,5 @@ public class GoogleUserInfoDTO {
 	private String given_name;
 	private String picture;
 	private String locale;
-	*/
+
 }

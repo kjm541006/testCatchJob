@@ -56,4 +56,15 @@ public class MemberDTO {
 		return memberDTO;
 	}
 	
+	public static MemberDTO fromMember(Member member) {
+		return MemberDTO.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .pwd(member.getPwd())
+                .job(member.getJob())
+                .hasCareer(member.getHasCareer())
+                .token(null) // token 필드는 null로 설정하거나 생략
+                .build();
+    }
+	
 }
