@@ -145,7 +145,7 @@ public class MemberController {
 	public void getGoogleAuthUrl(HttpServletResponse res) throws Exception {
 		res.sendRedirect(googleoauth.getOauthRedirectURL());
 	}
-	*/
+	
 	//@PostMapping("/api/oauth2/callback/google")
 	@PostMapping("/googlelogin")
 	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String accessCode) throws Exception {
@@ -163,7 +163,31 @@ public class MemberController {
 		System.out.println("---------6.createMember------" + createMember.toString());
 		return ResponseEntity.ok().body(createMember.getToken());
 	}
-
+*/
+	@PostMapping("/googlelogin")
+	public ResponseEntity<?> successGoogleLogin(
+	  @RequestParam("code") String accessCode,
+	  @RequestParam("grant_type") String grantType
+	) throws Exception {
+	  System.out.println("————1.accessCode———" + accessCode);
+	  System.out.println("————2.grantType———" + grantType);
+	  
+	  ResponseEntity<String> tokenEntity = googleoauth.requestAccessToken(accessCode);
+		System.out.println("---------3.tokenEntity------" + tokenEntity);
+		GoogleOAuthTokenDTO googleOAuthTokenDTO = googleoauth.getAccessToken(tokenEntity);
+		System.out.println("---------4.googleOAuthTokenDTO------" + googleOAuthTokenDTO);
+		ResponseEntity<String> requsetUser = googleoauth.requestUserInfo(googleOAuthTokenDTO);
+		System.out.println("---------5.requsetUser------" + requsetUser);
+		GoogleUserInfoDTO getUser = googleoauth.getUserInfo(requsetUser);
+		System.out.println("---------6.getUser------" + getUser);
+		
+		MemberDTO createMember = oAuthService.createGoogleUser(accessCode);
+		System.out.println("---------7.createMember------" + createMember.toString());
+		return ResponseEntity.ok().body(createMember.getToken());
+	}
+	  
+	
+	
 /*
 	// 회원조회
 	@GetMapping("/memberInfo")

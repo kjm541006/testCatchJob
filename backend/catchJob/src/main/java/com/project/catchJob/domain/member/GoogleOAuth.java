@@ -81,11 +81,14 @@ public class GoogleOAuth {
 		params.put("code", accessCode);
 	/*	params.put("client_id", googleClientId);
 		params.put("client_secret", googleClientSecret);
-		params.put("redirect_uri", googleRedirectUrl);
-		params.put("grant_type", "authorization_code");*/
-		
+		params.put("redirect_uri", googleRedirectUrl);*/
+		params.put("grant_type", "authorization_code");
+		/*
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_URL, params, String.class);
 		// 스프링부트에서 다른 서버의 api 엔드포인트 호출할 때 restTemplate사용
+		*/
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_URL, params, String.class);
+		
 		
 		if(responseEntity.getStatusCode() == HttpStatus.OK) {
 			return responseEntity;
@@ -101,7 +104,7 @@ public class GoogleOAuth {
 		// GoogleOAuthTokenDTO : json형태를 자바 객체 형식으로 변경(역직렬화) 후 저장해서 담을 곳
 	}
 
-	// get으로 token받아와서 사용자 정보 요청
+	// token받아와서 사용자 정보 요청
 	public ResponseEntity<String> requestUserInfo(GoogleOAuthTokenDTO oAuthToken) {
 		
 		// header에 accessToken 담기
