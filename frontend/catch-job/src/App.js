@@ -4,7 +4,6 @@ import Header from "./components/header/Header";
 import { Route, Routes } from "react-router-dom";
 import Footer from "./components/footer/Footer";
 import LoginPage from "./pages/LoginPage";
-import HeaderFile from "./pages/HeaderFile";
 import SocialSigninPage from "./pages/SocialSigninPage";
 import BasicSigninPage from "./pages/BasicSigninPage";
 import EditSigninPage from "./pages/EditSigninPage";
