@@ -80,6 +80,7 @@ const BasicSigninPage = () => {
       })
       .catch(error => {
         console.error(error); // 에러 출력
+
       });
   };
   
