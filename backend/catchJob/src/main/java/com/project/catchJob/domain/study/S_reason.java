@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.project.catchJob.domain.Member;
+import com.project.catchJob.domain.member.Member;
 
 import lombok.Getter;
 import lombok.Setter;

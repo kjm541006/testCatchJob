@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 function PostModal({ onPostSubmit, onCancel }) {
   const [postTitle, setPostTitle] = useState("");
@@ -11,7 +12,6 @@ function PostModal({ onPostSubmit, onCancel }) {
 
   const handlePostContentChange = (event) => {
     setPostContent(event.target.value);
-    console.log(postContent);
   };
 
   const handlePostCategoryChange = (event) => {
@@ -34,11 +34,19 @@ function PostModal({ onPostSubmit, onCancel }) {
       return;
     }
 
-    const newPost = { id: Date.now(), title: postTitle, content: postContent, category: postCategory };
-    onPostSubmit(newPost);
-    setPostCategory("");
-    setPostTitle("");
-    setPostContent("");
+    const newPost = { title: postTitle, content: postContent, category: postCategory };
+
+    axios
+      .post("/api/post", newPost)
+      .then((response) => {
+        onPostSubmit(response.data);
+        setPostCategory("");
+        setPostTitle("");
+        setPostContent("");
+      })
+      .catch((error) => {
+        console.error("Error submittion post:", error);
+      });
   };
 
   const handleCancel = () => {
@@ -51,7 +59,7 @@ function PostModal({ onPostSubmit, onCancel }) {
   return (
     <div className="overlay">
       <div className="postmodal">
-        <div className="catchJob">
+        <div className="catchJobletter">
           catch<span className="red-letter">J</span>ob
         </div>
         <div>

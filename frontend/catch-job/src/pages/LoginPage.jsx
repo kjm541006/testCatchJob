@@ -5,34 +5,45 @@ import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import GoogleLoginButton from "../components/GoogleLoginButton";
-import { GoogleOAuthProvider } from '@react-oauth/google'
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { useDispatch, useSelector } from "react-redux";
+import { selectLoggedIn, setCredentials } from "../redux/login";
+// import { userLoginMutation } from "../redux/authApi";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const dispatch = useDispatch();
+
+  const isLoggedIn = useSelector(selectLoggedIn);
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const userData = {
       email: email,
       pwd: password,
     };
 
-    axios.post("http://43.202.98.45:8089/login", userData)
-      .then(response => {
-        const token = response.data.token; 
-
-        localStorage.setItem("token", token);
-        console.log(userData);
-        console.log(token);
-      })
-      .catch(error => {
-        console.error(error); 
-      });
+    try {
+      const response = await axios.post("http://43.202.98.45:8089/login", userData);
+      console.log(response.data);
+      console.log(response.data.name);
+      const token = response.data.token;
+      const name = response.data.name;
+      localStorage.setItem("token", token);
+      localStorage.setItem("name", name);
+      dispatch(setCredentials({ user: name, token, ...userData }));
+      // localStorage.setItem("isLoggedIn", isLoggedIn);
+      console.log(`로그인여부 :${isLoggedIn}`);
+      window.location.href = "/";
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -43,14 +54,17 @@ const LoginPage = () => {
             catch<span className="red-letter">J</span>ob
           </h1>
           <div className="input-text">이메일</div>
-          <input type="text" className="input-box" tabIndex="1" value={email}
-            onChange={e => setEmail(e.target.value)} />
+          <input type="text" className="input-box" tabIndex="1" value={email} onChange={(e) => setEmail(e.target.value)} />
           <div className="input-text" tabIndex="2">
             비밀번호
           </div>
           <div className="input-container">
-            <input type={showPassword ? "text" : "password"} className="input-box"  value={password}
-              onChange={e => setPassword(e.target.value)}/>
+            <input
+              type={showPassword ? "text" : "password"}
+              className="input-box"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
             <div className="eye-icon" onClick={togglePasswordVisibility}>
               <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
             </div>
@@ -65,13 +79,15 @@ const LoginPage = () => {
           <div className="social-buttons">
             <button className="kakao-button"></button>
             <GoogleOAuthProvider clientId="226990065119-dh4qnntmuprddppr3hoi6umt9k99vkvb.apps.googleusercontent.com">
-              <GoogleLoginButton/>
+              <GoogleLoginButton />
             </GoogleOAuthProvider>
           </div>
 
           <div className="sign-in">
             <div className="entire-text">아직 회원이 아니세요?</div>
-            <Link to="/social-signin" className="sign-in-now">회원가입 하기</Link>
+            <Link to="/social-signin" className="sign-in-now">
+              회원가입 하기
+            </Link>
           </div>
         </div>
       </div>
