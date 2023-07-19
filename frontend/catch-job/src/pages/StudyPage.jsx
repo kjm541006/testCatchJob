@@ -48,10 +48,6 @@ const StudyPage = () => {
         <Loading />
       ) : (
         <div className={styles.studyWrapper}>
-          <div className={styles.makeProject}>
-            <FontAwesomeIcon icon={faPencil} />
-            <Link to={"/study/build"}>글 쓰기</Link>
-          </div>
           <div className={styles.studyPage}>
             <div className={styles.top}>
               <div className={styles.studySort}>
@@ -132,6 +128,10 @@ const StudyPage = () => {
                   </div>
                 );
               })}
+            </div>
+            <div className={styles.makeProject}>
+              <FontAwesomeIcon icon={faPencil} />
+              <Link to={"/study/build"}>글 쓰기</Link>
             </div>
           </div>
         </div>
