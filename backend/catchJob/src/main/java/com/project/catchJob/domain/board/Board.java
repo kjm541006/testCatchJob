@@ -1,6 +1,7 @@
 package com.project.catchJob.domain.board;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -17,10 +18,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.catchJob.domain.member.Member;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+@Builder
 @Getter
 @Setter
 @ToString(exclude = {"member","boardCommentsList", "boardLikeList", "boardTagList"})
@@ -51,6 +54,9 @@ public class Board {
 	@Transient
 	private MultipartFile bCoverUploadFile; // 커버(썸네일) 실제경로
 	
+	@Column(insertable = false, updatable = false, columnDefinition = "date default now()")
+	private Date bDate; // 작성날짜
+	
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member member;
@@ -68,5 +74,6 @@ public class Board {
 	
 	@OneToMany(mappedBy = "board")
 	private List<B_tag> boardTagList = new ArrayList<>();
+
 
 }

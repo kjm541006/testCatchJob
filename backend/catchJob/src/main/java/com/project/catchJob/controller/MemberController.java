@@ -22,10 +22,12 @@ import com.project.catchJob.security.TokenProvider;
 import com.project.catchJob.service.MemberService;
 import com.project.catchJob.service.OAuthService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/")
 public class MemberController {

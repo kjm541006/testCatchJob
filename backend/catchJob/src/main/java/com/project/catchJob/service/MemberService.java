@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,13 +26,19 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 	
 	@Autowired
-	private MemberRepository memberRepo;
+	private static MemberRepository memberRepo;
 	
 	@Autowired
 	private M_ProfileRepository mProfileRepo;
 	
 	@Autowired
 	private PasswordEncoder pwdEncoder;
+	
+	// 게시글 작성자 조회
+    public static Member getMember(Long memberId) throws Exception {
+        return memberRepo.findById(memberId)
+                .orElseThrow(() -> new NotFoundException());
+    }
 	
 	/*
 	// 회원가입
