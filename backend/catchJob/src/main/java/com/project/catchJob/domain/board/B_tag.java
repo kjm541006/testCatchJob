@@ -17,7 +17,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(exclude = {"board","tagList"})
+@ToString(exclude = {"board","tag"})
 @Entity
 public class B_tag {
 
@@ -33,6 +33,17 @@ public class B_tag {
 		board.getBoardTagList().add(this);
 	}
 	
+	@ManyToOne
+    @JoinColumn(name = "tag_id", nullable = false, updatable = false)
+    private Tag tag;
+	
+	 public void setTag(Tag tag) {
+	    this.tag = tag;
+	    tag.getB_tagList().add(this);
+	    }
+	
+
 	@OneToMany(mappedBy = "b_tag")
 	private List<Tag> tagList = new ArrayList<>();
+
 }

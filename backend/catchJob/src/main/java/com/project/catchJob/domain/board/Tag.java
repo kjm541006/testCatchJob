@@ -1,18 +1,22 @@
 package com.project.catchJob.domain.board;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.ToString;
 
-@Getter
-@Setter
-@ToString(exclude = "b_tag")
+@Builder
+@Data
+@ToString(exclude = "b_tagList")
 @Entity
 public class Tag {
 
@@ -29,4 +33,8 @@ public class Tag {
 		this.b_tag = b_tag;
 		b_tag.getTagList().add(this);
 	}
+
+	@OneToMany(mappedBy = "tag")
+    private List<B_tag> b_tagList = new ArrayList<>();
+
 }

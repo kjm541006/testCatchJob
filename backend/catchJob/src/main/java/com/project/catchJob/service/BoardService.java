@@ -1,6 +1,9 @@
 package com.project.catchJob.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.Page;
@@ -37,21 +40,13 @@ public class BoardService {
 	private B_likeRepository bLikeRepo; // 좋아요
 	
 	// 글 목록 조회
-	public Page<BoardDTO> getBoardList(BoardDTO boardDTO, PageRequest pageReq) {
-		Page<Board> boardPage = boardRepo.findAll(pageReq);	
-		return boardPage.map(board -> {
-			Member member = memberRepo.findById(board.getMember().getMemberId()).orElse(null);
-			return BoardDTO.toBoardDTO(board, member);
-		});
+	public List<BoardDTO> getBoardList(Member member) {
+		List<Board> boards = boardRepo.findAll();	
+		return boards.stream()
+				.map(board -> BoardDTO.toDTO(board, member, bLikeRepo)) // member, bLikeRepo 전달
+				.collect(Collectors.toList());
 	}
-/*	
-	// 글 조회
-	public Optional<Board> getBoard(Board board) {
-		Optional<Board> findBoard = boardRepo.findById(board.getBoardId());
-		if(findBoard.isPresent()) return findBoard;
-		return findBoard;
-	}
-*/	
+	
 	// 게시글 조회
     public Board getBoard(Long id) throws Exception {
         return boardRepo.findById(id)
@@ -70,8 +65,6 @@ public class BoardService {
                     .bTitle(boardDTO.getBTitle())
                     .bContents(boardDTO.getBContents())
                     .bFileName(boardDTO.getBFileName())
-                    .bUploadFile(boardDTO.getBUploadFile())
-                    .bCoverUploadFile(boardDTO.getBCoverUploadFile())
                     .bCoverFileName(boardDTO.getBCoverFileName())
                     .member(member)
                     .build();

@@ -1,11 +1,17 @@
 package com.project.catchJob.dto.board;
 
-import java.sql.Date;
+
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.catchJob.domain.board.Board;
+import com.project.catchJob.domain.board.Tag;
 import com.project.catchJob.domain.member.Member;
+import com.project.catchJob.dto.member.MemberDTO;
+import com.project.catchJob.repository.board.B_likeRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,43 +29,66 @@ public class BoardDTO {
 	private String bContents;
 	private int bCnt;
 	private int bLike;
+	private boolean isLike; // 내가 좋아요했는지 알 수 있는 여부
 	private String bFileName;
-	private MultipartFile bUploadFile;
+	//private MultipartFile bUploadFile;
 	private String bCoverFileName;
-	private MultipartFile bCoverUploadFile;
+	//private MultipartFile bCoverUploadFile;
 	private Date bDate;
-	private String mName;
-	private String mStoredFileName;
-
-	public static BoardDTO toBoardListDTO(Board board, Member member) {
-		
-		BoardDTO boardDTO = new BoardDTO();
-		
-		boardDTO.setBoardId(board.getBoardId());
-		boardDTO.setBCnt(board.getBCnt());
-		boardDTO.setBLike(board.getBLike());
-		boardDTO.setMName(member.getName());
-		boardDTO.setMStoredFileName(member.getMProfile().getMStoredFileName());
-		boardDTO.setBCoverUploadFile(board.getBCoverUploadFile());
-		boardDTO.setBDate((Date) board.getBDate());
-		
-		return boardDTO;
-	}
+	//private String mName;
+	//private String mStoredFileName;
+	private MemberDTO member;
+	private List<TagDTO> tags;
+	private List<B_commentsDTO> comments;
 	
-public static BoardDTO toBoardDTO(Board board, Member member) {
+	// board에서 BoardDTO로 변환하는 메서드
+	public static BoardDTO toDTO(Board board, Member member, B_likeRepository bLikeRepo) {
 		
-		BoardDTO boardDTO = new BoardDTO();
+		MemberDTO memberDTO = new MemberDTO();
+		memberDTO.setEmail(member.getEmail());
+		memberDTO.setName(member.getName());
+		memberDTO.setMOriginalFileName(member.getMProfile().getMOriginalFileName());
+		// 필요한 사용자 정보를 memberDTO에 저장
 		
-		boardDTO.setBoardId(board.getBoardId());
-		boardDTO.setBCnt(board.getBCnt());
-		boardDTO.setBLike(board.getBLike());
-		boardDTO.setMName(member.getName());
-		boardDTO.setMStoredFileName(member.getMProfile().getMStoredFileName());
-		boardDTO.setBCoverUploadFile(board.getBCoverUploadFile());
-		boardDTO.setBDate((Date) board.getBDate());
+		// 내가 좋아요했는지 여부 확인
+		boolean isLike = bLikeRepo.findByMemberAndBoard(member, board).isPresent();
 		
-		return boardDTO;
+		List<TagDTO> tagDTOList = board.getBoardTagList().stream()
+			    .map(bTag -> {
+			        Tag tag = bTag.getTag();
+			        return TagDTO.builder()
+			            .tagId(tag.getTagId())
+			            .tagName(tag.getTagName())
+			            .build();
+			    })
+			    .collect(Collectors.toList());
+		
+		List<B_commentsDTO> commentDTOList = board.getBoardCommentsList().stream()
+				.map(comment -> B_commentsDTO.builder()
+						.commentId(comment.getBComId())
+						.commentContent(comment.getBComContent())
+						.commentDate(comment.getBComDate())
+						.memberName(comment.getMember().getName())
+						.memberEmail(comment.getMember().getEmail())
+						.build())
+				.collect(Collectors.toList());
+				
+		return BoardDTO.builder()
+				.boardId(board.getBoardId())
+				.bTitle(board.getBTitle())
+				.bContents(board.getBContents())
+				.bCnt(board.getBCnt())
+				.bLike(board.getBLike())
+				.isLike(isLike) // isLike 설정
+				.bFileName(board.getBFileName())
+				.bCoverFileName(board.getBFileName())
+				.bDate(board.getBDate())
+				.member(memberDTO) // 멤버 정보 설정
+				.tags(tagDTOList)
+				.comments(commentDTOList)
+				.build();
 	}
+
 	
 }
 

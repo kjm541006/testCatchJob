@@ -75,5 +75,4 @@ public class Board {
 	@OneToMany(mappedBy = "board")
 	private List<B_tag> boardTagList = new ArrayList<>();
 
-
 }

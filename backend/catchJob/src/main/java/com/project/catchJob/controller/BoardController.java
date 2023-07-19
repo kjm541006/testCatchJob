@@ -1,5 +1,7 @@
 package com.project.catchJob.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -59,12 +61,11 @@ public class BoardController {
 	}
 
 
-	
+	// 글 목록 조회
 	@GetMapping("/")
-	public BoardDTO getBoardList(@PathVariable Long member_id) throws Exception {
-		Board board = boardService.getBoard(member_id);
-		Member member = MemberService.getMember(board.getMember().getMemberId());
-		return BoardDTO.toBoardListDTO(board, member);
+	public ResponseEntity<List<BoardDTO>> getBoardList(@RequestBody Member member) {
+		List<BoardDTO> boardDTOList = boardService.getBoardList(member);
+		return ResponseEntity.ok(boardDTOList);
 	}
 	
 	// 글등록
@@ -77,21 +78,19 @@ public class BoardController {
 				.bTitle(boardDTO.getBTitle())
 				.bContents(boardDTO.getBContents())
 				.bFileName(boardDTO.getBFileName())
-				.bUploadFile(boardDTO.getBUploadFile())
-				.bCoverUploadFile(boardDTO.getBCoverUploadFile())
 				.bCoverFileName(boardDTO.getBCoverFileName())
-				.mName(memberDTO.getEmail())
+				.member(memberDTO)
 				.build();
 		boardService.create(responseBoardDTO, memberDTO);
 		return ResponseEntity.ok().body(responseBoardDTO);
 	}
-
+/*
 	@GetMapping("/{member_id}")
 	public BoardDTO getBoard(@PathVariable Long member_id) throws Exception {
 		Board board = boardService.getBoard(member_id);
 		Member member = MemberService.getMember(board.getMember().getMemberId());
 		return BoardDTO.toBoardDTO(board, member);
 	}
-
+*/
 	
 }
