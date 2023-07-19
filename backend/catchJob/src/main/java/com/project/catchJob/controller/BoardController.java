@@ -20,59 +20,34 @@ import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.board.BoardDTO;
 import com.project.catchJob.dto.member.MemberDTO;
+import com.project.catchJob.repository.board.B_likeRepository;
 import com.project.catchJob.service.BoardService;
 import com.project.catchJob.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @CrossOrigin(origins = "http://localhost:3000")
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/")
 public class BoardController {
 	
 	@Autowired BoardService boardService;
-	/*
-	@PostMapping("")
-	public ResponseEntity<?> insert(@RequestBody B_likeDTO bLikeDTO) throws Exception {
-		boardService.insert(bLikeDTO);
-		return ResponseEntity.ok("하트 ++");
-	}
-	
-	@DeleteMapping("")
-	public ResponseEntity<?> delete(@RequestBody B_likeDTO bLikeDTO) throws Exception {
-		boardService.delete(bLikeDTO);
-		return ResponseEntity.ok("하트 --");
-	}
-	*/
-	
-	@PostMapping("")
-	public ResponseEntity<?> insert(@RequestParam Long memberId, @RequestParam Long boardId) throws Exception {
-	    boardService.insert(memberId, boardId);
-	    return ResponseEntity.ok("하트 ++");
-	}
-
-	@DeleteMapping("")
-	public ResponseEntity<?> delete(@RequestParam Long memberId, @RequestParam Long boardId) throws Exception {
-	    boardService.delete(memberId, boardId);
-	    return ResponseEntity.ok("하트 --");
-	}
+	@Autowired B_likeRepository bLikeRepo;
 
 
-	// 글 목록 조회
+	// 글 목록
 	@GetMapping("/")
 	public ResponseEntity<List<BoardDTO>> getBoardList(@RequestBody Member member) {
 		List<BoardDTO> boardDTOList = boardService.getBoardList(member);
 		return ResponseEntity.ok(boardDTOList);
 	}
 	
-	// 글등록
+	// 글 등록
 	@PostMapping("/portfolio/register")
 	public ResponseEntity<?> registerBoard(@RequestBody BoardDTO boardDTO, @RequestBody MemberDTO memberDTO) throws Exception {
-		if(boardDTO.getBoardId() == null) {
-			throw new Exception("게시글 없음");
+		if(boardDTO.getBoardId() != null) {
+			throw new Exception("게시글이 이미 존재합니다!");
 		}
 		BoardDTO responseBoardDTO = BoardDTO.builder()
 				.bTitle(boardDTO.getBTitle())
@@ -80,17 +55,41 @@ public class BoardController {
 				.bFileName(boardDTO.getBFileName())
 				.bCoverFileName(boardDTO.getBCoverFileName())
 				.member(memberDTO)
+				.tags(boardDTO.getTags())
 				.build();
 		boardService.create(responseBoardDTO, memberDTO);
 		return ResponseEntity.ok().body(responseBoardDTO);
 	}
-/*
-	@GetMapping("/{member_id}")
-	public BoardDTO getBoard(@PathVariable Long member_id) throws Exception {
-		Board board = boardService.getBoard(member_id);
-		Member member = MemberService.getMember(board.getMember().getMemberId());
-		return BoardDTO.toBoardDTO(board, member);
+
+	// 글 수정
+	@PostMapping("/")
+	
+	// 글 조회
+	@GetMapping("/{board_id}")
+	public ResponseEntity<BoardDTO> getBoard(@PathVariable Long board_id) {
+		try {
+			Board board = boardService.getBoard(board_id);
+			Member member = MemberService.getMember(board.getMember().getMemberId());
+			BoardDTO boardDTO =  BoardDTO.toDTO(board, member, bLikeRepo);
+			return ResponseEntity.ok(boardDTO);
+		} catch (Exception e) {
+			// 게시글이 없는 경우 404에러
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
 	}
-*/
+	
+	
+	
+	@PostMapping("")
+	public ResponseEntity<?> insert(@RequestParam Long memberId, @RequestParam Long boardId) throws Exception {
+		boardService.insert(memberId, boardId);
+		return ResponseEntity.ok("하트 ++");
+	}
+	
+	@DeleteMapping("")
+	public ResponseEntity<?> delete(@RequestParam Long memberId, @RequestParam Long boardId) throws Exception {
+		boardService.delete(memberId, boardId);
+		return ResponseEntity.ok("하트 --");
+	}
 	
 }

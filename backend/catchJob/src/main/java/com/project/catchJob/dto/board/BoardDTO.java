@@ -84,8 +84,8 @@ public class BoardDTO {
 				.bCoverFileName(board.getBFileName())
 				.bDate(board.getBDate())
 				.member(memberDTO) // 멤버 정보 설정
-				.tags(tagDTOList)
-				.comments(commentDTOList)
+				.tags(tagDTOList) // 태그
+				.comments(commentDTOList) // 댓글
 				.build();
 	}
 

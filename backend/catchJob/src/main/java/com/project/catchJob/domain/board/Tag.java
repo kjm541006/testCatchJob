@@ -12,9 +12,10 @@ import javax.persistence.OneToMany;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Builder
+@NoArgsConstructor // 기본 생성자 추가
 @Data
 @ToString(exclude = "b_tagList")
 @Entity

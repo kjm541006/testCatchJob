@@ -17,8 +17,7 @@ import com.project.catchJob.domain.board.B_comments;
 import com.project.catchJob.domain.board.B_like;
 import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.community.Comment;
-import com.project.catchJob.domain.community.C_like;
-import com.project.catchJob.domain.community.Community;
+import com.project.catchJob.domain.community.CommunityPost;
 import com.project.catchJob.domain.project.P_comments;
 import com.project.catchJob.domain.project.P_like;
 import com.project.catchJob.domain.project.P_reason;
@@ -39,7 +38,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = { 
-		"communityList", "c_CommentsList", "c_LikeList", 
+		"communityList", "c_CommentsList", 
 		"boardList", "b_CommentsList", "b_LikeList",
 		"studyList", "s_CommentsList", "s_LikeList", "s_ReasonList",
 		"projectList", "p_CommentsList", "p_LikeList", "p_ReasonList"})
@@ -88,13 +87,10 @@ public class Member {
 	private M_profile mProfile;
 	
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	private List<Community> communityList = new ArrayList<>();
+	private List<CommunityPost> communityList = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<Comment> c_CommentsList = new ArrayList<>();
-	
-	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	private List<C_like> c_LikeList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<Board> boardList = new ArrayList<>();
