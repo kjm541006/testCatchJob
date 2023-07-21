@@ -30,19 +30,18 @@ public class BoardDTO {
 	private int bCnt;
 	private int bLike;
 	private boolean isLike; // 내가 좋아요했는지 알 수 있는 여부
+	private int bComment; // 댓글갯수
 	private String bFileName;
-	//private MultipartFile bUploadFile;
+	private String bFileUrl;
 	private String bCoverFileName;
-	//private MultipartFile bCoverUploadFile;
+	private String bCoverFileUrl;
 	private Date bDate;
-	//private String mName;
-	//private String mStoredFileName;
 	private MemberDTO member;
 	private List<TagDTO> tags;
 	private List<B_commentsDTO> comments;
 	
 	// board에서 BoardDTO로 변환하는 메서드
-	public static BoardDTO toDTO(Board board, Member member, B_likeRepository bLikeRepo) {
+	public static BoardDTO toDTO(Board board, Member member, B_likeRepository bLikeRepo, String filePath) {
 		
 		MemberDTO memberDTO = new MemberDTO();
 		memberDTO.setEmail(member.getEmail());
@@ -63,6 +62,8 @@ public class BoardDTO {
 			    })
 			    .collect(Collectors.toList());
 		
+		int bComment = board.getBoardCommentsList().size(); // 게시글에 작성된 댓글 수를 구함
+		
 		List<B_commentsDTO> commentDTOList = board.getBoardCommentsList().stream()
 				.map(comment -> B_commentsDTO.builder()
 						.commentId(comment.getBComId())
@@ -73,6 +74,10 @@ public class BoardDTO {
 						.build())
 				.collect(Collectors.toList());
 				
+		//String bFileUrl = "/upload/" + board.getBFileName();
+		String bFileUrl = filePath + board.getBFileName();
+		String bCoverFileUrl = filePath + board.getBCoverFileName();
+		
 		return BoardDTO.builder()
 				.boardId(board.getBoardId())
 				.bTitle(board.getBTitle())
@@ -80,8 +85,11 @@ public class BoardDTO {
 				.bCnt(board.getBCnt())
 				.bLike(board.getBLike())
 				.isLike(isLike) // isLike 설정
+				.bComment(bComment)
 				.bFileName(board.getBFileName())
-				.bCoverFileName(board.getBFileName())
+				.bFileUrl(bFileUrl)
+				.bCoverFileName(board.getBCoverFileName())
+				.bCoverFileUrl(bCoverFileUrl)
 				.bDate(board.getBDate())
 				.member(memberDTO) // 멤버 정보 설정
 				.tags(tagDTOList) // 태그

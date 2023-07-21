@@ -85,13 +85,13 @@ public class Member {
 
 	@OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private M_profile mProfile;
-	
+	/*
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<CommunityPost> communityList = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<Comment> c_CommentsList = new ArrayList<>();
-
+*/
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<Board> boardList = new ArrayList<>();
 	

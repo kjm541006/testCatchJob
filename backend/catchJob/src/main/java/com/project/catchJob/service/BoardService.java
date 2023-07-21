@@ -1,21 +1,21 @@
 package com.project.catchJob.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.project.catchJob.domain.board.B_like;
 import com.project.catchJob.domain.board.B_tag;
 import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.board.Tag;
 import com.project.catchJob.domain.member.Member;
-import com.project.catchJob.dto.board.B_likeDTO;
 import com.project.catchJob.dto.board.BoardDTO;
 import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.repository.board.B_commentsRepository;
@@ -23,9 +23,7 @@ import com.project.catchJob.repository.board.B_likeRepository;
 import com.project.catchJob.repository.board.BoardRepository;
 import com.project.catchJob.repository.member.MemberRepository;
 
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 public class BoardService {
 	
@@ -41,18 +39,29 @@ public class BoardService {
 	@Autowired
 	private B_likeRepository bLikeRepo; // 좋아요
 	
+//	private String uploadFolderPath = "catchJob/upload/"; 
+	private String uploadFolderPath = "D:ding/";
+	// 서버 실제 디렉토리 구조
+//	private String fileUrlPath = "/upload/";
+	private String fileUrlPath = "D:ding/img/";
+	// 사용자가 파일에 액세스하는 경우 필요한 url 경로
+	// 경로를 구분해서 사용하면 서버와 클라이언트 간의 엑세스 권한 분리해서 관리 가능
+	
+	public String getFileUrlPath() {
+		return fileUrlPath;
+	}
 	
 	// 글 목록
 	public List<BoardDTO> getBoardList(Member member) {
 		List<Board> boards = boardRepo.findAll();	
 		return boards.stream()
-				.map(board -> BoardDTO.toDTO(board, member, bLikeRepo)) // member, bLikeRepo 전달
+				.map(board -> BoardDTO.toDTO(board, member, bLikeRepo, fileUrlPath)) // member, bLikeRepo 전달
 				.collect(Collectors.toList());
 	}
 	
 	
 	// 글 등록
-    public void create(BoardDTO boardDTO, MemberDTO memberDTO) {
+    public void create(BoardDTO boardDTO, MemberDTO memberDTO, MultipartFile file, MultipartFile coverFile) {
        
         Member member = memberRepo.findByEmail(memberDTO.getEmail()); 
 
@@ -79,10 +88,46 @@ public class BoardService {
         	board.setBoardTagList(tagList);
         }
         
-        boardRepo.save(board);
+        // 파일 저장
+        if(file != null && !file.isEmpty()) {
+        	String fileName = saveFile(file);
+        	board.setBFileName(fileName);
+        }
         
+        // 커버 파일 저장
+        if(coverFile != null && !coverFile.isEmpty()) {
+        	String coverFileName = saveFile(coverFile);
+        	board.setBCoverFileName(coverFileName);
+        }        
+        boardRepo.save(board);        
     }
-
+    
+    // 파일 저장
+    public String saveFile(MultipartFile file) {
+    	try {
+	    	// 저장 경로 지정
+	    	//String savePath = new File("").getAbsolutePath() + "/src/main/resources/static/upload/";
+    		String savePath = new File(uploadFolderPath).getAbsolutePath() + "/";
+    		File dir = new File(savePath);
+    		if(!dir.exists()) {
+    			dir.mkdir(); // 폴더 없다면 폴더 생성
+    		}
+	    	// 파일 이름 가져옴
+	    	String originalFileName = file.getOriginalFilename();
+	    	// 저장될 파일 이름 설정
+	    	String storedFileName = UUID.randomUUID() + "_" + originalFileName;
+	    	// 지정된 경로에 파일 저장
+	    	File finFile = new File(savePath + storedFileName);
+			file.transferTo(finFile);
+			
+			// 저장된 파일명 반환
+			return storedFileName;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} 
+    }
     
 	// 글 조회
     public Board getBoard(Long boardId) throws Exception {

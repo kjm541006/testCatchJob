@@ -46,13 +46,13 @@ public class Board {
 	
 	private String bFileName; // 파일명
 	
-	@Transient
-	private MultipartFile bUploadFile; // 실제경로
+	@Transient // DB에 저장 안 됨
+	private MultipartFile bFileUrl; // 실제경로
 	
 	private String bCoverFileName; // 커버(썸네일) 파일명
 	
-	@Transient
-	private MultipartFile bCoverUploadFile; // 커버(썸네일) 실제경로
+	@Transient // DB에 저장 안 됨
+	private MultipartFile bCoverFileUrl; // 커버(썸네일) 실제경로
 	
 	@Column(insertable = false, updatable = false, columnDefinition = "date default now()")
 	private Date bDate; // 작성날짜

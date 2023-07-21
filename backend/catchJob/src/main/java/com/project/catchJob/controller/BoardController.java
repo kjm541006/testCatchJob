@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.member.Member;
@@ -34,7 +35,7 @@ public class BoardController {
 	
 	@Autowired BoardService boardService;
 	@Autowired B_likeRepository bLikeRepo;
-
+	
 
 	// 글 목록
 	@GetMapping("/")
@@ -45,7 +46,7 @@ public class BoardController {
 	
 	// 글 등록
 	@PostMapping("/portfolio/register")
-	public ResponseEntity<?> registerBoard(@RequestBody BoardDTO boardDTO, @RequestBody MemberDTO memberDTO) throws Exception {
+	public ResponseEntity<?> registerBoard(@RequestBody BoardDTO boardDTO, @RequestBody MemberDTO memberDTO, @RequestParam("bFileName") MultipartFile file, @RequestParam("bCoverFileName") MultipartFile coverFile) throws Exception {
 		if(boardDTO.getBoardId() != null) {
 			throw new Exception("게시글이 이미 존재합니다!");
 		}
@@ -57,7 +58,7 @@ public class BoardController {
 				.member(memberDTO)
 				.tags(boardDTO.getTags())
 				.build();
-		boardService.create(responseBoardDTO, memberDTO);
+		boardService.create(responseBoardDTO, memberDTO, file, coverFile);
 		return ResponseEntity.ok().body(responseBoardDTO);
 	}
 
@@ -70,7 +71,9 @@ public class BoardController {
 		try {
 			Board board = boardService.getBoard(board_id);
 			Member member = MemberService.getMember(board.getMember().getMemberId());
-			BoardDTO boardDTO =  BoardDTO.toDTO(board, member, bLikeRepo);
+			
+			String fileUrlPath = boardService.getFileUrlPath();
+			BoardDTO boardDTO =  BoardDTO.toDTO(board, member, bLikeRepo, fileUrlPath);
 			return ResponseEntity.ok(boardDTO);
 		} catch (Exception e) {
 			// 게시글이 없는 경우 404에러
@@ -80,13 +83,13 @@ public class BoardController {
 	
 	
 	
-	@PostMapping("")
+	@PostMapping("/like")
 	public ResponseEntity<?> insert(@RequestParam Long memberId, @RequestParam Long boardId) throws Exception {
 		boardService.insert(memberId, boardId);
 		return ResponseEntity.ok("하트 ++");
 	}
 	
-	@DeleteMapping("")
+	@DeleteMapping("/unlike")
 	public ResponseEntity<?> delete(@RequestParam Long memberId, @RequestParam Long boardId) throws Exception {
 		boardService.delete(memberId, boardId);
 		return ResponseEntity.ok("하트 --");
