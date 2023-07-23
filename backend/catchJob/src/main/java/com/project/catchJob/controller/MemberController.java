@@ -186,12 +186,7 @@ public class MemberController {
 	
 	
 /*
-=======
 
->>>>>>> Stashed changes
-=======
-
->>>>>>> Stashed changes
 	// 회원조회
 	@GetMapping("/memberInfo")
 	public ResponseEntity<?> memberInfo(@RequestBody MemberDTO memberDTO) {
@@ -203,7 +198,6 @@ public class MemberController {
 		} else {
 			return ResponseEntity.badRequest().body("회원 조회 실패");
 		}
-<<<<<<< Updated upstream
 	}
 	*/
 	@GetMapping("/memberInfo")

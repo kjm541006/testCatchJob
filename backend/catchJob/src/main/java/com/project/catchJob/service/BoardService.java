@@ -24,7 +24,6 @@ import com.project.catchJob.repository.board.BoardRepository;
 import com.project.catchJob.repository.member.MemberRepository;
 import com.project.catchJob.security.TokenProvider;
 
-
 @Service
 public class BoardService {
 	
@@ -52,7 +51,6 @@ public class BoardService {
 	public String getFileUrlPath() {
 		return fileUrlPath;
 	}
-
 	
 	// 글 목록
 	public List<BoardDTO> getBoardList(Member member) {
