@@ -5,6 +5,7 @@ import java.io.File;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+//import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,12 +32,7 @@ public class MemberService {
 	
 	@Autowired
 	private PasswordEncoder pwdEncoder;
-	
-	// 게시글 작성자 조회
-    public static Member getMember(Long memberId) throws Exception {
-        return memberRepo.findById(memberId)
-                .orElseThrow(() -> new NotFoundException());
-    }
+
 	
 	/*
 	// 회원가입
@@ -133,13 +129,19 @@ public class MemberService {
 		}
 	}
 	
-	public Member findMemberByEmail(String userEmail) {
+	public Member findMemberByEmail(String userEmail) throws Exception {
 	    Member member = memberRepo.findByEmail(userEmail);
 	    if (member == null) {
-	        throw new UsernameNotFoundException("Member not found with email: " + userEmail);
+	        throw new Exception("Member not found with email: " + userEmail);
 	    }
 	    return member;
 	}
+
+	// 회원 정보 조회
+	public Member getMember(Long memberId) throws Exception {
+        return memberRepo.findById(memberId)
+                .orElseThrow(() -> new Exception("해당 회원이 없습니다"));
+    }
 
 
 }

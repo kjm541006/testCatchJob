@@ -34,6 +34,10 @@ public class MemberDTO {
 	
 	public static MemberDTO toMemberDTO(Member member) {
 		
+		if(member == null) {
+			throw new IllegalArgumentException("member가 null값");
+		}
+		
 		MemberDTO memberDTO = new MemberDTO();
 
 		memberDTO.setName(member.getName());

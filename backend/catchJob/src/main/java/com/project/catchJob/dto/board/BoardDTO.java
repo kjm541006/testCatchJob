@@ -47,6 +47,7 @@ public class BoardDTO {
 		memberDTO.setEmail(member.getEmail());
 		memberDTO.setName(member.getName());
 		memberDTO.setMOriginalFileName(member.getMProfile().getMOriginalFileName());
+
 		// 필요한 사용자 정보를 memberDTO에 저장
 		
 		// 내가 좋아요했는지 여부 확인

@@ -1,8 +1,8 @@
 package com.project.catchJob.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -22,22 +22,22 @@ import com.project.catchJob.repository.board.B_commentsRepository;
 import com.project.catchJob.repository.board.B_likeRepository;
 import com.project.catchJob.repository.board.BoardRepository;
 import com.project.catchJob.repository.member.MemberRepository;
-
+import com.project.catchJob.security.TokenProvider;
 
 @Service
 public class BoardService {
 	
-	@Autowired
-	private MemberRepository memberRepo;
 	
 	@Autowired
-	private BoardRepository boardRepo;
-	
-	@Autowired
-	private B_commentsRepository bCommRepo; // 댓글
-	
-	@Autowired
-	private B_likeRepository bLikeRepo; // 좋아요
+	public BoardService(CommonService commonService) {
+		this.commonService = commonService;
+	}
+	@Autowired private CommonService commonService;
+	@Autowired private MemberRepository memberRepo;
+	@Autowired private BoardRepository boardRepo;
+	@Autowired private B_commentsRepository bCommRepo; // 댓글
+	@Autowired private B_likeRepository bLikeRepo; // 좋아요
+	@Autowired private TokenProvider tokenProvider;
 	
 //	private String uploadFolderPath = "catchJob/upload/"; 
 	private String uploadFolderPath = "D:ding/";
@@ -50,6 +50,9 @@ public class BoardService {
 	public String getFileUrlPath() {
 		return fileUrlPath;
 	}
+
+
+
 	
 	// 글 목록
 	public List<BoardDTO> getBoardList(Member member) {
@@ -63,6 +66,10 @@ public class BoardService {
 	// 글 등록
     public void create(BoardDTO boardDTO, MemberDTO memberDTO, MultipartFile file, MultipartFile coverFile) {
        
+
+    	String jwtToken = memberDTO.getToken();
+    	Optional<Member> optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken);
+    			
         Member member = memberRepo.findByEmail(memberDTO.getEmail()); 
 
         Board board = Board.builder()
