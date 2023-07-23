@@ -203,7 +203,7 @@ public class ProjectController {
     private final MemberService memberService;
 
     @PostMapping("/buildstudy")
-    public ResponseEntity<?> addProject(@RequestBody ProjectDTO projectDTO, @RequestParam("userEmail") String userEmail) {
+    public ResponseEntity<?> addProject(@RequestBody ProjectDTO projectDTO, @RequestParam("userEmail") String userEmail) throws Exception {
 
         Member member = findMemberByEmail(userEmail);
 
@@ -219,7 +219,7 @@ public class ProjectController {
         }
     }
 
-    public Member findMemberByEmail(String userEmail) {
+    public Member findMemberByEmail(String userEmail) throws Exception {
         return memberService.findMemberByEmail(userEmail);
     }
 }

@@ -39,7 +39,7 @@ public class MemberController {
 	
 	@Autowired
 	private PasswordEncoder pwdEncoder;
-	
+
 	@Autowired
 	private GoogleOAuth googleoauth;
 	
@@ -47,7 +47,6 @@ public class MemberController {
 	private OAuthService oAuthService;
 	
 
-	
 	// 회원등록
 	@PostMapping("/register")
 	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
@@ -58,7 +57,6 @@ public class MemberController {
 			MemberDTO responseMemberDTO = MemberDTO.builder()
 					.email(memberDTO.getEmail())
 					.pwd(pwdEncoder.encrypt(memberDTO.getEmail(), memberDTO.getPwd()))
-//					.pwd(memberDTO.getPwd())
 					.name(memberDTO.getName())
 					.job(memberDTO.getJob())
 					.hasCareer(memberDTO.getHasCareer())
@@ -67,10 +65,7 @@ public class MemberController {
 			memberService.createMember(responseMemberDTO);
 			return ResponseEntity.ok().body(responseMemberDTO);
 		} catch (Exception e) {
-			// 멤버 정보는 항상 하나이므로 리스트로 만들어야하는 ResponseDTO를 사용하지 않고 그냥 member 리턴
-//			 ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
-//			 return ResponseEntity.badRequest().body(registerMember(memberDTO));
-			 return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
+			return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
 		}		
 	}
 	
@@ -112,15 +107,16 @@ public class MemberController {
 		}
 	}
 	*/
+
+
 	// 로그인
 	@PostMapping("/login") 
 	public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO) {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		
-		// log.info("{} 로그인 성공", member.toString());
 		System.out.println("==========" + member.toString());
 		if(member != null) {
-			
+
 			// 토큰 생성
 			final String token = tokenProvider.createToken(member);
 			log.info("token 생성 성공", token);
@@ -135,11 +131,11 @@ public class MemberController {
 					.build();
 			
 			return ResponseEntity.ok().body(responseMemberDTO);
-		}
-		else {
+		} else {
 			return ResponseEntity.badRequest().body("로그인 실패");
 		}
 	}
+
 	/*
 	// 구글 로그인
 	@GetMapping("/googlelogin")
@@ -190,6 +186,12 @@ public class MemberController {
 	
 	
 /*
+=======
+
+>>>>>>> Stashed changes
+=======
+
+>>>>>>> Stashed changes
 	// 회원조회
 	@GetMapping("/memberInfo")
 	public ResponseEntity<?> memberInfo(@RequestBody MemberDTO memberDTO) {
@@ -198,8 +200,10 @@ public class MemberController {
 		if(member != null) {
 			MemberDTO responseMemberDTO = MemberDTO.toMemberDTO(member);
 			return ResponseEntity.ok().body(responseMemberDTO);
+		} else {
+			return ResponseEntity.badRequest().body("회원 조회 실패");
 		}
-		return ResponseEntity.badRequest().body("회원 조회 실패");
+<<<<<<< Updated upstream
 	}
 	*/
 	@GetMapping("/memberInfo")
@@ -218,17 +222,17 @@ public class MemberController {
 		Member updateMember = memberService.updateMember(memberDTO);
 		
 		if(updateMember != null) {
-		MemberDTO responseMemberDTO = memberDTO.builder()
-				.email(memberDTO.getEmail()) // 이메일은 수정불가. 기존의 이메일
-				.name(updateMember.getName())
-				.pwd(updateMember.getPwd())
-				.job(updateMember.getJob())
-				.hasCareer(updateMember.getHasCareer())
-				.token(memberDTO.getToken()) // 토큰은 기존의 발급받은 토큰 사용
-				.type(memberDTO.getType())
-				.fileAttached(updateMember.getFileAttached())
-				.build();
-		
+			MemberDTO responseMemberDTO = memberDTO.builder()
+					.email(memberDTO.getEmail())
+					.name(updateMember.getName())
+					.pwd(updateMember.getPwd())
+					.job(updateMember.getJob())
+					.hasCareer(updateMember.getHasCareer())
+					.token(memberDTO.getToken())
+					.type(memberDTO.getType())
+					.fileAttached(updateMember.getFileAttached())
+					.build();
+			
 			return ResponseEntity.ok().body(responseMemberDTO);
 		} else {
 			return ResponseEntity.badRequest().body("회원 수정 실패");
@@ -241,11 +245,11 @@ public class MemberController {
 	public ResponseEntity<?> logout(@RequestBody MemberDTO memberDTO) {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		if(member != null) {
-
-			tokenProvider.deleteToken(memberDTO);
+			// 로그아웃 처리 (별도의 로직 필요. 현재 로직으로 토큰 삭제 처리할 수 없음)
 			return ResponseEntity.ok().build();
+		} else {
+			return ResponseEntity.badRequest().body("회원 로그아웃 실패");
 		}
-		return ResponseEntity.badRequest().body("회원 로그아웃 실패");
 	}
 	*/
 }
