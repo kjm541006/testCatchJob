@@ -1,27 +1,40 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = { name: "", email: "", token: null, isLoggedIn: false };
+
 export const loginSlice = createSlice({
   name: "login",
-  initialState: { user: null, token: null, isLoggedIn: false },
+  initialState,
   reducers: {
     setCredentials: (state, action) => {
-      const { user, accessToken } = action.payload;
-      state.user = user;
-      state.token = accessToken;
+      // state.name = action.payload.name;
+      // state.email = action.payload.email;
+      // state.token = action.payload.accessToken;
+      // state.isLoggedIn = true;
+    },
+    setTokenFromLocalStorage: (state, action) => {
+      state.name = action.payload.name;
+      state.email = action.payload.email;
+      state.token = action.payload.token;
       state.isLoggedIn = true;
+      // state.userLoggedOut = false;
     },
     logOut: (state, action) => {
-      state.user = null;
+      state.name = null;
       state.token = null;
+      state.email = null;
       state.isLoggedIn = false;
+      // state.userLoggedOut = true;
     },
   },
 });
 
-export const { setCredentials, logOut } = loginSlice.actions;
+export const { setCredentials, setTokenFromLocalStorage, logOut } = loginSlice.actions;
 
 export default loginSlice.reducer;
 
-export const selectUser = (state) => state.auth.user;
-export const selectCurrentToken = (state) => state.auth.token;
-export const selectLoggedIn = (state) => state.auth.isLoggedIn;
+export const selectName = (state) => state.login.name;
+export const selectEmail = (state) => state.login.email;
+export const selectCurrentToken = (state) => state.login.token;
+export const selectLoggedIn = (state) => state.login.isLoggedIn;
+export const selectUserLoggedOut = (state) => state.login.userLoggedOut;

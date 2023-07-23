@@ -1,11 +1,11 @@
 package com.project.catchJob.domain.member;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,8 +16,21 @@ import javax.persistence.OneToOne;
 import com.project.catchJob.domain.board.B_comments;
 import com.project.catchJob.domain.board.B_like;
 import com.project.catchJob.domain.board.Board;
-import com.project.catchJob.domain.community.Comment;
-import com.project.catchJob.domain.community.CommunityPost;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import com.project.catchJob.domain.board.B_comments;
+import com.project.catchJob.domain.board.B_like;
+import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.project.P_comments;
 import com.project.catchJob.domain.project.P_like;
 import com.project.catchJob.domain.project.P_reason;
@@ -85,13 +98,17 @@ public class Member {
 
 	@OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private M_profile mProfile;
-	/*
-	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	private List<CommunityPost> communityList = new ArrayList<>();
+
 	
-	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	private List<Comment> c_CommentsList = new ArrayList<>();
-*/
+//	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+//	private List<Community> communityList = new ArrayList<>();
+	
+//	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+//	private List<Comment> c_CommentsList = new ArrayList<>();
+	
+//	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+//	private List<C_like> c_LikeList = new ArrayList<>();
+
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<Board> boardList = new ArrayList<>();
 	

@@ -2,8 +2,6 @@ package com.project.catchJob.service;
 
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -134,5 +132,14 @@ public class MemberService {
 			throw new RuntimeException("다시 로그인 해주세요");
 		}
 	}
+	
+	public Member findMemberByEmail(String userEmail) {
+	    Member member = memberRepo.findByEmail(userEmail);
+	    if (member == null) {
+	        throw new UsernameNotFoundException("Member not found with email: " + userEmail);
+	    }
+	    return member;
+	}
+
 
 }
