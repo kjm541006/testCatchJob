@@ -1,11 +1,18 @@
 package com.project.catchJob.service;
 
+import java.util.HashSet;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.domain.project.Project;
 import com.project.catchJob.dto.project.ProjectDTO;
+import com.project.catchJob.repository.member.MemberRepository;
 import com.project.catchJob.repository.project.ProjectRepository;
+import com.project.catchJob.security.JwtUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,28 +20,41 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ProjectServiceImpl implements ProjectService {
 	
+	@Autowired
 	private final ProjectRepository projectRepository;
+	
+	@Autowired
+    private MemberRepository memberRepository;
+	
+	@Autowired
+    private JwtUtils jwtUtils;
+	
 
+//	public Project addProject(ProjectDTO projectDTO) {
+//		Project project = new Project();
+//
+//
+//	    projectRepository.save(project);
+//	    return project;
+//	}
+	
 	@Override
-	public Project addProject(ProjectDTO projectDTO) {
+	public Project addProject(ProjectDTO projectDTO, String userEmail) {
+		Member member = memberRepository.findByEmail(projectDTO.getEmail());
+		
 		Project project = new Project();
+        project.setTitle(projectDTO.getTitle());
+        project.setField(projectDTO.getField());
+        project.setTerm(projectDTO.getTerm());
+//        project.setPlatform(projectDTO.getPlatform());
+//        project.setPlatforms(new HashSet<>(projectDTO.getPlatforms()));
+        project.setPlatforms(projectDTO.getPlatforms() != null ? new HashSet<>(projectDTO.getPlatforms()) : new HashSet<>());
 
-
-	    projectRepository.save(project);
-	    return project;
-	}
-
-	@Override
-	public Project createProjectFromDTO(ProjectDTO projectDTO, Member member) {
-		Project project = new Project();
-
-        // 여기에서 DTO 필드 값을 적절한 Project 필드에 할당해주세요.
-        // 예: project.setTitle(projectDTO.getTitle());
-
-        // Member 객체를 새로 생성한 Project 객체에 할당합니다.
+        project.setLoc(projectDTO.getLoc());
+        project.setCrew(projectDTO.getCrew());
+        project.setDetail(projectDTO.getDetail());
         project.setMember(member);
-
-        // 새로운 Project 객체를 저장하고 반환합니다.
+		
         return projectRepository.save(project);
 	}
 

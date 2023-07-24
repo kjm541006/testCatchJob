@@ -16,11 +16,12 @@ import BuildStudyPage from "./pages/study&project/BuildStudyPage";
 // import GoogleLoginButton_long from "./components/GoogleLoginButton_long";
 import { useDispatch, useSelector } from "react-redux";
 import MyPage from "./pages/MyPage";
-import { selectUserLoggedOut, setCredentials, setTokenFromLocalStorage, userLoggedOut } from "./redux/login";
+import { selectCurrentToken, selectUserLoggedOut, setCredentials, setTokenFromLocalStorage, userLoggedOut } from "./redux/login";
 import { logOut, selectEmail, selectLoggedIn, selectName } from "./redux/login";
 import LoginRoute from "./components/LoginRoute";
 import { useEffect } from "react";
 import LoginAlertPage from "./pages/LoginAlertPage";
+import axios from "axios";
 
 function App() {
   const dispatch = useDispatch();
@@ -29,6 +30,11 @@ function App() {
   const savedToken = localStorage.getItem("token");
   const isLoggedIn = useSelector(selectLoggedIn);
   const userLoggedOut = useSelector(selectUserLoggedOut);
+  const savedTokenFromStore = useSelector(selectCurrentToken);
+
+  // axios 요청 헤더 토큰 코드
+  // axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
+  if (isLoggedIn) axios.defaults.headers.common["Authorization"] = `Bearer ${savedTokenFromStore}`;
 
   useEffect(() => {
     console.log(isLoggedIn);

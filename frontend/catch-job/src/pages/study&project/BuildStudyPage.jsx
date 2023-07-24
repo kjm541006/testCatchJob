@@ -1,12 +1,15 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import styles from "../../assets/css/study/BuildStudy.module.css";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { selectEmail } from "../../redux/login";
+import { useNavigate } from "react-router-dom";
 
 const BuildStudyPage = () => {
   const [bType, setBType] = useState("project");
   const [selectedField, setSelectedField] = useState(null);
   const [selectedTerm, setSelectedTerm] = useState(null);
-  const [selectedPlatform, setSelectedPlatform] = useState(null);
+  const [selectedPlatform, setSelectedPlatform] = useState([]);
   const [selectedLoc, setSelectedLoc] = useState("온라인");
   const [crewCounts, setCrewCounts] = useState({
     webDesigner: 0,
@@ -18,8 +21,10 @@ const BuildStudyPage = () => {
   });
   const titleRef = useRef();
   const detail = useRef();
+  const navigate = useNavigate();
 
-  const userEmail = localStorage.getItem("email");
+  // const userEmail = localStorage.getItem("email");
+  const userEmail = useSelector(selectEmail);
 
   const changeTypeToProject = () => {
     setBType("project");
@@ -38,7 +43,11 @@ const BuildStudyPage = () => {
   };
 
   const handlePlatformChange = (option) => {
-    setSelectedPlatform(option);
+    if (selectedPlatform.includes(option)) {
+      setSelectedPlatform(selectedPlatform.filter((p) => p !== option));
+    } else {
+      setSelectedPlatform([...selectedPlatform, option]);
+    }
   };
 
   const handleLocChange = (event) => {
@@ -65,19 +74,33 @@ const BuildStudyPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const titleValue = titleRef.current.value;
+    const detailValue = detail.current.value;
+    const crewCountsArray = Object.values(crewCounts);
+    const sumCrewCounts = crewCountsArray.reduce((a, b) => a + b, 0);
+
+    if (!titleValue || !selectedField || !selectedTerm || !selectedPlatform || !selectedLoc || sumCrewCounts === 0 || !detailValue) {
+      alert("모든 필드를 올바르게 입력해주세요.");
+      return;
+    }
     const buildData = {
-      title: titleRef.current.value,
+      title: titleValue,
       field: selectedField,
       term: selectedTerm,
-      platform: selectedPlatform,
+      platforms: selectedPlatform,
       loc: selectedLoc,
       crew: crewCounts,
-      detail: detail.current.value,
+      detail: detailValue,
+      email: userEmail,
     };
 
     try {
-      const response = await axios.post("http://localhost:8089/buildstudy?", buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+      const response = await axios.post(`http://localhost:8089/build${bType}`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
       console.log(response);
+      if (response && response.status >= 200 && response.status < 300) {
+        navigate(-1);
+      }
     } catch (error) {
       // 에러가 발생한 경우
       console.error("에러가 발생했습니다.", error);
@@ -380,44 +403,44 @@ const BuildStudyPage = () => {
         <ul className={styles.items}>
           <li>
             <input
-              type="radio"
+              type="checkbox"
               name="platform"
               id="web"
               value="웹"
-              checked={selectedPlatform === "웹"}
+              checked={selectedPlatform.includes("웹")}
               onChange={() => handlePlatformChange("웹")}
               className={styles.radioBtn}
             />
             <label className={styles.fieldSelect} htmlFor="web">
-              <div className={`${styles.select} ${selectedPlatform === "웹" && styles.active} `}>웹</div>
+              <div className={`${styles.select} ${selectedPlatform.includes("웹") && styles.active} `}>웹</div>
             </label>
           </li>
           <li>
             <input
-              type="radio"
+              type="checkbox"
               name="platform"
               id="android"
               value="안드로이드 앱"
-              checked={selectedPlatform === "안드로이드 앱"}
+              checked={selectedPlatform.includes("안드로이드 앱")}
               onChange={() => handlePlatformChange("안드로이드 앱")}
               className={styles.radioBtn}
             />
             <label className={styles.fieldSelect} htmlFor="android">
-              <div className={`${styles.select} ${selectedPlatform === "안드로이드 앱" && styles.active} `}>안드로이드 앱</div>
+              <div className={`${styles.select} ${selectedPlatform.includes("안드로이드 앱") && styles.active} `}>안드로이드 앱</div>
             </label>
           </li>
           <li>
             <input
-              type="radio"
+              type="checkbox"
               name="platform"
               id="ios"
               value="ios 앱"
-              checked={selectedPlatform === "ios 앱"}
+              checked={selectedPlatform.includes("ios 앱")}
               onChange={() => handlePlatformChange("ios 앱")}
               className={styles.radioBtn}
             />
             <label className={styles.fieldSelect} htmlFor="ios">
-              <div className={`${styles.select} ${selectedPlatform === "ios 앱" && styles.active} `}>ios 앱</div>
+              <div className={`${styles.select} ${selectedPlatform.includes("ios 앱") && styles.active} `}>ios 앱</div>
             </label>
           </li>
         </ul>
@@ -443,7 +466,7 @@ const BuildStudyPage = () => {
             뒤로 가기
           </button>
           <button className={styles.submit} onClick={handleSubmit}>
-            저장
+            등록
           </button>
         </div>
       </div>
@@ -454,22 +477,22 @@ const BuildStudyPage = () => {
 
 export default BuildStudyPage;
 
-const handleSubmit = async (e) => {
-  e.preventDefault(); // 기본 폼 제출을 막습니다.
+// const handleSubmit = async (e) => {
+//   e.preventDefault(); // 기본 폼 제출을 막습니다.
 
-  // 폼 필드의 데이터를 수집합니다.
-  const formData = new FormData(e.target.closest("form"));
-  const formValues = Object.fromEntries(formData.entries());
+//   // 폼 필드의 데이터를 수집합니다.
+//   const formData = new FormData(e.target.closest("form"));
+//   const formValues = Object.fromEntries(formData.entries());
 
-  // 얻은 데이터로 서버에 요청을 보냅니다.
-  try {
-    const response = await axios.post("http://localhost:8089/buildstudy", formValues); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
-    // 필요한 경우 응답을 처리합니다.
-  } catch (error) {
-    // 요청에 실패한 경우 오류를 처리합니다.
-  }
-  window.location.href = "/study";
-};
+//   // 얻은 데이터로 서버에 요청을 보냅니다.
+//   try {
+//     const response = await axios.post("http://localhost:8089/buildstudy", formValues); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+//     // 필요한 경우 응답을 처리합니다.
+//   } catch (error) {
+//     // 요청에 실패한 경우 오류를 처리합니다.
+//   }
+//   window.location.href = "/study";
+// };
 
 // async function handleSubmit(e) {
 //   e.preventDefault();

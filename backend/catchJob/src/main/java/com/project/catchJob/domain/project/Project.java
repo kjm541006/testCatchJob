@@ -3,13 +3,19 @@ package com.project.catchJob.domain.project;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 
 import com.project.catchJob.domain.member.Member;
@@ -39,19 +45,31 @@ public class Project {
 	
 	private String detail;
 	
-	private int webDesigner; // 웹디자인 인원
+//	private int webDesigner; // 웹디자인 인원
+//	
+//    private int webPublisher; // 웹퍼블리셔 인원
+//    
+//    private int frontend; // 프론트엔드 인원
+//    
+//    private int backend; // 백엔드 인원
+//    
+//    private int PM; // 프로젝트 매니저 인원
+//    
+//    private int others; // 기타 인원
 	
-    private int webPublisher; // 웹퍼블리셔 인원
-    
-    private int frontend; // 프론트엔드 인원
-    
-    private int backend; // 백엔드 인원
-    
-    private int PM; // 프로젝트 매니저 인원
-    
-    private int others; // 기타 인원
+	@ElementCollection
+    @CollectionTable(name = "crew_counts", joinColumns = @JoinColumn(name = "project_id"))
+    @MapKeyColumn(name = "role")
+    @Column(name = "count")
+    private Map<String, Integer> crew;
 	
-	private String platform; // 출시플랫폼
+	// private String platform; // 출시플랫폼
+	
+	@ElementCollection(fetch = FetchType.EAGER)
+	  @CollectionTable(name = "platforms", joinColumns = @JoinColumn(name = "project_id"))
+	  @Column(name = "platform")
+	  private Set<String> platforms; // 출시플랫폼을 Set으로 변경
+
 	
 	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
 	private int pCnt; // 조회수
