@@ -13,18 +13,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.catchJob.domain.board.B_like;
-import com.project.catchJob.domain.board.B_tag;
+//import com.project.catchJob.domain.board.B_tag;
 import com.project.catchJob.domain.board.Board;
-import com.project.catchJob.domain.board.Tag;
+//import com.project.catchJob.domain.board.Tag;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.board.BoardDTO;
 import com.project.catchJob.dto.board.TagDTO;
 import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.repository.board.B_commentsRepository;
 import com.project.catchJob.repository.board.B_likeRepository;
-import com.project.catchJob.repository.board.B_tagRepository;
+//import com.project.catchJob.repository.board.B_tagRepository;
 import com.project.catchJob.repository.board.BoardRepository;
-import com.project.catchJob.repository.board.TagRepository;
+//import com.project.catchJob.repository.board.TagRepository;
 import com.project.catchJob.repository.member.MemberRepository;
 import com.project.catchJob.security.TokenProvider;
 
@@ -44,8 +44,8 @@ public class BoardService {
 	@Autowired private BoardRepository boardRepo;
 	@Autowired private B_commentsRepository bCommRepo; // 댓글
 	@Autowired private B_likeRepository bLikeRepo; // 좋아요
-	@Autowired private B_tagRepository bTagRepo;
-	@Autowired private TagRepository tagRepo;
+//	@Autowired private B_tagRepository bTagRepo;
+//	@Autowired private TagRepository tagRepo;
 	@Autowired private TokenProvider tokenProvider;
 	
 //	private String uploadFolderPath = "catchJob/upload/"; 
@@ -64,7 +64,7 @@ public class BoardService {
 	public List<BoardDTO> getBoardList(Member member) {
 		List<Board> boards = boardRepo.findAll();	
 		return boards.stream()
-				.map(board -> BoardDTO.toDTO(board, member, bLikeRepo, fileUrlPath, tagDTOList)) // member, bLikeRepo 전달
+				.map(board -> BoardDTO.toDTO(board, member, bLikeRepo, fileUrlPath)) // member, bLikeRepo 전달
 				.collect(Collectors.toList());
 	}
 
@@ -78,6 +78,7 @@ public class BoardService {
 	    Board board = Board.builder()
 	            .bTitle(boardDTO.getBTitle())
 	            .bContents(boardDTO.getBContents())
+	            .tag(boardDTO.getTag())
 	            .member(member)
 	            .build();
 
@@ -114,23 +115,23 @@ public class BoardService {
 //	        bTagRepo.save(bTag);
 //	    }
 
-	    for (TagDTO tagDTO : boardDTO.getTags()) {
-	        B_tag bTag = new B_tag();
-	        bTag.setBoard(board);
-
-	        // 이름으로 태그 조회
-	        Tag tag = tagRepo.findByTagName(tagDTO.getTagName()).orElse(null);
-
-	        // 태그가 없으면 생성
-	        if (tag == null) {
-	            tag = new Tag();
-	            tag.setTagName(tagDTO.getTagName());
-	            tagRepo.save(tag);
-	        }
-
-	        bTag.setTag(tag);
-	        bTagRepo.save(bTag);
-	    }
+//	    for (TagDTO tagDTO : boardDTO.getTags()) {
+//	        B_tag bTag = new B_tag();
+//	        bTag.setBoard(board);
+//
+//	        // 이름으로 태그 조회
+//	        Tag tag = tagRepo.findByTagName(tagDTO.getTagName()).orElse(null);
+//
+//	        // 태그가 없으면 생성
+//	        if (tag == null) {
+//	            tag = new Tag();
+//	            tag.setTagName(tagDTO.getTagName());
+//	            tagRepo.save(tag);
+//	        }
+//
+//	        bTag.setTag(tag);
+//	        bTagRepo.save(bTag);
+//	    }
 
 
 	    // 파일 저장

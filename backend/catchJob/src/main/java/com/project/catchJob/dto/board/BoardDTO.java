@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.project.catchJob.domain.board.B_tag;
+//import com.project.catchJob.domain.board.B_tag;
 import com.project.catchJob.domain.board.Board;
-import com.project.catchJob.domain.board.Tag;
+//import com.project.catchJob.domain.board.Tag;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.repository.board.B_likeRepository;
@@ -59,12 +59,14 @@ public class BoardDTO {
 	@JsonProperty("bDate")
 	private Date bDate;
 	
+	private List<String> tag;
+	
 	private MemberDTO member;
-	private List<TagDTO> tags;
+	//private List<TagDTO> tags;
 	private List<B_commentsDTO> comments;
 	
 	// board에서 BoardDTO로 변환하는 메서드
-	public static BoardDTO toDTO(Board board, Member member, B_likeRepository bLikeRepo, String filePath, List<TagDTO> tagDTOList) {
+	public static BoardDTO toDTO(Board board, Member member, B_likeRepository bLikeRepo, String filePath) {
 		
 		MemberDTO memberDTO = new MemberDTO();
 		memberDTO.setEmail(member.getEmail());
@@ -86,15 +88,8 @@ public class BoardDTO {
 //			    })
 //			    .collect(Collectors.toList());
 		
-		List<TagDTO> tagList = board.getBoardTagList().stream()
-			    .map(bTag -> {
-			        Tag tag = bTag.getTag();
-			        return TagDTO.builder()
-			            //.tagId(tag.getTagId())
-			            .tagName(tag.getTagName())
-			            .build();
-			    })
-			    .collect(Collectors.toList());
+		List<String> tagList = board.getTag();
+		String[] tags = tagList.toArray(new String[0]);
 		
 		int bComment = board.getBoardCommentsList().size(); // 게시글에 작성된 댓글 수를 구함
 		
@@ -126,7 +121,7 @@ public class BoardDTO {
 				.bCoverFileUrl(bCoverFileUrl)
 				.bDate(board.getBDate())
 				.member(memberDTO) // 멤버 정보 설정
-				.tags(tagList) // 태그
+				.tag(board.getTag()) // 태그
 				.comments(commentDTOList) // 댓글
 				.build();
 	}

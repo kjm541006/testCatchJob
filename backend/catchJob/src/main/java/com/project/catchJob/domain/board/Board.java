@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -49,6 +50,9 @@ public class Board {
 	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
 	private int bLike; // 좋아요갯수
 	
+	@ElementCollection
+	private List<String> tag; // 태그
+	
 	private String bFileName; // 파일명
 	
 	@Transient // DB에 저장 안 됨
@@ -77,7 +81,7 @@ public class Board {
 	@OneToMany(mappedBy = "board")
 	private List<B_like> boardLikeList = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<B_tag> boardTagList = new ArrayList<>();
+//	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private List<B_tag> boardTagList = new ArrayList<>();
 
 }
