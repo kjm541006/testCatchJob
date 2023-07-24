@@ -1,12 +1,18 @@
-import {React, useEffect, useState} from "react";
+import { React, useEffect, useState } from "react";
 import styles from "../assets/css/PortfolioMain.module.css";
 import img from "../assets/img/port_img.jpeg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faCommentDots, faHeart, faCheck } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import PortfolioModal from "../components/PortfolioModal";
+import { useNavigate } from "react-router-dom";
 
 const PortfolioMainPage = () => {
+  // 아래는 react-router-dom 용 코드입니다 유지시켜주세요.
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate("/");
+  }, [navigate]);
 
   const dummyData = [
     {
@@ -26,36 +32,36 @@ const PortfolioMainPage = () => {
         "name": "User1",
         "mOriginalFileName": img,
       },
-      "tags": [
+      tags: [
         {
-          "tagId": 1,
-          "tagName": "java"
+          tagId: 1,
+          tagName: "java",
         },
         {
-          "tagId": 2,
-          "tagName": "git"
+          tagId: 2,
+          tagName: "git",
         },
         {
-          "tagId": 3,
-          "tagName": "gpt"
-        }
+          tagId: 3,
+          tagName: "gpt",
+        },
       ],
-      "comments": [
+      comments: [
         {
-          "commentId": 1,
-          "commentContent": "댓글1 내용입니다.",
-          "commentDate": "2023-07-19T16:30:00Z",
-          "memberName": "UserA",
-          "memberEmail": "userA@example.com"
+          commentId: 1,
+          commentContent: "댓글1 내용입니다.",
+          commentDate: "2023-07-19T16:30:00Z",
+          memberName: "UserA",
+          memberEmail: "userA@example.com",
         },
         {
-          "commentId": 2,
-          "commentContent": "댓글2 내용입니다.",
-          "commentDate": "2023-07-19T17:30:00Z",
-          "memberName": "UserB",
-          "memberEmail": "userB@example.com"
-        }
-      ]
+          commentId: 2,
+          commentContent: "댓글2 내용입니다.",
+          commentDate: "2023-07-19T17:30:00Z",
+          memberName: "UserB",
+          memberEmail: "userB@example.com",
+        },
+      ],
     },
     {
       "boardId": 2,
@@ -74,29 +80,29 @@ const PortfolioMainPage = () => {
         "name": "User2",
         "mOriginalFileName": img,
       },
-      "tags": [
+      tags: [
         {
-          "tagId": 4,
-          "tagName": "javascript"
+          tagId: 4,
+          tagName: "javascript",
         },
         {
-          "tagId": 5,
-          "tagName": "html"
+          tagId: 5,
+          tagName: "html",
         },
         {
-          "tagId": 6,
-          "tagName": "css"
-        }
+          tagId: 6,
+          tagName: "css",
+        },
       ],
-      "comments": [
+      comments: [
         {
-          "commentId": 3,
-          "commentContent": "댓글3 내용입니다.",
-          "commentDate": "2023-07-20T10:30:00Z",
-          "memberName": "UserC",
-          "memberEmail": "userC@example.com"
-        }
-      ]
+          commentId: 3,
+          commentContent: "댓글3 내용입니다.",
+          commentDate: "2023-07-20T10:30:00Z",
+          memberName: "UserC",
+          memberEmail: "userC@example.com",
+        },
+      ],
     },
     {
       "boardId": 3,
@@ -115,29 +121,29 @@ const PortfolioMainPage = () => {
         "name": "User3",
         "mOriginalFileName": img,
       },
-      "tags": [
+      tags: [
         {
-          "tagId": 7,
-          "tagName": "python"
+          tagId: 7,
+          tagName: "python",
         },
         {
-          "tagId": 8,
-          "tagName": "django"
+          tagId: 8,
+          tagName: "django",
         },
         {
-          "tagId": 8,
-          "tagName": "django"
-        }
+          tagId: 8,
+          tagName: "django",
+        },
       ],
-      "comments": [
+      comments: [
         {
-          "commentId": 4,
-          "commentContent": "댓글4 내용입니다.",
-          "commentDate": "2023-07-20T10:30:00Z",
-          "memberName": "Userd",
-          "memberEmail": "userd@example.com"
-        }
-      ]
+          commentId: 4,
+          commentContent: "댓글4 내용입니다.",
+          commentDate: "2023-07-20T10:30:00Z",
+          memberName: "Userd",
+          memberEmail: "userd@example.com",
+        },
+      ],
     },
     {
       "boardId": 1,
@@ -156,36 +162,36 @@ const PortfolioMainPage = () => {
         "name": "User1",
         "mOriginalFileName": img,
       },
-      "tags": [
+      tags: [
         {
-          "tagId": 1,
-          "tagName": "java"
+          tagId: 1,
+          tagName: "java",
         },
         {
-          "tagId": 2,
-          "tagName": "git"
+          tagId: 2,
+          tagName: "git",
         },
         {
-          "tagId": 3,
-          "tagName": "gpt"
-        }
+          tagId: 3,
+          tagName: "gpt",
+        },
       ],
-      "comments": [
+      comments: [
         {
-          "commentId": 1,
-          "commentContent": "댓글1 내용입니다.",
-          "commentDate": "2023-07-19T16:30:00Z",
-          "memberName": "UserA",
-          "memberEmail": "userA@example.com"
+          commentId: 1,
+          commentContent: "댓글1 내용입니다.",
+          commentDate: "2023-07-19T16:30:00Z",
+          memberName: "UserA",
+          memberEmail: "userA@example.com",
         },
         {
-          "commentId": 2,
-          "commentContent": "댓글2 내용입니다.",
-          "commentDate": "2023-07-19T17:30:00Z",
-          "memberName": "UserB",
-          "memberEmail": "userB@example.com"
-        }
-      ]
+          commentId: 2,
+          commentContent: "댓글2 내용입니다.",
+          commentDate: "2023-07-19T17:30:00Z",
+          memberName: "UserB",
+          memberEmail: "userB@example.com",
+        },
+      ],
     },
     {
       "boardId": 2,
@@ -204,29 +210,29 @@ const PortfolioMainPage = () => {
         "name": "User2",
         "mOriginalFileName": img,
       },
-      "tags": [
+      tags: [
         {
-          "tagId": 4,
-          "tagName": "javascript"
+          tagId: 4,
+          tagName: "javascript",
         },
         {
-          "tagId": 5,
-          "tagName": "html"
+          tagId: 5,
+          tagName: "html",
         },
         {
-          "tagId": 6,
-          "tagName": "css"
-        }
+          tagId: 6,
+          tagName: "css",
+        },
       ],
-      "comments": [
+      comments: [
         {
-          "commentId": 3,
-          "commentContent": "댓글3 내용입니다.",
-          "commentDate": "2023-07-20T10:30:00Z",
-          "memberName": "UserC",
-          "memberEmail": "userC@example.com"
-        }
-      ]
+          commentId: 3,
+          commentContent: "댓글3 내용입니다.",
+          commentDate: "2023-07-20T10:30:00Z",
+          memberName: "UserC",
+          memberEmail: "userC@example.com",
+        },
+      ],
     },
     {
       "boardId": 3,
@@ -245,29 +251,29 @@ const PortfolioMainPage = () => {
         "name": "User3",
         "mOriginalFileName": img,
       },
-      "tags": [
+      tags: [
         {
-          "tagId": 7,
-          "tagName": "python"
+          tagId: 7,
+          tagName: "python",
         },
         {
-          "tagId": 8,
-          "tagName": "django"
+          tagId: 8,
+          tagName: "django",
         },
         {
-          "tagId": 8,
-          "tagName": "django"
-        }
+          tagId: 8,
+          tagName: "django",
+        },
       ],
-      "comments": [
+      comments: [
         {
-          "commentId": 4,
-          "commentContent": "댓글4 내용입니다.",
-          "commentDate": "2023-07-20T10:30:00Z",
-          "memberName": "Userd",
-          "memberEmail": "userd@example.com"
-        }
-      ]
+          commentId: 4,
+          commentContent: "댓글4 내용입니다.",
+          commentDate: "2023-07-20T10:30:00Z",
+          memberName: "Userd",
+          memberEmail: "userd@example.com",
+        },
+      ],
     },
     {
       "boardId": 1,
@@ -286,36 +292,36 @@ const PortfolioMainPage = () => {
         "name": "User1",
         "mOriginalFileName": img,
       },
-      "tags": [
+      tags: [
         {
-          "tagId": 1,
-          "tagName": "java"
+          tagId: 1,
+          tagName: "java",
         },
         {
-          "tagId": 2,
-          "tagName": "git"
+          tagId: 2,
+          tagName: "git",
         },
         {
-          "tagId": 3,
-          "tagName": "gpt"
-        }
+          tagId: 3,
+          tagName: "gpt",
+        },
       ],
-      "comments": [
+      comments: [
         {
-          "commentId": 1,
-          "commentContent": "댓글1 내용입니다.",
-          "commentDate": "2023-07-19T16:30:00Z",
-          "memberName": "UserA",
-          "memberEmail": "userA@example.com"
+          commentId: 1,
+          commentContent: "댓글1 내용입니다.",
+          commentDate: "2023-07-19T16:30:00Z",
+          memberName: "UserA",
+          memberEmail: "userA@example.com",
         },
         {
-          "commentId": 2,
-          "commentContent": "댓글2 내용입니다.",
-          "commentDate": "2023-07-19T17:30:00Z",
-          "memberName": "UserB",
-          "memberEmail": "userB@example.com"
-        }
-      ]
+          commentId: 2,
+          commentContent: "댓글2 내용입니다.",
+          commentDate: "2023-07-19T17:30:00Z",
+          memberName: "UserB",
+          memberEmail: "userB@example.com",
+        },
+      ],
     },
     {
       "boardId": 2,
@@ -334,29 +340,29 @@ const PortfolioMainPage = () => {
         "name": "User2",
         "mOriginalFileName": img,
       },
-      "tags": [
+      tags: [
         {
-          "tagId": 4,
-          "tagName": "javascript"
+          tagId: 4,
+          tagName: "javascript",
         },
         {
-          "tagId": 5,
-          "tagName": "html"
+          tagId: 5,
+          tagName: "html",
         },
         {
-          "tagId": 6,
-          "tagName": "css"
-        }
+          tagId: 6,
+          tagName: "css",
+        },
       ],
-      "comments": [
+      comments: [
         {
-          "commentId": 3,
-          "commentContent": "댓글3 내용입니다.",
-          "commentDate": "2023-07-20T10:30:00Z",
-          "memberName": "UserC",
-          "memberEmail": "userC@example.com"
-        }
-      ]
+          commentId: 3,
+          commentContent: "댓글3 내용입니다.",
+          commentDate: "2023-07-20T10:30:00Z",
+          memberName: "UserC",
+          memberEmail: "userC@example.com",
+        },
+      ],
     },
     {
       "boardId": 3,
@@ -375,29 +381,29 @@ const PortfolioMainPage = () => {
         "name": "User3",
         "mOriginalFileName": img,
       },
-      "tags": [
+      tags: [
         {
-          "tagId": 7,
-          "tagName": "python"
+          tagId: 7,
+          tagName: "python",
         },
         {
-          "tagId": 8,
-          "tagName": "django"
+          tagId: 8,
+          tagName: "django",
         },
         {
-          "tagId": 8,
-          "tagName": "django"
-        }
+          tagId: 8,
+          tagName: "django",
+        },
       ],
-      "comments": [
+      comments: [
         {
-          "commentId": 4,
-          "commentContent": "댓글4 내용입니다.",
-          "commentDate": "2023-07-20T10:30:00Z",
-          "memberName": "Userd",
-          "memberEmail": "userd@example.com"
-        }
-      ]
+          commentId: 4,
+          commentContent: "댓글4 내용입니다.",
+          commentDate: "2023-07-20T10:30:00Z",
+          memberName: "Userd",
+          memberEmail: "userd@example.com",
+        },
+      ],
     },
         {
       "boardId": 1,
@@ -416,36 +422,36 @@ const PortfolioMainPage = () => {
         "name": "User1",
         "mOriginalFileName": img,
       },
-      "tags": [
+      tags: [
         {
-          "tagId": 1,
-          "tagName": "java"
+          tagId: 1,
+          tagName: "java",
         },
         {
-          "tagId": 2,
-          "tagName": "git"
+          tagId: 2,
+          tagName: "git",
         },
         {
-          "tagId": 3,
-          "tagName": "gpt"
-        }
+          tagId: 3,
+          tagName: "gpt",
+        },
       ],
-      "comments": [
+      comments: [
         {
-          "commentId": 1,
-          "commentContent": "댓글1 내용입니다.",
-          "commentDate": "2023-07-19T16:30:00Z",
-          "memberName": "UserA",
-          "memberEmail": "userA@example.com"
+          commentId: 1,
+          commentContent: "댓글1 내용입니다.",
+          commentDate: "2023-07-19T16:30:00Z",
+          memberName: "UserA",
+          memberEmail: "userA@example.com",
         },
         {
-          "commentId": 2,
-          "commentContent": "댓글2 내용입니다.",
-          "commentDate": "2023-07-19T17:30:00Z",
-          "memberName": "UserB",
-          "memberEmail": "userB@example.com"
-        }
-      ]
+          commentId: 2,
+          commentContent: "댓글2 내용입니다.",
+          commentDate: "2023-07-19T17:30:00Z",
+          memberName: "UserB",
+          memberEmail: "userB@example.com",
+        },
+      ],
     },
     {
       "boardId": 2,
@@ -464,29 +470,29 @@ const PortfolioMainPage = () => {
         "name": "User2",
         "mOriginalFileName": img,
       },
-      "tags": [
+      tags: [
         {
-          "tagId": 4,
-          "tagName": "javascript"
+          tagId: 4,
+          tagName: "javascript",
         },
         {
-          "tagId": 5,
-          "tagName": "html"
+          tagId: 5,
+          tagName: "html",
         },
         {
-          "tagId": 6,
-          "tagName": "css"
-        }
+          tagId: 6,
+          tagName: "css",
+        },
       ],
-      "comments": [
+      comments: [
         {
-          "commentId": 3,
-          "commentContent": "댓글3 내용입니다.",
-          "commentDate": "2023-07-20T10:30:00Z",
-          "memberName": "UserC",
-          "memberEmail": "userC@example.com"
-        }
-      ]
+          commentId: 3,
+          commentContent: "댓글3 내용입니다.",
+          commentDate: "2023-07-20T10:30:00Z",
+          memberName: "UserC",
+          memberEmail: "userC@example.com",
+        },
+      ],
     },
     {
       "boardId": 3,
@@ -505,44 +511,44 @@ const PortfolioMainPage = () => {
         "name": "User3",
         "mOriginalFileName": img,
       },
-      "tags": [
+      tags: [
         {
-          "tagId": 7,
-          "tagName": "python"
+          tagId: 7,
+          tagName: "python",
         },
         {
-          "tagId": 8,
-          "tagName": "django"
+          tagId: 8,
+          tagName: "django",
         },
         {
-          "tagId": 8,
-          "tagName": "django"
-        }
+          tagId: 8,
+          tagName: "django",
+        },
       ],
-      "comments": [
+      comments: [
         {
-          "commentId": 4,
-          "commentContent": "댓글4 내용입니다.",
-          "commentDate": "2023-07-20T10:30:00Z",
-          "memberName": "Userd",
-          "memberEmail": "userd@example.com"
-        }
-      ]
-    }
+          commentId: 4,
+          commentContent: "댓글4 내용입니다.",
+          commentDate: "2023-07-20T10:30:00Z",
+          memberName: "Userd",
+          memberEmail: "userd@example.com",
+        },
+      ],
+    },
   ];
-
 
   const [data, setData] = useState(dummyData); // 실제할 때는 []로 바꾸기 더미데이터 지우고
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
   useEffect(() => {
-    axios.get("서버_엔드포인트_URL")
-      .then(response => {
+    axios
+      .get("서버_엔드포인트_URL")
+      .then((response) => {
         setData(response.data); // 서버 응답은  { id: 2, comments: 2, views: 456, likes: 5, infoLeft: "Element 2",  "imageUrl": "이미지_URL_1",  "userImageUrl": "이미지_URL_2", }, 이런 식이여야함
         console.log(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("데이터 가져오기 에러:", error);
       });
   }, []);
@@ -567,15 +573,15 @@ const PortfolioMainPage = () => {
               <img className={`${styles.img}`} src={item.bCoverFileName} alt="img" />
               <div className={`${styles.info}`}>
                 <img className={`${styles.user_img}`} src={item.member.mOriginalFileName} alt="img" />
-                  <div className={`${styles.info_left}`}>{item.member.name}</div>
-                  <div className={`${styles.info_right}`}>
-                    <FontAwesomeIcon icon={faCommentDots} className={`${styles.faIcon}`} />
-                    <span className={`${styles.num}`}>{item.bComment}</span>
-                    <FontAwesomeIcon icon={faEye} className={`${styles.faIcon}`} />
-                    <span className={`${styles.num}`}>{item.bCnt}</span>
-                    <FontAwesomeIcon icon={faHeart} className={`${styles.faIcon}`} />
-                    <span className={`${styles.num}`}>{item.bLike}</span>
-                  </div>
+                <div className={`${styles.info_left}`}>{item.member.name}</div>
+                <div className={`${styles.info_right}`}>
+                  <FontAwesomeIcon icon={faCommentDots} className={`${styles.faIcon}`} />
+                  <span className={`${styles.num}`}>{item.bComment}</span>
+                  <FontAwesomeIcon icon={faEye} className={`${styles.faIcon}`} />
+                  <span className={`${styles.num}`}>{item.bCnt}</span>
+                  <FontAwesomeIcon icon={faHeart} className={`${styles.faIcon}`} />
+                  <span className={`${styles.num}`}>{item.bLike}</span>
+                </div>
               </div>
             </div>
           ))}

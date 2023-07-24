@@ -27,17 +27,31 @@ public class Project {
 	@Id @GeneratedValue @Column(name = "project_id")
 	private Long projectId;
 	
-	private String pType; // 분야
+	private String bType; // 분야
 	
-	private String pTitle;
+	private String title;
 	
-	private String pContents;
+	private String field;
 	
-	private String pLoc; // 지역
+	private String loc; // 지역
 	
-	private String pPeriod; // 모집기간
+	private String term; // 모집기간
 	
-	private String pPlatform; // 출시플랫폼
+	private String detail;
+	
+	private int webDesigner; // 웹디자인 인원
+	
+    private int webPublisher; // 웹퍼블리셔 인원
+    
+    private int frontend; // 프론트엔드 인원
+    
+    private int backend; // 백엔드 인원
+    
+    private int PM; // 프로젝트 매니저 인원
+    
+    private int others; // 기타 인원
+	
+	private String platform; // 출시플랫폼
 	
 	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
 	private int pCnt; // 조회수

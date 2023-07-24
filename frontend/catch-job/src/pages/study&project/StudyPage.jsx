@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPencil } from "@fortawesome/free-solid-svg-icons";
-import styles from "../assets/css/Study.module.css";
+import styles from "../../assets/css/study/Study.module.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import Loading from "../components/Loading";
+import Loading from "../../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
-import { startLoading, stopLoading } from "../redux/store";
+import { startLoading, stopLoading } from "../../redux/store";
 
 const StudyPage = () => {
   const [data, setData] = useState([]);
@@ -129,10 +129,12 @@ const StudyPage = () => {
                 );
               })}
             </div>
-            <div className={styles.makeProject}>
-              <FontAwesomeIcon icon={faPencil} />
-              <Link to={"/study/build"}>글 쓰기</Link>
-            </div>
+            <Link to={"/study/build"}>
+              <div className={styles.makeProject}>
+                <FontAwesomeIcon icon={faPencil} />
+                <div>글 쓰기</div>
+              </div>
+            </Link>
           </div>
         </div>
       )}
