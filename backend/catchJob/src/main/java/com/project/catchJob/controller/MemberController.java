@@ -51,9 +51,7 @@ public class MemberController {
 	@PostMapping("/register")
 	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
 		try {
-			if(memberDTO == null || memberDTO.getPwd() == null) {
-				throw new RuntimeException("비밀번호 공란");
-			}
+			
 			MemberDTO responseMemberDTO = MemberDTO.builder()
 					.email(memberDTO.getEmail())
 					.pwd(pwdEncoder.encrypt(memberDTO.getEmail(), memberDTO.getPwd()))
@@ -62,6 +60,7 @@ public class MemberController {
 					.hasCareer(memberDTO.getHasCareer())
 					.type("일반")
 					.build();
+			System.out.println("=========" + responseMemberDTO);
 			memberService.createMember(responseMemberDTO);
 			return ResponseEntity.ok().body(responseMemberDTO);
 		} catch (Exception e) {
