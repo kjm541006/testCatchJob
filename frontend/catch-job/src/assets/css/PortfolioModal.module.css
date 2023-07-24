@@ -1,0 +1,143 @@
+/* PortfolioModal.module.css */
+
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonSet{
+  position: absolute;
+  top: 15px;
+  right: 400px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalButton {
+  background-color: white;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  justify-content: center;
+  align-items: center;
+}
+
+.faIcon{
+  width: 24px;
+  height: 24px;
+  color: #444444;
+  align-items: center;
+}
+
+.buttonMent{
+  margin: 10px ;
+  font-size: 16px;
+  color: white;
+  font-weight: bold;
+  
+}
+
+.modalContent {
+  background-color: white;
+  padding: 40px;
+  width: 1200px;
+  min-height: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  overflow: auto;
+}
+
+.contentInfo{
+  display: flex;
+  align-items: center;
+}
+
+.user_img{
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  border: 1px solid #b2b2b2;
+}
+
+.contentUser{
+  display: flex;
+  margin: 10px;
+  flex-direction: column;
+}
+
+.contentUser_title{
+  font-size: 15;
+  font-weight: bold;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+.contentUser_info{
+  font-size: 15;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.realContent{
+  display: flex;
+  margin: 70px 0 70px 0;
+  padding: 0 70px 0 70px;
+  align-items: center;
+  font-size: 15;
+  white-space: pre-wrap;
+}
+
+.tagList{
+  display: flex;
+}
+
+.tagElement{
+  border-radius: 18px;
+  border: 2px solid #D0D1D4;
+  background: #FFF;
+  margin: 5px;
+  padding: 10px;
+}
+
+.contentFile{
+  margin: 30px 5px 20px 5px;
+  font-size: 16px;
+  color:#444444;
+}
+
+.contentFileName{
+  text-decoration-line: underline;
+  cursor: pointer;
+}
+
+.contentComment{
+  margin: 50px 5px 20px 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.comments{
+  font-weight: bold;
+  font-size: 22px;
+}
+
+.commentBox{
+  margin: 20px 0 20px 0 ;
+  width: 1100px;
+  height: 100px;
+  border-radius: 16px;
+  border: 2px solid #E1E1E1;
+  background: #FFF; 
+}
