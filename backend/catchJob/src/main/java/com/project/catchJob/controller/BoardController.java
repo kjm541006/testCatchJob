@@ -3,7 +3,6 @@ package com.project.catchJob.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,9 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.board.BoardDTO;
 import com.project.catchJob.dto.member.MemberDTO;
@@ -70,21 +72,20 @@ public class BoardController {
 //		return ResponseEntity.ok().body(responseBoardDTO);
 //	}
 	
-	@PostMapping("/portfolio/register")
+	@PostMapping("/portfolio/build")
 	public ResponseEntity<?> registerBoard(
 	        @RequestBody BoardDTO boardDTO, 
 	        @RequestHeader("Authorization") String jwtToken, 
-	        @RequestParam("bFileName") MultipartFile file, 
-	        @RequestParam("bCoverFileName") MultipartFile coverFile) throws Exception {
-
+	        @RequestPart(value = "file", required = false) MultipartFile file) 
+	        throws Exception {
+		
 	    Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
 
 	    MemberDTO memberDTO = MemberDTO.toMemberDTO(authenticatedMember);
-	    boardService.create(boardDTO, memberDTO, file, coverFile);
 
+	    boardService.create(boardDTO, memberDTO, file);
 	    return ResponseEntity.ok().build();
 	}
-
 
 	// 글 수정
 //	@PostMapping("/portfolio/update/{board_id}")

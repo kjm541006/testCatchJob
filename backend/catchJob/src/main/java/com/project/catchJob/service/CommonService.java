@@ -25,7 +25,6 @@ public class CommonService {
 	    if (jwtToken == null || !jwtToken.startsWith("Bearer ")) {
 	        return Optional.empty();
 	    }
-
 	    String token = jwtToken.substring(7);
 	    boolean isValidToken = tokenProvider.validateToken(token);
 

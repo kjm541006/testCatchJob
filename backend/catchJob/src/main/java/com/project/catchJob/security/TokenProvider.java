@@ -37,16 +37,27 @@ public class TokenProvider {
 		Date expireDate = Date.from(
 			Instant.now()
 				.plus(1, ChronoUnit.DAYS));
-		Claims claims = Jwts.claims().setSubject(member.getEmail());
+//		Claims claims = Jwts.claims().setSubject(member.getEmail());
 		
-		return Jwts.builder()
-				.signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-				.setSubject(member.getEmail())
-				.setIssuer("Token by catchJob")
-				.setIssuedAt(new Date())
-				.setExpiration(expireDate)
-				.setClaims(claims)
-				.compact();
+		Claims claims = Jwts.claims()
+	            .setSubject(member.getEmail())
+	            .setIssuer("Token by catchJob")
+	            .setIssuedAt(new Date())
+	            .setExpiration(expireDate);
+
+	    return Jwts.builder()
+	            .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+	            .setClaims(claims)
+	            .compact();
+		
+//		return Jwts.builder()
+//				.signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+//				.setSubject(member.getEmail())
+//				.setIssuer("Token by catchJob")
+//				.setIssuedAt(new Date())
+//				.setExpiration(expireDate)
+//				.setClaims(claims)
+//				.compact();
 	}
 	
 	// JWT 토큰에서 인증 정보 조회

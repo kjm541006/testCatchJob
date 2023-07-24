@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,14 +19,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.catchJob.domain.member.Member;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Data
 @ToString(exclude = {"member","boardCommentsList", "boardLikeList", "boardTagList"})
 @Entity
 public class Board {
@@ -72,7 +77,7 @@ public class Board {
 	@OneToMany(mappedBy = "board")
 	private List<B_like> boardLikeList = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "board")
+	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<B_tag> boardTagList = new ArrayList<>();
 
 }

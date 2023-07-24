@@ -72,7 +72,7 @@ public class MemberController {
 	
 	
 	/*
->>>>>>> 226a55db1e3b3cb985f2feb38fec422c29f749d0
+
 	// 회원등록
 	@PostMapping("/register") 
 	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
