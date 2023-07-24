@@ -3,6 +3,8 @@ import "../../assets/css/CommunityPage.css";
 import Modal from "./CommunityModal";
 import PostModal from "./CommunityPostModal";
 import "../../assets/css/CommunityPostModal.css";
+import Heart from "../../assets/img/heart.svg";
+import Noheart from "../../assets/img/noheart.svg";
 import axios from "axios";
 
 function Card(props) {
@@ -11,104 +13,40 @@ function Card(props) {
   const [comment, setComment] = useState("");
 
   const [expanded, setExpanded] = useState([]);
+
   const [postModalOpen, setPostModalOpen] = useState(false);
   const [showComments, setShowComments] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("전체");
 
   const data = [
     {
-      id: 1,
+      community_id: 1,
       profileImg: "https://example.com/profile1.jpg",
-      instUser: "User1",
-      instDate: "2023-07-17",
-      category: "기술 질문",
-      title: "React 관련 질문",
-      content: "React에서 상태 관리는 어떻게 하는 것이 좋을까요?",
+      member_id: "User1",
+      c_date: "2023-07-17",
+      c_type: "기술 질문",
+      c_title: "React 관련 질문",
+      c_contents: "React에서 상태 관리는 어떻게 하는 것이 좋을까요?",
+      c_like: false,
       comment: [
-        { id: 1, user: "User2", content: "React의 상태 관리는 주로 Redux나 Context API를 사용합니다." },
+        { c_com_id: 1, member_id: "User2", c_com_content: "React의 상태 관리는 주로 Redux나 Context API를 사용합니다." },
         {
-          id: 2,
-          user: "User3",
-          content: "제 경험에 따르면 Redux가 상대적으로 복잡하지만 큰 규모의 애플리케이션에서 유용하게 사용될 수 있습니다.",
+          c_com_id: 2,
+          member_id: "User3",
+          c_com_content: "제 경험에 따르면 Redux가 상대적으로 복잡하지만 큰 규모의 애플리케이션에서 유용하게 사용될 수 있습니다.",
         },
       ],
     },
-    {
-      id: 2,
-      profileImg: "https://example.com/profile2.jpg",
-      instUser: "User4",
-      instDate: "2023-07-16",
-      category: "취업 고민",
-      title: "면접 팁을 주세요",
-      content: "면접에서 성공하기 위한 팁이 있을까요?",
-      comment: [
-        {
-          id: 3,
-          user: "User5",
-          content: "면접 전에는 꼼꼼한 준비와 연습이 중요합니다. 자신의 경험에 대해 자세히 알고, 자주 묻는 질문에 대해 준비해보세요.",
-        },
-        { id: 4, user: "User6", content: "인터뷰어에게 궁금한 점을 질문하는 것도 좋은 인상을 남길 수 있습니다." },
-      ],
-    },
-    {
-      id: 3,
-      profileImg: "https://example.com/profile2.jpg",
-      instUser: "User4",
-      instDate: "2023-07-16",
-      category: "취업 고민",
-      title: "면접 팁을 주세요",
-      content: "면접에서 성공하기 위한 팁이 있을까요?",
-      comment: [
-        {
-          id: 5,
-          user: "User5",
-          content: "면접 전에는 꼼꼼한 준비와 연습이 중요합니다. 자신의 경험에 대해 자세히 알고, 자주 묻는 질문에 대해 준비해보세요.",
-        },
-        { id: 6, user: "User6", content: "인터뷰어에게 궁금한 점을 질문하는 것도 좋은 인상을 남길 수 있습니다." },
-      ],
-    },
-    {
-      id: 4,
-      profileImg: "https://example.com/profile2.jpg",
-      instUser: "User4",
-      instDate: "2023-07-16",
-      category: "기타",
-      title: "면접 팁을 주세요",
-      content: "면접에서 성공하기 위한 팁이 있을까요?",
-      comment: [
-        {
-          id: 7,
-          user: "User5",
-          content: "면접 전에는 꼼꼼한 준비와 연습이 중요합니다. 자신의 경험에 대해 자세히 알고, 자주 묻는 질문에 대해 준비해보세요.",
-        },
-        { id: 8, user: "User6", content: "인터뷰어에게 궁금한 점을 질문하는 것도 좋은 인상을 남길 수 있습니다." },
-      ],
-    },
-    {
-      id: 5,
-      profileImg: "https://example.com/profile2.jpg",
-      instUser: "User4",
-      instDate: "2023-07-16",
-      category: "기타",
-      title: "면접 팁을 주세요",
-      content: "면접에서 성공하기 위한 팁이 있을까요?",
-      comment: [
-        {
-          id: 1,
-          user: "User5",
-          content: "면접 전에는 꼼꼼한 준비와 연습이 중요합니다. 자신의 경험에 대해 자세히 알고, 자주 묻는 질문에 대해 준비해보세요.",
-        },
-        { id: 2, user: "User6", content: "인터뷰어에게 궁금한 점을 질문하는 것도 좋은 인상을 남길 수 있습니다." },
-      ],
-    },
+
     // 추가적인 데이터를 여기에 추가할 수 있습니다.
   ];
 
   const [communityData, setCommunityData] = useState(data);
 
+  // Function to fetch community data from the server
   const fetchCommunityData = async () => {
     try {
-      const response = await axios.get("/api/community"); //replace "api/community" actual API endpoint
+      const response = await axios.get("localhost:8089/community"); //replace "api/community" actual API endpoint
       setCommunityData(response.data);
     } catch (error) {
       console.error(error);
@@ -119,6 +57,7 @@ function Card(props) {
     fetchCommunityData();
   }, [selectedCategory]);
 
+  // Function to toggle comment modal and show/hide comments for a post
   const toggleCommentModal = (i) => {
     setCommentModalOpen((prevCommentModalOpen) => {
       const newCommentModalOpen = [...prevCommentModalOpen];
@@ -149,7 +88,7 @@ function Card(props) {
     const postId = filteredData[i].id;
 
     try {
-      const response = await axios.post(`/api/community/${postId}/comments`, newComment);
+      const response = await axios.post(`localhost:8089/community/${postId}/comments`, newComment);
       setCommunityData((prevData) => {
         const newData = [...prevData];
         const postIndex = newData.findIndex((post) => post.id === postId);
@@ -168,7 +107,7 @@ function Card(props) {
 
   const handlePostSubmit = async (newPost) => {
     try {
-      const response = await axios.post("/api/community", newPost);
+      const response = await axios.post("localhost:8089/community/insert", newPost);
       setCommunityData((prevData) => [...prevData, newPost]);
       togglePostModal();
     } catch (error) {
@@ -198,13 +137,24 @@ function Card(props) {
       <>
         <div className="commentsContainer">
           {comments.map((comment) => (
-            <div key={comment.id} className="commentment">
+            <div key={comment.c_com_id} className="commentment">
               <div className="commentmentuser">
-                <img src={comment.profileImg} alt="프로필" />
-                {comment.user}
+                <div>
+                  <img src={comment.profileImg} alt="프로필" />
+                  {comment.member_id}
+                </div>
+                <div className="commenteditBtn">
+                  <span style={{ color: "#77BC1F" }} onClick={() => handleEditComment(comment.id)}>
+                    수정
+                  </span>
+                  <span style={{ color: "#E2432E" }} onClick={() => handleDeleteComment(comment.id)}>
+                    삭제
+                  </span>
+                </div>
               </div>
+
               <div className="commentmentment">
-                <p>{comment.content}</p>
+                <p>{comment.c_com_content}</p>
               </div>
             </div>
           ))}
@@ -212,31 +162,57 @@ function Card(props) {
       </>
     );
   };
+  const handleLike = async (postId) => {
+    try {
+      const response = await axios.post(`localhost:8089/community/${postId}/like`);
+      setCommunityData((prevData) => {
+        const newData = prevData.map((post) => {
+          if (post.community_id === postId) {
+            return { ...post, c_like: response.data.like };
+          }
+          return post;
+        });
+        return newData;
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleEditComment = (commentId) => {
+    // 수정 기능을 구현하는 로직을 작성합니다.
+    // commentId를 기반으로 해당 댓글을 수정하는 작업을 수행합니다.
+  };
+
+  const handleDeleteComment = (commentId) => {
+    // 삭제 기능을 구현하는 로직을 작성합니다.
+    // commentId를 기반으로 해당 댓글을 삭제하는 작업을 수행합니다.
+  };
 
   return (
     <div className="communityCenter">
       <div className="communitySection">
         {filteredData.map((post, i) => (
-          <div key={post.id} className="communityCard" style={{ borderBottom: "1px solid #E2E8F0" }}>
+          <div key={post.community_id} className="communityCard" style={{ borderBottom: "1px solid #E2E8F0" }}>
             <div className="userSection">
               <div>
                 <img src={post.profileImg} alt="프로필" />
               </div>
-              <div>유저닉네임: {post.instUser}</div>
-              <div>시간: {post.instDate}</div>
+              <div>유저닉네임: {post.member_id}</div>
+              <div>시간: {post.c_date}</div>
             </div>
 
             <div className="cardContentsComponents">
               <div className="cardContentsComponents_Title">
-                <span className="contentpostCategory">{post.category}</span>
-                <h3>{post.title}</h3>
+                <span className="contentpostCategory">{post.c_type}</span>
+                <h3>{post.c_title}</h3>
               </div>
 
               <div>
                 <div className={`cardContentsComponents_TextArea ${expanded[i] ? "expanded" : ""}`}>
                   <p>
                     {expanded[i]
-                      ? post.content.split("\n").map((line) => {
+                      ? post.c_contents.split("\n").map((line) => {
                           // 펼칠때
                           return (
                             <span>
@@ -246,7 +222,7 @@ function Card(props) {
                           );
                         })
                       : truncateContent(
-                          post.content.split("\n").map((line) => {
+                          post.c_contents.split("\n").map((line) => {
                             // 접힐때
                             return (
                               <span>
@@ -259,7 +235,7 @@ function Card(props) {
                         )}
                   </p>
                 </div>
-                {post.content.length > 100 && (
+                {post.c_contents.length > 100 && (
                   <div className="cardContentsComponents_morebutton">
                     <span className="moreButton" onClick={() => toggleExpanded(i)}>
                       {expanded[i] ? "닫기" : "펼치기"}
@@ -270,7 +246,9 @@ function Card(props) {
             </div>
             <div>
               <div className="cardContentsComponents_bottom">
-                <div className="heart_img"></div>
+                <div className="heart_img" onClick={() => handleLike(post.community_id)}>
+                  {post.like ? <img src={Heart} alt="하트" /> : <img src={Noheart} alt="비어있는 하트" />}
+                </div>
 
                 <span className="ment" onClick={() => toggleCommentModal(i)}>
                   {showComments[i] ? "댓글 닫기" : "댓글"}

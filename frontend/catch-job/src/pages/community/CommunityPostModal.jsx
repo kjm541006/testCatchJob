@@ -37,7 +37,7 @@ function PostModal({ onPostSubmit, onCancel }) {
     const newPost = { title: postTitle, content: postContent, category: postCategory };
 
     axios
-      .post("/api/post", newPost)
+      .post("http://localhost:3000/api/community", newPost)
       .then((response) => {
         onPostSubmit(response.data);
         setPostCategory("");
