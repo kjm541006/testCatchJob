@@ -96,6 +96,7 @@
   padding: 0 70px 0 70px;
   align-items: center;
   font-size: 15;
+  white-space: pre-wrap;
 }
 
 .tagList{
@@ -108,4 +109,35 @@
   background: #FFF;
   margin: 5px;
   padding: 10px;
+}
+
+.contentFile{
+  margin: 30px 5px 20px 5px;
+  font-size: 16px;
+  color:#444444;
+}
+
+.contentFileName{
+  text-decoration-line: underline;
+  cursor: pointer;
+}
+
+.contentComment{
+  margin: 50px 5px 20px 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.comments{
+  font-weight: bold;
+  font-size: 22px;
+}
+
+.commentBox{
+  margin: 20px 0 20px 0 ;
+  width: 1100px;
+  height: 100px;
+  border-radius: 16px;
+  border: 2px solid #E1E1E1;
+  background: #FFF; 
 }
