@@ -17,6 +17,11 @@ const PortfolioModal = ({ item,onClose }) => {
     setIsLiked((prevIsLiked) => !prevIsLiked);
   };
 
+
+  const hand = (event) => {
+   console.log(item.bFileUrl)
+  };
+
   return (
     <div className={`${styles.modalBackdrop}`} onClick={onClose}>
         <div className={`${styles.buttonSet}`}>
@@ -50,7 +55,7 @@ const PortfolioModal = ({ item,onClose }) => {
           <div className={`${styles.buttonMent}`}>삭제하기</div>
         </div>
 
-      <div className={`${styles.modalContent}`}>
+      <div className={`${styles.modalContent}`} onClick={(e) => e.stopPropagation()}>
         <div className={`${styles.contentInfo}`}>
           <img className={`${styles.user_img}`} src={item.member.mOriginalFileName} alt="img" />
           <div className={`${styles.contentUser}`}>
@@ -63,6 +68,13 @@ const PortfolioModal = ({ item,onClose }) => {
           {item.tags[0] && (<div className={`${styles.tagElement}`}>{item.tags[0].tagName}</div>)}
           {item.tags[1] && (<div className={`${styles.tagElement}`}>{item.tags[1].tagName}</div>)}
           {item.tags[2] && (<div className={`${styles.tagElement}`}>{item.tags[2].tagName}</div>)}
+        </div>
+        <div className={`${styles.contentFile}`}>첨부파일: <a href={item.bFileUrl} download target="_blank" rel="noopener noreferrer" onClick={hand}>
+          <span className={`${styles.contentFileName}`}>{item.bFileName}</span></a>
+        </div>
+        <div className={`${styles.contentComment}`}>
+          <div className={`${styles.comments}`}>Comments</div>
+          <div className={`${styles.commentBox}`}></div>
         </div>
         
       </div>

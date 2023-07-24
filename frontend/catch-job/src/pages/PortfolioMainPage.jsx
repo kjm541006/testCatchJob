@@ -18,6 +18,7 @@ const PortfolioMainPage = () => {
       "bComment": 30,
       "isLike": true,
       "bFileName": "file1.jpg",
+      "bFileUrl": "https://example.com/files/file_name.pdf",
       "bCoverFileName": img,
       "bDate": "2023-07-19T15:30:00Z",
       "member": {
@@ -65,6 +66,7 @@ const PortfolioMainPage = () => {
       "bComment": 40,
       "isLike": false,
       "bFileName": "file2.jpg",
+      "bFileUrl": "https://example.com/files/file_name.pdf",
       "bCoverFileName": img,
       "bDate": "2023-07-20T09:45:00Z",
       "member": {
@@ -105,6 +107,7 @@ const PortfolioMainPage = () => {
       "bComment": 10,
       "isLike": false,
       "bFileName": "file3.jpg",
+      "bFileUrl": "https://example.com/files/file_name.pdf",
       "bCoverFileName": img,
       "bDate": "2023-07-21T14:20:00Z",
       "member": {
@@ -145,6 +148,7 @@ const PortfolioMainPage = () => {
       "bComment": 30,
       "isLike": true,
       "bFileName": "file1.jpg",
+      "bFileUrl": "https://example.com/files/file_name.pdf",
       "bCoverFileName": img,
       "bDate": "2023-07-19T15:30:00Z",
       "member": {
@@ -192,6 +196,7 @@ const PortfolioMainPage = () => {
       "bComment": 40,
       "isLike": false,
       "bFileName": "file2.jpg",
+      "bFileUrl": "https://example.com/files/file_name.pdf",
       "bCoverFileName": img,
       "bDate": "2023-07-20T09:45:00Z",
       "member": {
@@ -232,6 +237,7 @@ const PortfolioMainPage = () => {
       "bComment": 10,
       "isLike": false,
       "bFileName": "file3.jpg",
+      "bFileUrl": "https://example.com/files/file_name.pdf",
       "bCoverFileName": img,
       "bDate": "2023-07-21T14:20:00Z",
       "member": {
@@ -272,6 +278,7 @@ const PortfolioMainPage = () => {
       "bComment": 30,
       "isLike": true,
       "bFileName": "file1.jpg",
+      "bFileUrl": "https://example.com/files/file_name.pdf",
       "bCoverFileName": img,
       "bDate": "2023-07-19T15:30:00Z",
       "member": {
@@ -319,6 +326,7 @@ const PortfolioMainPage = () => {
       "bComment": 40,
       "isLike": false,
       "bFileName": "file2.jpg",
+      "bFileUrl": "https://example.com/files/file_name.pdf",
       "bCoverFileName": img,
       "bDate": "2023-07-20T09:45:00Z",
       "member": {
@@ -359,6 +367,7 @@ const PortfolioMainPage = () => {
       "bComment": 10,
       "isLike": false,
       "bFileName": "file3.jpg",
+      "bFileUrl": "https://example.com/files/file_name.pdf",
       "bCoverFileName": img,
       "bDate": "2023-07-21T14:20:00Z",
       "member": {
@@ -399,6 +408,7 @@ const PortfolioMainPage = () => {
       "bComment": 30,
       "isLike": true,
       "bFileName": "file1.jpg",
+      "bFileUrl": "https://example.com/files/file_name.pdf",
       "bCoverFileName": img,
       "bDate": "2023-07-19T15:30:00Z",
       "member": {
@@ -446,6 +456,7 @@ const PortfolioMainPage = () => {
       "bComment": 40,
       "isLike": false,
       "bFileName": "file2.jpg",
+      "bFileUrl": "https://example.com/files/file_name.pdf",
       "bCoverFileName": img,
       "bDate": "2023-07-20T09:45:00Z",
       "member": {
@@ -486,6 +497,7 @@ const PortfolioMainPage = () => {
       "bComment": 10,
       "isLike": false,
       "bFileName": "file3.jpg",
+      "bFileUrl": "https://example.com/files/file_name.pdf",
       "bCoverFileName": img,
       "bDate": "2023-07-21T14:20:00Z",
       "member": {
