@@ -98,7 +98,7 @@ public class MemberService {
 	}
 	
 	
-	// 로그인
+//	 로그인
 	public Member getByCredentials(final String email, final String pwd, final PasswordEncoder pwdEncoder) {
 		
 		final Member originMember = memberRepo.findByEmail(email);
@@ -109,6 +109,7 @@ public class MemberService {
 		}
 		return null;
 	}
+
 	
 	// 회원수정
 	public Member updateMember(MemberDTO member) {

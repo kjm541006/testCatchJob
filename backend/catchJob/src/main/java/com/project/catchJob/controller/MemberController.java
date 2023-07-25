@@ -1,8 +1,11 @@
 package com.project.catchJob.controller;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -109,33 +112,71 @@ public class MemberController {
 	}
 	*/
 	// 로그인
+//	@PostMapping("/login") 
+//	public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO) {
+//		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
+//		
+//		// log.info("{} 로그인 성공", member.toString());
+//		System.out.println("==========" + member.toString());
+//		if(member != null) {
+//			
+//			// 토큰 생성
+//			final String token = tokenProvider.createToken(member);
+//			log.info("token 생성 성공", token);
+//			
+//			final MemberDTO responseMemberDTO = MemberDTO.builder()
+//					.name(member.getName())
+//					.email(member.getEmail())
+//					.pwd(pwdEncoder.encrypt(member.getEmail(), member.getPwd()))
+//					.job(member.getJob())
+//					.hasCareer(member.getHasCareer())
+//					.token(token)
+//					.build();
+//			
+//			return ResponseEntity.ok().body(responseMemberDTO);
+//		}
+//		else {
+//			return ResponseEntity.badRequest().body("로그인 실패");
+//		}
+//	}
+	
 	@PostMapping("/login") 
 	public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO) {
-		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
-		
-		// log.info("{} 로그인 성공", member.toString());
-		System.out.println("==========" + member.toString());
-		if(member != null) {
+		try {
+			Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 			
-			// 토큰 생성
-			final String token = tokenProvider.createToken(member);
-			log.info("token 생성 성공", token);
-			
-			final MemberDTO responseMemberDTO = MemberDTO.builder()
-					.name(member.getName())
-					.email(member.getEmail())
-					.pwd(pwdEncoder.encrypt(member.getEmail(), member.getPwd()))
-					.job(member.getJob())
-					.hasCareer(member.getHasCareer())
-					.token(token)
-					.build();
-			
-			return ResponseEntity.ok().body(responseMemberDTO);
-		}
-		else {
-			return ResponseEntity.badRequest().body("로그인 실패");
+			// log.info("{} 로그인 성공", member.toString());
+			System.out.println("==========" + member.toString());
+			if(member != null) {
+				
+				// 토큰 생성
+				final String token = tokenProvider.createToken(member);
+				log.info("token 생성 성공", token);
+				
+				final MemberDTO responseMemberDTO = MemberDTO.builder()
+						.name(member.getName())
+						.email(member.getEmail())
+						.pwd(pwdEncoder.encrypt(member.getEmail(), member.getPwd()))
+						.job(member.getJob())
+						.hasCareer(member.getHasCareer())
+						.token(token)
+						.build();
+				
+				return ResponseEntity.ok().body(responseMemberDTO);
+			}
+			else {
+				System.out.println("로그인 실패: 회원이 존재하지 않음");
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("로그인 실패 - 회원이 존재하지 않음");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 내부 오류");
 		}
 	}
+	
+	
+
+	
 	/*
 	// 구글 로그인
 	@GetMapping("/google")
