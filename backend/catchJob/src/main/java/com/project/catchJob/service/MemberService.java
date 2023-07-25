@@ -127,13 +127,21 @@ public class MemberService {
 		}
 	}
 	
-	public Member findMemberByEmail(String userEmail) throws Exception {
-	    Member member = memberRepo.findByEmail(userEmail);
-	    if (member == null) {
-	        throw new Exception("Member not found with email: " + userEmail);
-	    }
-	    return member;
-	}
+//	public Member findMemberByEmail(String userEmail) throws Exception {
+//	    Member member = memberRepo.findByEmail(userEmail);
+//	    if (member == null) {
+//	        throw new Exception("Member not found with email: " + userEmail);
+//	    }
+//	    return member;
+//	}
+//	public Member findMemberByEmail(String userEmail) {
+//	    Member member = memberRepo.findByEmail(userEmail);
+//	    if (member == null) {
+//	        throw new UsernameNotFoundException("Member not found with email: " + userEmail);
+//	    }
+//	    return member;
+//	}
+	
 
 	// 회원 정보 조회
 	public Member getMember(Long memberId) throws Exception {

@@ -51,7 +51,7 @@ public class Board {
 	private int bLike; // 좋아요갯수
 	
 	@ElementCollection
-	private List<String> tag; // 태그
+	private List<String> tags; // 태그
 	
 	private String bFileName; // 파일명
 	
