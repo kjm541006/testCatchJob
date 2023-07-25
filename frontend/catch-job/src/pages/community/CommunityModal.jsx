@@ -3,7 +3,6 @@ import React, { useState } from "react";
 
 function Modal({ postId, onCommentSubmit, onCancel, comment, onCommentChange }) {
   const [loading, setLoading] = useState(false);
-
   const handleSubmit = () => {
     setLoading(true);
     axios
