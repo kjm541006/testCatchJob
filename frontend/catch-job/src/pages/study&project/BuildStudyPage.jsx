@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "../../assets/css/study/BuildStudy.module.css";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -9,7 +9,7 @@ const BuildStudyPage = () => {
   const [bType, setBType] = useState("project");
   const [selectedField, setSelectedField] = useState(null);
   const [selectedTerm, setSelectedTerm] = useState(null);
-  const [selectedPlatform, setSelectedPlatform] = useState([]);
+  const [selectedPlatforms, setSelectedPlatforms] = useState([]);
   const [selectedLoc, setSelectedLoc] = useState("온라인");
   const [crewCounts, setCrewCounts] = useState({
     webDesigner: 0,
@@ -42,11 +42,11 @@ const BuildStudyPage = () => {
     setSelectedTerm(option);
   };
 
-  const handlePlatformChange = (option) => {
-    if (selectedPlatform.includes(option)) {
-      setSelectedPlatform(selectedPlatform.filter((p) => p !== option));
+  const handlePlatformsChange = (option) => {
+    if (selectedPlatforms.includes(option)) {
+      setSelectedPlatforms(selectedPlatforms.filter((p) => p !== option));
     } else {
-      setSelectedPlatform([...selectedPlatform, option]);
+      setSelectedPlatforms([...selectedPlatforms, option]);
     }
   };
 
@@ -80,7 +80,7 @@ const BuildStudyPage = () => {
     const crewCountsArray = Object.values(crewCounts);
     const sumCrewCounts = crewCountsArray.reduce((a, b) => a + b, 0);
 
-    if (!titleValue || !selectedField || !selectedTerm || !selectedPlatform || !selectedLoc || sumCrewCounts === 0 || !detailValue) {
+    if (!titleValue || !selectedField || !selectedTerm || !selectedPlatforms || !selectedLoc || sumCrewCounts === 0 || !detailValue) {
       alert("모든 필드를 올바르게 입력해주세요.");
       return;
     }
@@ -88,7 +88,7 @@ const BuildStudyPage = () => {
       title: titleValue,
       field: selectedField,
       term: selectedTerm,
-      platforms: selectedPlatform,
+      platforms: selectedPlatforms,
       loc: selectedLoc,
       crew: crewCounts,
       detail: detailValue,
@@ -110,10 +110,10 @@ const BuildStudyPage = () => {
   useEffect(() => {
     console.log(selectedField);
     console.log(selectedTerm);
-    console.log(selectedPlatform);
+    console.log(selectedPlatforms);
     console.log(selectedLoc);
     console.log(crewCounts);
-  }, [selectedField, selectedTerm, selectedPlatform, selectedLoc, crewCounts]);
+  }, [selectedField, selectedTerm, selectedPlatforms, selectedLoc, crewCounts]);
 
   return (
     <div className={styles.buildPage}>
@@ -404,43 +404,43 @@ const BuildStudyPage = () => {
           <li>
             <input
               type="checkbox"
-              name="platform"
+              name="platforms"
               id="web"
               value="웹"
-              checked={selectedPlatform.includes("웹")}
-              onChange={() => handlePlatformChange("웹")}
+              checked={selectedPlatforms.includes("웹")}
+              onChange={() => handlePlatformsChange("웹")}
               className={styles.radioBtn}
             />
             <label className={styles.fieldSelect} htmlFor="web">
-              <div className={`${styles.select} ${selectedPlatform.includes("웹") && styles.active} `}>웹</div>
+              <div className={`${styles.select} ${selectedPlatforms.includes("웹") && styles.active} `}>웹</div>
             </label>
           </li>
           <li>
             <input
               type="checkbox"
-              name="platform"
+              name="platforms"
               id="android"
               value="안드로이드 앱"
-              checked={selectedPlatform.includes("안드로이드 앱")}
-              onChange={() => handlePlatformChange("안드로이드 앱")}
+              checked={selectedPlatforms.includes("안드로이드 앱")}
+              onChange={() => handlePlatformsChange("안드로이드 앱")}
               className={styles.radioBtn}
             />
             <label className={styles.fieldSelect} htmlFor="android">
-              <div className={`${styles.select} ${selectedPlatform.includes("안드로이드 앱") && styles.active} `}>안드로이드 앱</div>
+              <div className={`${styles.select} ${selectedPlatforms.includes("안드로이드 앱") && styles.active} `}>안드로이드 앱</div>
             </label>
           </li>
           <li>
             <input
               type="checkbox"
-              name="platform"
+              name="platforms"
               id="ios"
               value="ios 앱"
-              checked={selectedPlatform.includes("ios 앱")}
-              onChange={() => handlePlatformChange("ios 앱")}
+              checked={selectedPlatforms.includes("ios 앱")}
+              onChange={() => handlePlatformsChange("ios 앱")}
               className={styles.radioBtn}
             />
             <label className={styles.fieldSelect} htmlFor="ios">
-              <div className={`${styles.select} ${selectedPlatform.includes("ios 앱") && styles.active} `}>ios 앱</div>
+              <div className={`${styles.select} ${selectedPlatforms.includes("ios 앱") && styles.active} `}>ios 앱</div>
             </label>
           </li>
         </ul>
