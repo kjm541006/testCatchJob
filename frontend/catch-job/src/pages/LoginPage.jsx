@@ -18,7 +18,7 @@ const LoginPage = () => {
 
   const isLoggedIn = useSelector(selectLoggedIn);
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -38,6 +38,9 @@ const LoginPage = () => {
       const token = response.data.token;
       const name = response.data.name;
       const email = response.data.email;
+      if (response.status === 400) {
+        alert("회원을 찾지 못했습니다.");
+      }
       console.log(token);
       console.log(name);
       console.log(email);
@@ -47,10 +50,15 @@ const LoginPage = () => {
       // dispatch(setCredentials({ name, email, token }))
       console.log(`로그인여부 :${isLoggedIn}`);
       // window.location.href = "/";
-      // navigate(-1);
-      window.location.reload();
+      navigate(-1);
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
     } catch (error) {
-      console.error(error);
+      if (error.response.status === 500) {
+        // 서버 내부 에러 처리
+        alert("로그인에 실패했습니다. ");
+      }
     }
   };
 

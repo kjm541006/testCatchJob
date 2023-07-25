@@ -2,6 +2,8 @@ package com.project.catchJob.dto.project;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.project.catchJob.domain.member.Member;
 
@@ -25,17 +27,19 @@ public class ProjectDTO {
     private String loc;
     private String term;
     private String detail;
-    private int webDesigner;
-    private int webPublisher;
-    private int frontend;
-    private int backend;
-    private int PM;
-    private int others;
-    private String platform;
+//    private int webDesigner;
+//    private int webPublisher;
+//    private int frontend;
+//    private int backend;
+//    private int PM;
+//    private int others;
+    private Set<String> platforms;
     private int pCnt;
     private int pLike;
     private Date pDate;
     private Long memberId;
+    private Map<String, Integer> crew;
+    private String email;
 }
 	
 	// Assuming you have corresponding DTO classes for P_comments, P_like, P_reason, and P_member
