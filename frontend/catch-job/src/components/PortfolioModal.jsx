@@ -3,10 +3,12 @@ import styles from "../assets/css/PortfolioModal.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faComment, faHeart, faPenToSquare, faShare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import img from "../assets/img/port_img.jpeg";
+import axios from 'axios';
 
 const PortfolioModal = ({ item,onClose }) => {
   const contentCommentRef = useRef(null);
   const [isLiked, setIsLiked] = useState(false);
+  const [comment, setComment] = useState('');
 
   if (!item) {
     return null;
@@ -27,8 +29,24 @@ const PortfolioModal = ({ item,onClose }) => {
     const formatDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
     return formatDate;
   };
-  
 
+  const handleCommentChange = (e) => {
+    setComment(e.target.value);
+  };
+
+  const submitComment = async () => {
+    const response = await axios.post('http://43.202.98.45:8089/portfolio/{board_id}', {
+      comment: comment,
+    });
+  
+    if (response.status === 200) {
+      console.log("댓글 전송 성공")
+      
+    } else {
+      console.log("댓글 전송 실패", Error);
+    }
+  };
+  
   return (
     <div className={`${styles.modalBackdrop}`} onClick={onClose}>
         <div className={`${styles.buttonSet}`}>
@@ -81,16 +99,21 @@ const PortfolioModal = ({ item,onClose }) => {
         </div>
         <div className={`${styles.contentComment}`} ref={contentCommentRef}>
           <div className={`${styles.comments}`}>Comments</div>
-          <textarea className={`${styles.commentBox}`} placeholder="댓글을 작성하세요."></textarea>
-          <button className={`${styles.commentEnter}`}>등록</button>
+          <textarea className={`${styles.commentBox}`} placeholder="댓글을 작성하세요.(최대 작성 가능한 글자 수는 100자입니다.)" maxlength="100" value={comment} onChange={handleCommentChange}></textarea>
+          <button className={`${styles.commentEnter}`} onClick={submitComment}>등록</button>
         </div>
         <div className={`${styles.readComment}`}>
-          <div className={`${styles.contentUser}`}>
-            <div className={`${styles.contentUser_title}`}>{item.comments[0].memberName}({item.comments[0].memberEmail})</div>
-            <div className={`${styles.contentUser_info}`}>{formatCommentDate(item.comments[0].commentDate)}</div>
+          {item.comments.map((comment) => (
+            <div className={`${styles.readCommentItem}`}>
+              <div key={comment.commentDate} className={`${styles.contentUser}`}>
+              <div className={`${styles.contentUser_title}`}>{comment.memberName} ({comment.memberEmail})</div>
+              <div className={`${styles.contentUser_info}`} style={{color:'#9F9F9F'}}>{formatCommentDate(comment.commentDate)}</div>
+              </div>
+              <div className={`${styles.commentContent}`}>{comment.commentContent}</div>
+              <div className={`${styles.commentBar}`}></div>
+            </div>))}
           </div>
         </div>
-      </div>
     </div>
   );
 };

@@ -47,14 +47,14 @@ const PortfolioMainPage = () => {
         },
         {
           commentContent: "댓글3 내용입니다.",
-          commentDate: "2023-07-19T17:30:00Z",
-          memberName: "UserB",
+          commentDate: "2023-07-19T17:40:00Z",
+          memberName: "UserC",
           memberEmail: "userB@example.com",
         },
         {
           commentContent: "댓글4 내용입니다.",
-          commentDate: "2023-07-19T17:30:00Z",
-          memberName: "UserB",
+          commentDate: "2023-07-19T17:20:00Z",
+          memberName: "UserD",
           memberEmail: "userB@example.com",
         },
       ],
