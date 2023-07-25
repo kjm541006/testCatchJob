@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styles from "../assets/css/PortfolioModal.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faComment, faHeart, faPenToSquare, faShare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import img from "../assets/img/port_img.jpeg";
+import axios from 'axios';
 
 const PortfolioModal = ({ item,onClose }) => {
-
+  const contentCommentRef = useRef(null);
   const [isLiked, setIsLiked] = useState(false);
+  const [comment, setComment] = useState('');
 
   if (!item) {
     return null;
@@ -17,11 +19,34 @@ const PortfolioModal = ({ item,onClose }) => {
     setIsLiked((prevIsLiked) => !prevIsLiked);
   };
 
-
-  const hand = (event) => {
-   console.log(item.bFileUrl)
+  const handleComment = (event) => {
+    event.stopPropagation();
+    contentCommentRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const formatCommentDate = (dateString) => {
+    const date = new Date(dateString);
+    const formatDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+    return formatDate;
+  };
+
+  const handleCommentChange = (e) => {
+    setComment(e.target.value);
+  };
+
+  const submitComment = async () => {
+    const response = await axios.post('http://43.202.98.45:8089/portfolio/{board_id}', {
+      comment: comment,
+    });
+  
+    if (response.status === 200) {
+      console.log("댓글 전송 성공")
+      
+    } else {
+      console.log("댓글 전송 실패", Error);
+    }
+  };
+  
   return (
     <div className={`${styles.modalBackdrop}`} onClick={onClose}>
         <div className={`${styles.buttonSet}`}>
@@ -30,7 +55,7 @@ const PortfolioModal = ({ item,onClose }) => {
           </button>
           <div className={`${styles.buttonMent}`} >좋아요</div>
         </div>
-        <div className={`${styles.buttonSet}`} style={{top:"130px", right:"408px"}} >
+        <div className={`${styles.buttonSet}`} style={{top:"130px", right:"408px"}} onClick={handleComment}>
           <button className={`${styles.modalButton}`}>
             <FontAwesomeIcon icon={faComment} className={`${styles.faIcon}`} />
           </button>
@@ -65,19 +90,30 @@ const PortfolioModal = ({ item,onClose }) => {
         </div>
         <div className={`${styles.realContent}`}>{item.bContents}</div>
         <div className={`${styles.tagList}`}>
-          {item.tags[0] && (<div className={`${styles.tagElement}`}>{item.tags[0].tagName}</div>)}
-          {item.tags[1] && (<div className={`${styles.tagElement}`}>{item.tags[1].tagName}</div>)}
-          {item.tags[2] && (<div className={`${styles.tagElement}`}>{item.tags[2].tagName}</div>)}
+          {item.tags[0] && (<div className={`${styles.tagElement}`}>{item.tags[0]}</div>)}
+          {item.tags[1] && (<div className={`${styles.tagElement}`}>{item.tags[1]}</div>)}
+          {item.tags[2] && (<div className={`${styles.tagElement}`}>{item.tags[2]}</div>)}
         </div>
-        <div className={`${styles.contentFile}`}>첨부파일: <a href={item.bFileUrl} download target="_blank" rel="noopener noreferrer" onClick={hand}>
+        <div className={`${styles.contentFile}`}>첨부파일: <a href={item.bFileName} download target="_blank" rel="noopener noreferrer">
           <span className={`${styles.contentFileName}`}>{item.bFileName}</span></a>
         </div>
-        <div className={`${styles.contentComment}`}>
+        <div className={`${styles.contentComment}`} ref={contentCommentRef}>
           <div className={`${styles.comments}`}>Comments</div>
-          <div className={`${styles.commentBox}`}></div>
+          <textarea className={`${styles.commentBox}`} placeholder="댓글을 작성하세요.(최대 작성 가능한 글자 수는 100자입니다.)" maxlength="100" value={comment} onChange={handleCommentChange}></textarea>
+          <button className={`${styles.commentEnter}`} onClick={submitComment}>등록</button>
         </div>
-        
-      </div>
+        <div className={`${styles.readComment}`}>
+          {item.comments.map((comment) => (
+            <div className={`${styles.readCommentItem}`}>
+              <div key={comment.commentDate} className={`${styles.contentUser}`}>
+              <div className={`${styles.contentUser_title}`}>{comment.memberName} ({comment.memberEmail})</div>
+              <div className={`${styles.contentUser_info}`} style={{color:'#9F9F9F'}}>{formatCommentDate(comment.commentDate)}</div>
+              </div>
+              <div className={`${styles.commentContent}`}>{comment.commentContent}</div>
+              <div className={`${styles.commentBar}`}></div>
+            </div>))}
+          </div>
+        </div>
     </div>
   );
 };
