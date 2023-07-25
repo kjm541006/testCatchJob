@@ -1,26 +1,31 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import "./header.css";
 import { useDispatch, useSelector } from "react-redux";
-import { logOut, selectLoggedIn, selectUser } from "../../redux/login";
+import { logOut, selectEmail, selectLoggedIn, selectName } from "../../redux/login";
 
 const Header = () => {
   const dispatch = useDispatch();
-  let user = useSelector(selectUser);
+  const uName = useSelector(selectName);
+  const uEmail = useSelector(selectEmail);
   const isLoggedIn = useSelector(selectLoggedIn);
+  let username = "";
 
-  console.log(user);
+  console.log(uName);
+  console.log(uEmail);
   console.log(isLoggedIn);
 
-  if (user === undefined) {
-    user = localStorage.getItem("name");
+  if (isLoggedIn) {
+    username = localStorage.getItem("name");
   }
 
   const logOutBtn = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("name");
+    localStorage.removeItem("email");
     dispatch(logOut());
+    <Navigate to="/" />;
   };
 
   return (
@@ -75,7 +80,7 @@ const Header = () => {
             {isLoggedIn && (
               <div className="header-user-info">
                 <Link to="/mypage" className="header-username">
-                  {user} 님
+                  {username} 님
                 </Link>
                 <div className="header-logout-btn" onClick={logOutBtn}>
                   로그아웃

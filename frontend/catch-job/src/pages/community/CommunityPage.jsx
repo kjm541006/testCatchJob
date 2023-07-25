@@ -17,36 +17,12 @@ function Card(props) {
   const [postModalOpen, setPostModalOpen] = useState(false);
   const [showComments, setShowComments] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("전체");
-
-  const data = [
-    {
-      community_id: 1,
-      profileImg: "https://example.com/profile1.jpg",
-      member_id: "User1",
-      c_date: "2023-07-17",
-      c_type: "기술 질문",
-      c_title: "React 관련 질문",
-      c_contents: "React에서 상태 관리는 어떻게 하는 것이 좋을까요?",
-      c_like: false,
-      comment: [
-        { c_com_id: 1, member_id: "User2", c_com_content: "React의 상태 관리는 주로 Redux나 Context API를 사용합니다." },
-        {
-          c_com_id: 2,
-          member_id: "User3",
-          c_com_content: "제 경험에 따르면 Redux가 상대적으로 복잡하지만 큰 규모의 애플리케이션에서 유용하게 사용될 수 있습니다.",
-        },
-      ],
-    },
-
-    // 추가적인 데이터를 여기에 추가할 수 있습니다.
-  ];
-
-  const [communityData, setCommunityData] = useState(data);
+  const [communityData, setCommunityData] = useState([]);
 
   // Function to fetch community data from the server
   const fetchCommunityData = async () => {
     try {
-      const response = await axios.get("localhost:8089/community"); //replace "api/community" actual API endpoint
+      const response = await axios.get("http://localhost:8089/community"); //replace "api/community" actual API endpoint
       setCommunityData(response.data);
     } catch (error) {
       console.error(error);
@@ -84,14 +60,14 @@ function Card(props) {
   };
 
   const handleSubmitComment = async (i) => {
-    const newComment = { id: Date.now(), content: comment };
-    const postId = filteredData[i].id;
+    const newComment = { c_com_id: Date.now(), member_id: "", c_com_content: comment };
+    const postId = communityData[i].community_id;
 
     try {
-      const response = await axios.post(`localhost:8089/community/${postId}/comments`, newComment);
+      const response = await axios.post(`http://localhost:8089/community/${postId}/comments`, newComment);
       setCommunityData((prevData) => {
         const newData = [...prevData];
-        const postIndex = newData.findIndex((post) => post.id === postId);
+        const postIndex = newData.findIndex((post) => post.community_id === postId);
         newData[postIndex].comment.push(response.data);
         return newData;
       });
@@ -107,7 +83,7 @@ function Card(props) {
 
   const handlePostSubmit = async (newPost) => {
     try {
-      const response = await axios.post("localhost:8089/community/insert", newPost);
+      const response = await axios.post("http://localhost:8089/community/insert", newPost);
       setCommunityData((prevData) => [...prevData, newPost]);
       togglePostModal();
     } catch (error) {
@@ -164,7 +140,7 @@ function Card(props) {
   };
   const handleLike = async (postId) => {
     try {
-      const response = await axios.post(`localhost:8089/community/${postId}/like`);
+      const response = await axios.post(`http://localhost:8089/community/like`, { communityId: postId });
       setCommunityData((prevData) => {
         const newData = prevData.map((post) => {
           if (post.community_id === postId) {
@@ -179,14 +155,30 @@ function Card(props) {
     }
   };
 
-  const handleEditComment = (commentId) => {
-    // 수정 기능을 구현하는 로직을 작성합니다.
-    // commentId를 기반으로 해당 댓글을 수정하는 작업을 수행합니다.
+  const handleEditComment = async (postId, commentId, editedContent) => {
+    try {
+      // 서버에서 댓글 수정 API 호출
+      await axios.put(`http://localhost:8089/community/${postId}/comments/${commentId}`, {
+        c_com_content: editedContent,
+      });
+
+      // 서버에서 수정된 댓글 데이터를 다시 가져와서 화면에 반영
+      fetchCommunityData();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleDeleteComment = (commentId) => {
-    // 삭제 기능을 구현하는 로직을 작성합니다.
-    // commentId를 기반으로 해당 댓글을 삭제하는 작업을 수행합니다.
+  const handleDeleteComment = async (postId, commentId) => {
+    try {
+      // 서버에서 댓글 삭제 API 호출
+      await axios.delete(`http://localhost:8089/community/${postId}/comments/${commentId}`);
+
+      // 서버에서 삭제된 댓글 데이터를 다시 가져와서 화면에 반영
+      fetchCommunityData();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

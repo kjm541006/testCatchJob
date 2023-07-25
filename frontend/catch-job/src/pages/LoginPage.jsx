@@ -7,7 +7,8 @@ import { Link } from "react-router-dom";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useDispatch, useSelector } from "react-redux";
-import { selectLoggedIn, setCredentials } from "../redux/login";
+import { selectLoggedIn } from "../redux/login";
+import { useNavigate } from "react-router-dom";
 // import { userLoginMutation } from "../redux/authApi";
 
 const LoginPage = () => {
@@ -15,9 +16,9 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const dispatch = useDispatch();
-
   const isLoggedIn = useSelector(selectLoggedIn);
+
+  // const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -30,17 +31,24 @@ const LoginPage = () => {
     };
 
     try {
-      const response = await axios.post("http://43.202.98.45:8089/login", userData);
+      // const response = await axios.post("http://43.202.98.45:8089/login", userData);
+      const response = await axios.post("http://localhost:8089/login", userData);
       console.log(response.data);
       console.log(response.data.name);
       const token = response.data.token;
       const name = response.data.name;
+      const email = response.data.email;
+      console.log(token);
+      console.log(name);
+      console.log(email);
       localStorage.setItem("token", token);
       localStorage.setItem("name", name);
-      dispatch(setCredentials({ user: name, token, ...userData }));
-      // localStorage.setItem("isLoggedIn", isLoggedIn);
+      localStorage.setItem("email", email);
+      // dispatch(setCredentials({ name, email, token }))
       console.log(`로그인여부 :${isLoggedIn}`);
-      window.location.href = "/";
+      // window.location.href = "/";
+      // navigate(-1);
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }

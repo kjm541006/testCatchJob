@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 function PostModal({ onPostSubmit, onCancel }) {
+  const [loading, setLoading] = useState(false);
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
   const [postCategory, setPostCategory] = useState("");
@@ -19,32 +20,32 @@ function PostModal({ onPostSubmit, onCancel }) {
   };
 
   const handleSave = () => {
-    if (postTitle.trim() === "") {
-      alert("제목을 입력해주세요.");
+    setLoading(true);
+    if (postTitle.trim() === "" || postContent.trim() === "" || postCategory === "") {
+      alert("모든 필드를 입력해주세요.");
+      setLoading(false);
       return;
     }
 
-    if (postContent.trim() === "") {
-      alert("내용을 입력해주세요.");
-      return;
-    }
-
-    if (postCategory === "") {
-      alert("카테고리를 선택해주세요.");
-      return;
-    }
-
-    const newPost = { title: postTitle, content: postContent, category: postCategory };
+    const newPost = {
+      profileImg: "", // Replace with the profile image URL or leave it blank if not required
+      cType: postCategory,
+      cTitle: postTitle,
+      cContents: postContent,
+      cLike: 0, // Assuming initial like count is 0
+    };
 
     axios
       .post("http://localhost:3000/api/community", newPost)
       .then((response) => {
+        setLoading(false);
         onPostSubmit(response.data);
         setPostCategory("");
         setPostTitle("");
         setPostContent("");
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Error submittion post:", error);
       });
   };
@@ -63,7 +64,7 @@ function PostModal({ onPostSubmit, onCancel }) {
           catch<span className="red-letter">J</span>ob
         </div>
         <div>
-          <select className="postcategory" value={postCategory} onChange={handlePostCategoryChange} required>
+          <select className="postcategory" value={postCategory} onChange={handlePostCategoryChange}>
             <option selected disabled hidden value="">
               카테고리
             </option>
