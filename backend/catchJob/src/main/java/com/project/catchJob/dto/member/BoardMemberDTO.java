@@ -1,9 +1,5 @@
 package com.project.catchJob.dto.member;
 
-import java.util.Date;
-
-import com.project.catchJob.dto.board.B_commentsDTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

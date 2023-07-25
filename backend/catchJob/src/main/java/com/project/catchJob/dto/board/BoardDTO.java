@@ -12,7 +12,6 @@ import com.project.catchJob.domain.board.Board;
 //import com.project.catchJob.domain.board.Tag;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.member.BoardMemberDTO;
-import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.repository.board.B_likeRepository;
 
 import lombok.AllArgsConstructor;

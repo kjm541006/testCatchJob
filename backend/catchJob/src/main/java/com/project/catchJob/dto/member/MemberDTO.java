@@ -2,7 +2,9 @@ package com.project.catchJob.dto.member;
 
 
 import org.springframework.web.multipart.MultipartFile;
+
 import com.project.catchJob.domain.member.Member;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

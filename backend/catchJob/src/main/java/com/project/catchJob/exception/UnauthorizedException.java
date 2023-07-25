@@ -1,4 +1,4 @@
-package com.project.catchJob.controller;
+package com.project.catchJob.exception;
 
 public class UnauthorizedException extends RuntimeException {
 	

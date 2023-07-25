@@ -1,9 +1,6 @@
 package com.project.catchJob.dto.project;
 
 import java.util.Date;
-import java.util.List;
-
-import com.project.catchJob.domain.member.Member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
