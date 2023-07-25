@@ -71,13 +71,14 @@ const LoginPage = () => {
           </h1>
           <div className="input-text">이메일</div>
           <input type="text" className="input-box" tabIndex="1" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <div className="input-text" tabIndex="2">
+          <div className="input-text">
             비밀번호
           </div>
           <div className="input-container">
             <input
               type={showPassword ? "text" : "password"}
               className="input-box"
+              tabIndex="2"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />

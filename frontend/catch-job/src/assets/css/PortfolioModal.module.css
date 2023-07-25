@@ -172,8 +172,23 @@
 }
 
 .readComment{
-  margin: 50px 5px 20px 5px;
+  margin: 30px 5px 20px 5px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
 }
+
+.readCommentItem{
+  margin: 20px 0 20px 0;
+}
+
+.commentContent{
+  margin: 30px 20px 10px 20px;
+}
+
+.commentBar{
+  margin: 50px 50px 0 20px;
+  width: 1070px;
+  border: 1px solid #f2f2f2;
+}
+
 
