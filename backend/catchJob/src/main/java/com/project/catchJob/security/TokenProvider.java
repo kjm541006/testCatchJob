@@ -79,10 +79,5 @@ public class TokenProvider {
 			return false;
 		}
 	}
-	
-	// DB에서 조회
-	public Member getUser(String token) {
-		String email = getUserEmail(token);
-		return memberRepository.findByEmail(email);
-	}
+
 }

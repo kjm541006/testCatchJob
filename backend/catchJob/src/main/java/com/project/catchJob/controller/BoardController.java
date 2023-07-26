@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,7 +68,6 @@ public class BoardController {
 		return ResponseEntity.ok(boardDTOList);
 	}
 	
-	
 	// 글 등록
 	@PostMapping("/portfolio/build")
 	public ResponseEntity<?> registerBoard(
@@ -77,28 +77,46 @@ public class BoardController {
 	        throws Exception {
 		
 	    Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
-
 	    MemberDTO memberDTO = MemberDTO.toMemberDTO(authenticatedMember);
-
 	    boardService.create(boardDTO, memberDTO, file);
+	    
 	    return ResponseEntity.ok().build();
 	}
 
 	// 글 수정
-	@PostMapping("/portfolio/update/{board_id}")
+	@PutMapping("/portfolio/edit/{board_id}")
 	public ResponseEntity<?> editBoard(
 	        @RequestBody BoardDTO boardDTO, 
+	        @PathVariable("board_id") Long boardId,
 	        @RequestHeader("Authorization") String jwtToken, 
 	        @RequestPart(value = "file", required = false) MultipartFile file) 
 	        throws Exception {
 		
 	    Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
-
 	    MemberDTO memberDTO = MemberDTO.toMemberDTO(authenticatedMember);
-
+	    memberDTO.setToken(jwtToken);
+	    boardDTO.setBoardId(boardId);
 	    boardService.update(boardDTO, memberDTO, file);
+	    
 	    return ResponseEntity.ok().build();
 	}
+	
+	// 글 삭제
+	@DeleteMapping("/portfolio/delete/{board_id}")
+	public ResponseEntity<?> deleteBoard(
+			@PathVariable("board_id") Long boardId,
+	        @RequestHeader("Authorization") String jwtToken, 
+	        @RequestPart(value = "file", required = false) MultipartFile file) 
+	        throws Exception {
+		
+	    Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
+	    MemberDTO memberDTO = MemberDTO.toMemberDTO(authenticatedMember);
+	    memberDTO.setToken(jwtToken);
+	    boardService.delete(boardId, memberDTO, file);
+	    return ResponseEntity.ok().build();
+	}
+	
+	//======================== 댓글 ========================
 	
 	// 댓글 등록
 	@PostMapping("/portfolio/{board_id}")
@@ -115,7 +133,7 @@ public class BoardController {
 	}
 	
 	// 댓글 수정
-	@PutMapping("/portfolio/edit/{comment_id}")
+	@PutMapping("/portfolio/comment/edit/{comment_id}")
 	public ResponseEntity<?> editComment(
 			@RequestBody B_commentsDTO commentDTO,
 			@PathVariable("comment_id") Long commentId,
@@ -123,29 +141,52 @@ public class BoardController {
 		
 		Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
 		MemberDTO memberDTO = MemberDTO.toMemberDTO(authenticatedMember);
+		memberDTO.setToken(jwtToken);
 		CommentResponse commentRes = boardService.editComment(commentDTO, memberDTO, commentId);
 		
 		return ResponseEntity.ok(commentRes);
 	}
 	
+	// 댓글 삭제
+	@DeleteMapping("/portfolio/comment/delete/{comment_id}")
+	public ResponseEntity<?> deleteComment(
+			@PathVariable("comment_id") Long commentId,
+			@RequestHeader("Authorization") String jwtToken) {
+		
+		Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
+		MemberDTO memberDTO = MemberDTO.toMemberDTO(authenticatedMember);
+		memberDTO.setToken(jwtToken);
+		boardService.deleteComment(memberDTO, commentId);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	//======================== 좋아요 ========================
+	
 	// 좋아요
 	@PostMapping("/like/{board_id}")
-	public ResponseEntity<?> like(@RequestParam Long memberId, @RequestParam Long boardId) throws Exception {
-		boolean isLiked = boardService.findLike(memberId, boardId);
+	public ResponseEntity<?> like(@RequestHeader("Authorization") String jwtToken, @RequestParam Long boardId) throws Exception {
+		Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
+		MemberDTO memberDTO = MemberDTO.toMemberDTO(authenticatedMember);
+		String email = memberDTO.getEmail();
+		boolean isLiked = boardService.findLike(email, boardId);
 		if(isLiked) {
-			boardService.delete(memberId, boardId);
+			boardService.delete(email, boardId);
 			Board board = boardRepo.findById(boardId)
 					.orElseThrow(() -> new NotFoundException());
 			boardService.updateLike(board, false);
 			return ResponseEntity.ok("하트 --");
 		} else {
-			boardService.insert(memberId, boardId);
+			boardService.insert(email, boardId);
 			Board board = boardRepo.findById(boardId)
 					.orElseThrow(() -> new NotFoundException());
 			boardService.updateLike(board, true);
 			return ResponseEntity.ok("하트 ++");
 		}
 	}
+	
+	//======================== 조회수 ========================
 
+	//@GetMapping("/")
 	
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -72,10 +73,12 @@ public class Board {
 		member.getBoardList().add(this);
 	}
 	
-	@OneToMany(mappedBy = "board")
+	@Builder.Default // 이 녀석이 없으면 lombok의 builder로 객체를 생성할 때 List가 선언한대로 제대로 초기화되지 않는다.
+	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<B_comments> boardCommentsList = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "board")
+	@Builder.Default // 이 녀석이 없으면 lombok의 builder로 객체를 생성할 때 List가 선언한대로 제대로 초기화되지 않는다.
+	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<B_like> boardLikeList = new ArrayList<>();
 	
 //	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)

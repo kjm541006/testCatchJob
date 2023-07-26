@@ -1,6 +1,7 @@
 package com.project.catchJob.service;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -108,49 +109,6 @@ public class BoardService {
 
 	    boardRepo.save(board);
 	}
-	
-	// 댓글 등록
-	public CommentResponse createComment(B_commentsDTO commentDTO, MemberDTO memberDTO, Long boardId) {
-		String jwtToken = memberDTO.getToken();
-		Optional<Member> optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken);
-		
-		Member member = memberRepo.findByEmail(memberDTO.getEmail());
-		
-		Board board = boardRepo.findById(boardId).orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
-		B_comments comments = B_comments.builder()
-				.bComContent(commentDTO.getCommentContent())
-//				.bComDate(LocalDateTime.now())
-				.member(member)
-				.board(board)
-				.build();
-		B_comments saveComm = bCommRepo.save(comments);
-		bCommRepo.flush();
-		return new CommentResponse(saveComm.getBComDate());
-	}
-	
-	// 댓글 수정
-	public CommentResponse editComment(B_commentsDTO commentDTO, MemberDTO memberDTO, Long commentId) {
-		String jwtToken = memberDTO.getToken();
-		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
-		        .orElseThrow(UnauthorizedException::new);
-
-		//Member member = memberRepo.findByEmail(memberDTO.getEmail());
-		
-		B_comments comment = bCommRepo.findById(commentId).orElseThrow(() -> new EntityNotFoundException("댓글이 없음"));
-		System.out.println("-----member---" + optAuthenticatedMember);
-		System.out.println("-----comment---" + comment);
-		if (!optAuthenticatedMember.getEmail().equals(comment.getMember().getEmail())) {
-			System.out.println("===----------cto---" + comment.getMember().getEmail());
-			System.out.println("===----------cto---" + optAuthenticatedMember.getEmail());
-		    
-			throw new UnauthorizedException();
-		}
-		comment.setBComContent(commentDTO.getCommentContent());
-		B_comments saveComm = bCommRepo.save(comment);
-		bCommRepo.flush();
-		return new CommentResponse(saveComm.getBComDate());
-	}
-	
     
     // 파일 저장
     public String saveFile(MultipartFile file) {
@@ -173,7 +131,6 @@ public class BoardService {
 			// 저장된 파일명 반환
 			return storedFileName;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		} 
@@ -183,15 +140,103 @@ public class BoardService {
     public void update(BoardDTO boardDTO, MemberDTO memberDTO, MultipartFile file) {
     	
     	String jwtToken = memberDTO.getToken();
-	    Optional<Member> optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken);
-
-	    Member member = memberRepo.findByEmail(memberDTO.getEmail());
-    	
+	    Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+	    		.orElseThrow(UnauthorizedException::new);
+	    System.out.println("-=-------" + boardDTO);
+	    Board board = boardRepo.findById(boardDTO.getBoardId())
+	    		.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+	    
+	    if(!optAuthenticatedMember.getEmail().equals(board.getMember().getEmail())) {
+	    	throw new UnauthorizedException();
+	    }
+	    
+	    board.setBTitle(boardDTO.getBTitle());
+	    board.setBContents(boardDTO.getBContents());
+	    board.setTags(boardDTO.getTags());
+	 
+    	// 파일 저장
+	    if(file != null && !file.isEmpty()) {
+	    	String fileName = saveFile(file);
+	    	board.setBFileName(fileName);
+	    }
+	    boardRepo.save(board);
     }
     
+    // 글 삭제
+    public void delete(Long boardId, MemberDTO memberDTO, MultipartFile file) {
+    	
+    	String jwtToken = memberDTO.getToken();
+	    Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+	    		.orElseThrow(UnauthorizedException::new);
+
+	    Board board = boardRepo.findById(boardId)
+	    		.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+	    
+	    if(!optAuthenticatedMember.getEmail().equals(board.getMember().getEmail())) {
+	    	throw new UnauthorizedException();
+	    }
+	    
+	    boardRepo.deleteById(boardId);
+    }
+
+    //======================== 댓글 ========================
+    
+    // 댓글 등록
+    public CommentResponse createComment(B_commentsDTO commentDTO, MemberDTO memberDTO, Long boardId) {
+    	String jwtToken = memberDTO.getToken();
+    	Optional<Member> optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken);
+    	
+    	Member member = memberRepo.findByEmail(memberDTO.getEmail());
+    	
+    	Board board = boardRepo.findById(boardId).orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+    	B_comments comments = B_comments.builder()
+    			.bComContent(commentDTO.getCommentContent())
+    			.member(member)
+    			.board(board)
+    			.build();
+    	B_comments saveComm = bCommRepo.save(comments);
+    	bCommRepo.flush();
+    	return new CommentResponse(saveComm.getBComDate());
+    }
+    
+    // 댓글 수정
+    public CommentResponse editComment(B_commentsDTO commentDTO, MemberDTO memberDTO, Long commentId) {
+    	
+    	String jwtToken = memberDTO.getToken();
+    	Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+    			.orElseThrow(UnauthorizedException::new);
+    	
+    	B_comments comment = bCommRepo.findById(commentId).orElseThrow(() -> new EntityNotFoundException("댓글이 없음"));
+    	if (!optAuthenticatedMember.getEmail().equals(comment.getMember().getEmail())) {
+    		throw new UnauthorizedException();
+    	}
+    	comment.setBComContent(commentDTO.getCommentContent());
+    	comment.setBComDate(LocalDateTime.now());
+    	B_comments saveComm = bCommRepo.save(comment);
+    	bCommRepo.flush();
+    	return new CommentResponse(saveComm.getBComDate());
+    }
+    
+    // 댓글 삭제
+    public void deleteComment(MemberDTO memberDTO, Long commentId) {
+    	
+    	String jwtToken = memberDTO.getToken();
+    	Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+    			.orElseThrow(UnauthorizedException::new);
+    	
+    	B_comments comment = bCommRepo.findById(commentId).orElseThrow(() -> new EntityNotFoundException("댓글이 없음"));
+    	
+    	if (!optAuthenticatedMember.getEmail().equals(comment.getMember().getEmail())) {
+    		throw new UnauthorizedException();
+    	}
+    	bCommRepo.deleteById(commentId);
+    }
+    
+    //======================== 좋아요 ========================
+    
     // 좋아요 확인
-    public boolean findLike(Long memberId, Long boardId) throws Exception {
-    	Member member = memberRepo.findById(memberId)
+    public boolean findLike(String email, Long boardId) throws Exception {
+    	Member member = memberRepo.findOptionalByEmail(email)
 	            .orElseThrow(() -> new NotFoundException());
 
 	    Board board = boardRepo.findById(boardId)
@@ -203,17 +248,17 @@ public class BoardService {
     
     
 	// 좋아요 추가
-	public void insert(Long memberId, Long boardId) throws Exception {
-	    Member member = memberRepo.findById(memberId)
+	public void insert(String email, Long boardId) throws Exception {
+	    Member member = memberRepo.findOptionalByEmail(email)
 	            .orElseThrow(() -> new NotFoundException());
 
 	    Board board = boardRepo.findById(boardId)
 	            .orElseThrow(() -> new NotFoundException());
-
-	    // 이미 좋아요 되어 있으면 에러
-	    if (bLikeRepo.findByMemberAndBoard(member, board).isPresent()) {
-	        throw new Exception();
-	    }
+//
+//	    // 이미 좋아요 되어 있으면 에러
+//	    if (bLikeRepo.findByMemberAndBoard(member, board).isPresent()) {
+//	        throw new Exception();
+//	    }
 
 	    B_like like = B_like.builder()
 	            .board(board)
@@ -224,8 +269,8 @@ public class BoardService {
 	}
 
 	// 좋아요 취소
-	public void delete(Long memberId, Long boardId) throws NotFoundException {
-	    Member member = memberRepo.findById(memberId)
+	public void delete(String email, Long boardId) throws NotFoundException {
+	    Member member = memberRepo.findOptionalByEmail(email)
 	            .orElseThrow(() -> new NotFoundException());
 
 	    Board board = boardRepo.findById(boardId)
