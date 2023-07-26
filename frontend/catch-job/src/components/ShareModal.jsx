@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styles from "../assets/css/ShareModal.module.css";
 
-const ShareModal = ({ item,onClose }) => {
+const ShareModal = ({ item,onClose, modalUrl }) => {
+
+  const handleCopyURL = async () => {
+    try {
+      await navigator.clipboard.writeText(modalUrl);
+      alert("URL이 복사되었습니다.");
+    } catch (err) {
+      console.error("URL을 복사하는데 실패했습니다.", err);
+    }
+  }
 
   if (!item) {
     return null;
@@ -16,10 +25,14 @@ const ShareModal = ({ item,onClose }) => {
         </h1>
         <div className={`${styles.title}`}>프로젝트 공유하기</div>
         <div className={`${styles.contentInfo}`}>
-          <img className={`${styles.user_img}`} src={item.member.mOriginalFileName} alt="img" />
+          <img className={`${styles.shareTitleImg}`} src={item.bCoverFileName} alt="img" />
           <div className={`${styles.contentUser}`}>
-            <div className={`${styles.contentUser_title}`}>{item.bTitle}</div>
-            <div className={`${styles.contentUser_info}`}>{item.member.name} ({item.member.email})</div>
+            <div className={`${styles.shareTitleName}`}>{item.bTitle}</div>
+          </div>
+        </div>
+        <div className={`${styles.shareLinkBox}`}>
+          <div className={`${styles.shareLink}`}>{modalUrl}
+            <button className={`${styles.shareLinkButton}`} onClick={handleCopyURL}>URL 복사</button>
           </div>
         </div>
       </div>

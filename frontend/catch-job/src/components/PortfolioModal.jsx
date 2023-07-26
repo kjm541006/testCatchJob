@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from "../assets/css/PortfolioModal.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faComment, faHeart, faPenToSquare, faShare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import img from "../assets/img/port_img.jpeg";
 import axios from 'axios';
 import ShareModal from "../components/ShareModal";
+import { useLocation } from "react-router-dom";
 
 const PortfolioModal = ({ item,onClose }) => {
   const token = localStorage.getItem("token");
@@ -16,10 +17,22 @@ const PortfolioModal = ({ item,onClose }) => {
   const [comment, setComment] = useState('');
   const [commentList, setCommentList] = useState(item.comments || []);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const location = useLocation();
+  const [firstModalUrl, setFirstModalUrl] = useState('');
 
+  useEffect(() => {
+    // item이 변경될 때마다 URL을 업데이트합니다.
+    if (item) {
+        const newModalUrl = window.location.origin + location.pathname + "?boardId=" + item.boardId;
+        setFirstModalUrl(newModalUrl);
+    }
+}, [item, location.pathname]);
+
+  
   if (!item) {
     return null;
   }
+  
 
   const handleLike = (event) => {
     event.stopPropagation();
@@ -153,7 +166,7 @@ const PortfolioModal = ({ item,onClose }) => {
           </div>
         </div>
     </div>
-    {isModalOpen && <ShareModal item={item} onClose={() => setIsModalOpen(false)} />}
+    {isModalOpen && <ShareModal item={item} onClose={() => setIsModalOpen(false)} modalUrl={firstModalUrl} />}
     </>
   );
 };
