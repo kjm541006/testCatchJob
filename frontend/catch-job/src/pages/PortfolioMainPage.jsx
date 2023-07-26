@@ -5,14 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faCommentDots, faHeart, faCheck } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import PortfolioModal from "../components/PortfolioModal";
-import ShareModal from "../components/ShareModal";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const PortfolioMainPage = () => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    navigate("/");
-  }, [navigate]);
 
   const dummyData = [
     {
@@ -368,7 +363,18 @@ const PortfolioMainPage = () => {
   const [data, setData] = useState(dummyData); // 실제할 때는 []로 바꾸기 더미데이터 지우고
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
+  const queryParam = new URLSearchParams(useLocation().search);
+  const itemFromURL = queryParam.get('boardId');
 
+  useEffect(() => {
+    if (itemFromURL) {
+      setSelectedItemId(parseInt(itemFromURL));
+      setIsModalOpen(true);
+    } else {
+      setIsModalOpen(false);
+    }
+  }, [itemFromURL]);
+  
   useEffect(() => {
     axios
       .get("http://43.202.98.45:8089/")
