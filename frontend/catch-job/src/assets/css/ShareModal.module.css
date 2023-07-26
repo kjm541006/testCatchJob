@@ -1,0 +1,90 @@
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 100vh;
+  overflow-y: auto; 
+  flex-direction: column; 
+}
+
+.modalContent {
+  position: relative;
+  background-color: white;
+  padding: 40px;
+  width: 800px;
+  min-height: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  overflow: auto;
+  border-radius: 10px;
+}
+
+.closeButton {
+  border:none;
+  background-color: #ffffff;
+  color:#444444;
+  cursor: pointer;
+  font-size: 30px;
+  position: absolute;
+  top:10px;
+  right: 15px;
+}
+
+.catch{
+  margin-top:10px;
+  margin-bottom: 40px;
+  color: #000;
+  text-align: center;
+  font-size: 66px;
+  font-weight: bold;
+}
+
+.catchJ {
+  color: #e2432e;
+  font-size: 76px;
+}
+
+.title{
+  display: flex;
+  margin:0 0 20px 0;
+  justify-content: center;
+  font-size: 27px;
+  font-weight: bold;
+}
+
+.contentInfo{
+  display: flex;
+  align-items: center;
+}
+
+.user_img{
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  border: 1px solid #b2b2b2;
+}
+
+.contentUser{
+  display: flex;
+  margin: 10px;
+  flex-direction: column;
+}
+
+.contentUser_title{
+  font-size: 15;
+  font-weight: bold;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+.contentUser_info{
+  font-size: 15;
+  margin-left: 10px;
+  margin-top: 5px;
+}

@@ -63,15 +63,13 @@ const BasicSigninPage = () => {
 
     // axios.post('localhost:8089/register', userData, {
     axios
-      // .post("http://43.202.98.45:8089/register", userData, {
-      .post("http://localhost:8089/register", userData, {
+      .post("http://43.202.98.45:8089/register", userData, {
         headers: {
           "Content-Type": "application/json",
         },
       })
       .then((response) => {
         console.log(response.data); // 서버 응답 데이터 출력
-        window.location.href = "/";
       })
       .catch((error) => {
         console.error(error); // 에러 출력
