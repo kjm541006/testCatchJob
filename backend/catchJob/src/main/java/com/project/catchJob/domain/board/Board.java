@@ -42,10 +42,10 @@ public class Board {
 	@Lob
 	private String bContents; // editor사용(대용량)
 	
-	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
+	@Column(insertable = false, columnDefinition = "bigint default 0")
 	private int bCnt; // 조회수
 	
-	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
+	@Column(insertable = false, columnDefinition = "bigint default 0")
 	private int bLike; // 좋아요갯수
 	
 	@ElementCollection

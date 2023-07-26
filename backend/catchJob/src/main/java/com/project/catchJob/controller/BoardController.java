@@ -27,7 +27,6 @@ import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.board.B_commentsDTO;
 import com.project.catchJob.dto.board.BoardDTO;
 import com.project.catchJob.dto.board.CommentResponse;
-import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.exception.UnauthorizedException;
 import com.project.catchJob.repository.board.B_commentsRepository;
 import com.project.catchJob.repository.board.B_likeRepository;
@@ -76,9 +75,7 @@ public class BoardController {
 	        @RequestPart(value = "file", required = false) MultipartFile file) 
 	        throws Exception {
 		
-	    Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
-	    MemberDTO memberDTO = MemberDTO.toMemberDTO(authenticatedMember);
-	    boardService.create(boardDTO, memberDTO, file);
+	    boardService.create(boardDTO, file, jwtToken);
 	    
 	    return ResponseEntity.ok().build();
 	}
@@ -92,11 +89,8 @@ public class BoardController {
 	        @RequestPart(value = "file", required = false) MultipartFile file) 
 	        throws Exception {
 		
-	    Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
-	    MemberDTO memberDTO = MemberDTO.toMemberDTO(authenticatedMember);
-	    memberDTO.setToken(jwtToken);
 	    boardDTO.setBoardId(boardId);
-	    boardService.update(boardDTO, memberDTO, file);
+	    boardService.edit(boardDTO, file, jwtToken);
 	    
 	    return ResponseEntity.ok().build();
 	}
@@ -109,10 +103,7 @@ public class BoardController {
 	        @RequestPart(value = "file", required = false) MultipartFile file) 
 	        throws Exception {
 		
-	    Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
-	    MemberDTO memberDTO = MemberDTO.toMemberDTO(authenticatedMember);
-	    memberDTO.setToken(jwtToken);
-	    boardService.delete(boardId, memberDTO, file);
+	    boardService.delete(boardId, file, jwtToken);
 	    return ResponseEntity.ok().build();
 	}
 	
@@ -125,9 +116,7 @@ public class BoardController {
 			@PathVariable("board_id") Long boardId,
 			@RequestHeader("Authorization") String jwtToken) {
 		
-		Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
-		MemberDTO memberDTO = MemberDTO.toMemberDTO(authenticatedMember);
-		CommentResponse commentRes = boardService.createComment(commentDTO, memberDTO, boardId);
+		CommentResponse commentRes = boardService.createComment(commentDTO, boardId, jwtToken);
 		
 		return ResponseEntity.ok(commentRes);
 	}
@@ -139,11 +128,8 @@ public class BoardController {
 			@PathVariable("comment_id") Long commentId,
 			@RequestHeader("Authorization") String jwtToken) {
 		
-		Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
-		MemberDTO memberDTO = MemberDTO.toMemberDTO(authenticatedMember);
-		memberDTO.setToken(jwtToken);
-		CommentResponse commentRes = boardService.editComment(commentDTO, memberDTO, commentId);
-		
+		CommentResponse commentRes = boardService.editComment(commentDTO, commentId, jwtToken);
+
 		return ResponseEntity.ok(commentRes);
 	}
 	
@@ -153,10 +139,7 @@ public class BoardController {
 			@PathVariable("comment_id") Long commentId,
 			@RequestHeader("Authorization") String jwtToken) {
 		
-		Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
-		MemberDTO memberDTO = MemberDTO.toMemberDTO(authenticatedMember);
-		memberDTO.setToken(jwtToken);
-		boardService.deleteComment(memberDTO, commentId);
+		boardService.deleteComment(commentId, jwtToken);
 		
 		return ResponseEntity.ok().build();
 	}
@@ -165,28 +148,32 @@ public class BoardController {
 	
 	// 좋아요
 	@PostMapping("/like/{board_id}")
-	public ResponseEntity<?> like(@RequestHeader("Authorization") String jwtToken, @RequestParam Long boardId) throws Exception {
+	public ResponseEntity<?> like(@RequestHeader("Authorization") String jwtToken, @PathVariable("board_id") Long boardId) throws Exception {
 		Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
-		MemberDTO memberDTO = MemberDTO.toMemberDTO(authenticatedMember);
-		String email = memberDTO.getEmail();
-		boolean isLiked = boardService.findLike(email, boardId);
+		String email = authenticatedMember.getEmail();
+		boolean isLiked = boardService.hasUserLiked(email, boardId);
+		
+		Board board;
 		if(isLiked) {
 			boardService.delete(email, boardId);
-			Board board = boardRepo.findById(boardId)
-					.orElseThrow(() -> new NotFoundException());
-			boardService.updateLike(board, false);
-			return ResponseEntity.ok("하트 --");
+			board = boardService.updateLike(boardId, false);
 		} else {
 			boardService.insert(email, boardId);
-			Board board = boardRepo.findById(boardId)
-					.orElseThrow(() -> new NotFoundException());
-			boardService.updateLike(board, true);
-			return ResponseEntity.ok("하트 ++");
+			board = boardService.updateLike(boardId, true);
 		}
+		int updatedLikeCount = board.getBLike();
+		return ResponseEntity.ok(updatedLikeCount);
 	}
 	
 	//======================== 조회수 ========================
 
-	//@GetMapping("/")
-	
+	// 조회수
+	@PostMapping("/{board_id}")
+	public ResponseEntity<?> click(@PathVariable("board_id") Long boardId) throws NotFoundException{
+		boardService.updateCnt(boardId);
+		Board board = boardRepo.findById(boardId).orElseThrow(NotFoundException::new);
+		int updatedReadCount = board.getBCnt();
+		
+		return ResponseEntity.ok(updatedReadCount);
+	}
 }
