@@ -89,3 +89,27 @@
   color: #7c8484;
   font-size: 20px;
 }
+
+.makeProject {
+  width: 145px;
+  height: 65px;
+  position: sticky;
+  left: 1500px;
+  bottom: 5%;
+  z-index: 98;
+  border-radius: 32px;
+  background-color: #e2432e;
+  color: #fff;
+  padding: 15px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.5px;
+  margin-bottom: 30px;
+  cursor: pointer;
+  opacity: 0.85;
+}

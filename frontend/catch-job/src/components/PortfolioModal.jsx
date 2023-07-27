@@ -1,18 +1,38 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from "../assets/css/PortfolioModal.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faComment, faHeart, faPenToSquare, faShare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import img from "../assets/img/port_img.jpeg";
 import axios from 'axios';
+import ShareModal from "../components/ShareModal";
+import { useLocation } from "react-router-dom";
 
 const PortfolioModal = ({ item,onClose }) => {
+  const token = localStorage.getItem("token");
+  const writerName = localStorage.getItem("name");
+  const writerEmail = localStorage.getItem("email");
+
   const contentCommentRef = useRef(null);
   const [isLiked, setIsLiked] = useState(false);
   const [comment, setComment] = useState('');
+  const [commentList, setCommentList] = useState(item.comments || []);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const location = useLocation();
+  const [firstModalUrl, setFirstModalUrl] = useState('');
 
+  useEffect(() => {
+    // item이 변경될 때마다 URL을 업데이트합니다.
+    if (item) {
+        const newModalUrl = window.location.origin + location.pathname + "?boardId=" + item.boardId;
+        setFirstModalUrl(newModalUrl);
+    }
+}, [item, location.pathname]);
+
+  
   if (!item) {
     return null;
   }
+  
 
   const handleLike = (event) => {
     event.stopPropagation();
@@ -22,6 +42,11 @@ const PortfolioModal = ({ item,onClose }) => {
   const handleComment = (event) => {
     event.stopPropagation();
     contentCommentRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleShare = (event) => {
+    event.stopPropagation();
+    setIsModalOpen(true);
   };
 
   const formatCommentDate = (dateString) => {
@@ -35,12 +60,37 @@ const PortfolioModal = ({ item,onClose }) => {
   };
 
   const submitComment = async () => {
-    const response = await axios.post('http://43.202.98.45:8089/portfolio/{board_id}', {
-      comment: comment,
+
+    const response = await axios.post(`http://43.202.98.45:8089/portfolio/${item.boardId}`, {
+      memberName: writerName,
+      memberEmail: writerEmail,
+      commentContent: comment,
+    },{
+      headers: {
+        'Authorization': `Bearer ${token}`
+    }
     });
   
     if (response.status === 200) {
-      console.log("댓글 전송 성공")
+      const commentDateFromServer = response.data.commentDate;
+
+      console.log("댓글 전송 성공");
+      console.log(token);
+      console.log(writerName);
+      console.log(writerEmail);
+      console.log(comment);
+
+      setCommentList([
+        {
+          commentContent: comment,
+          commentDate:  commentDateFromServer,
+          memberName: writerName,
+          memberEmail: writerEmail,
+        },
+        ...commentList,
+      ]);
+
+        setComment('');
       
     } else {
       console.log("댓글 전송 실패", Error);
@@ -48,6 +98,7 @@ const PortfolioModal = ({ item,onClose }) => {
   };
   
   return (
+    <>
     <div className={`${styles.modalBackdrop}`} onClick={onClose}>
         <div className={`${styles.buttonSet}`}>
           <button className={`${styles.modalButton}`} style={{backgroundColor:"#E2432E"}} onClick={handleLike}>
@@ -61,7 +112,7 @@ const PortfolioModal = ({ item,onClose }) => {
           </button>
           <div className={`${styles.buttonMent}`}>댓글</div>
         </div>
-        <div className={`${styles.buttonSet}`} style={{top:"247px", right:"394px"}} >
+        <div className={`${styles.buttonSet}`} style={{top:"247px", right:"394px"}} onClick={handleShare} >
           <button className={`${styles.modalButton}`}>
             <FontAwesomeIcon icon={faShare} className={`${styles.faIcon}`} />
           </button>
@@ -103,7 +154,7 @@ const PortfolioModal = ({ item,onClose }) => {
           <button className={`${styles.commentEnter}`} onClick={submitComment}>등록</button>
         </div>
         <div className={`${styles.readComment}`}>
-          {item.comments.map((comment) => (
+          {commentList.map((comment) => (
             <div className={`${styles.readCommentItem}`}>
               <div key={comment.commentDate} className={`${styles.contentUser}`}>
               <div className={`${styles.contentUser_title}`}>{comment.memberName} ({comment.memberEmail})</div>
@@ -115,6 +166,8 @@ const PortfolioModal = ({ item,onClose }) => {
           </div>
         </div>
     </div>
+    {isModalOpen && <ShareModal item={item} onClose={() => setIsModalOpen(false)} modalUrl={firstModalUrl} />}
+    </>
   );
 };
 

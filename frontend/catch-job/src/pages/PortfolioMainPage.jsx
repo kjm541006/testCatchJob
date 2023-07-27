@@ -2,17 +2,12 @@ import { React, useEffect, useState } from "react";
 import styles from "../assets/css/PortfolioMain.module.css";
 import img from "../assets/img/port_img.jpeg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faCommentDots, faHeart, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faCommentDots, faHeart, faCheck, faPencil } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import PortfolioModal from "../components/PortfolioModal";
-import { useNavigate } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 const PortfolioMainPage = () => {
-  // 아래는 react-router-dom 용 코드입니다 유지시켜주세요.
-  const navigate = useNavigate();
-  useEffect(() => {
-    navigate("/");
-  }, [navigate]);
 
   const dummyData = [
     {
@@ -112,7 +107,7 @@ const PortfolioMainPage = () => {
       ],
     },
     {
-      "boardId": 1,
+      "boardId": 4,
       "bTitle": "첫 번째 게시물",
       "bContents": "첫 번째 게시물 내용입니다.",
       "bCnt": 100,
@@ -144,7 +139,7 @@ const PortfolioMainPage = () => {
       ],
     },
     {
-      "boardId": 2,
+      "boardId": 5,
       "bTitle": "두 번째 게시물",
       "bContents": "두 번째 게시물 내용입니다.",
       "bCnt": 50,
@@ -170,7 +165,7 @@ const PortfolioMainPage = () => {
       ],
     },
     {
-      "boardId": 3,
+      "boardId": 6,
       "bTitle": "세 번째 게시물",
       "bContents": "세 번째 게시물 내용입니다.",
       "bCnt": 25,
@@ -196,7 +191,7 @@ const PortfolioMainPage = () => {
       ],
     },
     {
-      "boardId": 1,
+      "boardId": 7,
       "bTitle": "첫 번째 게시물",
       "bContents": "첫 번째 게시물 내용입니다.",
       "bCnt": 100,
@@ -228,7 +223,7 @@ const PortfolioMainPage = () => {
       ],
     },
     {
-      "boardId": 2,
+      "boardId": 8,
       "bTitle": "두 번째 게시물",
       "bContents": "두 번째 게시물 내용입니다.",
       "bCnt": 50,
@@ -254,7 +249,7 @@ const PortfolioMainPage = () => {
       ],
     },
     {
-      "boardId": 3,
+      "boardId": 9,
       "bTitle": "세 번째 게시물",
       "bContents": "세 번째 게시물 내용입니다.",
       "bCnt": 25,
@@ -280,7 +275,7 @@ const PortfolioMainPage = () => {
       ],
     },
         {
-      "boardId": 1,
+      "boardId": 10,
       "bTitle": "첫 번째 게시물",
       "bContents": "첫 번째 게시물 내용입니다.",
       "bCnt": 100,
@@ -312,7 +307,7 @@ const PortfolioMainPage = () => {
       ],
     },
     {
-      "boardId": 2,
+      "boardId": 11,
       "bTitle": "두 번째 게시물",
       "bContents": "두 번째 게시물 내용입니다.",
       "bCnt": 50,
@@ -338,7 +333,7 @@ const PortfolioMainPage = () => {
       ],
     },
     {
-      "boardId": 3,
+      "boardId": 12,
       "bTitle": "세 번째 게시물",
       "bContents": "세 번째 게시물 내용입니다.",
       "bCnt": 25,
@@ -368,12 +363,23 @@ const PortfolioMainPage = () => {
   const [data, setData] = useState(dummyData); // 실제할 때는 []로 바꾸기 더미데이터 지우고
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
+  const queryParam = new URLSearchParams(useLocation().search);
+  const itemFromURL = queryParam.get('boardId');
 
   useEffect(() => {
+    if (itemFromURL) {
+      setSelectedItemId(parseInt(itemFromURL));
+      setIsModalOpen(true);
+    } else {
+      setIsModalOpen(false);
+    }
+  }, [itemFromURL]);
+  
+  useEffect(() => {
     axios
-      .get("서버_엔드포인트_URL")
+      .get("http://43.202.98.45:8089/")
       .then((response) => {
-        setData(response.data); // 서버 응답은  { id: 2, comments: 2, views: 456, likes: 5, infoLeft: "Element 2",  "imageUrl": "이미지_URL_1",  "userImageUrl": "이미지_URL_2", }, 이런 식이여야함
+        setData(response.data); 
         console.log(response.data);
       })
       .catch((error) => {
@@ -414,6 +420,12 @@ const PortfolioMainPage = () => {
             </div>
           ))}
         </div>
+        <Link to={"/portfolio/build"}>
+          <div className={styles.makeProject}>
+            <FontAwesomeIcon icon={faPencil} />
+            <div>글 쓰기</div>
+          </div>
+      </Link>
       </div>
       {isModalOpen && <PortfolioModal item={data.find((item) => item.boardId === selectedItemId)} onClose={() => setIsModalOpen(false)} />}
     </div>

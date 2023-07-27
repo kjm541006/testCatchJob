@@ -11,6 +11,7 @@ import PortfolioMainPage from "./pages/PortfolioMainPage";
 import CommunityRoutes from "./pages/community/CommunityPage";
 import StudyPage from "./pages/study&project/StudyPage";
 import BuildStudyPage from "./pages/study&project/BuildStudyPage";
+import BuildPortfolioPage from "./pages/BuildPortfolioPage";
 // import GoogleLoginButton from "./components/GoogleLoginButton";
 // import { GoogleOAuthProvider } from "@react-oauth/google";
 // import GoogleLoginButton_long from "./components/GoogleLoginButton_long";
@@ -53,6 +54,7 @@ function App() {
           {/* <Route path="/recruit" element={<Recruit />} /> */}
           <Route path="/study" element={<StudyPage />} />
           <Route path="/study/build" element={savedToken != null ? <BuildStudyPage /> : <LoginAlertPage />} />
+          <Route path="/portfolio/build" element={savedToken != null ? <BuildPortfolioPage /> : <LoginAlertPage />} />
           {/* <Route path="/community/*" element={<CommunityRoutes />} /> */}
         </Route>
         <Route path="/join" element={<SocialSigninPage />} />

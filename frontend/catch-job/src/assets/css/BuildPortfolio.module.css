@@ -1,0 +1,25 @@
+.wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.realEditorTitle{
+  width: 1200px;
+  height: 50px;
+  margin-top:50px;
+  padding-left: 10px;
+  font-size: 15px;
+  border:1px solid #b2b2b2;
+  border-radius: 3px;
+}
+
+.realEditor{
+  display: flex;
+  align-items: center;
+  width: 1200px;
+  margin: 50px auto;
+  border:1px solid #b2b2b2;
+  border-radius: 3px;
+}
