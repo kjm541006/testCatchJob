@@ -8,16 +8,24 @@ import java.util.Set;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.project.catchJob.converter.CrewConverter;
+import com.project.catchJob.converter.PlatformConverter;
 import com.project.catchJob.domain.member.Member;
 
 import lombok.Getter;
@@ -26,14 +34,14 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(exclude = {"member", "projectCommentsList", "projectLikeList", "projectReasonList"})
+@ToString(exclude = {"member", "projectCommentsList", "projectLikeList", "projectReasonList", "projectMemberList"})
 @Entity
 public class Project {
 
 	@Id @GeneratedValue @Column(name = "project_id")
 	private Long projectId;
 	
-	private String bType; // 분야
+	private String type; // 분야
 	
 	private String title;
 	
@@ -43,32 +51,24 @@ public class Project {
 	
 	private String term; // 모집기간
 	
+	@Lob
+	@Column(length=50000)
 	private String detail;
 	
-//	private int webDesigner; // 웹디자인 인원
-//	
-//    private int webPublisher; // 웹퍼블리셔 인원
-//    
-//    private int frontend; // 프론트엔드 인원
-//    
-//    private int backend; // 백엔드 인원
-//    
-//    private int PM; // 프로젝트 매니저 인원
-//    
-//    private int others; // 기타 인원
-	
-	@ElementCollection
-    @CollectionTable(name = "crew_counts", joinColumns = @JoinColumn(name = "project_id"))
-    @MapKeyColumn(name = "role")
-    @Column(name = "count")
+//	@ElementCollection
+//    @CollectionTable(name = "crew_counts", joinColumns = @JoinColumn(name = "project_id"))
+//    @MapKeyColumn(name = "role")
+//    @Column(name = "count")
+	@Convert(converter=CrewConverter.class)
     private Map<String, Integer> crew;
 	
 	// private String platform; // 출시플랫폼
 	
-	@ElementCollection(fetch = FetchType.EAGER)
-	  @CollectionTable(name = "platforms", joinColumns = @JoinColumn(name = "project_id"))
-	  @Column(name = "platform")
-	  private Set<String> platforms; // 출시플랫폼을 Set으로 변경
+//	@ElementCollection(fetch = FetchType.EAGER)
+//	@CollectionTable(name = "platforms", joinColumns = @JoinColumn(name = "project_id"))
+//	@Column(name = "platform")
+	@Convert(converter=PlatformConverter.class)
+	private List<String> platforms;
 
 	
 	@Column(insertable = false, updatable = false, columnDefinition = "bigint default 0")
@@ -80,8 +80,13 @@ public class Project {
 	@Column(insertable = false, updatable = false, columnDefinition = "date default now()")
 	private Date pDate; // 작성날짜
 	
-	@ManyToOne
-	@JoinColumn(name = "member_id", nullable = false, updatable = false)
+//	@JsonIgnore
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "member_id", nullable = false, updatable = false)
+	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "memberId")
+	@JsonIdentityReference(alwaysAsId = true) // id로만 serialize
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "member_id")
 	private Member member;
 	
 	public void setMember(Member member) {

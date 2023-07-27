@@ -16,7 +16,7 @@ import lombok.ToString;
 public class ProjectDTO {
 
     private Long projectId;
-    private String bType;
+    private String type;
     private String title;
     private String field;
     private String loc;
