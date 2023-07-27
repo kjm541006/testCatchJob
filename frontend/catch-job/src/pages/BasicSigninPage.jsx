@@ -13,27 +13,6 @@ const BasicSigninPage = () => {
   const [selectedJobs, setSelectedJobs] = useState("");
   const [selectedCarrers, setSelectedCarrers] = useState("");
 
-  const handleClick = (e) => {
-    const { name } = e.target;
-
-    switch (name) {
-      case "email":
-        setEmail("");
-        break;
-      case "name":
-        setName("");
-        break;
-      case "password":
-        setPassword("");
-        break;
-      case "confirmPassword":
-        setConfirmPassword("");
-        break;
-      default:
-        break;
-    }
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -84,15 +63,13 @@ const BasicSigninPage = () => {
 
     // axios.post('localhost:8089/register', userData, {
     axios
-      // .post("http://43.202.98.45:8089/register", userData, {
-      .post("http://localhost:8089/register", userData, {
+      .post("http://43.202.98.45:8089/register", userData, {
         headers: {
           "Content-Type": "application/json",
         },
       })
       .then((response) => {
         console.log(response.data); // 서버 응답 데이터 출력
-        window.location.href = "/";
       })
       .catch((error) => {
         console.error(error); // 에러 출력
@@ -123,7 +100,6 @@ const BasicSigninPage = () => {
             tabIndex="1"
             name="email"
             value={email}
-            onClick={handleClick}
             onChange={handleInputChange}
             placeholder="이메일을 입력하세요"
           />
@@ -134,7 +110,6 @@ const BasicSigninPage = () => {
             tabIndex="2"
             name="name"
             value={name}
-            onClick={handleClick}
             onChange={handleInputChange}
             placeholder="이름을 입력하세요"
           />
@@ -146,7 +121,6 @@ const BasicSigninPage = () => {
               tabIndex="3"
               name="password"
               value={password}
-              onClick={handleClick}
               onChange={handleInputChange}
               placeholder="비밀번호 입력하세요"
             />
@@ -162,7 +136,6 @@ const BasicSigninPage = () => {
               tabIndex="4"
               name="confirmPassword"
               value={confirmPassword}
-              onClick={handleClick}
               onChange={handleInputChange}
               placeholder="비밀번호를 다시 한 번 입력하세요"
             />
@@ -173,44 +146,60 @@ const BasicSigninPage = () => {
 
           <div className="input-text-basic">직무</div>
           <div className="choosejob" id="pick">
-            <div className="choosejobone">
-              <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹디자이너")} />
-              <div className="choosejob-text-basic">웹디자이너</div>
-            </div>
-            <div className="choosejobone">
-              <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹퍼블리셔")} />
-              <div className="choosejob-text-basic">웹퍼블리셔</div>
-            </div>
-            <div className="choosejobone">
-              <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("프론트엔드")} />
-              <div className="choosejob-text-basic">프론트엔드</div>
-            </div>
+            <label>
+              <div className="choosejobone">
+                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹디자이너")} />
+                <div className="choosejob-text-basic">웹디자이너</div>
+              </div>
+            </label>
+            <label>
+              <div className="choosejobone">
+                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹퍼블리셔")} />
+                <div className="choosejob-text-basic">웹퍼블리셔</div>
+              </div>
+            </label>
+            <label>
+              <div className="choosejobone">
+                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("프론트엔드")} />
+                <div className="choosejob-text-basic">프론트엔드</div>
+              </div>
+            </label>    
           </div>
           <div className="choosejob">
-            <div className="choosejobone">
-              <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("백엔드")} />
-              <div className="choosejob-text-basic">백엔드</div>
-            </div>
-            <div className="choosejobone">
-              <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("PM")} />
-              <div className="choosejob-text-basic">PM</div>
-            </div>
-            <div className="choosejobone">
-              <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("기타")} />
-              <div className="choosejob-text-basic">기타</div>
-            </div>
+            <label>
+              <div className="choosejobone">
+                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("백엔드")} />
+                <div className="choosejob-text-basic">백엔드</div>
+              </div>
+            </label>  
+            <label>
+              <div className="choosejobone">
+                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("PM")} />
+                <div className="choosejob-text-basic">PM</div>
+              </div>
+            </label>  
+            <label>
+              <div className="choosejobone">
+                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("기타")} />
+                <div className="choosejob-text-basic">기타</div>
+              </div>
+            </label>
           </div>
 
           <div className="input-text-basic">경력 여부</div>
           <div className="choosejob" id="pick">
-            <div className="choosejobone" id="carrer">
-              <input type="radio" className="custom-checkbox" name="career" onChange={() => handleCarrerChange("신입")} />
-              <div className="choosejob-text-basic">신입</div>
-            </div>
-            <div className="choosejobone" id="carrer">
-              <input type="radio" className="custom-checkbox" name="career" onChange={() => handleCarrerChange("경력")} />
-              <div className="choosejob-text-basic">경력</div>
-            </div>
+            <label>
+              <div className="choosejobone" id="carrer">
+                <input type="radio" className="custom-checkbox" name="career" onChange={() => handleCarrerChange("신입")} />
+                <div className="choosejob-text-basic">신입</div>
+              </div>
+            </label>
+            <label>
+              <div className="choosejobone" id="carrer">
+                <input type="radio" className="custom-checkbox" name="career" onChange={() => handleCarrerChange("경력")} />
+                <div className="choosejob-text-basic">경력</div>
+              </div>
+            </label>
           </div>
 
           <div className="enrollbutton">

@@ -18,7 +18,7 @@ const LoginPage = () => {
 
   const isLoggedIn = useSelector(selectLoggedIn);
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -31,13 +31,15 @@ const LoginPage = () => {
     };
 
     try {
-      // const response = await axios.post("http://43.202.98.45:8089/login", userData);
-      const response = await axios.post("http://localhost:8089/login", userData);
+      const response = await axios.post("http://43.202.98.45:8089/login", userData);
       console.log(response.data);
       console.log(response.data.name);
       const token = response.data.token;
       const name = response.data.name;
       const email = response.data.email;
+      if (response.status === 400) {
+        alert("회원을 찾지 못했습니다.");
+      }
       console.log(token);
       console.log(name);
       console.log(email);
@@ -47,10 +49,15 @@ const LoginPage = () => {
       // dispatch(setCredentials({ name, email, token }))
       console.log(`로그인여부 :${isLoggedIn}`);
       // window.location.href = "/";
-      // navigate(-1);
-      window.location.reload();
+      navigate(-1);
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
     } catch (error) {
-      console.error(error);
+      if (error.response.status === 500) {
+        // 서버 내부 에러 처리
+        alert("로그인에 실패했습니다. ");
+      }
     }
   };
 
@@ -63,13 +70,14 @@ const LoginPage = () => {
           </h1>
           <div className="input-text">이메일</div>
           <input type="text" className="input-box" tabIndex="1" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <div className="input-text" tabIndex="2">
+          <div className="input-text">
             비밀번호
           </div>
           <div className="input-container">
             <input
               type={showPassword ? "text" : "password"}
               className="input-box"
+              tabIndex="2"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
