@@ -66,45 +66,48 @@ public class BoardController {
 	
 	// 글 등록
 //	@PostMapping("/portfolio/build")
-//	@PostMapping(value = "/portfolio/build", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	@PostMapping(value = "/portfolio/build", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
+	@PostMapping(value = "/portfolio/build", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> registerBoard(
 //	        @RequestBody BoardDTO boardDTO, 
 	        @RequestPart(value = "board") BoardDTO boardDTO, 
 	        @RequestHeader("Authorization") String jwtToken, 
-	        @RequestPart(value = "mFileName", required = false) MultipartFile mFile, 
+	        @RequestPart(value = "bFileName", required = false) MultipartFile bFile, 
 			@RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile) 
 	        throws Exception {
 		
-	    boardService.create(boardDTO, mFile, bCoverFile, jwtToken);
+	    boardService.create(boardDTO, bFile, bCoverFile, jwtToken);
 	    
 	    return ResponseEntity.ok().build();
 	}
 
 	// 글 수정
-	@PutMapping("/portfolio/edit/{board_id}")
+//	@PutMapping("/portfolio/edit/{board_id}")
+	@PutMapping(value = "/portfolio/edit/{board_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> editBoard(
-	        @RequestBody BoardDTO boardDTO, 
+			@RequestPart(value = "board") BoardDTO boardDTO,
 	        @PathVariable("board_id") Long boardId,
 	        @RequestHeader("Authorization") String jwtToken, 
-	        @RequestPart(value = "file", required = false) MultipartFile file) 
+	        @RequestPart(value = "bFileName", required = false) MultipartFile bFile, 
+			@RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile) 
 	        throws Exception {
 		
 	    boardDTO.setBoardId(boardId);
-	    boardService.edit(boardDTO, file, jwtToken);
+	    boardService.edit(boardDTO, bFile, bCoverFile, jwtToken);
 	    
 	    return ResponseEntity.ok().build();
 	}
 	
 	// 글 삭제
-	@DeleteMapping("/portfolio/delete/{board_id}")
+//	@DeleteMapping("/portfolio/delete/{board_id}")
+	@DeleteMapping(value = "/portfolio/delete/{board_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> deleteBoard(
 			@PathVariable("board_id") Long boardId,
 	        @RequestHeader("Authorization") String jwtToken, 
-	        @RequestPart(value = "file", required = false) MultipartFile file) 
+	        @RequestPart(value = "bFileName", required = false) MultipartFile bFile, 
+			@RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile)
 	        throws Exception {
 		
-	    boardService.delete(boardId, file, jwtToken);
+	    boardService.delete(boardId, bFile, bCoverFile, jwtToken);
 	    return ResponseEntity.ok().build();
 	}
 	

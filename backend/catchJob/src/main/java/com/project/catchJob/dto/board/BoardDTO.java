@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 //import com.project.catchJob.domain.board.B_tag;
 import com.project.catchJob.domain.board.Board;
@@ -57,14 +58,16 @@ public class BoardDTO {
 	@JsonProperty("bCoverFileUrl")
 	private String bCoverFileUrl;
 	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	@JsonProperty("bDate")
 	private Date bDate;
 	
 	private List<String> tags;
 	
+	private boolean removeBFile;
+	private boolean removeBCoverFile;
+	
 	private BoardMemberDTO member;
-	// private MemberDTO member;
-	//private List<TagDTO> tags;
 	private List<B_commentsDTO> comments;
 	
 	// board에서 BoardDTO로 변환하는 메서드

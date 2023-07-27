@@ -79,7 +79,8 @@ public class BoardService {
 			Member member = commonService.getAuthenticatedMember(jwtToken)
 					.orElseThrow(UnauthorizedException::new);
 			return boards.stream()
-					.map(board -> BoardDTO.toDTO(board, member, bLikeRepo, fileUrlPath)) // member, bLikeRepo 전달
+//					.map(board -> BoardDTO.toDTO(board, member, bLikeRepo, fileUrlPath)) // member, bLikeRepo 전달
+					.map(board -> BoardDTO.toDTO(board, member, bLikeRepo, filePath)) // member, bLikeRepo 전달
 					.collect(Collectors.toList());
 		}
 		
@@ -90,7 +91,7 @@ public class BoardService {
 	}
 
 	// 글 등록
-	public void create(BoardDTO boardDTO, MultipartFile mFile, MultipartFile bCoverFile, String jwtToken) {
+	public void create(BoardDTO boardDTO, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
 
 	    Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 	    		.orElseThrow(UnauthorizedException::new);
@@ -104,16 +105,14 @@ public class BoardService {
 	            .build();
 
 	    // 파일 저장
-	    if(mFile != null && !mFile.isEmpty()) {
-	        String fileName = saveFile(mFile);
+	    if(bFile != null && !bFile.isEmpty()) {
+	        String fileName = saveFile(bFile);
 	        board.setBFileName(fileName);
 	    }
 	    if(bCoverFile != null && !bCoverFile.isEmpty()) {
 	    	String fileName = saveFile(bCoverFile);
 	    	board.setBCoverFileName(fileName);
 	    }
-	    
-
 	    boardRepo.save(board);
 	}
     
@@ -122,7 +121,7 @@ public class BoardService {
     	try {
 	    	// 저장 경로 지정
 	    	//String savePath = new File("").getAbsolutePath() + "/src/main/resources/static/upload/";
-    		String savePath = new File(uploadFolderPath).getAbsolutePath() + "/";
+    		String savePath = new File(filePath).getAbsolutePath() + "/";
     		File dir = new File(savePath);
     		if(!dir.exists()) {
     			dir.mkdir(); // 폴더 없다면 폴더 생성
@@ -144,7 +143,7 @@ public class BoardService {
     }
     
     // 글 수정
-    public void edit(BoardDTO boardDTO, MultipartFile file, String jwtToken) {
+    public void edit(BoardDTO boardDTO, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
     	
 	    Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 	    		.orElseThrow(UnauthorizedException::new);
@@ -159,17 +158,33 @@ public class BoardService {
 	    board.setBTitle(boardDTO.getBTitle());
 	    board.setBContents(boardDTO.getBContents());
 	    board.setTags(boardDTO.getTags());
+	    board.setBFileName(boardDTO.getBFileName());
+	    board.setBCoverFileName(boardDTO.getBCoverFileName());
 	 
+//	    // 파일 삭제
+//	    if(boardDTO.isRemoveBFile()) {
+	    
     	// 파일 저장
-	    if(file != null && !file.isEmpty()) {
-	    	String fileName = saveFile(file);
+	    if(bFile != null && !bFile.isEmpty()) {
+	    	String fileName = saveFile(bFile);
 	    	board.setBFileName(fileName);
+	    } else {
+	    	String fileName = saveFile(bFile);
+	    	deleteFile(fileName);
 	    }
+	    if(bCoverFile != null && !bCoverFile.isEmpty()) {
+	    	String fileName = saveFile(bCoverFile);
+	    	board.setBCoverFileName(fileName);
+	    } else {
+	    	String fileName = saveFile(bFile);
+	    	deleteFile(fileName);
+	    }
+	    
 	    boardRepo.save(board);
     }
     
     // 글 삭제
-    public void delete(Long boardId, MultipartFile file, String jwtToken) {
+    public void delete(Long boardId, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
     	
 	    Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 	    		.orElseThrow(UnauthorizedException::new);
@@ -181,7 +196,23 @@ public class BoardService {
 	    	throw new UnauthorizedException();
 	    }
 	    
+	    if(bFile != null && !bFile.isEmpty()) {
+	    	String fileName = board.getBFileName();
+	    	deleteFile(fileName);
+	    }
+	    if(bCoverFile != null && !bCoverFile.isEmpty()) {
+	    	String fileName = board.getBCoverFileName();
+	    	deleteFile(fileName);
+	    }
 	    boardRepo.deleteById(boardId);
+    }
+    
+    // 파일 삭제
+    public void deleteFile(String fileName) {
+    	File file = new File(filePath + fileName);
+    	if(file.exists()) {
+    		file.delete();
+    	}
     }
 
     //======================== 댓글 ========================

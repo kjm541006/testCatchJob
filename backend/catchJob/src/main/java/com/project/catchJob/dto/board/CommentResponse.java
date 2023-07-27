@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class CommentResponse {
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime commentDate;
 	
 	public CommentResponse(LocalDateTime commentDate) {
