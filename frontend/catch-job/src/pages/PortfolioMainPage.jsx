@@ -2,10 +2,10 @@ import { React, useEffect, useState } from "react";
 import styles from "../assets/css/PortfolioMain.module.css";
 import img from "../assets/img/port_img.jpeg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faCommentDots, faHeart, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faCommentDots, faHeart, faCheck, faPencil } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import PortfolioModal from "../components/PortfolioModal";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 const PortfolioMainPage = () => {
 
@@ -420,6 +420,12 @@ const PortfolioMainPage = () => {
             </div>
           ))}
         </div>
+        <Link to={"/portfolio/build"}>
+          <div className={styles.makeProject}>
+            <FontAwesomeIcon icon={faPencil} />
+            <div>글 쓰기</div>
+          </div>
+      </Link>
       </div>
       {isModalOpen && <PortfolioModal item={data.find((item) => item.boardId === selectedItemId)} onClose={() => setIsModalOpen(false)} />}
     </div>
