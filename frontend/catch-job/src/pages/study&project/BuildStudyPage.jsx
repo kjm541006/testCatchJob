@@ -21,6 +21,8 @@ const BuildStudyPage = () => {
   });
   const titleRef = useRef();
   const detail = useRef();
+  let buildData = {};
+
   const navigate = useNavigate();
 
   // const userEmail = localStorage.getItem("email");
@@ -84,7 +86,8 @@ const BuildStudyPage = () => {
       alert("모든 필드를 올바르게 입력해주세요.");
       return;
     }
-    const buildData = {
+    buildData = {
+      type: bType,
       title: titleValue,
       field: selectedField,
       term: selectedTerm,
@@ -96,9 +99,10 @@ const BuildStudyPage = () => {
     };
 
     try {
-      const response = await axios.post(`http://localhost:8089/build${bType}`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+      const response = await axios.post(`http://localhost:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
       console.log(response);
       if (response && response.status >= 200 && response.status < 300) {
+        alert("성공적으로 등록되었습니다.");
         navigate(-1);
       }
     } catch (error) {
@@ -106,14 +110,6 @@ const BuildStudyPage = () => {
       console.error("에러가 발생했습니다.", error);
     }
   };
-
-  useEffect(() => {
-    console.log(selectedField);
-    console.log(selectedTerm);
-    console.log(selectedPlatforms);
-    console.log(selectedLoc);
-    console.log(crewCounts);
-  }, [selectedField, selectedTerm, selectedPlatforms, selectedLoc, crewCounts]);
 
   return (
     <div className={styles.buildPage}>
@@ -130,7 +126,7 @@ const BuildStudyPage = () => {
       {/* =====================프로젝트 명======================= */}
       <div className={styles.wrapper}>
         <div className={styles.title}>프로젝트 명</div>
-        <input type="text" name="title" placeholder="제목" className={styles.titleInput} ref={titleRef} />
+        <input type="text" name="title" placeholder="제목" className={styles.titleInput} ref={titleRef} maxLength={30} />
       </div>
 
       {/* =====================프로젝트 분야======================= */}
@@ -344,7 +340,7 @@ const BuildStudyPage = () => {
             <span className={styles.typeName}>웹디자인 : </span>
             <div className={styles.plusMinusBtn}>
               <div className={styles.countNum}>
-                <input type="number" onChange={handleInputChange} name="webDesigner" defaultValue={0} />
+                <input type="number" onChange={handleInputChange} name="webDesigner" defaultValue={0} onFocus={(e) => e.target.select()} />
                 <span>명</span>
               </div>
             </div>
@@ -353,7 +349,7 @@ const BuildStudyPage = () => {
             <span className={styles.typeName}>웹퍼블리셔 : </span>
             <div className={styles.plusMinusBtn}>
               <div className={styles.countNum}>
-                <input type="number" onChange={handleInputChange} name="webPublisher" defaultValue={0} />
+                <input type="number" onChange={handleInputChange} name="webPublisher" defaultValue={0} onFocus={(e) => e.target.select()} />
                 <span>명</span>
               </div>
             </div>
@@ -362,7 +358,7 @@ const BuildStudyPage = () => {
             <span className={styles.typeName}>프론트엔드 : </span>
             <div className={styles.plusMinusBtn}>
               <div className={styles.countNum}>
-                <input type="number" onChange={handleInputChange} name="frontend" defaultValue={0} />
+                <input type="number" onChange={handleInputChange} name="frontend" defaultValue={0} onFocus={(e) => e.target.select()} />
                 <span>명</span>
               </div>
             </div>
@@ -371,7 +367,7 @@ const BuildStudyPage = () => {
             <span className={styles.typeName}>백엔드 : </span>
             <div className={styles.plusMinusBtn}>
               <div className={styles.countNum}>
-                <input type="number" onChange={handleInputChange} name="backend" defaultValue={0} />
+                <input type="number" onChange={handleInputChange} name="backend" defaultValue={0} onFocus={(e) => e.target.select()} />
                 <span>명</span>
               </div>
             </div>
@@ -380,7 +376,7 @@ const BuildStudyPage = () => {
             <span className={styles.typeName}>PM : </span>
             <div className={styles.plusMinusBtn}>
               <div className={styles.countNum}>
-                <input type="number" onChange={handleInputChange} name="PM" defaultValue={0} />
+                <input type="number" onChange={handleInputChange} name="PM" defaultValue={0} onFocus={(e) => e.target.select()} />
                 <span>명</span>
               </div>
             </div>
@@ -389,7 +385,7 @@ const BuildStudyPage = () => {
             <span className={styles.typeName}>기타 : </span>
             <div className={styles.plusMinusBtn}>
               <div className={styles.countNum}>
-                <input type="number" onChange={handleInputChange} name="others" defaultValue={0} />
+                <input type="number" onChange={handleInputChange} name="others" defaultValue={0} onFocus={(e) => e.target.select()} />
                 <span>명</span>
               </div>
             </div>
@@ -476,42 +472,3 @@ const BuildStudyPage = () => {
 };
 
 export default BuildStudyPage;
-
-// const handleSubmit = async (e) => {
-//   e.preventDefault(); // 기본 폼 제출을 막습니다.
-
-//   // 폼 필드의 데이터를 수집합니다.
-//   const formData = new FormData(e.target.closest("form"));
-//   const formValues = Object.fromEntries(formData.entries());
-
-//   // 얻은 데이터로 서버에 요청을 보냅니다.
-//   try {
-//     const response = await axios.post("http://localhost:8089/buildstudy", formValues); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
-//     // 필요한 경우 응답을 처리합니다.
-//   } catch (error) {
-//     // 요청에 실패한 경우 오류를 처리합니다.
-//   }
-//   window.location.href = "/study";
-// };
-
-// async function handleSubmit(e) {
-//   e.preventDefault();
-//   const formData = new FormData(e.target.closest("form"));
-//   const formValues = Object.fromEntries(formData.entries());
-
-// try {
-//   const response = await axios.post("http://localhost:8089/buildstudy?", formValues); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
-
-//   if (response.status === 200) {
-//     // 응답이 성공적으로 완료되었습니다.
-//     const data = await response.json(); // 응답에 대한 데이터를 JSON 형식으로 변환합니다. (필요한 경우)
-//     console.log("성공적으로 데이터가 전송되었습니다.", data);
-//   } else {
-//     // 응답이 실패하였습니다.
-//     console.error("데이터 전송에 실패했습니다.");
-//   }
-// } catch (error) {
-//   // 에러가 발생한 경우
-//   console.error("에러가 발생했습니다.", error);
-// }
-// }

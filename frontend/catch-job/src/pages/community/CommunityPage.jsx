@@ -100,7 +100,7 @@ function Card(props) {
 
   useEffect(() => {
     fetchCommunityData();
-  }, [selectedCategory]);
+  }, []);
 
   const toggleCommentModal = (i) => {
     setCommentModalOpen((prevCommentModalOpen) => {

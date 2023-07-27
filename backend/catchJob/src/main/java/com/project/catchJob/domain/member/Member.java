@@ -13,6 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.project.catchJob.domain.board.B_comments;
 import com.project.catchJob.domain.board.B_like;
 import com.project.catchJob.domain.board.Board;
@@ -38,12 +41,14 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = { 
-		"communityList", "c_CommentsList", "c_LikeList", 
-		"boardList", "b_CommentsList", "b_LikeList",
-		"studyList", "s_CommentsList", "s_LikeList", "s_ReasonList",
-		"projectList", "p_CommentsList", "p_LikeList", "p_ReasonList"})
+//@ToString(exclude = { 
+//		"communityList", "c_CommentsList", "c_LikeList", 
+//		"boardList", "b_CommentsList", "b_LikeList",
+//		"studyList", "s_CommentsList", "s_LikeList", "s_ReasonList",
+//		"projectList", "p_CommentsList", "p_LikeList", "p_ReasonList"})
+//@ToString(exclude = {"projectList"})
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "memberId")
 public class Member {
 
 	@Id
@@ -116,8 +121,8 @@ public class Member {
 	
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<S_reason> s_ReasonList = new ArrayList<>();
-	
-	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+//	
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
 	private List<Project> projectList = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)

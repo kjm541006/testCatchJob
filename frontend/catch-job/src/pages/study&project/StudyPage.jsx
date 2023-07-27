@@ -3,25 +3,36 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPencil } from "@fortawesome/free-solid-svg-icons";
 import styles from "../../assets/css/study/Study.module.css";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { startLoading, stopLoading } from "../../redux/store";
+import Select from "react-select";
 
 const StudyPage = () => {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.loading.isLoading);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       dispatch(startLoading());
 
+      // try {
+      //   const response = await axios.get("https://jsonplaceholder.typicode.com/posts/");
+      //   setData(response.data);
+      // } catch (error) {
+      //   // console.error("Error fetching data:", error);
+      //   alert("에러가 발생했습니다.");
+      // } finally {
+      //   dispatch(stopLoading());
+      // }
       try {
-        const response = await axios.get("https://jsonplaceholder.typicode.com/posts/");
+        const response = await axios.get("http://localhost:8089/project");
         setData(response.data);
+        console.log(response.data);
       } catch (error) {
-        // console.error("Error fetching data:", error);
         alert("에러가 발생했습니다.");
       } finally {
         dispatch(stopLoading());
@@ -42,6 +53,13 @@ const StudyPage = () => {
 
   const addHeart = () => {};
 
+  const options = [{ value: "전체" }, { value: "스터디" }, { value: "프로젝트" }];
+  const [sortedOption, setSortedOption] = useState(null);
+
+  const handleOptionChange = (option) => {
+    setSortedOption(option);
+  };
+
   return (
     <>
       {isLoading ? (
@@ -57,21 +75,28 @@ const StudyPage = () => {
                 <span className={styles.new}>최신순</span>
               </div>
               <div className={styles.showSelected}>
-                <select value={selectedOption} onChange={handleOptionSelect} className={styles.selected}>
+                {/* <select value={selectedOption} onChange={handleOptionSelect} className={styles.selected}>
                   <option value="">전체</option>
                   <option value="study">스터디</option>
                   <option value="project">프로젝트</option>
                   <option value="like">좋아요</option>
-                </select>
+                </select> */}
+                <Select defaultValue={options[0]} isClearable={false} isSearchable={false} options={options} />
               </div>
             </div>
             <div className={styles.studyGridView}>
               {/* key db id로 변경해야함 */}
               {data.map((v, i) => {
                 return (
-                  <div key={i} className={styles.studyGridElement}>
+                  <div
+                    key={i}
+                    className={styles.studyGridElement}
+                    onClick={() =>
+                      v.bType === "project" ? navigate(`/projectDetail?id=${v.projectId}`) : navigate(`/studyDetail?id=${v.studyId}`)
+                    }
+                  >
                     <div className={styles.type}>
-                      {true && (
+                      {v.type === "study" && (
                         <>
                           <div className={styles.typeWord}>S</div>
                           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
@@ -106,9 +131,9 @@ const StudyPage = () => {
                       <h2>{v.title}</h2>
                     </div>
                     <div className={styles.tagsWrap}>
-                      <div className={`${styles.tag} ${styles.tag1}`}>온라인</div>
-                      <div className={`${styles.tag} ${styles.tag2}`}>프로그래밍</div>
-                      <div className={`${styles.tag} ${styles.tag3}`}>3개월</div>
+                      <div className={`${styles.tag} ${styles.tag1}`}>{v.loc}</div>
+                      <div className={`${styles.tag} ${styles.tag2}`}>{v.field}</div>
+                      <div className={`${styles.tag} ${styles.tag3}`}>{v.term}</div>
                     </div>
                     <div className={styles.countHeart}>
                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -129,12 +154,12 @@ const StudyPage = () => {
                 );
               })}
             </div>
-            <Link to={"/study/build"}>
-              <div className={styles.makeProject}>
+            <div className={styles.makeProjectBtnWrapper}>
+              <Link to={"/study/build"} className={styles.makeProject}>
                 <FontAwesomeIcon icon={faPencil} />
                 <div>글 쓰기</div>
-              </div>
-            </Link>
+              </Link>
+            </div>
           </div>
         </div>
       )}
