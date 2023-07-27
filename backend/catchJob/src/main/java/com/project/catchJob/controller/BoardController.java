@@ -2,11 +2,10 @@ package com.project.catchJob.controller;
 
 import java.util.List;
 
-import javax.persistence.EntityNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +15,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.project.catchJob.domain.board.B_comments;
 import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.board.B_commentsDTO;
@@ -68,14 +65,18 @@ public class BoardController {
 	}
 	
 	// 글 등록
-	@PostMapping("/portfolio/build")
+//	@PostMapping("/portfolio/build")
+//	@PostMapping(value = "/portfolio/build", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "/portfolio/build", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
 	public ResponseEntity<?> registerBoard(
-	        @RequestBody BoardDTO boardDTO, 
+//	        @RequestBody BoardDTO boardDTO, 
+	        @RequestPart(value = "board") BoardDTO boardDTO, 
 	        @RequestHeader("Authorization") String jwtToken, 
-	        @RequestPart(value = "file", required = false) MultipartFile file) 
+	        @RequestPart(value = "mFileName", required = false) MultipartFile mFile, 
+			@RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile) 
 	        throws Exception {
 		
-	    boardService.create(boardDTO, file, jwtToken);
+	    boardService.create(boardDTO, mFile, bCoverFile, jwtToken);
 	    
 	    return ResponseEntity.ok().build();
 	}

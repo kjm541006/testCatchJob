@@ -90,7 +90,7 @@ public class BoardService {
 	}
 
 	// 글 등록
-	public void create(BoardDTO boardDTO, MultipartFile file, String jwtToken) {
+	public void create(BoardDTO boardDTO, MultipartFile mFile, MultipartFile bCoverFile, String jwtToken) {
 
 	    Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 	    		.orElseThrow(UnauthorizedException::new);
@@ -104,10 +104,15 @@ public class BoardService {
 	            .build();
 
 	    // 파일 저장
-	    if(file != null && !file.isEmpty()) {
-	        String fileName = saveFile(file);
+	    if(mFile != null && !mFile.isEmpty()) {
+	        String fileName = saveFile(mFile);
 	        board.setBFileName(fileName);
 	    }
+	    if(bCoverFile != null && !bCoverFile.isEmpty()) {
+	    	String fileName = saveFile(bCoverFile);
+	    	board.setBCoverFileName(fileName);
+	    }
+	    
 
 	    boardRepo.save(board);
 	}
