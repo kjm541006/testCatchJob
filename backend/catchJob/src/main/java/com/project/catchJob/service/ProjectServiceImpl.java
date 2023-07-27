@@ -1,6 +1,8 @@
 package com.project.catchJob.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,15 +31,6 @@ public class ProjectServiceImpl implements ProjectService {
 	@Autowired
     private JwtUtils jwtUtils;
 	
-
-//	public Project addProject(ProjectDTO projectDTO) {
-//		Project project = new Project();
-//
-//
-//	    projectRepository.save(project);
-//	    return project;
-//	}
-	
 	@Override
 	public Project addProject(ProjectDTO projectDTO, String userEmail) {
 		Member member = memberRepository.findByEmail(projectDTO.getEmail());
@@ -46,10 +39,8 @@ public class ProjectServiceImpl implements ProjectService {
         project.setTitle(projectDTO.getTitle());
         project.setField(projectDTO.getField());
         project.setTerm(projectDTO.getTerm());
-//        project.setPlatform(projectDTO.getPlatform());
-//        project.setPlatforms(new HashSet<>(projectDTO.getPlatforms()));
-        project.setPlatforms(projectDTO.getPlatforms() != null ? new HashSet<>(projectDTO.getPlatforms()) : new HashSet<>());
-
+        project.setPlatforms(projectDTO.getPlatforms() != null ? new ArrayList<>(projectDTO.getPlatforms()) : new ArrayList<>());
+        project.setType(projectDTO.getType());
         project.setLoc(projectDTO.getLoc());
         project.setCrew(projectDTO.getCrew());
         project.setDetail(projectDTO.getDetail());
@@ -57,5 +48,9 @@ public class ProjectServiceImpl implements ProjectService {
 		
         return projectRepository.save(project);
 	}
+	
+	 public List<Project> getAllProjects() {
+	        return projectRepository.findAll();
+	    }
 
 }
