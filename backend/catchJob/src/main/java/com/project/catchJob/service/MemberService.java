@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+//import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -130,13 +130,13 @@ public class MemberService {
 		}
 	}
 	
-	public Member findMemberByEmail(String userEmail) {
-	    Member member = memberRepo.findByEmail(userEmail);
-	    if (member == null) {
-	        throw new UsernameNotFoundException("Member not found with email: " + userEmail);
-	    }
-	    return member;
-	}
+//	public Member findMemberByEmail(String userEmail) {
+//	    Member member = memberRepo.findByEmail(userEmail);
+//	    if (member == null) {
+//	        throw new UsernameNotFoundException("Member not found with email: " + userEmail);
+//	    }
+//	    return member;
+//	}
 
 
 }
