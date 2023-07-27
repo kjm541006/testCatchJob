@@ -2,7 +2,9 @@ package com.project.catchJob.dto.member;
 
 
 import org.springframework.web.multipart.MultipartFile;
+
 import com.project.catchJob.domain.member.Member;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +36,10 @@ public class MemberDTO {
 	
 	public static MemberDTO toMemberDTO(Member member) {
 		
+		if(member == null) {
+			throw new IllegalArgumentException("member가 null값");
+		}
+		
 		MemberDTO memberDTO = new MemberDTO();
 
 		memberDTO.setName(member.getName());
@@ -55,5 +61,16 @@ public class MemberDTO {
 		}
 		return memberDTO;
 	}
+	
+	public static MemberDTO fromMember(Member member) {
+		return MemberDTO.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .pwd(member.getPwd())
+                .job(member.getJob())
+                .hasCareer(member.getHasCareer())
+                .token(null) // token 필드는 null로 설정하거나 생략
+                .build();
+    }
 	
 }
