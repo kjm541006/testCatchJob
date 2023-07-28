@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -180,5 +181,14 @@ public class BoardController {
 		int updatedReadCount = board.getBCnt();
 		
 		return ResponseEntity.ok(updatedReadCount);
+	}
+	
+	//======================== 검색 ========================
+	
+	// 검색
+	@GetMapping("/search")
+	public ResponseEntity<?> search(@RequestParam String keyword) {
+		List<Object> result = commonService.search(keyword);
+		return ResponseEntity.ok(result);
 	}
 }

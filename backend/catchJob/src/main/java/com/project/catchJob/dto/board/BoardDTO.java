@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 //import com.project.catchJob.domain.board.B_tag;
 import com.project.catchJob.domain.board.Board;
@@ -80,12 +81,21 @@ public class BoardDTO {
 //		memberDTO.setName(member.getName());
 		//memberDTO.setMOriginalFileName(member.getMProfile().getMOriginalFileName());
 
-		BoardMemberDTO memberDTO = new BoardMemberDTO();
+		// 구현 되는 코드
+//		BoardMemberDTO memberDTO = new BoardMemberDTO();
+//		Member member = board.getMember();
+//		if(member != null) {
+//			memberDTO.setEmail(board.getMember().getEmail());
+//			memberDTO.setName(board.getMember().getName());
+//			//memberDTO.setMOriginalFileName(board.getMember().getMProfile().getMOriginalFileName());
+//		}
+		BoardMemberDTO memberDTO = null;
 		Member writer = board.getMember();
-		if(writer != null) {
-			memberDTO.setEmail(board.getMember().getEmail());
-			memberDTO.setName(board.getMember().getName());
-			//memberDTO.setMOriginalFileName(board.getMember().getMProfile().getMOriginalFileName());
+		if (writer != null) {
+		    memberDTO = new BoardMemberDTO();
+		    memberDTO.setEmail(writer.getEmail());
+		    memberDTO.setName(writer.getName());
+		    // memberDTO.setMOriginalFileName(writer.getMProfile().getMOriginalFileName());
 		}
 		
 		// 내가 좋아요했는지 여부 확인
@@ -142,12 +152,21 @@ public class BoardDTO {
 	// 로그인하지 않은 사용자
 	public static BoardDTO toDTOWithoutMember(Board board, String filePath) {
 		// 필요한 사용자 정보를 memberDTO에 저장
-		BoardMemberDTO memberDTO = new BoardMemberDTO();
+		// 구현 되는 코드
+//		BoardMemberDTO memberDTO = new BoardMemberDTO();
+//		Member member = board.getMember();
+//		if(member != null) {
+//			memberDTO.setEmail(board.getMember().getEmail());
+//			memberDTO.setName(board.getMember().getName());
+//			//memberDTO.setMOriginalFileName(board.getMember().getMProfile().getMOriginalFileName());
+//		}
+		BoardMemberDTO memberDTO = null;
 		Member member = board.getMember();
-		if(member != null) {
-			memberDTO.setEmail(board.getMember().getEmail());
-			memberDTO.setName(board.getMember().getName());
-			//memberDTO.setMOriginalFileName(board.getMember().getMProfile().getMOriginalFileName());
+		if (member != null) {
+		    memberDTO = new BoardMemberDTO();
+		    memberDTO.setEmail(member.getEmail());
+		    memberDTO.setName(member.getName());
+		    // memberDTO.setMOriginalFileName(member.getMProfile().getMOriginalFileName());
 		}
 
 		int bComment = board.getBoardCommentsList().size(); // 댓글 수 계산
