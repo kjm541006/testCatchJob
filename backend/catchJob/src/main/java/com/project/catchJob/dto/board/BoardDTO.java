@@ -50,14 +50,14 @@ public class BoardDTO {
 	@JsonProperty("bFileName")
 	private String bFileName;
 	
-	@JsonProperty("bFileUrl")
-	private String bFileUrl;
+//	@JsonProperty("bFileUrl")
+//	private String bFileUrl;
 	
 	@JsonProperty("bCoverFileName")
 	private String bCoverFileName;
 	
-	@JsonProperty("bCoverFileUrl")
-	private String bCoverFileUrl;
+//	@JsonProperty("bCoverFileUrl")
+//	private String bCoverFileUrl;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	@JsonProperty("bDate")
@@ -129,9 +129,9 @@ public class BoardDTO {
 				.isLike(isLike) // isLike 설정
 				.bComment(bComment)
 				.bFileName(board.getBFileName())
-				.bFileUrl(bFileUrl)
+//				.bFileUrl(bFileUrl)
 				.bCoverFileName(board.getBCoverFileName())
-				.bCoverFileUrl(bCoverFileUrl)
+//				.bCoverFileUrl(bCoverFileUrl)
 				.bDate(board.getBDate())
 				.member(memberDTO) // 멤버 정보 설정
 				.tags(board.getTags()) // 태그
@@ -193,9 +193,9 @@ public class BoardDTO {
 				.isLike(false) // 로그인하지 않은 사용자는 항상 false
 				.bComment(bComment) // 댓글 수 계산
 				.bFileName(board.getBFileName())
-				.bFileUrl(bFileUrl)
+//				.bFileUrl(bFileUrl)
 				.bCoverFileName(board.getBCoverFileName())
-				.bCoverFileUrl(bCoverFileUrl)
+//				.bCoverFileUrl(bCoverFileUrl)
 				.bDate(board.getBDate())
 				.member(memberDTO) // 멤버 정보 설정
 				.tags(board.getTags()) // 태그

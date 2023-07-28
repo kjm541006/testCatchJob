@@ -4,6 +4,7 @@ package com.project.catchJob.service;
 import java.io.File;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +36,8 @@ public class MemberService {
 
 	@Autowired
 	private CommonService commonService;
+	
+	@Value("${file.path}") private String filePath;
 	
 	/*
 	// 회원가입
@@ -77,7 +80,8 @@ public class MemberService {
 			MultipartFile mProfile = memberDTO.getMProfile(); // DTO에 담긴 파일 가져옴
 			String originalFileName = mProfile.getOriginalFilename(); // 파일 이름 가져옴
 			String storedFileName = System.currentTimeMillis() + "_" + originalFileName; // 서버 저장용 이름
-			String savePath = "C:/Users/권유진/Desktop/딩딩_학원실습/temp/" + storedFileName; // 저장 경로 설정
+//			String savePath = "C:/Users/권유진/Desktop/딩딩_학원실습/temp/" + storedFileName; // 저장 경로 설정
+			String savePath = filePath + storedFileName; // 저장 경로 설정
 			mProfile.transferTo(new File(savePath)); // 해당 경로에 파일 저장
 			Member member = Member.builder()
 					.email(memberDTO.getEmail())
