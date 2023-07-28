@@ -4,7 +4,8 @@ import 'react-quill/dist/quill.snow.css'; // 테마 스타일 가져오기
 import styles from '../assets/css/BuildPortfolio.module.css';
 function MyComponent() {
   const [value, setValue] = useState("");
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
+  const [uploadedFile, setUploadedFile] = useState('');
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -13,6 +14,12 @@ function MyComponent() {
   const handleChange = (content) => {
     setValue(content);
   };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0]; 
+    setUploadedFile(file.name); 
+  };
+  
 
   const modules = {
     toolbar: [
@@ -43,12 +50,20 @@ function MyComponent() {
           theme="snow"
           className={`${styles.customQuillEditor}`}
         />
+        
       </div>
       <div className={`${styles.addThings}`}>
-        <button className={`${styles.addButtons}`}>파일 업로드</button>
+      <input
+          type="file"
+          id="fileUpload"
+          style={{ display: 'none' }}
+          onChange={handleFileUpload}
+        />
+        <button className={`${styles.addButtons}`}  onClick={() => document.getElementById("fileUpload").click()}>파일 업로드</button>
         <button className={`${styles.addButtons}`}>세부 사항 설정</button>
         <button className={`${styles.saveContent}`}>저<span style={{marginLeft:"20px"}}></span>장</button>
       </div>
+      <div className={`${styles.fileName}`}><span>{uploadedFile}</span>{uploadedFile && <span className={`${styles.removeBtn}`} onClick={() => setUploadedFile('')}>X</span>}</div>
     </div>
   );
   
