@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../assets/css/BasicSignin.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 const BasicSigninPage = () => {
@@ -211,7 +212,7 @@ const BasicSigninPage = () => {
 
           <div className="log-in-basic">
             <div className="entire-text-basic">이미 계정이 있으신가요?</div>
-            <button className="log-in-now-basic">로그인 하기</button>
+            <Link to="/login" className="log-in-now-basic">로그인 하기</Link>
           </div>
         </div>
       </div>

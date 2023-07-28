@@ -1,6 +1,6 @@
 package com.project.catchJob.domain.board;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,14 +9,22 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.catchJob.domain.member.Member;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Builder
 @ToString(exclude = {"member", "board"})
 @Entity
 public class B_comments {
@@ -26,9 +34,14 @@ public class B_comments {
 	
 	private String bComContent; // 댓글 내용
 	
-	@Column(insertable = false, updatable = false, columnDefinition = "date default now()")
-	private Date bComDate; // 댓글 작성날짜
+//	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+//	@Column(insertable = false, updatable = false, columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
+	@CreationTimestamp
+	@Column(nullable = false, updatable = false)
+	private LocalDateTime bComDate; // 댓글 작성날짜
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member member;
@@ -38,6 +51,7 @@ public class B_comments {
 		member.getB_CommentsList().add(this);
 	}
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "board_id", nullable = false, updatable = false)
 	private Board board;

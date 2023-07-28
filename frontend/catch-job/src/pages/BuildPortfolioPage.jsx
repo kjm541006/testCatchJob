@@ -1,41 +1,77 @@
-import React, {useState} from 'react';
-import { HtmlEditor, Image, Inject, Link, QuickToolbar, RichTextEditorComponent, Toolbar } from '@syncfusion/ej2-react-richtexteditor';
+import React, { useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // 테마 스타일 가져오기
 import styles from '../assets/css/BuildPortfolio.module.css';
-import '@syncfusion/ej2-base/styles/material.css';
-import '@syncfusion/ej2-buttons/styles/material.css';
-import '@syncfusion/ej2-inputs/styles/material.css';
-import '@syncfusion/ej2-navigations/styles/material.css';
-import '@syncfusion/ej2-popups/styles/material.css';
-import '@syncfusion/ej2-splitbuttons/styles/material.css';
-import '@syncfusion/ej2-react-richtexteditor/styles/material.css';
-import "@syncfusion/ej2-icons/styles/material.css";
-import { enableRipple } from '@syncfusion/ej2-base';
-enableRipple(true);
+import DetailModal from "../components/DetailModal";
 
 const BuildPortfolioPage = () => {
-
-  const [title, setTitle] = useState('');
+  const [value, setValue] = useState("");
+  const [title, setTitle] = useState("");
+  const [uploadedFile, setUploadedFile] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   }
 
-  return(
-  <div className={`${styles.wrapper}`}>
-   <input type="text"
-          tabIndex="1"
-          name="email"
-          value={title}
-          onChange={handleTitleChange}
-          placeholder="제목을 입력하세요" 
-          className={`${styles.realEditorTitle}`}></input>
-    <div className={`${styles.realEditor}`}  tabIndex="2">
-      <RichTextEditorComponent height="800px" >
-        <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
-      </RichTextEditorComponent>
-    </div>
-  </div>
-  );
-};
-export default BuildPortfolioPage;
+  const handleChange = (content) => {
+    setValue(content);
+  };
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0]; 
+    setUploadedFile(file.name); 
+  };
+  
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+      ["image"]
+    ],
+  };
+
+  return (
+    <>
+    <div className={`${styles.wrapper}`}>
+      <input
+        type="text"
+        tabIndex="1"
+        name="email"
+        value={title}
+        onChange={handleTitleChange}
+        placeholder="제목을 입력하세요"
+        className={`${styles.realEditorTitle}`}
+      ></input>
+      <div className={`${styles.realEditor}`} tabIndex="2" style={{ width: '1200px', height: '800px' }}>
+        <style>{`.ql-container.ql-snow .ql-editor {font-size: 16px;}`}</style>
+        <ReactQuill
+          value={value}
+          onChange={handleChange}
+          modules={modules}
+          theme="snow"
+          className={`${styles.customQuillEditor}`}
+        />
+      </div>
+      <div className={`${styles.fileName}`}><span>{uploadedFile}</span>{uploadedFile && <span className={`${styles.removeBtn}`} onClick={() => setUploadedFile('')}>X</span>}</div>
+    </div>
+    <div className={`${styles.addThings}`}>
+      <input
+          type="file"
+          id="fileUpload"
+          style={{ display: 'none' }}
+          onChange={handleFileUpload}
+        />
+        <button className={`${styles.addButtons}`}  onClick={() => document.getElementById("fileUpload").click()}>파일 업로드</button>
+        <button to={"/detail"} className={`${styles.addButtons}`}  onClick={() => setShowModal(true)}>세부 사항 설정</button>
+        <button className={`${styles.saveContent}`}>저<span style={{marginLeft:"20px"}}></span>장</button>
+      </div>
+      {showModal && <DetailModal setShowModal={setShowModal} />}
+    </>
+  );
+  
+}
+
+export default BuildPortfolioPage;

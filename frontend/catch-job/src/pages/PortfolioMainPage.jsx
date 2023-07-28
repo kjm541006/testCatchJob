@@ -387,6 +387,19 @@ const PortfolioMainPage = () => {
       });
   }, []);
 
+  // useEffect(() => {
+  //   axios
+  //     .get("http://43.202.98.45:8089/")
+  //     .then((response) => {
+  //       setData(response.data);
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("데이터 가져오기 에러:", error);
+  //     });
+  // }, []);
+  //주석처리한거 나중에는 풀고 사용하기
+
   const handleElementClick = (itemId) => {
     setSelectedItemId(itemId);
     setIsModalOpen(true);

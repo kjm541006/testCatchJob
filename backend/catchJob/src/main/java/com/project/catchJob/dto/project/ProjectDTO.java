@@ -50,4 +50,3 @@ public class ProjectDTO {
 //	private List<P_reasonDTO> projectReasonList;
 //	
 //	private List<P_memberDTO> projectMemberList;	
-

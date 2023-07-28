@@ -1,27 +1,8 @@
 package com.project.catchJob.domain.member;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.catchJob.dto.member.GoogleOAuthTokenDTO;
-import com.project.catchJob.dto.member.GoogleUserInfoDTO;
-import com.project.catchJob.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 
 @Component
