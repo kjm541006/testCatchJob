@@ -14,6 +14,7 @@ import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.member.BoardMemberDTO;
 import com.project.catchJob.repository.board.B_likeRepository;
+import com.project.catchJob.service.BoardService;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -71,7 +72,7 @@ public class BoardDTO {
 	private List<B_commentsDTO> comments;
 	
 	// board에서 BoardDTO로 변환하는 메서드
-	public static BoardDTO toDTO(Board board, Member member, B_likeRepository bLikeRepo, String filePath) {
+	public static BoardDTO toDTO(Board board, Member member, BoardService boardService, String filePath) {
 		
 		// 필요한 사용자 정보를 memberDTO에 저장
 //		MemberDTO memberDTO = new MemberDTO();
@@ -88,7 +89,8 @@ public class BoardDTO {
 		}
 		
 		// 내가 좋아요했는지 여부 확인
-		boolean isLike = bLikeRepo.findByMemberAndBoard(member, board).isPresent();
+//		boolean isLike = bLikeRepo.findByMemberAndBoard(member, board).isPresent();
+		boolean isLike = boardService.isUserLiked(member.getEmail(), board.getBoardId());
 		
 //		List<TagDTO> tagDTOList = board.getBoardTagList().stream()
 //			    .map(bTag -> {

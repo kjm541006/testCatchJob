@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.catchJob.domain.member.M_profile;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.member.MemberDTO;
+import com.project.catchJob.exception.UnauthorizedException;
 import com.project.catchJob.repository.member.M_ProfileRepository;
 import com.project.catchJob.repository.member.MemberRepository;
 import com.project.catchJob.security.PasswordEncoder;
@@ -23,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional // memberRepo와 mProfileRepo 하나라도 실패하면 롤백
 public class MemberService {
 	
-	@Autowired
+	@Autowired 
 	private MemberRepository memberRepo;
 	
 	@Autowired
@@ -32,6 +33,8 @@ public class MemberService {
 	@Autowired
 	private PasswordEncoder pwdEncoder;
 
+	@Autowired
+	private CommonService commonService;
 	
 	/*
 	// 회원가입
@@ -95,7 +98,7 @@ public class MemberService {
 	}
 	
 	
-//	 로그인
+	// 로그인
 	public Member getByCredentials(final String email, final String pwd, final PasswordEncoder pwdEncoder) {
 		
 		final Member originMember = memberRepo.findByEmail(email);
@@ -107,7 +110,6 @@ public class MemberService {
 		return null;
 	}
 
-	
 	// 회원수정
 	public Member updateMember(MemberDTO member) {
 		

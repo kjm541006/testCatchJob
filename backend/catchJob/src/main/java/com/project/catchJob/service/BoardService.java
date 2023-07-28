@@ -80,7 +80,7 @@ public class BoardService {
 					.orElseThrow(UnauthorizedException::new);
 			return boards.stream()
 //					.map(board -> BoardDTO.toDTO(board, member, bLikeRepo, fileUrlPath)) // member, bLikeRepo 전달
-					.map(board -> BoardDTO.toDTO(board, member, bLikeRepo, filePath)) // member, bLikeRepo 전달
+					.map(board -> BoardDTO.toDTO(board, member, this, filePath)) // member, bLikeRepo 전달
 					.collect(Collectors.toList());
 		}
 		
@@ -270,18 +270,21 @@ public class BoardService {
     //======================== 좋아요 ========================
     
     // 좋아요 확인
-    public boolean hasUserLiked(String email, Long boardId) throws Exception {
-    	Member member = memberRepo.findOptionalByEmail(email)
-	            .orElseThrow(() -> new NotFoundException());
-
-	    Board board = boardRepo.findById(boardId)
-	            .orElseThrow(() -> new NotFoundException());
-	   
-	    Optional<B_like> like = bLikeRepo.findByMemberAndBoard(member, board);
-	    return like.isPresent();
+    public boolean isUserLiked(String email, Long boardId) {
+    	Member member = memberRepo.findOptionalByEmail(email).orElse(null);
+    	if(member == null) {
+    		return false;
+    	} 
+    	
+    	Board board = boardRepo.findById(boardId).orElse(null);
+    	if(board == null) {
+    		return false;
+    	}
+    	
+    	Optional<B_like> like = bLikeRepo.findByMemberAndBoard(member, board);
+    	return like.isPresent();
     }
-    
-    
+  
 	// 좋아요 추가
 	public void insert(String email, Long boardId) throws Exception {
 	    Member member = memberRepo.findOptionalByEmail(email)

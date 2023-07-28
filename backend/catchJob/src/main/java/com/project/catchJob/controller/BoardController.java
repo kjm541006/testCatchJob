@@ -155,12 +155,13 @@ public class BoardController {
 	public ResponseEntity<?> like(@RequestHeader("Authorization") String jwtToken, @PathVariable("board_id") Long boardId) throws Exception {
 		Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken).orElseThrow(UnauthorizedException::new);
 		String email = authenticatedMember.getEmail();
-		boolean isLiked = boardService.hasUserLiked(email, boardId);
+		boolean isLiked = boardService.isUserLiked(email, boardId);
 		
 		Board board;
 		if(isLiked) {
 			boardService.delete(email, boardId);
 			board = boardService.updateLike(boardId, false);
+			
 		} else {
 			boardService.insert(email, boardId);
 			board = boardService.updateLike(boardId, true);
