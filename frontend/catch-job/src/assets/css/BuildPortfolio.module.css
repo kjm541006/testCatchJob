@@ -18,7 +18,7 @@
 .realEditor {
   display: flex;
   align-items: center;
-  margin: 50px auto;
+  margin: 50px auto 20px auto;
   border: 1px solid #b2b2b2;
   border-radius: 3px;
   width: 1200px;
@@ -30,6 +30,7 @@
   width: 100%;
   height: 100%;
   overflow-y: auto;
+  color:#444444;
 }
 
 .addThings{
@@ -66,7 +67,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 30px;
   width: 183px;
   height: 40px;
   border-radius: 3px;
@@ -81,4 +82,23 @@
 .saveContent:active{
   background-color:#ffffff;
   border:none;
+}
+
+.fileName{
+  display: flex;
+  align-items: center;
+  border: 1px solid #b2b2b2 ;
+  border-radius: 3px;
+  width: 1200px;
+  height: 40px;
+  font-size: 16px;
+  color: #444444;
+  padding-left: 10px;
+}
+
+.removeBtn {
+  margin-left: 0.5rem;
+  color: #E2432E;
+  cursor: pointer;
+  font-size: 13px;
 }
