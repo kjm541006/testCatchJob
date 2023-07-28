@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 //import com.project.catchJob.domain.board.B_tag;
 import com.project.catchJob.domain.board.Board;
@@ -14,6 +15,7 @@ import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.member.BoardMemberDTO;
 import com.project.catchJob.repository.board.B_likeRepository;
+import com.project.catchJob.service.BoardService;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,14 +51,14 @@ public class BoardDTO {
 	@JsonProperty("bFileName")
 	private String bFileName;
 	
-	@JsonProperty("bFileUrl")
-	private String bFileUrl;
+//	@JsonProperty("bFileUrl")
+//	private String bFileUrl;
 	
 	@JsonProperty("bCoverFileName")
 	private String bCoverFileName;
 	
-	@JsonProperty("bCoverFileUrl")
-	private String bCoverFileUrl;
+//	@JsonProperty("bCoverFileUrl")
+//	private String bCoverFileUrl;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	@JsonProperty("bDate")
@@ -71,7 +73,7 @@ public class BoardDTO {
 	private List<B_commentsDTO> comments;
 	
 	// board에서 BoardDTO로 변환하는 메서드
-	public static BoardDTO toDTO(Board board, Member member, B_likeRepository bLikeRepo, String filePath) {
+	public static BoardDTO toDTO(Board board, Member member, BoardService boardService, String filePath) {
 		
 		// 필요한 사용자 정보를 memberDTO에 저장
 //		MemberDTO memberDTO = new MemberDTO();
@@ -79,16 +81,26 @@ public class BoardDTO {
 //		memberDTO.setName(member.getName());
 		//memberDTO.setMOriginalFileName(member.getMProfile().getMOriginalFileName());
 
-		BoardMemberDTO memberDTO = new BoardMemberDTO();
+		// 구현 되는 코드
+//		BoardMemberDTO memberDTO = new BoardMemberDTO();
+//		Member member = board.getMember();
+//		if(member != null) {
+//			memberDTO.setEmail(board.getMember().getEmail());
+//			memberDTO.setName(board.getMember().getName());
+//			//memberDTO.setMOriginalFileName(board.getMember().getMProfile().getMOriginalFileName());
+//		}
+		BoardMemberDTO memberDTO = null;
 		Member writer = board.getMember();
-		if(writer != null) {
-			memberDTO.setEmail(board.getMember().getEmail());
-			memberDTO.setName(board.getMember().getName());
-			//memberDTO.setMOriginalFileName(board.getMember().getMProfile().getMOriginalFileName());
+		if (writer != null) {
+		    memberDTO = new BoardMemberDTO();
+		    memberDTO.setEmail(writer.getEmail());
+		    memberDTO.setName(writer.getName());
+		    // memberDTO.setMOriginalFileName(writer.getMProfile().getMOriginalFileName());
 		}
 		
 		// 내가 좋아요했는지 여부 확인
-		boolean isLike = bLikeRepo.findByMemberAndBoard(member, board).isPresent();
+//		boolean isLike = bLikeRepo.findByMemberAndBoard(member, board).isPresent();
+		boolean isLike = boardService.isUserLiked(member.getEmail(), board.getBoardId());
 		
 //		List<TagDTO> tagDTOList = board.getBoardTagList().stream()
 //			    .map(bTag -> {
@@ -127,9 +139,9 @@ public class BoardDTO {
 				.isLike(isLike) // isLike 설정
 				.bComment(bComment)
 				.bFileName(board.getBFileName())
-				.bFileUrl(bFileUrl)
+//				.bFileUrl(bFileUrl)
 				.bCoverFileName(board.getBCoverFileName())
-				.bCoverFileUrl(bCoverFileUrl)
+//				.bCoverFileUrl(bCoverFileUrl)
 				.bDate(board.getBDate())
 				.member(memberDTO) // 멤버 정보 설정
 				.tags(board.getTags()) // 태그
@@ -140,12 +152,21 @@ public class BoardDTO {
 	// 로그인하지 않은 사용자
 	public static BoardDTO toDTOWithoutMember(Board board, String filePath) {
 		// 필요한 사용자 정보를 memberDTO에 저장
-		BoardMemberDTO memberDTO = new BoardMemberDTO();
+		// 구현 되는 코드
+//		BoardMemberDTO memberDTO = new BoardMemberDTO();
+//		Member member = board.getMember();
+//		if(member != null) {
+//			memberDTO.setEmail(board.getMember().getEmail());
+//			memberDTO.setName(board.getMember().getName());
+//			//memberDTO.setMOriginalFileName(board.getMember().getMProfile().getMOriginalFileName());
+//		}
+		BoardMemberDTO memberDTO = null;
 		Member member = board.getMember();
-		if(member != null) {
-			memberDTO.setEmail(board.getMember().getEmail());
-			memberDTO.setName(board.getMember().getName());
-			//memberDTO.setMOriginalFileName(board.getMember().getMProfile().getMOriginalFileName());
+		if (member != null) {
+		    memberDTO = new BoardMemberDTO();
+		    memberDTO.setEmail(member.getEmail());
+		    memberDTO.setName(member.getName());
+		    // memberDTO.setMOriginalFileName(member.getMProfile().getMOriginalFileName());
 		}
 
 		int bComment = board.getBoardCommentsList().size(); // 댓글 수 계산
@@ -191,9 +212,9 @@ public class BoardDTO {
 				.isLike(false) // 로그인하지 않은 사용자는 항상 false
 				.bComment(bComment) // 댓글 수 계산
 				.bFileName(board.getBFileName())
-				.bFileUrl(bFileUrl)
+//				.bFileUrl(bFileUrl)
 				.bCoverFileName(board.getBCoverFileName())
-				.bCoverFileUrl(bCoverFileUrl)
+//				.bCoverFileUrl(bCoverFileUrl)
 				.bDate(board.getBDate())
 				.member(memberDTO) // 멤버 정보 설정
 				.tags(board.getTags()) // 태그

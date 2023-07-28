@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.project.catchJob.domain.board.B_comments;
 import com.project.catchJob.domain.board.B_like;
@@ -38,12 +40,6 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = { 
-		"communityList", "c_CommentsList", 
-		"boardList", "b_CommentsList", "b_LikeList",
-		"studyList", "s_CommentsList", "s_LikeList", "s_ReasonList",
-		"projectList", "p_CommentsList", "p_LikeList", "p_ReasonList"})
-
 //@ToString(exclude = { 
 //		"communityList", "c_CommentsList", "c_LikeList", 
 //		"boardList", "b_CommentsList", "b_LikeList",
@@ -91,7 +87,7 @@ public class Member {
 	}
 	*/
 	
-
+	@JsonIgnore
 	@OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private M_profile mProfile;
 
@@ -107,14 +103,17 @@ public class Member {
 
 //	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<Board> boardList = new ArrayList<>();
 	
 //	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<B_comments> b_CommentsList = new ArrayList<>();
 	
 //	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<B_like> b_LikeList = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)

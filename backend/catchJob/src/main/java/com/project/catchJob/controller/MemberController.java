@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.member.MemberDTO;
@@ -45,7 +48,6 @@ public class MemberController {
 			MemberDTO responseMemberDTO = MemberDTO.builder()
 					.email(memberDTO.getEmail())
 					.pwd(pwdEncoder.encrypt(memberDTO.getEmail(), memberDTO.getPwd()))
-//					.pwd(memberDTO.getPwd())
 					.name(memberDTO.getName())
 					.job(memberDTO.getJob())
 					.hasCareer(memberDTO.getHasCareer())
@@ -54,10 +56,7 @@ public class MemberController {
 			memberService.createMember(responseMemberDTO);
 			return ResponseEntity.ok().body(responseMemberDTO);
 		} catch (Exception e) {
-			// 멤버 정보는 항상 하나이므로 리스트로 만들어야하는 ResponseDTO를 사용하지 않고 그냥 member 리턴
-//			 ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
-//			 return ResponseEntity.badRequest().body(registerMember(memberDTO));
-			 return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
+			return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
 		}		
 	}
 	

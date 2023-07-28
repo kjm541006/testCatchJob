@@ -36,7 +36,4 @@ public class M_profile {
 		return mProfile;
 	}
 	
-	
-	
-	
 }

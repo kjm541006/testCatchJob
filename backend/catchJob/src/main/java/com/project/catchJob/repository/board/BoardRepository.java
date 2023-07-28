@@ -1,5 +1,7 @@
 package com.project.catchJob.repository.board;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +22,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	int updateLike(@Param("boardId") Long boardId, @Param("increment") int increment);
 
 	Board findByBoardId(Long boardId);
+	
+	@Query("select b from Board b where b.bTitle like CONCAT('%', :keyword, '%')")
+	List<Board> findByBTitleContaining(@Param("keyword") String keyword);
+	List<Board> findByMemberNameContaining(String keyword);
+	List<Board> findByTagsContaining(@Param("keyword") String keyword);
 }

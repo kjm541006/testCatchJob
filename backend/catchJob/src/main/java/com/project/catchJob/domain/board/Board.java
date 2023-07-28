@@ -18,7 +18,11 @@ import javax.persistence.Transient;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.catchJob.domain.member.Member;
 
 import lombok.AllArgsConstructor;
@@ -68,6 +72,7 @@ public class Board {
 	
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
+	@JsonIgnore
 	private Member member;
 	
 	public void setMember(Member member) {
@@ -83,10 +88,12 @@ public class Board {
 		this.bCoverFileName = null;
 	}
  	
+	@JsonIgnore
 	@Builder.Default // 이 녀석이 없으면 lombok의 builder로 객체를 생성할 때 List가 선언한대로 제대로 초기화되지 않는다.
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<B_comments> boardCommentsList = new ArrayList<>();
 	
+	@JsonIgnore
 	@Builder.Default // 이 녀석이 없으면 lombok의 builder로 객체를 생성할 때 List가 선언한대로 제대로 초기화되지 않는다.
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<B_like> boardLikeList = new ArrayList<>();
