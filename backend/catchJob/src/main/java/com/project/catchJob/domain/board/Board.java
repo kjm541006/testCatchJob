@@ -18,6 +18,7 @@ import javax.persistence.Transient;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.catchJob.domain.member.Member;
 
 import lombok.AllArgsConstructor;
@@ -61,6 +62,7 @@ public class Board {
 	@Transient // DB에 저장 안 됨
 	private MultipartFile bCoverFileUrl; // 커버(썸네일) 실제경로
 	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	@Column(insertable = false, updatable = false, columnDefinition = "date default now()")
 	private Date bDate; // 작성날짜
 	
@@ -73,6 +75,14 @@ public class Board {
 		member.getBoardList().add(this);
 	}
 	
+	public void removeBFile() {
+		this.bFileName = null;
+	}
+	
+	public void removeBCoverFile() {
+		this.bCoverFileName = null;
+	}
+ 	
 	@Builder.Default // 이 녀석이 없으면 lombok의 builder로 객체를 생성할 때 List가 선언한대로 제대로 초기화되지 않는다.
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<B_comments> boardCommentsList = new ArrayList<>();

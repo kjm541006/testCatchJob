@@ -134,6 +134,7 @@ public class MemberService {
 //	    }
 //	    return member;
 //	}
+
 //	public Member findMemberByEmail(String userEmail) {
 //	    Member member = memberRepo.findByEmail(userEmail);
 //	    if (member == null) {
@@ -148,6 +149,5 @@ public class MemberService {
         return memberRepo.findById(memberId)
                 .orElseThrow(() -> new Exception("해당 회원이 없습니다"));
     }
-
 
 }
