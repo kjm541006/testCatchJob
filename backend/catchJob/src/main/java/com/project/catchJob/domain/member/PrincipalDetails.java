@@ -1,7 +1,5 @@
 package com.project.catchJob.domain.member;
 
-import java.util.Collection;
-import java.util.Map;
 /*
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -8,12 +8,16 @@ import javax.persistence.ManyToOne;
 
 import com.project.catchJob.domain.member.Member;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Data
 @ToString(exclude = {"member", "board"})
 @Entity
 public class B_like {

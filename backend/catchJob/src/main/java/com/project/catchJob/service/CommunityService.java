@@ -1,14 +1,14 @@
 package com.project.catchJob.service;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.catchJob.domain.community.Comment;
 import com.project.catchJob.domain.community.CommunityPost;
 import com.project.catchJob.repository.community.CommunityPostRepository;
-
-import java.util.List;
 
 @Service
 public class CommunityService {

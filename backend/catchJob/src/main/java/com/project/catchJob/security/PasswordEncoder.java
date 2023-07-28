@@ -19,11 +19,15 @@ public class PasswordEncoder {
 	
 	// https://wonchan.tistory.com/4참고
 	
+	private static final String SECRET_KEY_FACTORY_ALGORITHM = "PBKDF2WithHmacSHA1";
+    private static final int ITERATION_COUNT = 321;
+    private static final int KEY_LENGTH = 123;
+	
 	public String encrypt(String email, String pwd) {
 		
 		try {
-			KeySpec spec = new PBEKeySpec(pwd.toCharArray(), getSalt(email), 321, 123);
-			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+			SecretKeyFactory factory = SecretKeyFactory.getInstance(SECRET_KEY_FACTORY_ALGORITHM);
+			KeySpec spec = new PBEKeySpec(pwd.toCharArray(), getSalt(email), ITERATION_COUNT, KEY_LENGTH);
 			
 			byte[] hash = factory.generateSecret(spec).getEncoded();
 			
@@ -40,18 +44,12 @@ public class PasswordEncoder {
 			return digest.digest(keyBytes);
 		}		
 	
-	
 	public String encode(MemberDTO memberDTO) {
 		PasswordEncoder pwdEncoder = new PasswordEncoder();
 		String encryptPwd = pwdEncoder.encrypt(memberDTO.getEmail(), memberDTO.getPwd());
 		
 		return encryptPwd;
 	}
-	
-//	public boolean matches(String pwd1, String pwd2) {
-//		if(pwd1 == pwd2) return true;
-//		else return false;
-//	}
 	
 	public boolean matches(String pwd1, String pwd2) {
 	    return pwd1.equals(pwd2);
