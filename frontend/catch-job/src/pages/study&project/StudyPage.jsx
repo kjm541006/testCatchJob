@@ -3,34 +3,37 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPencil } from "@fortawesome/free-solid-svg-icons";
 import styles from "../../assets/css/study/Study.module.css";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { startLoading, stopLoading } from "../../redux/store";
 import Select from "react-select";
+import { type } from "@testing-library/user-event/dist/type";
 
 const StudyPage = () => {
   const [data, setData] = useState([]);
-  const dispatch = useDispatch();
+  const [sortedOption, setSortedOption] = useState("all");
+  const [searchParams, setSearchParams] = useSearchParams();
   const isLoading = useSelector((state) => state.loading.isLoading);
+  const typeParam = searchParams.get("type");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      dispatch(startLoading());
+      console.log(typeParam);
 
-      // try {
-      //   const response = await axios.get("https://jsonplaceholder.typicode.com/posts/");
-      //   setData(response.data);
-      // } catch (error) {
-      //   // console.error("Error fetching data:", error);
-      //   alert("에러가 발생했습니다.");
-      // } finally {
-      //   dispatch(stopLoading());
-      // }
       try {
+        //   const response = await axios.get("https://jsonplaceholder.typicode.com/posts/");
         const response = await axios.get("http://localhost:8089/project");
-        setData(response.data);
+        if (typeParam === "all") {
+          setData(response.data);
+          return;
+        }
+        const newProducts = response.data.filter((list) => list.type === typeParam);
+        setData(newProducts);
         console.log(response.data);
       } catch (error) {
         alert("에러가 발생했습니다.");
@@ -42,23 +45,24 @@ const StudyPage = () => {
     fetchData().then(() => {
       dispatch(stopLoading());
     });
-  }, [dispatch]);
-
-  const [selectedOption, setSelectedOption] = useState("");
-
-  const handleOptionSelect = (event) => {
-    const optionValue = event.target.value;
-    setSelectedOption(optionValue);
-  };
+  }, [dispatch, typeParam]);
 
   const addHeart = () => {};
 
-  const options = [{ value: "전체" }, { value: "스터디" }, { value: "프로젝트" }];
-  const [sortedOption, setSortedOption] = useState(null);
+  const options = [
+    { value: "all", label: "전체" },
+    { value: "study", label: "스터디" },
+    { value: "project", label: "프로젝트" },
+  ];
 
   const handleOptionChange = (option) => {
-    setSortedOption(option);
+    setSortedOption(option.value);
+    searchParams.set("type", option.value);
+    setSearchParams(searchParams);
   };
+  useEffect(() => {
+    console.log(sortedOption);
+  }, [sortedOption]);
 
   return (
     <>
@@ -81,7 +85,14 @@ const StudyPage = () => {
                   <option value="project">프로젝트</option>
                   <option value="like">좋아요</option>
                 </select> */}
-                <Select defaultValue={options[0]} isClearable={false} isSearchable={false} options={options} />
+                <Select
+                  onChange={(option) => handleOptionChange(option)}
+                  defaultValue={options.filter((option) => option.value === typeParam)}
+                  key={options.filter((option) => option.value === typeParam)}
+                  isClearable={false}
+                  isSearchable={false}
+                  options={options}
+                />
               </div>
             </div>
             <div className={styles.studyGridView}>
@@ -92,7 +103,7 @@ const StudyPage = () => {
                     key={i}
                     className={styles.studyGridElement}
                     onClick={() =>
-                      v.bType === "project" ? navigate(`/projectDetail?id=${v.projectId}`) : navigate(`/studyDetail?id=${v.studyId}`)
+                      v.bType === "project" ? navigate(`/projectDetail?id=${v.projectId}`) : navigate(`/studyDetail?id=${v.projectId}`)
                     }
                   >
                     <div className={styles.type}>
