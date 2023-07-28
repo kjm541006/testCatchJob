@@ -38,9 +38,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 240px;
-  right: 250px;
+  position: relative;
+  top: -860px;
+  right: -750px;
 }
 
 .addButtons{

@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // 테마 스타일 가져오기
 import styles from '../assets/css/BuildPortfolio.module.css';
-function MyComponent() {
+import DetailModal from "../components/DetailModal";
+
+const BuildPortfolioPage = () => {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
   const [uploadedFile, setUploadedFile] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -31,6 +34,7 @@ function MyComponent() {
   };
 
   return (
+    <>
     <div className={`${styles.wrapper}`}>
       <input
         type="text"
@@ -50,9 +54,10 @@ function MyComponent() {
           theme="snow"
           className={`${styles.customQuillEditor}`}
         />
-        
       </div>
-      <div className={`${styles.addThings}`}>
+      <div className={`${styles.fileName}`}><span>{uploadedFile}</span>{uploadedFile && <span className={`${styles.removeBtn}`} onClick={() => setUploadedFile('')}>X</span>}</div>
+    </div>
+    <div className={`${styles.addThings}`}>
       <input
           type="file"
           id="fileUpload"
@@ -60,13 +65,13 @@ function MyComponent() {
           onChange={handleFileUpload}
         />
         <button className={`${styles.addButtons}`}  onClick={() => document.getElementById("fileUpload").click()}>파일 업로드</button>
-        <button className={`${styles.addButtons}`}>세부 사항 설정</button>
+        <button to={"/detail"} className={`${styles.addButtons}`}  onClick={() => setShowModal(true)}>세부 사항 설정</button>
         <button className={`${styles.saveContent}`}>저<span style={{marginLeft:"20px"}}></span>장</button>
       </div>
-      <div className={`${styles.fileName}`}><span>{uploadedFile}</span>{uploadedFile && <span className={`${styles.removeBtn}`} onClick={() => setUploadedFile('')}>X</span>}</div>
-    </div>
+      {showModal && <DetailModal setShowModal={setShowModal} />}
+    </>
   );
   
 }
 
-export default MyComponent;
+export default BuildPortfolioPage;
