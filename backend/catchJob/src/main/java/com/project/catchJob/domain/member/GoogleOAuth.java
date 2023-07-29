@@ -22,6 +22,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,12 +31,12 @@ import com.project.catchJob.dto.member.GoogleOAuthTokenDTO;
 import com.project.catchJob.dto.member.GoogleUserInfoDTO;
 
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
 @PropertySource("classpath:application-oauth.properties")
 public class GoogleOAuth {
-
 	// https://velog.io/@hwsa1004/Spring-%EA%B5%AC%EA%B8%80-%EB%A1%9C%EA%B7%B8%EC%9D%B8-REST-API-%EA%B5%AC%ED%98%84-OAuth2
 	// https://developers.google.com/identity/protocols/oauth2/web-server?hl=ko 참고
 	
@@ -74,60 +76,45 @@ public class GoogleOAuth {
 //	}
 
 	// 일회용 코드를 다시 구글로 보내 엑세스 토큰을 포함한 json string이 담긴 responseEntity 받아옴
-	public ResponseEntity<String> requestAccessToken(String accessCode) {
-	    RestTemplate restTemplate = new RestTemplate();
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+	public Mono<GoogleOAuthTokenDTO> requestAccessToken(String accessCode) {
+	    WebClient webClient = WebClient.create();
 
-	    MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
-	    bodyParams.add("code", accessCode);
-	    bodyParams.add("client_id", googleClientId);
-	    bodyParams.add("client_secret", googleClientSecret);
-	    bodyParams.add("redirect_uri", googleRedirectUrl);
-	    bodyParams.add("grant_type", "authorization_code");
-	  
-	    HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(bodyParams, headers);
+	    return webClient.post()
+	        .uri(GOOGLE_TOKEN_URL)
+	        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	        .body(BodyInserters
+	            .fromFormData("code", accessCode)
+	            .with("client_id", googleClientId)
+	            .with("client_secret", googleClientSecret)
+	            .with("redirect_uri", googleRedirectUrl)
+	            .with("grant_type", "authorization_code"))
+	        .retrieve()
+	        .onStatus(HttpStatus::isError, clientResponse -> Mono.error(new RuntimeException("Error: " + clientResponse.statusCode())))
+	        .bodyToMono(GoogleOAuthTokenDTO.class);
+	}
 
-	    try {
-	        ResponseEntity<String> response = restTemplate.exchange(GOOGLE_TOKEN_URL, HttpMethod.POST, requestEntity, String.class);
-	        return response;
-	    } catch (HttpClientErrorException e) {
-	        System.out.println("Error response body: " + e.getResponseBodyAsString());
-	        e.printStackTrace();
-	        return new ResponseEntity<>("Error: " + e.getStatusCode() + " " + e.getStatusText(), HttpStatus.INTERNAL_SERVER_ERROR);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return new ResponseEntity<>("Error: Unknown issue", HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
+	public Mono<ResponseEntity<String>> requestUserInfo(GoogleOAuthTokenDTO oAuthToken) {
+	    WebClient webClient = WebClient.create();
+	        
+	    return webClient.get()
+	        .uri(GOOGLE_USERINFO_REQUEST_URL)
+	        .header("Authorization", "Bearer " + oAuthToken.getAccess_token())
+	        .retrieve()
+	        .onStatus(HttpStatus::isError, clientResponse -> Mono.error(new RuntimeException("Error: " + clientResponse.statusCode())))
+	        .toEntity(String.class);
+	}
+
+	public Mono<GoogleUserInfoDTO> getUserInfo(ResponseEntity<String> res) {
+	    return Mono.just(res.getBody()).map(body -> {
+	        try {
+	            return objectMapper.readValue(body, GoogleUserInfoDTO.class);
+	        } catch (JsonProcessingException e) {
+	            throw new RuntimeException("Error: Cannot convert JSON to GoogleUserInfoDTO", e);
+	        }
+	    });
 	}
 
 	
-	// token 얻기 json -> 자바 객체
-	public GoogleOAuthTokenDTO getAccessToken(ResponseEntity<String> res) throws JsonProcessingException {
-		System.out.println("response.getBody() = " + res.getBody());
-		GoogleOAuthTokenDTO googleOAuthTokenDTO = objectMapper.readValue(res.getBody(), GoogleOAuthTokenDTO.class);
-		return googleOAuthTokenDTO;
-		// GoogleOAuthTokenDTO : json형태를 자바 객체 형식으로 변경 후 저장해서 담을 곳
-	}
 
-	// get으로 token받아와서 사용자 정보 요청
-	public ResponseEntity<String> requestUserInfo(GoogleOAuthTokenDTO oAuthToken) {
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "Bearer" + oAuthToken.getAccess_token());
-		
-		HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(headers);
-		ResponseEntity<String> res = restTemplate.exchange(GOOGLE_USERINFO_REQUEST_URL, HttpMethod.GET, req, String.class);
-		System.out.println("response.getBody() = " + res.getBody());
-		return res;
-	}
-	
-	// 요청해서 받은 사용자 정보 json -> 자바 객체
-	public GoogleUserInfoDTO getUserInfo(ResponseEntity<String> res) throws JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		GoogleUserInfoDTO googleUserInfoDTO = objectMapper.readValue(res.getBody(), GoogleUserInfoDTO.class);
-		return googleUserInfoDTO;
-		// GoogleUserInfoDTO : json형태를 자바 객체 형식으로 변경 후 저장해서 담을 곳
-	}
 	
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.catchJob.domain.member.GoogleOAuth;
 import com.project.catchJob.domain.member.Member;
+import com.project.catchJob.dto.member.GoogleUserInfoDTO;
 import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.security.PasswordEncoder;
 import com.project.catchJob.security.TokenProvider;
@@ -19,6 +20,7 @@ import com.project.catchJob.service.MemberService;
 import com.project.catchJob.service.OAuthService;
 
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
@@ -137,10 +139,14 @@ public class MemberController {
 //	}
 //	
 	@PostMapping("/googlelogin")
-	public ResponseEntity<String> successGoogleLogin(@RequestParam("code") String accessCode) {
-		System.out.println("=======1========" + accessCode);
-		return googleoauth.requestAccessToken(accessCode);
+	public Mono<GoogleUserInfoDTO> successGoogleLogin(@RequestParam String code) {
+	    return oAuthService.getGoogleUserInfoDTO(code);
 	}
+
+//	@PostMapping("/googlelogin")
+//	public ResponseEntity<String> successGoogleLogin(@RequestParam("code") String accessCode) {
+//		return googleoauth.requestAccessToken(accessCode);
+//	}
 //	
 //	@GetMapping("/googlelogin")
 //	public ResponseEntity<?> successGoogleLogin2(@RequestParam("code") String accessCode) {
