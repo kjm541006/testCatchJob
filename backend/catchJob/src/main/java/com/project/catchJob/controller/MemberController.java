@@ -140,6 +140,8 @@ public class MemberController {
 //	
 	@PostMapping("/googlelogin")
 	public ResponseEntity<String> successGoogleLogin(@RequestParam("code") String code) {
+		System.out.println("---------code------" + code);
+		System.out.println("--------------------" + code.getClass());
 		return googleoauth.requestAccessToken(code);
 	}
 
