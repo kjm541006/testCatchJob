@@ -81,6 +81,10 @@ public class GoogleOAuth {
 		params.put("redirect-uri", googleRedirectUrl);
 		params.put("grant_type", "authorization_code");
 		
+		System.out.println("-------------------" + googleClientId);
+		System.out.println("-------------------" + googleClientSecret);
+		System.out.println("-------------------" + googleRedirectUrl);
+		
 		 RestTemplate restTemplate1 = new RestTemplate();
 
 		    // Add a custom error handler
