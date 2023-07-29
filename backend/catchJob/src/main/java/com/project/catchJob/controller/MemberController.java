@@ -139,8 +139,8 @@ public class MemberController {
 //	}
 //	
 	@PostMapping("/googlelogin")
-	public Mono<GoogleUserInfoDTO> successGoogleLogin(@RequestParam String code) {
-	    return oAuthService.getGoogleUserInfoDTO(code);
+	public ResponseEntity<String> successGoogleLogin(@RequestParam("code") String code) {
+		return googleoauth.requestAccessToken(code);
 	}
 
 //	@PostMapping("/googlelogin")
