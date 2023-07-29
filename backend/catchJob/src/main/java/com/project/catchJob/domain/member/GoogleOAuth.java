@@ -1,7 +1,11 @@
 package com.project.catchJob.domain.member;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
@@ -9,8 +13,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,7 +25,6 @@ import com.project.catchJob.dto.member.GoogleOAuthTokenDTO;
 import com.project.catchJob.dto.member.GoogleUserInfoDTO;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 
 @Component
 @RequiredArgsConstructor
@@ -66,7 +71,6 @@ public class GoogleOAuth {
 
 	// 일회용 코드를 다시 구글로 보내 엑세스 토큰을 포함한 json string이 담긴 responseEntity 받아옴
 	public ResponseEntity<String> requestAccessToken(String accessCode) {
-		System.out.println("=======2========" + accessCode);
 		RestTemplate restTemplate = new RestTemplate();
 		Map<String, String> params = new HashMap<>();
 		
@@ -76,8 +80,31 @@ public class GoogleOAuth {
 //		params.put("redirect-uri", googleRedirectUrl);
 		params.put("grant_type", "authorization_code");
 		
-		System.out.println("-------params-------" + params);
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_URL, params, String.class);
+		 RestTemplate restTemplate1 = new RestTemplate();
+
+		    // Add a custom error handler
+		    restTemplate1.setErrorHandler(new ResponseErrorHandler() {
+		        @Override
+		        public boolean hasError(ClientHttpResponse response) throws IOException {
+		            return response.getStatusCode().series() == HttpStatus.Series.CLIENT_ERROR
+		                    || response.getStatusCode().series() == HttpStatus.Series.SERVER_ERROR;
+		        }
+
+		        @Override
+		        public void handleError(ClientHttpResponse response) throws IOException {
+		            String responseBody = new BufferedReader(new InputStreamReader(response.getBody()))
+		                    .lines().collect(Collectors.joining("\n"));
+
+		            System.out.println("ClientHttpResponse Status Code: " + response.getStatusCode());
+		            System.out.println("ClientHttpResponse Status Text: " + response.getStatusText());
+		            System.out.println("ClientHttpResponse Response Body: " + responseBody);
+		        }
+		    });
+
+		
+		
+		
+		ResponseEntity<String> responseEntity = restTemplate1.postForEntity(GOOGLE_TOKEN_URL, params, String.class);
 		// 스프링부트에서 다른 서버의 api 엔드포인트 호출할 때 restTemplate사용
 		System.out.println("-------res-------" + responseEntity.getBody());
 		if(responseEntity.getStatusCode() == HttpStatus.OK) {
