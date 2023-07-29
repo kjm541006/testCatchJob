@@ -53,8 +53,8 @@ dependencies { //2.9.9
 	implementation('org.springframework.boot:spring-boot-starter-oauth2-client') {
     exclude group: 'org.springframework.security', module: 'spring-security-config'
     exclude group: 'org.springframework.security', module: 'spring-security-web'
-    implementation 'io.projectreactor:reactor-core:3.4.13'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.6.3'
+    implementation 'io.projectreactor:reactor-core:3.4.15'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.7.13'
 }
 	
 	
