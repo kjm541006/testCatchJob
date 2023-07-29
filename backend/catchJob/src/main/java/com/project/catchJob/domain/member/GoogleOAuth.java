@@ -19,6 +19,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
@@ -89,13 +90,17 @@ public class GoogleOAuth {
 	    HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(bodyParams, headers);
 
 	    try {
-	        ResponseEntity<String> response = restTemplate.postForEntity("https://oauth2.googleapis.com/token", requestEntity, String.class);
+	        ResponseEntity<String> response = restTemplate.postForEntity(GOOGLE_TOKEN_URL, requestEntity, String.class);
 	        return response;
+	    } catch (HttpClientErrorException e) {
+	        System.out.println("Error response body: " + e.getResponseBodyAsString());
+	        e.printStackTrace();
+	        return new ResponseEntity<>("Error: " + e.getStatusCode() + " " + e.getStatusText(), HttpStatus.INTERNAL_SERVER_ERROR);
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        return null;
+	        return new ResponseEntity<>("Error: Unknown issue", HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
-	}	
+	}
 	
 	// token 얻기 json -> 자바 객체
 	public GoogleOAuthTokenDTO getAccessToken(ResponseEntity<String> res) throws JsonProcessingException {
