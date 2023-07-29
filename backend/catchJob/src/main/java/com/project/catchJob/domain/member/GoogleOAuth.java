@@ -3,10 +3,6 @@ package com.project.catchJob.domain.member;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,8 +17,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.catchJob.dto.member.GoogleOAuthTokenDTO;
 import com.project.catchJob.dto.member.GoogleUserInfoDTO;
-import com.project.catchJob.repository.member.MemberRepository;
+
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
 @Component
 @RequiredArgsConstructor
@@ -42,50 +39,52 @@ public class GoogleOAuth {
 	
 	private RestTemplate restTemplate;
 	
-	@Value("${spring.security.oauth2.client.registration.google.clientId}")
-	private String googleClientId;
-	
-	@Value("${spring.security.oauth2.client.registration.google.clientSecret}")
-	private String googleClientSecret;
-	
-	@Value("${spring.security.oauth2.client.registration.google.redirect}")
-	private String googleRedirectUrl;
+//	@Value("${spring.security.oauth2.client.registration.google.clientId}")
+//	private String googleClientId;
+//	
+//	@Value("${spring.security.oauth2.client.registration.google.clientSecret}")
+//	private String googleClientSecret;
+//	
+//	@Value("${spring.security.oauth2.client.registration.google.redirect}")
+//	private String googleRedirectUrl;
 
 
-	public String getOauthRedirectURL() {
-
-		String redirectUrl = "https://accounts.google.com/o/oauth2/auth";
-	    String clientId = googleClientId;
-	    String redirectUri = googleRedirectUrl;
-	    String responseType = "code";
-	    String scope = "openid email profile";
-	    String state = "your-state-value"; // 선택 사항: CSRF 보호를 위한 상태 값 추가
-	    
-	    String oauthUrl = redirectUrl + "?client_id=" + clientId + "&redirect_uri=" + redirectUri +
-	            "&response_type=" + responseType + "&scope=" + scope + "&state=" + state;
-	    
-	    return oauthUrl;
-	}
+//	public String getOauthRedirectURL() {
+//
+//		String redirectUrl = "https://accounts.google.com/o/oauth2/auth";
+////	    String clientId = googleClientId;
+////	    String redirectUri = googleRedirectUrl;
+//	    String responseType = "code";
+//	    String scope = "openid email profile";
+//	    String state = "your-state-value"; // 선택 사항: CSRF 보호를 위한 상태 값 추가
+//	    
+//	    String oauthUrl = redirectUrl + "?client_id=" + clientId + "&redirect_uri=" + redirectUri +
+//	            "&response_type=" + responseType + "&scope=" + scope + "&state=" + state;
+//	    
+//	    return oauthUrl;
+//	}
 
 	// 일회용 코드를 다시 구글로 보내 엑세스 토큰을 포함한 json string이 담긴 responseEntity 받아옴
 	public ResponseEntity<String> requestAccessToken(String accessCode) {
-
+		System.out.println("=======3========" + accessCode);
 		RestTemplate restTemplate = new RestTemplate();
 		Map<String, String> params = new HashMap<>();
 		
 		params.put("code", accessCode);
-		params.put("client-id", googleClientId);
-		params.put("client-secret", googleClientSecret);
-		params.put("redirect-uri", googleRedirectUrl);
+//		params.put("client-id", googleClientId);
+//		params.put("client-secret", googleClientSecret);
+//		params.put("redirect-uri", googleRedirectUrl);
 		params.put("grant_type", "authorization_code");
 		
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_URL, params, String.class);
 		// 스프링부트에서 다른 서버의 api 엔드포인트 호출할 때 restTemplate사용
 		
 		if(responseEntity.getStatusCode() == HttpStatus.OK) {
+			System.out.println("=======ok========" + responseEntity);
 			return responseEntity;
 		} 
-		return null;
+		System.out.println("=======null========" + responseEntity);
+		return ResponseEntity.badRequest().body("fail");
 	}
 	
 	// token 얻기 json -> 자바 객체
@@ -100,7 +99,7 @@ public class GoogleOAuth {
 	public ResponseEntity<String> requestUserInfo(GoogleOAuthTokenDTO oAuthToken) {
 		
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "Bearer " + oAuthToken.getAccess_token());
+		headers.add("Authorization", "Bearer" + oAuthToken.getAccess_token());
 		
 		HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(headers);
 		ResponseEntity<String> res = restTemplate.exchange(GOOGLE_USERINFO_REQUEST_URL, HttpMethod.GET, req, String.class);
