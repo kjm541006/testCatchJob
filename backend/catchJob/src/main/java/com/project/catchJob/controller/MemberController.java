@@ -136,7 +136,7 @@ public class MemberController {
 //		res.sendRedirect(googleoauth.getOauthRedirectURL());
 //	}
 //	
-	@GetMapping("/googlelogin")
+	@PostMapping("/googlelogin")
 	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String accessCode) {
 		return googleoauth.requestAccessToken(accessCode);
 	}
