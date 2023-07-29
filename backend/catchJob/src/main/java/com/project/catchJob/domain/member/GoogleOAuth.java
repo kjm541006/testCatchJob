@@ -66,7 +66,7 @@ public class GoogleOAuth {
 
 	// 일회용 코드를 다시 구글로 보내 엑세스 토큰을 포함한 json string이 담긴 responseEntity 받아옴
 	public ResponseEntity<String> requestAccessToken(String accessCode) {
-
+		System.out.println("=======2========" + accessCode);
 		RestTemplate restTemplate = new RestTemplate();
 		Map<String, String> params = new HashMap<>();
 		
@@ -80,9 +80,11 @@ public class GoogleOAuth {
 		// 스프링부트에서 다른 서버의 api 엔드포인트 호출할 때 restTemplate사용
 		
 		if(responseEntity.getStatusCode() == HttpStatus.OK) {
+			System.out.println("=======ok========" + responseEntity);
 			return responseEntity;
 		} 
-		return null;
+		System.out.println("=======null========" + responseEntity);
+		return ResponseEntity.badRequest().body("fail");
 	}
 	
 	// token 얻기 json -> 자바 객체
