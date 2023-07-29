@@ -1,19 +1,22 @@
 package com.project.catchJob.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
+import com.project.catchJob.domain.member.GoogleOAuth;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.security.PasswordEncoder;
 import com.project.catchJob.security.TokenProvider;
 import com.project.catchJob.service.MemberService;
+import com.project.catchJob.service.OAuthService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,13 +32,13 @@ public class MemberController {
 	
 	@Autowired
 	private PasswordEncoder pwdEncoder;
-/*	
+	
 	@Autowired
 	private GoogleOAuth googleoauth;
 	
 	@Autowired
 	private OAuthService oAuthService;
-*/	
+	
 
 	
 	// 회원등록
@@ -126,24 +129,24 @@ public class MemberController {
 			return ResponseEntity.badRequest().body("로그인 실패");
 		}
 	}
-	/*
-	// 구글 로그인
-	@GetMapping("/google")
-	public void getGoogleAuthUrl(HttpServletResponse res) throws Exception {
-		res.sendRedirect(googleoauth.getOauthRedirectURL());
-	}
 	
-	@GetMapping("/api/oauth2/callback/google")
+//	// 구글 로그인
+//	@GetMapping("/google")
+//	public void getGoogleAuthUrl(HttpServletResponse res) throws Exception {
+//		res.sendRedirect(googleoauth.getOauthRedirectURL());
+//	}
+//	
+	@GetMapping("/googlelogin")
 	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String accessCode) {
 		return googleoauth.requestAccessToken(accessCode);
 	}
-	
-	@GetMapping("/google/login")
-	public ResponseEntity<?> successGoogleLogin2(@RequestParam("code") String accessCode) {
-		return null;
-		// return oAuthService.googleLogin(accessCode);
-	}
-*/
+//	
+//	@GetMapping("/googlelogin")
+//	public ResponseEntity<?> successGoogleLogin2(@RequestParam("code") String accessCode) {
+////		return null;
+//		 return oAuthService.googleLogin(accessCode);
+//	}
+
 	// 회원조회
 	@PostMapping("/memberInfo")
 	public ResponseEntity<?> memberInfo(@RequestBody MemberDTO memberDTO) {
