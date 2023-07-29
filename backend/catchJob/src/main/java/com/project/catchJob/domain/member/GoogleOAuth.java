@@ -76,9 +76,9 @@ public class GoogleOAuth {
 		Map<String, String> params = new HashMap<>();
 		
 		params.put("code", accessCode);
-		params.put("client-id", googleClientId);
-		params.put("client-secret", googleClientSecret);
-		params.put("redirect-uri", googleRedirectUrl);
+		params.put("client_id", googleClientId);
+		params.put("client_secret", googleClientSecret);
+		params.put("redirect_uri", googleRedirectUrl);
 		params.put("grant_type", "authorization_code");
 		
 		System.out.println("-------------------" + googleClientId);
