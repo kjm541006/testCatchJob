@@ -3,6 +3,7 @@ package com.project.catchJob.domain.member;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +20,6 @@ import com.project.catchJob.dto.member.GoogleOAuthTokenDTO;
 import com.project.catchJob.dto.member.GoogleUserInfoDTO;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 
 @Component
 @RequiredArgsConstructor
@@ -39,14 +39,14 @@ public class GoogleOAuth {
 	
 	private RestTemplate restTemplate;
 	
-//	@Value("${spring.security.oauth2.client.registration.google.clientId}")
-//	private String googleClientId;
-//	
-//	@Value("${spring.security.oauth2.client.registration.google.clientSecret}")
-//	private String googleClientSecret;
-//	
-//	@Value("${spring.security.oauth2.client.registration.google.redirect}")
-//	private String googleRedirectUrl;
+	@Value("${spring.security.oauth2.client.registration.google.clientId}")
+	private String googleClientId;
+	
+	@Value("${spring.security.oauth2.client.registration.google.clientSecret}")
+	private String googleClientSecret;
+	
+	@Value("${spring.security.oauth2.client.registration.google.redirect}")
+	private String googleRedirectUrl;
 
 
 //	public String getOauthRedirectURL() {
@@ -71,9 +71,9 @@ public class GoogleOAuth {
 		Map<String, String> params = new HashMap<>();
 		
 		params.put("code", accessCode);
-//		params.put("client-id", googleClientId);
-//		params.put("client-secret", googleClientSecret);
-//		params.put("redirect-uri", googleRedirectUrl);
+		params.put("client-id", googleClientId);
+		params.put("client-secret", googleClientSecret);
+		params.put("redirect-uri", googleRedirectUrl);
 		params.put("grant_type", "authorization_code");
 		
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_URL, params, String.class);
