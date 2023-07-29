@@ -76,9 +76,10 @@ public class GoogleOAuth {
 //		params.put("redirect-uri", googleRedirectUrl);
 		params.put("grant_type", "authorization_code");
 		
+		System.out.println("-------params-------" + params);
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_URL, params, String.class);
 		// 스프링부트에서 다른 서버의 api 엔드포인트 호출할 때 restTemplate사용
-		
+		System.out.println("-------res-------" + responseEntity);
 		if(responseEntity.getStatusCode() == HttpStatus.OK) {
 			System.out.println("=======ok========" + responseEntity);
 			return responseEntity;
