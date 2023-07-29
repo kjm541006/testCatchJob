@@ -75,22 +75,32 @@ public class GoogleOAuth {
 
 	// 일회용 코드를 다시 구글로 보내 엑세스 토큰을 포함한 json string이 담긴 responseEntity 받아옴
 	public ResponseEntity<String> requestAccessToken(String accessCode) {
-		RestTemplate restTemplate = new RestTemplate();
-		Map<String, String> params = new HashMap<>();
+	    RestTemplate restTemplate = new RestTemplate();
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-	    params.put("code", accessCode);
-	    params.put("client_id", googleClientId);
-	    params.put("client_secret", googleClientSecret);
-	    params.put("redirect_uri", googleRedirectUrl);
-	    params.put("grant_type", "authorization_code");
+	    MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
+	    bodyParams.add("code", accessCode);
+	    bodyParams.add("client_id", googleClientId);
+	    bodyParams.add("client_secret", googleClientSecret);
+	    bodyParams.add("redirect_uri", googleRedirectUrl);
+	    bodyParams.add("grant_type", "authorization_code");
+	  
+	    HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(bodyParams, headers);
 
-	    ResponseEntity<String> responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_URL, params, String.class);
-	    
-	    if(responseEntity.getStatusCode() == HttpStatus.OK) {
-	        return responseEntity;
+	    try {
+	        ResponseEntity<String> response = restTemplate.exchange(GOOGLE_TOKEN_URL, HttpMethod.POST, requestEntity, String.class);
+	        return response;
+	    } catch (HttpClientErrorException e) {
+	        System.out.println("Error response body: " + e.getResponseBodyAsString());
+	        e.printStackTrace();
+	        return new ResponseEntity<>("Error: " + e.getStatusCode() + " " + e.getStatusText(), HttpStatus.INTERNAL_SERVER_ERROR);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return new ResponseEntity<>("Error: Unknown issue", HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
-	    return ResponseEntity.badRequest().build();
 	}
+
 	
 	// token 얻기 json -> 자바 객체
 	public GoogleOAuthTokenDTO getAccessToken(ResponseEntity<String> res) throws JsonProcessingException {
