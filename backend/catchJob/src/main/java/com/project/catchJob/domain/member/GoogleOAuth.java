@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -44,14 +45,14 @@ public class GoogleOAuth {
 	
 	private RestTemplate restTemplate;
 	
-//	@Value("${spring.security.oauth2.client.registration.google.clientId}")
-//	private String googleClientId;
-//	
-//	@Value("${spring.security.oauth2.client.registration.google.clientSecret}")
-//	private String googleClientSecret;
-//	
-//	@Value("${spring.security.oauth2.client.registration.google.redirect}")
-//	private String googleRedirectUrl;
+	@Value("${spring.security.oauth2.client.registration.google.clientId}")
+	private String googleClientId;
+	
+	@Value("${spring.security.oauth2.client.registration.google.clientSecret}")
+	private String googleClientSecret;
+	
+	@Value("${spring.security.oauth2.client.registration.google.redirect}")
+	private String googleRedirectUrl;
 
 
 //	public String getOauthRedirectURL() {
@@ -75,9 +76,9 @@ public class GoogleOAuth {
 		Map<String, String> params = new HashMap<>();
 		
 		params.put("code", accessCode);
-		params.put("client-id", "226990065119-dh4qnntmuprddppr3hoi6umt9k99vkvb.apps.googleusercontent.com");
-//		params.put("client-secret", googleClientSecret);
-//		params.put("redirect-uri", googleRedirectUrl);
+		params.put("client-id", googleClientId);
+		params.put("client-secret", googleClientSecret);
+		params.put("redirect-uri", googleRedirectUrl);
 		params.put("grant_type", "authorization_code");
 		
 		 RestTemplate restTemplate1 = new RestTemplate();
