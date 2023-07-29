@@ -28,6 +28,10 @@ configurations {
 repositories {
 	mavenCentral()
 }
+ext {
+    set('webfluxVersion', '2.7.13')
+    set('reactorNettyVersion', '1.0.15')
+}
 
 dependencies { //2.9.9
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.12.5'
@@ -53,8 +57,8 @@ dependencies { //2.9.9
 	implementation('org.springframework.boot:spring-boot-starter-oauth2-client') {
     exclude group: 'org.springframework.security', module: 'spring-security-config'
     exclude group: 'org.springframework.security', module: 'spring-security-web'
-    implementation 'io.projectreactor:reactor-core:3.4.15'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.7.13'
+    implementation "org.springframework.boot:spring-boot-starter-webflux:${webfluxVersion}"
+    implementation "io.projectreactor.netty:reactor-netty-http:${reactorNettyVersion}"
 }
 	
 	
