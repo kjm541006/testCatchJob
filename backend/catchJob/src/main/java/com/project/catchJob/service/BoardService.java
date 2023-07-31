@@ -91,16 +91,16 @@ public class BoardService {
 	}
 
 	// 글 등록
-	public void create(BoardDTO boardDTO, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
+	public void create(String bTitle, String bContents, List<String> tags, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
 
 	    Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 	    		.orElseThrow(UnauthorizedException::new);
 	    Member member = memberRepo.findByEmail(optAuthenticatedMember.getEmail());
 
 	    Board board = Board.builder()
-	            .bTitle(boardDTO.getBTitle())
-	            .bContents(boardDTO.getBContents())
-	            .tags(boardDTO.getTags())
+	            .bTitle(bTitle)
+	            .bContents(bContents)
+	            .tags(tags)
 	            .member(member)
 	            .build();
 
@@ -115,13 +115,40 @@ public class BoardService {
 	    }
 	    boardRepo.save(board);
 	}
+	
+	// 작동가능
+//	public void create(BoardDTO boardDTO, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
+//		
+//		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+//				.orElseThrow(UnauthorizedException::new);
+//		Member member = memberRepo.findByEmail(optAuthenticatedMember.getEmail());
+//		
+//		Board board = Board.builder()
+//				.bTitle(boardDTO.getBTitle())
+//				.bContents(boardDTO.getBContents())
+//				.tags(boardDTO.getTags())
+//				.member(member)
+//				.build();
+//		
+//		// 파일 저장
+//		if(bFile != null && !bFile.isEmpty()) {
+//			String fileName = saveFile(bFile);
+//			board.setBFileName(fileName);
+//		}
+//		if(bCoverFile != null && !bCoverFile.isEmpty()) {
+//			String fileName = saveFile(bCoverFile);
+//			board.setBCoverFileName(fileName);
+//		}
+//		boardRepo.save(board);
+//	}
     
     // 파일 저장
     public String saveFile(MultipartFile file) {
     	try {
 	    	// 저장 경로 지정
 	    	//String savePath = new File("").getAbsolutePath() + "/src/main/resources/static/upload/";
-    		String savePath = new File(filePath).getAbsolutePath() + "/";
+//    		String savePath = new File(filePath).getAbsolutePath() + "/";
+    		String savePath = filePath + "/";
     		File dir = new File(savePath);
     		if(!dir.exists()) {
     			dir.mkdir(); // 폴더 없다면 폴더 생성
