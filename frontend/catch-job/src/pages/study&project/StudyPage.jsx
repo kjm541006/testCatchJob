@@ -19,15 +19,14 @@ const StudyPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     const fetchData = async () => {
       console.log(typeParam);
 
       try {
         //   const response = await axios.get("https://jsonplaceholder.typicode.com/posts/");
-        const response = await axios.get("http://localhost:8089/project");
+        // const response = await axios.get("http://localhost:8089/project");
+        const response = await axios.get("http://43.202.98.45:8089/project");
         if (typeParam === "all") {
           setData(response.data);
           return;
@@ -37,6 +36,7 @@ const StudyPage = () => {
         console.log(response.data);
       } catch (error) {
         alert("에러가 발생했습니다.");
+        dispatch(stopLoading());
       } finally {
         dispatch(stopLoading());
       }

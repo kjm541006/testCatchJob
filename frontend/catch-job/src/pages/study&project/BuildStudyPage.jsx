@@ -99,7 +99,8 @@ const BuildStudyPage = () => {
     };
 
     try {
-      const response = await axios.post(`http://localhost:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+      // const response = await axios.post(`http://localhost:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+      const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
       console.log(response);
       if (response && response.status >= 200 && response.status < 300) {
         alert("성공적으로 등록되었습니다.");
