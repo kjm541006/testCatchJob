@@ -6,14 +6,15 @@ import axios from 'axios';
 const GoogleLoginButton_long = () => {
   const googleSocialLogin = useGoogleLogin({
     onSuccess: (codeResponse) => {
+      console.log("=========codeResponse=============",codeResponse);
       axios.post('http://43.202.98.45:8089/googlelogin', { code: codeResponse.code }) 
         .then((response) => {
           // 서버 응답 처리
-          console.log(response.data);
+          console.log("============data==========",response.data);
         })
         .catch((error) => {
           // 오류 처리
-          console.error(error);
+          console.error("-----------error------------",error);
         });
     },
     flow: 'auth-code',
