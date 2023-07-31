@@ -4,6 +4,7 @@ import img from "../assets/img/port_img.jpeg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faCommentDots, faHeart, faCheck, faPencil } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+// import PortfolioModal from "../../components/PortfolioModal";
 import PortfolioModal from "../components/PortfolioModal";
 import { useLocation, Link } from "react-router-dom";
 
@@ -386,6 +387,10 @@ const PortfolioMainPage = () => {
         console.error("데이터 가져오기 에러:", error);
       });
   }, []);
+
+  useEffect(() => {
+    console.log(isModalOpen);
+  }, [isModalOpen]);
 
   // useEffect(() => {
   //   axios
