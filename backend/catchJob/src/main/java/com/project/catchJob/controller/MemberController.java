@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +15,7 @@ import com.project.catchJob.domain.member.GoogleOAuth;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.member.GoogleUserInfoDTO;
 import com.project.catchJob.dto.member.MemberDTO;
+import com.project.catchJob.dto.member.MemberInfoDTO;
 import com.project.catchJob.security.PasswordEncoder;
 import com.project.catchJob.security.TokenProvider;
 import com.project.catchJob.service.MemberService;
@@ -150,24 +152,27 @@ public class MemberController {
 //	public ResponseEntity<String> successGoogleLogin(@RequestParam("code") String accessCode) {
 //		return googleoauth.requestAccessToken(accessCode);
 //	}
-//	
-//	@GetMapping("/googlelogin")
-//	public ResponseEntity<?> successGoogleLogin2(@RequestParam("code") String accessCode) {
-////		return null;
-//		 return oAuthService.googleLogin(accessCode);
-//	}
 
 	// 회원조회
 	@GetMapping("/memberInfo")
-	public ResponseEntity<?> memberInfo(@RequestBody MemberDTO memberDTO) {
-		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
+	public ResponseEntity<?> memberInfo(@RequestHeader("Authorization") String jwtToken) {
+		//Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		
-		if(member != null) {
-			MemberDTO responseMemberDTO = MemberDTO.toMemberDTO(member);
-			return ResponseEntity.ok().body(responseMemberDTO);
+		MemberInfoDTO memberInfo = memberService.getInfo(jwtToken);
+		if(memberInfo != null) {
+			return ResponseEntity.ok().body(memberInfo);
 		}
 		return ResponseEntity.badRequest().body("회원 조회 실패");
 	}
+//	public ResponseEntity<?> memberInfo(@RequestBody MemberDTO memberDTO) {
+//		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
+//		
+//		if(member != null) {
+//			MemberDTO responseMemberDTO = MemberDTO.toMemberDTO(member);
+//			return ResponseEntity.ok().body(responseMemberDTO);
+//		}
+//		return ResponseEntity.badRequest().body("회원 조회 실패");
+//	}
 	
 	// 회원수정
 	@PostMapping("/memberUpdate")

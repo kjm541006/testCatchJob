@@ -73,16 +73,21 @@ public class BoardController {
 	public ResponseEntity<?> registerBoard(
 	        @RequestParam(value = "bTitle") String bTitle,
 	        @RequestParam(value = "bContents") String bContents,
-	        @RequestParam(value = "tags") List<String> tags,
+	        @RequestParam(value = "tags") String tagsJson, // tags 값을 JSON 문자열로 받습니다.
 	        @RequestHeader("Authorization") String jwtToken,
 	        @RequestPart(value = "bFileName", required = false) MultipartFile bFile,
 	        @RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile)
 	        throws Exception {
 
+	    // JSON 문자열을 List<String> 타입으로 변환
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    List<String> tags = objectMapper.readValue(tagsJson, new TypeReference<List<String>>() {});
+
 	    boardService.create(bTitle, bContents, tags, bFile, bCoverFile, jwtToken);
 
 	    return ResponseEntity.ok().build();
 	}
+
 	
 	// 가능코드
 //	@PostMapping(value = "/buildportfolio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

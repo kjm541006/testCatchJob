@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.catchJob.domain.member.M_profile;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.member.MemberDTO;
+import com.project.catchJob.dto.member.MemberInfoDTO;
 import com.project.catchJob.exception.UnauthorizedException;
 import com.project.catchJob.repository.member.M_ProfileRepository;
 import com.project.catchJob.repository.member.MemberRepository;
@@ -113,6 +114,22 @@ public class MemberService {
 		}
 		return null;
 	}
+	// 회원조회
+	public MemberInfoDTO getInfo(String jwtToken) {
+		
+		 Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+		    		.orElseThrow(UnauthorizedException::new);
+		
+		Member findMember = memberRepo.findByEmail(optAuthenticatedMember.getEmail());
+		MemberInfoDTO memberInfo = MemberInfoDTO.builder()
+				.email(findMember.getEmail())
+				.name(findMember.getName())
+				.job(findMember.getJob())
+				.hasCareer(findMember.getHasCareer())
+				.build();
+		return memberInfo;
+	}
+	
 
 	// 회원수정
 	public Member updateMember(MemberDTO member) {
