@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../assets/css/EditSignin.css"
-import axios from 'axios';
+
+//axios 기능 구현해야함
 
 const EditSigninPage = () => {
   const [email, setEmail] = useState("");
@@ -43,6 +44,8 @@ const EditSigninPage = () => {
         <input type="text" className="input-box-edit" tabIndex="1" value={email} readOnly style={{color:'#807d7d'}}/>
         <div className="input-text-edit">이름</div>
         <input type="text" className="input-box-edit" tabIndex="2" value={name} readOnly style={{color:'#807d7d'}}/>
+        <div className="input-text-edit">비밀번호</div>
+        <input type="text" className="input-box-edit" tabIndex="3" value={password}/>
 
         <div className="input-text-edit">직무</div>
           <div className="choosejob-edit" id="pick-edit">
@@ -74,8 +77,8 @@ const EditSigninPage = () => {
             </div>
           </div>
 
-        <div className="input-text-edit">경력 여부</div>
-        <div className="choosejob-edit" id="pick-edit">
+          <div className="input-text-edit">경력 여부</div>
+          <div className="choosejob-edit" id="pick-edit">
             <div className="choosejobone-edit" id="carrer-edit">
               <input type="radio" className="custom-checkbox-edit"  name="career-edit" checked={selectedCarrers === "신입"}  />
               <div className="choosejob-text-edit">신입</div>
@@ -84,15 +87,15 @@ const EditSigninPage = () => {
               <input type="radio" className="custom-checkbox-edit" name="career-edit" checked={selectedCarrers === "경력"} />
               <div className="choosejob-text-edit">경력</div>
             </div>
-        </div>
+          </div>
 
-        <div className="enrollbutton-edit">
-          <button className="cancel-edit">취소</button>
-          <button className="enroll-edit">등록</button>
+          <div className="enrollbutton-edit">
+            <button className="cancel-edit">취소</button>
+            <button className="enroll-edit">등록</button>
+          </div>
         </div>
-      </div>   
+      </div>
     </div>
-  </div>
   );
 };
 

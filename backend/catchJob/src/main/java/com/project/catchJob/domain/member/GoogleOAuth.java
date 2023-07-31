@@ -123,35 +123,27 @@ public class GoogleOAuth {
 //			}
 //	}
 	public ResponseEntity<String> requestAccessToken(String accessCode) {
-	    // RestTemplate 생성
-	    RestTemplate restTemplate = new RestTemplate();
-	    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-	    
-	    params.add("code", accessCode);
-	    params.add("client_id", googleClientId);
-	    params.add("client_secret", googleClientSecret);
-	    params.add("redirect_uri", googleRedirectUrl);
-	    params.add("grant_type", "authorization_code");
+		System.out.println("=======3========" + accessCode);
+		RestTemplate restTemplate = new RestTemplate();
+		Map<String, String> params = new HashMap<>();
 
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-	    HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
-	    
-	    ResponseEntity<String> responseEntity;
-	    try {
-	        responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_URL, requestEntity, String.class);
-	    } catch (HttpClientErrorException e) {
-	        if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-	            responseEntity = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired access code");
-	        } else {
-	            e.printStackTrace();
-	            responseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while making API call");
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        responseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while making API call");
-	    }
-	    return responseEntity;
+		params.put("code", accessCode);
+		params.put("client_secret", googleClientSecret);
+		params.put("grant_type", "authorization_code");
+		params.put("client_id", googleClientId);
+		params.put("redirect_uri", googleRedirectUrl);
+
+
+
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_URL, params, String.class);
+		// 스프링부트에서 다른 서버의 api 엔드포인트 호출할 때 restTemplate사용
+		System.out.printf("여기니?");
+		if(responseEntity.getStatusCode() == HttpStatus.OK) {
+		System.out.println("=======ok========" + responseEntity);
+		return responseEntity;
+		}
+		System.out.println("=======null========" + responseEntity);
+		return ResponseEntity.badRequest().body("fail");
 	}
 
 	

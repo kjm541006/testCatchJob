@@ -4,6 +4,7 @@
   position: relative;
   margin: 0 auto;
   margin-bottom: 100px;
+  min-height: calc(100vh - 390px);
 }
 
 .port_page {
@@ -46,7 +47,7 @@
   cursor: pointer;
 }
 
-.user_img{
+.user_img {
   width: 24px;
   height: 24px;
   border-radius: 12px;
@@ -123,3 +124,4 @@
 .makeProject:hover {
   opacity: 1;
 }
+

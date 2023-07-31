@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.board.B_commentsDTO;
@@ -67,19 +69,35 @@ public class BoardController {
 	
 	// 글 등록
 //	@PostMapping("/portfolio/build")
-	@PostMapping(value = "/buildportfolio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = " /buildportfolio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> registerBoard(
-//	        @RequestBody BoardDTO boardDTO, 
-	        @RequestPart(value = "board") BoardDTO boardDTO, 
-	        @RequestHeader("Authorization") String jwtToken, 
-	        @RequestPart(value = "bFileName", required = false) MultipartFile bFile, 
-			@RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile) 
+	        @RequestParam(value = "bTitle") String bTitle,
+	        @RequestParam(value = "bContents") String bContents,
+	        @RequestParam(value = "tags") List<String> tags,
+	        @RequestHeader("Authorization") String jwtToken,
+	        @RequestPart(value = "bFileName", required = false) MultipartFile bFile,
+	        @RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile)
 	        throws Exception {
-		
-	    boardService.create(boardDTO, bFile, bCoverFile, jwtToken);
-	    
+
+	    boardService.create(bTitle, bContents, tags, bFile, bCoverFile, jwtToken);
+
 	    return ResponseEntity.ok().build();
 	}
+	
+	// 가능코드
+//	@PostMapping(value = "/buildportfolio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//	public ResponseEntity<?> registerBoard(
+////	        @RequestBody BoardDTO boardDTO, 
+//			@RequestPart(value = "board") BoardDTO boardDTO, 
+//			@RequestHeader("Authorization") String jwtToken, 
+//			@RequestPart(value = "bFileName", required = false) MultipartFile bFile, 
+//			@RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile) 
+//					throws Exception {
+//		
+//		boardService.create(boardDTO, bFile, bCoverFile, jwtToken);
+//		
+//		return ResponseEntity.ok().build();
+//	}
 
 	// 글 수정
 //	@PutMapping("/portfolio/edit/{board_id}")
@@ -106,7 +124,7 @@ public class BoardController {
 	        @RequestHeader("Authorization") String jwtToken, 
 	        @RequestPart(value = "bFileName", required = false) MultipartFile bFile, 
 			@RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile)
-	        throws Exception {
+	        throws Exception { 
 		
 	    boardService.delete(boardId, bFile, bCoverFile, jwtToken);
 	    return ResponseEntity.ok().build();
@@ -115,7 +133,7 @@ public class BoardController {
 	//======================== 댓글 ========================
 	
 	// 댓글 등록
-	@PostMapping("/portfolio/{board_id}")
+	@PostMapping("/portfolio/comment/{board_id}")
 	public ResponseEntity<?> registerComment(
 			@RequestBody B_commentsDTO commentDTO,
 			@PathVariable("board_id") Long boardId,
@@ -174,7 +192,7 @@ public class BoardController {
 	//======================== 조회수 ========================
 
 	// 조회수
-	@PostMapping("/{board_id}")
+	@PostMapping("/portfolio/{board_id}")
 	public ResponseEntity<?> click(@PathVariable("board_id") Long boardId) throws NotFoundException{
 		boardService.updateCnt(boardId);
 		Board board = boardRepo.findById(boardId).orElseThrow(NotFoundException::new);

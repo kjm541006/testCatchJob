@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import "../assets/css/EditSignin.css"
+import EditSignin from "../assets/css/member/EditSignin.css";
 
 //axios 기능 구현해야함
 

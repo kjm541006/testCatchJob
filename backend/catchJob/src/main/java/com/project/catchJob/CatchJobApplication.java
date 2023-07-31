@@ -3,6 +3,10 @@ package com.project.catchJob;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module; // 이 부분을 추가하세요.
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -23,5 +27,15 @@ public class CatchJobApplication {
 	    objectMapper.registerModule(new JavaTimeModule());
 
 	    return objectMapper;
+	}
+	
+	@Configuration
+	public class WebConfig implements WebMvcConfigurer {
+		// 멀티파트 해결자 빈 등록
+		@Bean
+		public CommonsMultipartResolver multipartResolver() {
+            CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+            return multipartResolver;
+        }
 	}
 }

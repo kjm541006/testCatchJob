@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import "../assets/css/Login.css";
+import React, { useEffect, useState } from "react";
+import "../assets/css/member/Login.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +19,7 @@ const LoginPage = () => {
   const isLoggedIn = useSelector(selectLoggedIn);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -32,6 +33,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post("http://43.202.98.45:8089/login", userData);
+      // const response = await axios.post("http://localhost:8089/login", userData);
       console.log(response.data);
       console.log(response.data.name);
       const token = response.data.token;
@@ -39,6 +41,7 @@ const LoginPage = () => {
       const email = response.data.email;
       if (response.status === 400) {
         alert("회원을 찾지 못했습니다.");
+        return;
       }
       console.log(token);
       console.log(name);
@@ -46,17 +49,15 @@ const LoginPage = () => {
       localStorage.setItem("token", token);
       localStorage.setItem("name", name);
       localStorage.setItem("email", email);
-      // dispatch(setCredentials({ name, email, token }))
       console.log(`로그인여부 :${isLoggedIn}`);
-      // window.location.href = "/";
-      navigate(-1);
+      navigate("/");
       setTimeout(() => {
         window.location.reload();
       }, 100);
     } catch (error) {
       if (error.response.status === 500) {
         // 서버 내부 에러 처리
-        alert("로그인에 실패했습니다. ");
+        alert("로그인에 실패했습니다.(서버 에러) ");
       }
     }
   };
@@ -70,9 +71,7 @@ const LoginPage = () => {
           </h1>
           <div className="input-text">이메일</div>
           <input type="text" className="input-box" tabIndex="1" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <div className="input-text">
-            비밀번호
-          </div>
+          <div className="input-text">비밀번호</div>
           <div className="input-container">
             <input
               type={showPassword ? "text" : "password"}

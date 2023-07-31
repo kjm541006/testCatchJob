@@ -3,6 +3,7 @@ import styles from "../assets/css/PortfolioMain.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faCommentDots, faHeart, faCheck, faPencil } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+// import PortfolioModal from "../../components/PortfolioModal";
 import PortfolioModal from "../components/PortfolioModal";
 import { useLocation, Link } from "react-router-dom";
 
@@ -22,6 +23,22 @@ const PortfolioMainPage = () => {
       setIsModalOpen(false);
     }
   }, [itemFromURL]);
+
+  useEffect(() => {
+    axios
+      .get("http://43.202.98.45:8089/")
+      .then((response) => {
+        setData(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("데이터 가져오기 에러:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    console.log(isModalOpen);
+  }, [isModalOpen]);
 
   useEffect(() => {
     axios
