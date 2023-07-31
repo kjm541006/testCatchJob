@@ -4,6 +4,7 @@ import img from "../assets/img/port_img.jpeg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faCommentDots, faHeart, faCheck, faPencil } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+// import PortfolioModal from "../../components/PortfolioModal";
 import PortfolioModal from "../components/PortfolioModal";
 import { useLocation, Link } from "react-router-dom";
 
@@ -360,7 +361,7 @@ const PortfolioMainPage = () => {
     },
   ];
 
-  const [data, setData] = useState(dummyData); // 실제할 때는 []로 바꾸기 더미데이터 지우고
+  const [data, setData] = useState([]); // 실제할 때는 []로 바꾸기 더미데이터 지우고
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
   const queryParam = new URLSearchParams(useLocation().search);
@@ -386,6 +387,10 @@ const PortfolioMainPage = () => {
         console.error("데이터 가져오기 에러:", error);
       });
   }, []);
+
+  useEffect(() => {
+    console.log(isModalOpen);
+  }, [isModalOpen]);
 
   // useEffect(() => {
   //   axios

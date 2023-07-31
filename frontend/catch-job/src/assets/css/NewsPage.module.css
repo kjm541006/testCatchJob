@@ -1,0 +1,5 @@
+.news {
+  height: auto;
+  min-height: calc(100vh - 290px);
+  padding-bottom: 200px;
+}
