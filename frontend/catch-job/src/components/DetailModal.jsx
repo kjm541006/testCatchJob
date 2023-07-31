@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styles from '../assets/css/DetailModal.module.css';
 
-const DetailModal = ({ setShowModal }) => {
+const DetailModal = ({ setShowModal,onSave }) => {
 
   const [uploadedFile, setUploadedFile] = useState('');
   const [tags, setTags] = useState([]);
@@ -36,6 +36,7 @@ const DetailModal = ({ setShowModal }) => {
   const saveButtonHandler = () => {
     console.log("bCoverFileName:", bCoverFileName); // 커버 파일 이름 확인
     console.log("tags:", tags); // 태그 확인
+    onSave(bCoverFileName, tags);
   };
   
 
