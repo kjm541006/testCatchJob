@@ -90,12 +90,18 @@
   font-size: 20px;
 }
 
+.makeProjectBtnWrapper {
+  position: sticky;
+  bottom: 15%;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .makeProject {
+  position: absolute;
+  /* bottom: 0; */
   width: 145px;
   height: 65px;
-  position: sticky;
-  left: 1500px;
-  bottom: 5%;
   z-index: 98;
   border-radius: 32px;
   background-color: #e2432e;
@@ -112,4 +118,8 @@
   margin-bottom: 30px;
   cursor: pointer;
   opacity: 0.85;
+}
+
+.makeProject:hover {
+  opacity: 1;
 }

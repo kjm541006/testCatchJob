@@ -1,22 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import "../assets/css/EditSignin.css"
-
-//axios 기능 구현해야함
+import axios from 'axios';
 
 const EditSigninPage = () => {
-  const [email, setEmail] = useState(localStorage.getItem('email') || '');
-  const [name, setName] = useState(localStorage.getItem('name') || '');
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [selectedJobs, setSelectedJobs] = useState("");
   const [selectedCarrers, setSelectedCarrers] = useState("");
-
-  const handleJobCheckboxChange = (job) => {
-    setSelectedJobs(job);
-  };
-
-  const handleCarrerChange = (carrer) => {
-    setSelectedCarrers(carrer);
-  };
+  
+  useEffect(() => {
+    async function fetchData() {
+      const token = localStorage.getItem("token");
+      const axiosConfig = {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      };
+      try {
+        const response = await axios.get("http://43.202.98.45:8089/memberInfo", axiosConfig);
+        setEmail(response.data.email);
+        setName(response.data.name);
+        setSelectedJobs(response.data.selectedJobs);
+        setSelectedCarrers(response.data.selectedCarrers);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <div className="body-edit">
@@ -31,35 +43,33 @@ const EditSigninPage = () => {
         <input type="text" className="input-box-edit" tabIndex="1" value={email} readOnly style={{color:'#807d7d'}}/>
         <div className="input-text-edit">이름</div>
         <input type="text" className="input-box-edit" tabIndex="2" value={name} readOnly style={{color:'#807d7d'}}/>
-        <div className="input-text-edit">비밀번호</div>
-        <input type="text" className="input-box-edit" tabIndex="3" value={password}/>
 
         <div className="input-text-edit">직무</div>
           <div className="choosejob-edit" id="pick-edit">
             <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("웹디자이너")}/>
+              <input type="radio" className="custom-checkbox-edit" name="job-edit" checked={selectedJobs === "웹디자이너"} />
               <div className="choosejob-text-edit">웹디자이너</div>
             </div>
             <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("웹퍼블리셔")}/>
+              <input type="radio" className="custom-checkbox-edit" name="job-edit" checked={selectedJobs === "웹퍼블리셔"}  />
               <div className="choosejob-text-edit">웹퍼블리셔</div>
             </div>
             <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("프론트엔드")}/>
+              <input type="radio" className="custom-checkbox-edit" name="job-edit" checked={selectedJobs === "프론트엔드"}  />
               <div className="choosejob-text-edit">프론트엔드</div>
             </div>
           </div>
           <div className="choosejob-edit">
           <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("백엔드")}/>
+              <input type="radio" className="custom-checkbox-edit" name="job-edit" checked={selectedJobs === "백엔드"} />
               <div className="choosejob-text-edit">백엔드</div>
             </div>
             <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("PM")}/>
+              <input type="radio" className="custom-checkbox-edit" name="job-edit" checked={selectedJobs === "PM"} />
               <div className="choosejob-text-edit">PM</div>
             </div>
             <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("웹퍼블리셔")}/>
+              <input type="radio" className="custom-checkbox-edit" name="job-edit" checked={selectedJobs === "기타"} />
               <div className="choosejob-text-edit">기타</div>
             </div>
           </div>
@@ -67,11 +77,11 @@ const EditSigninPage = () => {
         <div className="input-text-edit">경력 여부</div>
         <div className="choosejob-edit" id="pick-edit">
             <div className="choosejobone-edit" id="carrer-edit">
-              <input type="radio" className="custom-checkbox-edit"  name="career-edit" onChange={() => handleCarrerChange("신입")}/>
+              <input type="radio" className="custom-checkbox-edit"  name="career-edit" checked={selectedCarrers === "신입"}  />
               <div className="choosejob-text-edit">신입</div>
             </div>
             <div className="choosejobone" id="carrer">
-              <input type="radio" className="custom-checkbox-edit" name="career-edit" onChange={() => handleCarrerChange("경력")}/>
+              <input type="radio" className="custom-checkbox-edit" name="career-edit" checked={selectedCarrers === "경력"} />
               <div className="choosejob-text-edit">경력</div>
             </div>
         </div>

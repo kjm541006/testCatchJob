@@ -139,8 +139,7 @@ const PortfolioModal = ({ item,onClose }) => {
             <div className={`${styles.contentUser_info}`}>{item.member.name} ({item.member.email})</div>
           </div>
         </div>
-        <div className={`${styles.realContent}`}>{item.bContents}</div>
-        <div className={`${styles.tagList}`}>
+        <div className={`${styles.realContent}`} dangerouslySetInnerHTML={{ __html: item.bContents }}></div>        <div className={`${styles.tagList}`}>
           {item.tags[0] && (<div className={`${styles.tagElement}`}>{item.tags[0]}</div>)}
           {item.tags[1] && (<div className={`${styles.tagElement}`}>{item.tags[1]}</div>)}
           {item.tags[2] && (<div className={`${styles.tagElement}`}>{item.tags[2]}</div>)}
