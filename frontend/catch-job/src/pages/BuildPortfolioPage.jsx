@@ -12,7 +12,10 @@ const BuildPortfolioPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [bCoverFileName, setBCoverFileName] = useState("");
   const [tags, setTags] = useState([]);
-  
+  const [prevCover, setPrevCover] = useState('');
+  const [prevTags, setPrevTags] = useState([]);
+  const [prevCoverURL, setPrevCoverURL] = useState('');
+
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   }
@@ -23,43 +26,35 @@ const BuildPortfolioPage = () => {
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0]; 
-    setUploadedFile(file.name); 
+    setUploadedFile(file); 
   };
   
-  const handleDetailSave = (cover, tags) => {
+  const handleDetailSave = (cover, coverURL, tags) => {
     setBCoverFileName(cover);
     setTags(tags);
-    console.log("메인bCoverFileName:", bCoverFileName); // 커버 파일 이름 확인
-    console.log("메인tags:", tags); // 태그 확인
+    setPrevCover(cover);
+    setPrevTags(tags);
+    setPrevCoverURL(coverURL);
   };
 
   const handleSaveContent = async () => {
     const token = localStorage.getItem("token");
-    console.log(token);
-  
     const axiosConfig = {
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${token}`,
       },
     };
   
-    const board = {
-      bTitle: title,
-      bContents: value,
-      tags: tags,
-    };
-  
-    const data = {
-      board: board,
-      bFileName: uploadedFile,
-      bCoverFileName: bCoverFileName,
-    };
-
-    console.log(board,data.bFileName,bCoverFileName);
-  
+    const formData = new FormData();
+    formData.append("bTitle", title);
+    formData.append("bContents", value);
+    formData.append("tags", JSON.stringify(tags));
+    formData.append("bFileName", uploadedFile);
+    formData.append("bCoverFileName", bCoverFileName);
+    
     try {
-      const response = await axios.post('http://43.202.98.45:8089/buildportfolio', data, axiosConfig);
+      const response = await axios.post('http://43.202.98.45:8089/buildportfolio', formData, axiosConfig);
       console.log(response.data);
     } catch (error) {
       console.error('Error:', error);
@@ -67,7 +62,6 @@ const BuildPortfolioPage = () => {
   };
   
   
-
   const modules = {
     toolbar: [
       [{ header: [1, 2, false] }],
@@ -99,7 +93,7 @@ const BuildPortfolioPage = () => {
           className={`${styles.customQuillEditor}`}
         />
       </div>
-      <div className={`${styles.fileName}`}><span>{uploadedFile}</span>{uploadedFile && <span className={`${styles.removeBtn}`} onClick={() => setUploadedFile('')}>X</span>}</div>
+      <div className={`${styles.fileName}`}><span>{uploadedFile ? uploadedFile.name : ''}</span>{uploadedFile && <span className={`${styles.removeBtn}`} onClick={() => setUploadedFile('')}>X</span>}</div>
     </div>
     <div className={`${styles.addThings}`}>
       <input
@@ -112,8 +106,8 @@ const BuildPortfolioPage = () => {
         <button to={"/detail"} className={`${styles.addButtons}`}  onClick={() => setShowModal(true)}>세부 사항 설정</button>
         <button className={`${styles.saveContent}`} onClick={handleSaveContent}>저<span style={{marginLeft:"20px"}}></span>장</button>      
         </div>
-    {showModal && <DetailModal setShowModal={setShowModal}  onSave={handleDetailSave}/>}      
-    </>
+        {showModal && <DetailModal setShowModal={setShowModal} onSave={handleDetailSave} prevCover={prevCover} prevCoverURL={prevCoverURL} prevTags={prevTags} />} 
+     </>
   );
   
 }
