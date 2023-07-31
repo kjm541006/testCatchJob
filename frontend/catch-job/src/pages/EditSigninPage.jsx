@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import "../assets/css/EditSignin.css"
+import EditSignin from "../assets/css/member/EditSignin.css";
+import axios from 'axios';
+import MyPage from './MyPage';
 
 //axios 기능 구현해야함
 
@@ -44,8 +46,6 @@ const EditSigninPage = () => {
         <input type="text" className="input-box-edit" tabIndex="1" value={email} readOnly style={{color:'#807d7d'}}/>
         <div className="input-text-edit">이름</div>
         <input type="text" className="input-box-edit" tabIndex="2" value={name} readOnly style={{color:'#807d7d'}}/>
-        <div className="input-text-edit">비밀번호</div>
-        <input type="text" className="input-box-edit" tabIndex="3" value={password}/>
 
         <div className="input-text-edit">직무</div>
           <div className="choosejob-edit" id="pick-edit">
