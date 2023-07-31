@@ -137,21 +137,12 @@ public class MemberController {
 //		res.sendRedirect(googleoauth.getOauthRedirectURL());
 //	}
 //	
-//	@PostMapping("/googlelogin")
+//	@PostMapping("/login/oauth2/code/google")
 //	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String code) {
 //		return googleoauth.requestAccessToken(code);
 //	}
-	@PostMapping("/login/oauth2/code/google")
+	@PostMapping("/googlelogin")
 	public ResponseEntity<?> successGoogleLogin1(@RequestParam("code") String code) {
-	    System.out.println("test Auth Code" + code);	    
-	    try{
-	    	googleoauth.requestAccessToken(code);
-	    	
-	    }catch(Exception e) {
-	    	
-		    System.out.println("test error00");
-
-	    }
 		return googleoauth.requestAccessToken(code);
 	}
 
@@ -167,7 +158,7 @@ public class MemberController {
 //	}
 
 	// 회원조회
-	@PostMapping("/memberInfo")
+	@GetMapping("/memberInfo")
 	public ResponseEntity<?> memberInfo(@RequestBody MemberDTO memberDTO) {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		
