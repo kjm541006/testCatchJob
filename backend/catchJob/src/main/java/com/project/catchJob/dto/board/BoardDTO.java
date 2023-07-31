@@ -102,16 +102,6 @@ public class BoardDTO {
 //		boolean isLike = bLikeRepo.findByMemberAndBoard(member, board).isPresent();
 		boolean isLike = boardService.isUserLiked(member.getEmail(), board.getBoardId());
 		
-//		List<TagDTO> tagDTOList = board.getBoardTagList().stream()
-//			    .map(bTag -> {
-//			        Tag tag = bTag.getTag();
-//			        return TagDTO.builder()
-//			            .tagId(tag.getTagId())
-//			            .tagName(tag.getTagName())
-//			            .build();
-//			    })
-//			    .collect(Collectors.toList());
-		
 		List<String> tagList = board.getTags();
 		String[] tags = tagList.toArray(new String[0]);
 		
