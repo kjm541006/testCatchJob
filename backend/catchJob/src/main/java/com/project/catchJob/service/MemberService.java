@@ -4,6 +4,7 @@ package com.project.catchJob.service;
 import java.io.File;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.catchJob.domain.member.M_profile;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.member.MemberDTO;
+import com.project.catchJob.exception.UnauthorizedException;
 import com.project.catchJob.repository.member.M_ProfileRepository;
 import com.project.catchJob.repository.member.MemberRepository;
 import com.project.catchJob.security.PasswordEncoder;
@@ -23,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional // memberRepo와 mProfileRepo 하나라도 실패하면 롤백
 public class MemberService {
 	
-	@Autowired
+	@Autowired 
 	private MemberRepository memberRepo;
 	
 	@Autowired
@@ -32,6 +34,10 @@ public class MemberService {
 	@Autowired
 	private PasswordEncoder pwdEncoder;
 
+	@Autowired
+	private CommonService commonService;
+	
+	@Value("${file.path}") private String filePath;
 	
 	/*
 	// 회원가입
@@ -74,7 +80,8 @@ public class MemberService {
 			MultipartFile mProfile = memberDTO.getMProfile(); // DTO에 담긴 파일 가져옴
 			String originalFileName = mProfile.getOriginalFilename(); // 파일 이름 가져옴
 			String storedFileName = System.currentTimeMillis() + "_" + originalFileName; // 서버 저장용 이름
-			String savePath = "C:/Users/권유진/Desktop/딩딩_학원실습/temp/" + storedFileName; // 저장 경로 설정
+//			String savePath = "C:/Users/권유진/Desktop/딩딩_학원실습/temp/" + storedFileName; // 저장 경로 설정
+			String savePath = filePath + storedFileName; // 저장 경로 설정
 			mProfile.transferTo(new File(savePath)); // 해당 경로에 파일 저장
 			Member member = Member.builder()
 					.email(memberDTO.getEmail())
@@ -95,7 +102,7 @@ public class MemberService {
 	}
 	
 	
-//	 로그인
+	// 로그인
 	public Member getByCredentials(final String email, final String pwd, final PasswordEncoder pwdEncoder) {
 		
 		final Member originMember = memberRepo.findByEmail(email);
@@ -107,7 +114,6 @@ public class MemberService {
 		return null;
 	}
 
-	
 	// 회원수정
 	public Member updateMember(MemberDTO member) {
 		

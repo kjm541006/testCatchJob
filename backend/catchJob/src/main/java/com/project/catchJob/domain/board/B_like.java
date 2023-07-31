@@ -6,6 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.catchJob.domain.member.Member;
 
 import lombok.AllArgsConstructor;
@@ -25,6 +27,7 @@ public class B_like {
 	@Id @GeneratedValue
 	private Long bLikId; // 보드좋아요 아이디
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member member;
@@ -34,6 +37,7 @@ public class B_like {
 		member.getB_LikeList().add(this);
 	}
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "board_id", nullable = false, updatable = false)
 	private Board board;

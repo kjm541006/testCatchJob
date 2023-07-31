@@ -1,7 +1,29 @@
 package com.project.catchJob.domain.member;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.catchJob.config.RestTemplateConfig;
+import com.project.catchJob.dto.member.GoogleOAuthTokenDTO;
+import com.project.catchJob.dto.member.GoogleUserInfoDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -9,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @PropertySource("classpath:application-oauth.properties")
 public class GoogleOAuth {
-/*
+
 	// https://velog.io/@hwsa1004/Spring-%EA%B5%AC%EA%B8%80-%EB%A1%9C%EA%B7%B8%EC%9D%B8-REST-API-%EA%B5%AC%ED%98%84-OAuth2
 	// https://developers.google.com/identity/protocols/oauth2/web-server?hl=ko 참고
 	
@@ -21,53 +43,117 @@ public class GoogleOAuth {
 	
 	private final ObjectMapper objectMapper;
 	
-	private RestTemplate restTemplate;
+	private final RestTemplate restTemplate;
 	
-	@Value("${spring.security.oauth2.client.registration.google.clientId}")
+	@Value("${spring.security.oauth2.client.registration.google.client-id}")
 	private String googleClientId;
 	
-	@Value("${spring.security.oauth2.client.registration.google.clientSecret}")
+	@Value("${spring.security.oauth2.client.registration.google.client-secret}")
 	private String googleClientSecret;
 	
-	@Value("${spring.security.oauth2.client.registration.google.redirect}")
+	@Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
 	private String googleRedirectUrl;
 
 
-	public String getOauthRedirectURL() {
-
-		String redirectUrl = "https://accounts.google.com/o/oauth2/auth";
-	    String clientId = googleClientId;
-	    String redirectUri = googleRedirectUrl;
-	    String responseType = "code";
-	    String scope = "openid email profile";
-	    String state = "your-state-value"; // 선택 사항: CSRF 보호를 위한 상태 값 추가
-	    
-	    String oauthUrl = redirectUrl + "?client_id=" + clientId + "&redirect_uri=" + redirectUri +
-	            "&response_type=" + responseType + "&scope=" + scope + "&state=" + state;
-	    
-	    return oauthUrl;
-	}
+//	public String getOauthRedirectURL() {
+//
+//		String redirectUrl = "https://accounts.google.com/o/oauth2/auth";
+////	    String clientId = googleClientId;
+////	    String redirectUri = googleRedirectUrl;
+//	    String responseType = "code";
+//	    String scope = "openid email profile";
+//	    String state = "your-state-value"; // 선택 사항: CSRF 보호를 위한 상태 값 추가
+//	    
+//	    String oauthUrl = redirectUrl + "?client_id=" + clientId + "&redirect_uri=" + redirectUri +
+//	            "&response_type=" + responseType + "&scope=" + scope + "&state=" + state;
+//	    
+//	    return oauthUrl;
+//	}
 
 	// 일회용 코드를 다시 구글로 보내 엑세스 토큰을 포함한 json string이 담긴 responseEntity 받아옴
-	public ResponseEntity<String> requestAccessToken(String accessCode) {
-
-		RestTemplate restTemplate = new RestTemplate();
-		Map<String, String> params = new HashMap<>();
+//	public ResponseEntity<String> requestAccessToken(String accessCode) {
+//		RestTemplate restTemplate = new RestTemplate();
+//		Map<String, String> params = new HashMap<>();
+//		
+//		params.put("code", accessCode);
+//		params.put("client_id", googleClientId);
+//		params.put("client_secret", googleClientSecret);
+//		params.put("redirect_uri", googleRedirectUrl);
+//		params.put("grant_type", "authorization_code");
+//		
+//		
+//		ResponseEntity<String> responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_URL, params, String.class);
+//		if(responseEntity.getBody().isBlank() || responseEntity.getBody().isEmpty()) System.out.println("res~~~~~~~~~~" + "없" );
+//		System.out.println("getStatusCode~~~~~~~" + responseEntity.getStatusCode());
+//		System.out.println("getBody~~~~~~~" + responseEntity.getBody());
+//		
+//		if(responseEntity.getStatusCode() == HttpStatus.OK) {
+//			ResponseEntity.ok(responseEntity);
+//		}
+//		return ResponseEntity.badRequest().body("fail");
 		
-		params.put("code", accessCode);
-		params.put("client-id", googleClientId);
-		params.put("client-secret", googleClientSecret);
-		params.put("redirect-uri", googleRedirectUrl);
-		params.put("grant_type", "authorization_code");
-		
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_URL, params, String.class);
 		// 스프링부트에서 다른 서버의 api 엔드포인트 호출할 때 restTemplate사용
-		
-		if(responseEntity.getStatusCode() == HttpStatus.OK) {
-			return responseEntity;
-		} 
-		return null;
+	////////이거
+//		 //RestTemplate restTemplate = new RestTemplate();
+//		    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+//		    
+//		    params.add("code", accessCode);
+//		    params.add("client_id", googleClientId);
+//		    params.add("client_secret", googleClientSecret);
+//		    params.add("redirect_uri", googleRedirectUrl);
+//		    params.add("grant_type", "authorization_code");
+//
+//		    HttpHeaders headers = new HttpHeaders();
+//		    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//		   HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
+//		    
+//		   ResponseEntity<String> responseEntity;
+//		   try {
+//			    responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_URL, requestEntity, String.class);
+//			} catch (HttpClientErrorException e) {
+//			    if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+//			        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired access code");
+//			    } else {
+//			        e.printStackTrace();
+//			        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while making API call");
+//			    }
+//			} catch (Exception e) {
+//			    e.printStackTrace();
+//			    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while making API call");
+//			}
+//	}
+	public ResponseEntity<String> requestAccessToken(String accessCode) {
+	    // RestTemplate 생성
+	    RestTemplate restTemplate = new RestTemplate();
+	    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+	    
+	    params.add("code", accessCode);
+	    params.add("client_id", googleClientId);
+	    params.add("client_secret", googleClientSecret);
+	    params.add("redirect_uri", googleRedirectUrl);
+	    params.add("grant_type", "authorization_code");
+
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+	    HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
+	    
+	    ResponseEntity<String> responseEntity;
+	    try {
+	        responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_URL, requestEntity, String.class);
+	    } catch (HttpClientErrorException e) {
+	        if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+	            responseEntity = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired access code");
+	        } else {
+	            e.printStackTrace();
+	            responseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while making API call");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        responseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while making API call");
+	    }
+	    return responseEntity;
 	}
+
 	
 	// token 얻기 json -> 자바 객체
 	public GoogleOAuthTokenDTO getAccessToken(ResponseEntity<String> res) throws JsonProcessingException {
@@ -81,9 +167,11 @@ public class GoogleOAuth {
 	public ResponseEntity<String> requestUserInfo(GoogleOAuthTokenDTO oAuthToken) {
 		
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "Bearer" + oAuthToken.getAccess_token());
+		headers.add("Authorization", "Bearer " + oAuthToken.getAccess_token());
+		System.out.println("Authorization: " + "Bearer "+oAuthToken.getAccess_token());
 		
 		HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(headers);
+//		HttpEntity req = new HttpEntity(headers);
 		ResponseEntity<String> res = restTemplate.exchange(GOOGLE_USERINFO_REQUEST_URL, HttpMethod.GET, req, String.class);
 		System.out.println("response.getBody() = " + res.getBody());
 		return res;
@@ -96,5 +184,5 @@ public class GoogleOAuth {
 		return googleUserInfoDTO;
 		// GoogleUserInfoDTO : json형태를 자바 객체 형식으로 변경 후 저장해서 담을 곳
 	}
-	*/
+	
 }

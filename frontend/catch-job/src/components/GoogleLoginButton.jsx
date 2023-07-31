@@ -5,7 +5,7 @@ import axios from 'axios';
 const GoogleLoginButton = () => {
   const googleSocialLogin = useGoogleLogin({
     onSuccess: (codeResponse) => {
-      console.log(codeResponse.code);
+      console.log("-----------", codeResponse.code);
       axios.post('http://43.202.98.45:8089/googlelogin', null, {
         params: {
           code: codeResponse.code,
@@ -15,7 +15,7 @@ const GoogleLoginButton = () => {
         .then((response) => {
           const jwtToken = response.data.jwtToken;
           localStorage.setItem('jwtToken', jwtToken); // JWT 토큰을 localStorage에 저장
-          console.log(jwtToken);
+          console.log("aaa --------------------", jwtToken);
           console.log('JWT 토큰이 저장되었습니다.');
 
         })

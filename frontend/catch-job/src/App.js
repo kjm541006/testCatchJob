@@ -23,6 +23,7 @@ import LoginRoute from "./components/LoginRoute";
 import { useEffect } from "react";
 import LoginAlertPage from "./pages/LoginAlertPage";
 import axios from "axios";
+import NewsPage from "./pages/NewsPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ function App() {
           <Route path="/study/build" element={savedToken != null ? <BuildStudyPage /> : <LoginAlertPage />} />
           <Route path="/portfolio/build" element={savedToken != null ? <BuildPortfolioPage /> : <LoginAlertPage />} />
           {/* <Route path="/community/*" element={<CommunityRoutes />} /> */}
+          <Route path="/news" element={<NewsPage />} />
         </Route>
         <Route path="/join" element={<SocialSigninPage />} />
         <Route path="/signin" element={<BasicSigninPage />} />

@@ -42,10 +42,10 @@ const Header = () => {
               <Link to={"/"} className="link">
                 <li className="nav-list">포트폴리오</li>
               </Link>
-              <Link to={"/recruit"} className="link">
+              <Link to={"/news"} className="link">
                 <li className="nav-list">채용</li>
               </Link>
-              <Link to={"/study"} className="link">
+              <Link to={"/study?type=all"} className="link">
                 <li className="nav-list">스터디</li>
               </Link>
               <Link to={"/community"} className="link">

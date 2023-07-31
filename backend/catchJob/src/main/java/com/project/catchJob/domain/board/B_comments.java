@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.catchJob.domain.member.Member;
 
 import lombok.AllArgsConstructor;
@@ -39,6 +41,7 @@ public class B_comments {
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime bComDate; // 댓글 작성날짜
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member member;
@@ -48,6 +51,7 @@ public class B_comments {
 		member.getB_CommentsList().add(this);
 	}
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "board_id", nullable = false, updatable = false)
 	private Board board;

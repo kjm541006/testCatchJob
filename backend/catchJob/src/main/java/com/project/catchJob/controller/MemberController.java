@@ -1,16 +1,23 @@
 package com.project.catchJob.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.catchJob.domain.member.GoogleOAuth;
 import com.project.catchJob.domain.member.Member;
+import com.project.catchJob.dto.member.GoogleUserInfoDTO;
 import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.security.PasswordEncoder;
 import com.project.catchJob.security.TokenProvider;
 import com.project.catchJob.service.MemberService;
+import com.project.catchJob.service.OAuthService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,13 +33,13 @@ public class MemberController {
 	
 	@Autowired
 	private PasswordEncoder pwdEncoder;
-/*	
+	
 	@Autowired
 	private GoogleOAuth googleoauth;
 	
 	@Autowired
 	private OAuthService oAuthService;
-*/	
+	
 
 	
 	// 회원등록
@@ -45,7 +52,6 @@ public class MemberController {
 			MemberDTO responseMemberDTO = MemberDTO.builder()
 					.email(memberDTO.getEmail())
 					.pwd(pwdEncoder.encrypt(memberDTO.getEmail(), memberDTO.getPwd()))
-//					.pwd(memberDTO.getPwd())
 					.name(memberDTO.getName())
 					.job(memberDTO.getJob())
 					.hasCareer(memberDTO.getHasCareer())
@@ -54,10 +60,7 @@ public class MemberController {
 			memberService.createMember(responseMemberDTO);
 			return ResponseEntity.ok().body(responseMemberDTO);
 		} catch (Exception e) {
-			// 멤버 정보는 항상 하나이므로 리스트로 만들어야하는 ResponseDTO를 사용하지 않고 그냥 member 리턴
-//			 ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
-//			 return ResponseEntity.badRequest().body(registerMember(memberDTO));
-			 return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
+			return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
 		}		
 	}
 	
@@ -127,24 +130,42 @@ public class MemberController {
 			return ResponseEntity.badRequest().body("로그인 실패");
 		}
 	}
-	/*
-	// 구글 로그인
-	@GetMapping("/google")
-	public void getGoogleAuthUrl(HttpServletResponse res) throws Exception {
-		res.sendRedirect(googleoauth.getOauthRedirectURL());
-	}
 	
-	@GetMapping("/api/oauth2/callback/google")
-	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String accessCode) {
-		return googleoauth.requestAccessToken(accessCode);
+//	// 구글 로그인
+//	@GetMapping("/google")
+//	public void getGoogleAuthUrl(HttpServletResponse res) throws Exception {
+//		res.sendRedirect(googleoauth.getOauthRedirectURL());
+//	}
+//	
+//	@PostMapping("/googlelogin")
+//	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String code) {
+//		return googleoauth.requestAccessToken(code);
+//	}
+	@PostMapping("/login/oauth2/code/google")
+	public ResponseEntity<?> successGoogleLogin1(@RequestParam("code") String code) {
+	    System.out.println("test Auth Code" + code);	    
+	    try{
+	    	googleoauth.requestAccessToken(code);
+	    	
+	    }catch(Exception e) {
+	    	
+		    System.out.println("test error00");
+
+	    }
+		return googleoauth.requestAccessToken(code);
 	}
-	
-	@GetMapping("/google/login")
-	public ResponseEntity<?> successGoogleLogin2(@RequestParam("code") String accessCode) {
-		return null;
-		// return oAuthService.googleLogin(accessCode);
-	}
-*/
+
+//	@PostMapping("/googlelogin")
+//	public ResponseEntity<String> successGoogleLogin(@RequestParam("code") String accessCode) {
+//		return googleoauth.requestAccessToken(accessCode);
+//	}
+//	
+//	@GetMapping("/googlelogin")
+//	public ResponseEntity<?> successGoogleLogin2(@RequestParam("code") String accessCode) {
+////		return null;
+//		 return oAuthService.googleLogin(accessCode);
+//	}
+
 	// 회원조회
 	@PostMapping("/memberInfo")
 	public ResponseEntity<?> memberInfo(@RequestBody MemberDTO memberDTO) {
