@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styles from "../assets/css/DetailModal.module.css";
 
-const DetailModal = ({ setShowModal, onSave }) => {
-  const [uploadedFile, setUploadedFile] = useState("");
-  const [tags, setTags] = useState([]);
+const DetailModal = ({ setShowModal, onSave, prevCover, prevCoverURL, prevTags }) => {
+  const [uploadedFile, setUploadedFile] = useState(prevCoverURL); // 이전값으로 초기화
+  const [tags, setTags] = useState(prevTags || []);
   const [currentTag, setCurrentTag] = useState("");
   const [bCoverFileName, setBCoverFileName] = useState("");
 
@@ -35,7 +35,8 @@ const DetailModal = ({ setShowModal, onSave }) => {
   const saveButtonHandler = () => {
     console.log("bCoverFileName:", bCoverFileName); // 커버 파일 이름 확인
     console.log("tags:", tags); // 태그 확인
-    onSave(bCoverFileName, tags);
+    onSave(bCoverFileName, uploadedFile, tags); // uploadedFile 전달 추가
+    setShowModal(false);
   };
 
   return (

@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 const BasicSigninPage = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +15,7 @@ const BasicSigninPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [selectedJobs, setSelectedJobs] = useState("");
   const [selectedCarrers, setSelectedCarrers] = useState("");
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -76,6 +79,7 @@ const BasicSigninPage = () => {
       .then((response) => {
         console.log(response.data); // 서버 응답 데이터 출력
         alert("회원가입이 성공적으로 되었습니다!");
+        navigate("/login");
       })
       .catch((error) => {
         console.error(error); // 에러 출력
@@ -213,9 +217,7 @@ const BasicSigninPage = () => {
 
           <div className="enrollbutton">
             <button className="cancel-basic">취소</button>
-            <Link to="/login" className="enroll-basic" onClick={registerUser}>
-              등록
-            </Link>
+            <button className="enroll-basic" onClick={registerUser}>등록</button>
           </div>
 
           <div className="log-in-basic">
