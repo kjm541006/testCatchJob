@@ -102,19 +102,18 @@ public class MemberService {
 		}
 	}
 	
-	
 	// 로그인
 	public Member getByCredentials(final String email, final String pwd, final PasswordEncoder pwdEncoder) {
 		
 		final Member originMember = memberRepo.findByEmail(email);
-		System.out.println(originMember);
 		// matches 메서드를 이용해서 패스워드 같은지 확인
 		if(originMember != null && pwdEncoder.matches(pwdEncoder.encrypt(email, pwd), originMember.getPwd())) {
 			return originMember;
 		}
 		return null;
 	}
-	// 회원조회
+	
+	// 마이페이지(1. 회원조회)
 	public MemberInfoDTO getInfo(String jwtToken) {
 		
 		 Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
@@ -130,42 +129,36 @@ public class MemberService {
 		return memberInfo;
 	}
 	
-
-	// 회원수정
-	public Member updateMember(MemberDTO member) {
+	// 마이페이지(2. 비번조회)
+	public String checkPwd(String jwtToken, MemberDTO memberDTO, PasswordEncoder pwdEncoder) {
 		
-		Member findMember = memberRepo.findByEmail(member.getEmail());
-		PasswordEncoder pwdEncoder = new PasswordEncoder();
+		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+	    		.orElseThrow(UnauthorizedException::new);
+		if(optAuthenticatedMember != null && pwdEncoder.matches(
+				pwdEncoder.encrypt(optAuthenticatedMember.getEmail(), memberDTO.getPwd()), 
+				optAuthenticatedMember.getPwd())) {
+			return "비밀번호 일치";
+		}
+		return null;
+	}
+	
+	// 마이페이지(3. 회원수정)
+	public Member updateMember(String jwtToken, MemberDTO member) {
 		
-		if(findMember != null) {
-			// 이메일,타입은 수정 불가
-			findMember.setName(member.getName());
-			findMember.setPwd(pwdEncoder.encrypt(member.getEmail(), member.getPwd()));
-			findMember.setJob(member.getJob());
-			findMember.setHasCareer(member.getHasCareer());
-			findMember.setFileAttached(member.getFileAttached());
-			return memberRepo.save(findMember);
+		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+	    		.orElseThrow(UnauthorizedException::new);
+		
+		if(optAuthenticatedMember != null) {
+			optAuthenticatedMember.setName(member.getName());
+			optAuthenticatedMember.setPwd(pwdEncoder.encrypt(optAuthenticatedMember.getEmail(), member.getPwd()));
+			optAuthenticatedMember.setJob(member.getJob());
+			optAuthenticatedMember.setHasCareer(member.getHasCareer());
+			// optAuthenticatedMember.setFileAttached(member.getFileAttached());
+			return memberRepo.save(optAuthenticatedMember);
 		} else {
 			throw new RuntimeException("다시 로그인 해주세요");
 		}
 	}
-	
-//	public Member findMemberByEmail(String userEmail) throws Exception {
-//	    Member member = memberRepo.findByEmail(userEmail);
-//	    if (member == null) {
-//	        throw new Exception("Member not found with email: " + userEmail);
-//	    }
-//	    return member;
-//	}
-
-//	public Member findMemberByEmail(String userEmail) {
-//	    Member member = memberRepo.findByEmail(userEmail);
-//	    if (member == null) {
-//	        throw new UsernameNotFoundException("Member not found with email: " + userEmail);
-//	    }
-//	    return member;
-//	}
-	
 
 	// 회원 정보 조회
 	public Member getMember(Long memberId) throws Exception {

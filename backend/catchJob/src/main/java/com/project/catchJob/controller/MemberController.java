@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.dto.member.MemberInfoDTO;
 import com.project.catchJob.security.PasswordEncoder;
 import com.project.catchJob.security.TokenProvider;
+import com.project.catchJob.service.BoardService;
 import com.project.catchJob.service.MemberService;
 import com.project.catchJob.service.OAuthService;
 
@@ -110,7 +112,6 @@ public class MemberController {
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		
 		// log.info("{} 로그인 성공", member.toString());
-		System.out.println("==========" + member.toString());
 		if(member != null) {
 			
 			// 토큰 생성
@@ -134,29 +135,15 @@ public class MemberController {
 	}
 	
 //	// 구글 로그인
-//	@GetMapping("/google")
-//	public void getGoogleAuthUrl(HttpServletResponse res) throws Exception {
-//		res.sendRedirect(googleoauth.getOauthRedirectURL());
-//	}
-//	
 //	@PostMapping("/login/oauth2/code/google")
-//	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String code) {
-//		return googleoauth.requestAccessToken(code);
-//	}
 	@PostMapping("/googlelogin")
-	public ResponseEntity<?> successGoogleLogin1(@RequestParam("code") String code) {
+	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String code) {
 		return googleoauth.requestAccessToken(code);
 	}
 
-//	@PostMapping("/googlelogin")
-//	public ResponseEntity<String> successGoogleLogin(@RequestParam("code") String accessCode) {
-//		return googleoauth.requestAccessToken(accessCode);
-//	}
-
-	// 회원조회
+	// 마이페이지 (회원조회)
 	@GetMapping("/memberInfo")
 	public ResponseEntity<?> memberInfo(@RequestHeader("Authorization") String jwtToken) {
-		//Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		
 		MemberInfoDTO memberInfo = memberService.getInfo(jwtToken);
 		if(memberInfo != null) {
@@ -174,41 +161,47 @@ public class MemberController {
 //		return ResponseEntity.badRequest().body("회원 조회 실패");
 //	}
 	
-	// 회원수정
-	@PostMapping("/memberUpdate")
-	public ResponseEntity<?> memberUpdate(@RequestBody MemberDTO memberDTO) {
-		Member updateMember = memberService.updateMember(memberDTO);
+	// 마이페이지 (비번조회)
+	@PostMapping("/memberPwd")
+	public ResponseEntity<?> checkPwd(@RequestHeader("Authorization") String jwtToken, @RequestBody MemberDTO memberDTO) {
 		
-		if(updateMember != null) {
-		MemberDTO responseMemberDTO = memberDTO.builder()
-				.email(memberDTO.getEmail()) // 이메일은 수정불가. 기존의 이메일
-				.name(updateMember.getName())
-				.pwd(updateMember.getPwd())
-				.job(updateMember.getJob())
-				.hasCareer(updateMember.getHasCareer())
-				.token(memberDTO.getToken()) // 토큰은 기존의 발급받은 토큰 사용
-				.type(memberDTO.getType())
-				.fileAttached(updateMember.getFileAttached())
-				.build();
-		
-			return ResponseEntity.ok().body(responseMemberDTO);
-		} else {
-			return ResponseEntity.badRequest().body("회원 수정 실패");
-		}
+		String res = memberService.checkPwd(jwtToken, memberDTO, pwdEncoder);
+		if(res != null) {
+			return ResponseEntity.ok().body("비밀번호 일치");
+		} 
+		return ResponseEntity.badRequest().body("비밀번호 불일치");
 	}
 	
-//	// 로그아웃
-//	@PostMapping("/logout")
-//	public ResponseEntity<?> logout(@RequestBody MemberDTO memberDTO) {
-//		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
-//		System.out.println("-------------" + memberDTO.getEmail());
-//		System.out.println("-------------" + memberDTO.getPwd());
-//		System.out.println("-------------" + pwdEncoder);
-//		if(member != null) {
-//
-//			tokenProvider.deleteToken(memberDTO);
-//			return ResponseEntity.ok().build();
+	// 마이페이지 (회원수정)
+	@PutMapping("/memberUpdate")
+	public ResponseEntity<?> memberUpdate(@RequestHeader("Authorization") String jwtToken, @RequestBody MemberDTO memberDTO) {
+		Member updateMember = memberService.updateMember(jwtToken, memberDTO);
+		
+		if(updateMember != null) {
+			return ResponseEntity.ok().body(updateMember);
+		} 
+		return ResponseEntity.badRequest().body("회원 수정 실패");
+
+	}
+//	public ResponseEntity<?> memberUpdate(@RequestBody MemberDTO memberDTO) {
+//		Member updateMember = memberService.updateMember(memberDTO);
+//		
+//		if(updateMember != null) {
+//			MemberDTO responseMemberDTO = memberDTO.builder()
+//					.email(memberDTO.getEmail()) // 이메일은 수정불가. 기존의 이메일
+//					.name(updateMember.getName())
+//					.pwd(updateMember.getPwd())
+//					.job(updateMember.getJob())
+//					.hasCareer(updateMember.getHasCareer())
+//					.token(memberDTO.getToken()) // 토큰은 기존의 발급받은 토큰 사용
+//					.type(memberDTO.getType())
+//					.fileAttached(updateMember.getFileAttached())
+//					.build();
+//			
+//			return ResponseEntity.ok().body(responseMemberDTO);
+//		} else {
+//			return ResponseEntity.badRequest().body("회원 수정 실패");
 //		}
-//		return ResponseEntity.badRequest().body("회원 로그아웃 실패");
 //	}
+
 }

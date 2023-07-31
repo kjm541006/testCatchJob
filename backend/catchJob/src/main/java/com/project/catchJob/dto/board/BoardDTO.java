@@ -7,14 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-//import com.project.catchJob.domain.board.B_tag;
 import com.project.catchJob.domain.board.Board;
-//import com.project.catchJob.domain.board.Tag;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.member.BoardMemberDTO;
-import com.project.catchJob.repository.board.B_likeRepository;
 import com.project.catchJob.service.BoardService;
 
 import lombok.AllArgsConstructor;
