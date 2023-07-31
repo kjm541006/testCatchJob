@@ -23,7 +23,7 @@ const BuildPortfolioPage = () => {
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0]; 
-    setUploadedFile(file.name); 
+    setUploadedFile(file); 
   };
   
   const handleDetailSave = (cover, tags) => {
@@ -39,32 +39,37 @@ const BuildPortfolioPage = () => {
   
     const axiosConfig = {
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${token}`,
       },
     };
   
-    const board = {
+    const formData = new FormData();
+    formData.append('board', JSON.stringify({
       bTitle: title,
       bContents: value,
       tags: tags,
-    };
-  
-    const data = {
-      board: board,
-      bFileName: uploadedFile,
-      bCoverFileName: bCoverFileName,
-    };
+    }));
 
-    console.log(board,data.bFileName,bCoverFileName);
+    formData.append('bFileName', uploadedFile);
+    formData.append('bCoverFileName', bCoverFileName);
+
+    console.log("board 정보:", { // 확인을 위한 콘솔 출력
+      bTitle: title,
+      bContents: value,
+      tags: tags,
+    });
   
+    console.log("bFileName 정보:", uploadedFile); // 확인을 위한 콘솔 출력
+    console.log("bCoverFileName 정보:", bCoverFileName); // 확인을 위한 콘솔 출력
     try {
-      const response = await axios.post('http://43.202.98.45:8089/buildportfolio', data, axiosConfig);
+      const response = await axios.post('http://43.202.98.45:8089/buildportfolio', formData, axiosConfig);
       console.log(response.data);
     } catch (error) {
       console.error('Error:', error);
     }
   };
+  
   
   
 

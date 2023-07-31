@@ -37,6 +37,7 @@ const DetailModal = ({ setShowModal,onSave }) => {
     console.log("bCoverFileName:", bCoverFileName); // 커버 파일 이름 확인
     console.log("tags:", tags); // 태그 확인
     onSave(bCoverFileName, tags);
+    setShowModal(false); 
   };
   
 
