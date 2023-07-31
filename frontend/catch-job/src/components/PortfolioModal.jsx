@@ -65,7 +65,7 @@ const PortfolioModal = ({ item, onClose }) => {
 
   const submitComment = async () => {
     const response = await axios.post(
-      `http://43.202.98.45:8089/portfolio/${item.boardId}`,
+      `http://43.202.98.45:8089/portfolio/comment/${item.boardId}`,
       {
         memberName: writerName,
         memberEmail: writerEmail,
@@ -88,13 +88,13 @@ const PortfolioModal = ({ item, onClose }) => {
       console.log(comment);
 
       setCommentList([
+        ...commentList,
         {
           commentContent: comment,
           commentDate: commentDateFromServer,
           memberName: writerName,
           memberEmail: writerEmail,
         },
-        ...commentList,
       ]);
 
       setComment("");
