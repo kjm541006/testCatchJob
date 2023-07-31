@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import "../assets/css/BasicSignin.css";
+import "../assets/css/member/BasicSignin.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 const BasicSigninPage = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +15,7 @@ const BasicSigninPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [selectedJobs, setSelectedJobs] = useState("");
   const [selectedCarrers, setSelectedCarrers] = useState("");
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -48,6 +51,10 @@ const BasicSigninPage = () => {
   };
 
   const registerUser = () => {
+    if (!email || !name || !password || !confirmPassword || !selectedJobs || !selectedCarrers) {
+      return alert("모든 필드를 채워주세요.");
+    }
+
     if (password !== confirmPassword) {
       return alert("비밀번호와 비밀번호 확인이 같지 않습니다.");
     }
@@ -71,10 +78,15 @@ const BasicSigninPage = () => {
       })
       .then((response) => {
         console.log(response.data); // 서버 응답 데이터 출력
+        alert("회원가입이 성공적으로 되었습니다!");
+        navigate("/login");
       })
       .catch((error) => {
         console.error(error); // 에러 출력
-
+        if (error.response && error.response.status >= 400) {
+          // 이미 있는 이메일 확인
+          alert("회원가입에 실패했습니다.");
+        }
       });
   };
 
@@ -164,7 +176,7 @@ const BasicSigninPage = () => {
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("프론트엔드")} />
                 <div className="choosejob-text-basic">프론트엔드</div>
               </div>
-            </label>    
+            </label>
           </div>
           <div className="choosejob">
             <label>
@@ -172,13 +184,13 @@ const BasicSigninPage = () => {
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("백엔드")} />
                 <div className="choosejob-text-basic">백엔드</div>
               </div>
-            </label>  
+            </label>
             <label>
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("PM")} />
                 <div className="choosejob-text-basic">PM</div>
               </div>
-            </label>  
+            </label>
             <label>
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("기타")} />
@@ -205,14 +217,14 @@ const BasicSigninPage = () => {
 
           <div className="enrollbutton">
             <button className="cancel-basic">취소</button>
-            <button className="enroll-basic" onClick={registerUser}>
-              등록
-            </button>
+            <button className="enroll-basic" onClick={registerUser}>등록</button>
           </div>
 
           <div className="log-in-basic">
             <div className="entire-text-basic">이미 계정이 있으신가요?</div>
-            <Link to="/login" className="log-in-now-basic">로그인 하기</Link>
+            <Link to="/login" className="log-in-now-basic">
+              로그인 하기
+            </Link>
           </div>
         </div>
       </div>

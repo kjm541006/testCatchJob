@@ -111,14 +111,14 @@
 .button-icon-kakao {
   width: 24px;
   height: 24px;
-  background: url("../img/ico-kakao.png"), 0px 0px / 100% 100% no-repeat;
+  background: url("../../img/ico-kakao.png"), 0px 0px / 100% 100% no-repeat;
   margin-right: 10px;
 }
 
 .button-icon-google {
   width: 24px;
   height: 24px;
-  background: url("../img/ico-google.png"), 0px 0px / 100% 100% no-repeat;
+  background: url("../../img/ico-google.png"), 0px 0px / 100% 100% no-repeat;
   margin-right: 10px;
 }
 

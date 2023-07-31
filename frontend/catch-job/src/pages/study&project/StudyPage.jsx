@@ -19,15 +19,14 @@ const StudyPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     const fetchData = async () => {
       console.log(typeParam);
 
       try {
         //   const response = await axios.get("https://jsonplaceholder.typicode.com/posts/");
-        const response = await axios.get("http://localhost:8089/project");
+        // const response = await axios.get("http://localhost:8089/project");
+        const response = await axios.get("http://43.202.98.45:8089/project");
         if (typeParam === "all") {
           setData(response.data);
           return;
@@ -36,7 +35,11 @@ const StudyPage = () => {
         setData(newProducts);
         console.log(response.data);
       } catch (error) {
+        if (error.message.toLowerCase() === "Network Error".toLowerCase()) {
+          alert("네트워크 에러입니다. 서버가 꺼져있을 수 있습니다.");
+        }
         alert("에러가 발생했습니다.");
+        dispatch(stopLoading());
       } finally {
         dispatch(stopLoading());
       }
