@@ -3,7 +3,7 @@ import "../assets/css/member/Login.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,16 +19,11 @@ const LoginPage = () => {
   const isLoggedIn = useSelector(selectLoggedIn);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     window.location.href = "/";
-  //   }
-  // }, [isLoggedIn]);
 
   const handleLogin = async () => {
     const userData = {
@@ -46,6 +41,7 @@ const LoginPage = () => {
       const email = response.data.email;
       if (response.status === 400) {
         alert("회원을 찾지 못했습니다.");
+        return;
       }
       console.log(token);
       console.log(name);
@@ -53,17 +49,15 @@ const LoginPage = () => {
       localStorage.setItem("token", token);
       localStorage.setItem("name", name);
       localStorage.setItem("email", email);
-      // dispatch(setCredentials({ name, email, token }))
       console.log(`로그인여부 :${isLoggedIn}`);
-      window.location.href = "/";
-      console.log(navigate(-1));
+      navigate("/");
       setTimeout(() => {
         window.location.reload();
       }, 100);
     } catch (error) {
       if (error.response.status === 500) {
         // 서버 내부 에러 처리
-        alert("로그인에 실패했습니다. ");
+        alert("로그인에 실패했습니다.(서버 에러) ");
       }
     }
   };
@@ -106,7 +100,7 @@ const LoginPage = () => {
 
           <div className="sign-in">
             <div className="entire-text">아직 회원이 아니세요?</div>
-            <Link to="/social-signin" className="sign-in-now">
+            <Link to="/join" className="sign-in-now">
               회원가입 하기
             </Link>
           </div>

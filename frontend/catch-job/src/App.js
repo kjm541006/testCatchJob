@@ -24,6 +24,7 @@ import { useEffect } from "react";
 import LoginAlertPage from "./pages/LoginAlertPage";
 import axios from "axios";
 import NewsPage from "./pages/NewsPage";
+import SigninAlertPage from "./pages/SigninAlertPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -60,7 +61,7 @@ function App() {
           <Route path="/news" element={<NewsPage />} />
         </Route>
         <Route path="/join" element={<SocialSigninPage />} />
-        <Route path="/signin" element={<BasicSigninPage />} />
+        <Route path="/signin" element={!isLoggedIn ? <BasicSigninPage /> : <SigninAlertPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/mypage" element={savedToken != null ? <EditSigninPage /> : <LoginAlertPage />} />
         <Route path="/edit" element={<EditSigninPage />} />
