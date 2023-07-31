@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../assets/css/BasicSignin.css";
+import "../assets/css/member/BasicSignin.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
@@ -74,7 +74,6 @@ const BasicSigninPage = () => {
       })
       .catch((error) => {
         console.error(error); // 에러 출력
-
       });
   };
 
@@ -164,7 +163,7 @@ const BasicSigninPage = () => {
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("프론트엔드")} />
                 <div className="choosejob-text-basic">프론트엔드</div>
               </div>
-            </label>    
+            </label>
           </div>
           <div className="choosejob">
             <label>
@@ -172,13 +171,13 @@ const BasicSigninPage = () => {
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("백엔드")} />
                 <div className="choosejob-text-basic">백엔드</div>
               </div>
-            </label>  
+            </label>
             <label>
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("PM")} />
                 <div className="choosejob-text-basic">PM</div>
               </div>
-            </label>  
+            </label>
             <label>
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("기타")} />
@@ -212,7 +211,9 @@ const BasicSigninPage = () => {
 
           <div className="log-in-basic">
             <div className="entire-text-basic">이미 계정이 있으신가요?</div>
-            <Link to="/login" className="log-in-now-basic">로그인 하기</Link>
+            <Link to="/login" className="log-in-now-basic">
+              로그인 하기
+            </Link>
           </div>
         </div>
       </div>

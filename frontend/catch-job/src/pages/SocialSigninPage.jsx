@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/css/SocialSignin.css";
+import "../assets/css/member/SocialSignin.css";
 import { Link } from "react-router-dom";
 import GoogleLoginButton_long from "../components/GoogleLoginButton_long";
 import { GoogleOAuthProvider } from "@react-oauth/google";

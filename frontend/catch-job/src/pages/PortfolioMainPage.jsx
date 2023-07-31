@@ -360,7 +360,7 @@ const PortfolioMainPage = () => {
     },
   ];
 
-  const [data, setData] = useState(dummyData); // 실제할 때는 []로 바꾸기 더미데이터 지우고
+  const [data, setData] = useState([]); // 실제할 때는 []로 바꾸기 더미데이터 지우고
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
   const queryParam = new URLSearchParams(useLocation().search);
