@@ -43,7 +43,7 @@ const Header = () => {
                 <li className="nav-list">포트폴리오</li>
               </Link>
               <Link to={"/news"} className="link">
-                <li className="nav-list">채용</li>
+                <li className="nav-list">뉴스</li>
               </Link>
               <Link to={"/study?type=all"} className="link">
                 <li className="nav-list">스터디</li>
