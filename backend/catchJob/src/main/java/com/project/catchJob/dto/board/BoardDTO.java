@@ -127,8 +127,8 @@ public class BoardDTO {
 				.collect(Collectors.toList());
 				
 		//String bFileUrl = "/upload/" + board.getBFileName();
-		String bFileUrl = filePath + board.getBFileName();
-		String bCoverFileUrl = filePath + board.getBCoverFileName();
+		String bFileUrl = filePath + "/" + board.getBFileName();
+		String bCoverFileUrl = filePath + "/" + board.getBCoverFileName();
 		
 		return BoardDTO.builder()
 				.boardId(board.getBoardId())
@@ -138,9 +138,11 @@ public class BoardDTO {
 				.bLike(board.getBLike())
 				.isLike(isLike) // isLike 설정
 				.bComment(bComment)
-				.bFileName(board.getBFileName())
+				.bFileName(bFileUrl) // 경로+파일명
+//				.bFileName(board.getBFileName())
 //				.bFileUrl(bFileUrl)
-				.bCoverFileName(board.getBCoverFileName())
+				.bCoverFileName(bCoverFileUrl) // 경로+파일명
+//				.bCoverFileName(board.getBCoverFileName())
 //				.bCoverFileUrl(bCoverFileUrl)
 				.bDate(board.getBDate())
 				.member(memberDTO) // 멤버 정보 설정
@@ -196,11 +198,11 @@ public class BoardDTO {
 	    String bCoverFileUrl = "";
 
 	    if (board.getBFileName() != null) {
-	        bFileUrl = filePath + board.getBFileName();
+	        bFileUrl = filePath + "/" + board.getBFileName();
 	    }
 
 	    if (board.getBCoverFileName() != null) {
-	        bCoverFileUrl = filePath + board.getBCoverFileName();
+	        bCoverFileUrl = filePath + "/" + board.getBCoverFileName();
 	    }
 
 		return BoardDTO.builder()
@@ -211,9 +213,11 @@ public class BoardDTO {
 				.bLike(board.getBLike())
 				.isLike(false) // 로그인하지 않은 사용자는 항상 false
 				.bComment(bComment) // 댓글 수 계산
-				.bFileName(board.getBFileName())
+				.bFileName(bFileUrl)
+//				.bFileName(board.getBFileName())
 //				.bFileUrl(bFileUrl)
-				.bCoverFileName(board.getBCoverFileName())
+				.bCoverFileName(bCoverFileUrl)
+//				.bCoverFileName(board.getBCoverFileName())
 //				.bCoverFileUrl(bCoverFileUrl)
 				.bDate(board.getBDate())
 				.member(memberDTO) // 멤버 정보 설정

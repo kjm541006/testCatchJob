@@ -17,10 +17,15 @@ public class RestTemplateConfig {
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
 		
-		return restTemplateBuilder
-				.requestFactory(() -> new SimpleClientHttpRequestFactory())
-				.additionalMessageConverters(new StringHttpMessageConverter(Charset.forName("UTF-8")))
-				.build();
+//		return restTemplateBuilder
+//				.requestFactory(() -> new SimpleClientHttpRequestFactory())
+//				.additionalMessageConverters(new StringHttpMessageConverter(Charset.forName("UTF-8")))
+//				.build();
+		
+		var factory = new SimpleClientHttpRequestFactory();
+		factory.setConnectTimeout(3000);
+		factory.setReadTimeout(3000);
+		return new RestTemplate(factory);
 	}
 
 }
