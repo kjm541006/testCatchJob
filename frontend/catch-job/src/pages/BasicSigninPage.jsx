@@ -48,6 +48,10 @@ const BasicSigninPage = () => {
   };
 
   const registerUser = () => {
+    if (!email || !name || !password || !confirmPassword || !selectedJobs || !selectedCarrers) {
+      return alert("모든 필드를 채워주세요.");
+    }
+
     if (password !== confirmPassword) {
       return alert("비밀번호와 비밀번호 확인이 같지 않습니다.");
     }
@@ -71,10 +75,14 @@ const BasicSigninPage = () => {
       })
       .then((response) => {
         console.log(response.data); // 서버 응답 데이터 출력
+        alert("회원가입이 성공적으로 되었습니다!");
       })
       .catch((error) => {
         console.error(error); // 에러 출력
-
+        if (error.response && error.response.status >= 400) {
+          // 이미 있는 이메일 확인
+            alert("회원가입에 실패했습니다.");
+        }
       });
   };
 
@@ -205,9 +213,9 @@ const BasicSigninPage = () => {
 
           <div className="enrollbutton">
             <button className="cancel-basic">취소</button>
-            <button className="enroll-basic" onClick={registerUser}>
+            <Link to="/login" className="enroll-basic" onClick={registerUser}>
               등록
-            </button>
+            </Link>
           </div>
 
           <div className="log-in-basic">
