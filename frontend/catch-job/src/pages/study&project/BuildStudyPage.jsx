@@ -19,6 +19,7 @@ const BuildStudyPage = () => {
     PM: 0,
     others: 0,
   });
+  const [crewCount, setCrewCount] = useState(0);
   const titleRef = useRef();
   const detail = useRef();
   let buildData = {};
@@ -27,6 +28,10 @@ const BuildStudyPage = () => {
 
   // const userEmail = localStorage.getItem("email");
   const userEmail = useSelector(selectEmail);
+
+  useEffect(() => {
+    console.log(bType);
+  }, [bType]);
 
   const changeTypeToProject = () => {
     setBType("project");
@@ -74,41 +79,54 @@ const BuildStudyPage = () => {
     window.location.href = "/study";
   };
 
+  const handleStudyCrewCount = (e) => {
+    setCrewCount(e.target.value);
+    console.log(e.target.value);
+  };
+
+  useEffect(() => {
+    console.log(crewCount);
+  }, [crewCount]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const titleValue = titleRef.current.value;
-    const detailValue = detail.current.value;
-    const crewCountsArray = Object.values(crewCounts);
-    const sumCrewCounts = crewCountsArray.reduce((a, b) => a + b, 0);
+    console.log(bType);
+    if (bType === "project") {
+      const titleValue = titleRef.current.value;
+      const detailValue = detail.current.value;
+      const crewCountsArray = Object.values(crewCounts);
+      const sumCrewCounts = crewCountsArray.reduce((a, b) => a + b, 0);
 
-    if (!titleValue || !selectedField || !selectedTerm || !selectedPlatforms || !selectedLoc || sumCrewCounts === 0 || !detailValue) {
-      alert("모든 필드를 올바르게 입력해주세요.");
-      return;
-    }
-    buildData = {
-      type: bType,
-      title: titleValue,
-      field: selectedField,
-      term: selectedTerm,
-      platforms: selectedPlatforms,
-      loc: selectedLoc,
-      crew: crewCounts,
-      detail: detailValue,
-      email: userEmail,
-    };
-
-    try {
-      // const response = await axios.post(`http://localhost:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
-      const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
-      console.log(response);
-      if (response && response.status >= 200 && response.status < 300) {
-        alert("성공적으로 등록되었습니다.");
-        navigate(-1);
+      if (!titleValue || !selectedField || !selectedTerm || !selectedPlatforms || !selectedLoc || sumCrewCounts === 0 || !detailValue) {
+        alert("모든 필드를 올바르게 입력해주세요.");
+        return;
       }
-    } catch (error) {
-      // 에러가 발생한 경우
-      console.error("에러가 발생했습니다.", error);
+      buildData = {
+        type: bType,
+        title: titleValue,
+        field: selectedField,
+        term: selectedTerm,
+        platforms: selectedPlatforms,
+        loc: selectedLoc,
+        crew: crewCounts,
+        detail: detailValue,
+        email: userEmail,
+      };
+
+      try {
+        // const response = await axios.post(`http://localhost:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+        const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+        console.log(response);
+        if (response && response.status >= 200 && response.status < 300) {
+          alert("성공적으로 등록되었습니다.");
+          navigate(-1);
+        }
+      } catch (error) {
+        // 에러가 발생한 경우
+        console.error("에러가 발생했습니다.", error);
+      }
+    } else {
     }
   };
 
@@ -126,90 +144,151 @@ const BuildStudyPage = () => {
 
       {/* =====================프로젝트 명======================= */}
       <div className={styles.wrapper}>
-        <div className={styles.title}>프로젝트 명</div>
+        {bType === "project" ? <div className={styles.title}>프로젝트 명</div> : <div className={styles.title}>스터디 명</div>}
         <input type="text" name="title" placeholder="제목" className={styles.titleInput} ref={titleRef} maxLength={30} />
       </div>
 
       {/* =====================프로젝트 분야======================= */}
       <div className={styles.wrapper}>
-        <div className={styles.title}>프로젝트 분야</div>
-        <ul className={styles.items}>
-          <li>
-            <input
-              type="radio"
-              name="field"
-              id="fashion"
-              value="패션"
-              checked={selectedField === "패션"}
-              onChange={() => handleFieldChange("패션")}
-              className={styles.radioBtn}
-            />
-            <label className={styles.fieldSelect} htmlFor="fashion">
-              <div className={`${styles.select} ${selectedField === "패션" && styles.active} `}>패션</div>
-            </label>
-          </li>
-          <li>
-            <input
-              type="radio"
-              name="field"
-              id="financial"
-              value="금융"
-              checked={selectedField === "금융"}
-              onChange={() => handleFieldChange("금융")}
-              className={styles.radioBtn}
-            />
-            <label className={styles.fieldSelect} htmlFor="financial">
-              <div className={`${styles.select} ${selectedField === "금융" && styles.active} `}>금융</div>
-            </label>
-          </li>
-          <li>
-            <input
-              type="radio"
-              name="field"
-              id="sports"
-              value="스포츠"
-              checked={selectedField === "스포츠"}
-              onChange={() => handleFieldChange("스포츠")}
-              className={styles.radioBtn}
-            />
-            <label className={styles.fieldSelect} htmlFor="sports">
-              <div className={`${styles.select} ${selectedField === "스포츠" && styles.active} `}>스포츠</div>
-            </label>
-          </li>
-          <li>
-            <input
-              type="radio"
-              name="field"
-              id="travel"
-              value="여행"
-              checked={selectedField === "여행"}
-              onChange={() => handleFieldChange("여행")}
-              className={styles.radioBtn}
-            />
-            <label className={styles.fieldSelect} htmlFor="travel">
-              <div className={`${styles.select} ${selectedField === "여행" && styles.active} `}>여행</div>
-            </label>
-          </li>
-          <li>
-            <input
-              type="radio"
-              name="field"
-              id="others"
-              value="기타"
-              checked={selectedField === "기타"}
-              onChange={() => handleFieldChange("기타")}
-              className={styles.radioBtn}
-            />
-            <label className={styles.fieldSelect} htmlFor="others">
-              <div className={`${styles.select} ${selectedField === "기타" && styles.active} `}>기타</div>
-            </label>
-          </li>
-        </ul>
+        {bType === "project" ? <div className={styles.title}>프로젝트 분야</div> : <div className={styles.title}>스터디 분야</div>}
+        {bType === "project" ? (
+          <ul className={styles.items}>
+            <li>
+              <input
+                type="radio"
+                name="field"
+                id="fashion"
+                value="패션"
+                checked={selectedField === "패션"}
+                onChange={() => handleFieldChange("패션")}
+                className={styles.radioBtn}
+              />
+              <label className={styles.fieldSelect} htmlFor="fashion">
+                <div className={`${styles.select} ${selectedField === "패션" && styles.active} `}>패션</div>
+              </label>
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="field"
+                id="financial"
+                value="금융"
+                checked={selectedField === "금융"}
+                onChange={() => handleFieldChange("금융")}
+                className={styles.radioBtn}
+              />
+              <label className={styles.fieldSelect} htmlFor="financial">
+                <div className={`${styles.select} ${selectedField === "금융" && styles.active} `}>금융</div>
+              </label>
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="field"
+                id="sports"
+                value="스포츠"
+                checked={selectedField === "스포츠"}
+                onChange={() => handleFieldChange("스포츠")}
+                className={styles.radioBtn}
+              />
+              <label className={styles.fieldSelect} htmlFor="sports">
+                <div className={`${styles.select} ${selectedField === "스포츠" && styles.active} `}>스포츠</div>
+              </label>
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="field"
+                id="travel"
+                value="여행"
+                checked={selectedField === "여행"}
+                onChange={() => handleFieldChange("여행")}
+                className={styles.radioBtn}
+              />
+              <label className={styles.fieldSelect} htmlFor="travel">
+                <div className={`${styles.select} ${selectedField === "여행" && styles.active} `}>여행</div>
+              </label>
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="field"
+                id="others"
+                value="기타"
+                checked={selectedField === "기타"}
+                onChange={() => handleFieldChange("기타")}
+                className={styles.radioBtn}
+              />
+              <label className={styles.fieldSelect} htmlFor="others">
+                <div className={`${styles.select} ${selectedField === "기타" && styles.active} `}>기타</div>
+              </label>
+            </li>
+          </ul>
+        ) : (
+          <ul className={styles.items}>
+            <li>
+              <input
+                type="radio"
+                name="field"
+                id="webDesign"
+                value="웹디자인"
+                checked={selectedField === "웹디자인"}
+                onChange={() => handleFieldChange("웹디자인")}
+                className={styles.radioBtn}
+              />
+              <label className={styles.fieldSelect} htmlFor="webDesign">
+                <div className={`${styles.select} ${selectedField === "웹디자인" && styles.active} `}>웹디자인</div>
+              </label>
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="field"
+                id="programming"
+                value="프로그래밍"
+                checked={selectedField === "프로그래밍"}
+                onChange={() => handleFieldChange("프로그래밍")}
+                className={styles.radioBtn}
+              />
+              <label className={styles.fieldSelect} htmlFor="programming">
+                <div className={`${styles.select} ${selectedField === "프로그래밍" && styles.active} `}>프로그래밍</div>
+              </label>
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="field"
+                id="hired"
+                value="취업"
+                checked={selectedField === "취업"}
+                onChange={() => handleFieldChange("취업")}
+                className={styles.radioBtn}
+              />
+              <label className={styles.fieldSelect} htmlFor="hired">
+                <div className={`${styles.select} ${selectedField === "취업" && styles.active} `}>취업</div>
+              </label>
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="field"
+                id="others"
+                value="기타"
+                checked={selectedField === "기타"}
+                onChange={() => handleFieldChange("기타")}
+                className={styles.radioBtn}
+              />
+              <label className={styles.fieldSelect} htmlFor="others">
+                <div className={`${styles.select} ${selectedField === "기타" && styles.active} `}>기타</div>
+              </label>
+            </li>
+          </ul>
+        )}
       </div>
 
       {/* =====================프로젝트 기간======================= */}
       <div className={styles.wrapper}>
-        <div className={styles.title}>프로젝트 기간</div>
+        {bType === "project" ? <div className={styles.title}>프로젝트 기간</div> : <div className={styles.title}>스터디 기간</div>}
         <ul className={styles.items}>
           <li>
             <input
@@ -336,112 +415,142 @@ const BuildStudyPage = () => {
       {/* =====================모집인원======================= */}
       <div className={styles.wrapper}>
         <div className={styles.title}>모집인원</div>
-        <ul className={styles.crewList}>
-          <li className={styles.crewType}>
-            <span className={styles.typeName}>웹디자인 : </span>
-            <div className={styles.plusMinusBtn}>
-              <div className={styles.countNum}>
-                <input type="number" onChange={handleInputChange} name="webDesigner" defaultValue={0} onFocus={(e) => e.target.select()} />
-                <span>명</span>
+        {bType === "project" ? (
+          <ul className={styles.crewList}>
+            <li className={styles.crewType}>
+              <span className={styles.typeName}>웹디자인 : </span>
+              <div className={styles.plusMinusBtn}>
+                <div className={styles.countNum}>
+                  <input
+                    type="number"
+                    onChange={handleInputChange}
+                    name="webDesigner"
+                    defaultValue={0}
+                    onFocus={(e) => e.target.select()}
+                  />
+                  <span>명</span>
+                </div>
               </div>
-            </div>
-          </li>
-          <li className={styles.crewType}>
-            <span className={styles.typeName}>웹퍼블리셔 : </span>
-            <div className={styles.plusMinusBtn}>
-              <div className={styles.countNum}>
-                <input type="number" onChange={handleInputChange} name="webPublisher" defaultValue={0} onFocus={(e) => e.target.select()} />
-                <span>명</span>
+            </li>
+            <li className={styles.crewType}>
+              <span className={styles.typeName}>웹퍼블리셔 : </span>
+              <div className={styles.plusMinusBtn}>
+                <div className={styles.countNum}>
+                  <input
+                    type="number"
+                    onChange={handleInputChange}
+                    name="webPublisher"
+                    defaultValue={0}
+                    onFocus={(e) => e.target.select()}
+                  />
+                  <span>명</span>
+                </div>
               </div>
-            </div>
-          </li>
-          <li className={styles.crewType}>
-            <span className={styles.typeName}>프론트엔드 : </span>
-            <div className={styles.plusMinusBtn}>
-              <div className={styles.countNum}>
-                <input type="number" onChange={handleInputChange} name="frontend" defaultValue={0} onFocus={(e) => e.target.select()} />
-                <span>명</span>
+            </li>
+            <li className={styles.crewType}>
+              <span className={styles.typeName}>프론트엔드 : </span>
+              <div className={styles.plusMinusBtn}>
+                <div className={styles.countNum}>
+                  <input type="number" onChange={handleInputChange} name="frontend" defaultValue={0} onFocus={(e) => e.target.select()} />
+                  <span>명</span>
+                </div>
               </div>
-            </div>
-          </li>
-          <li className={styles.crewType}>
-            <span className={styles.typeName}>백엔드 : </span>
-            <div className={styles.plusMinusBtn}>
-              <div className={styles.countNum}>
-                <input type="number" onChange={handleInputChange} name="backend" defaultValue={0} onFocus={(e) => e.target.select()} />
-                <span>명</span>
+            </li>
+            <li className={styles.crewType}>
+              <span className={styles.typeName}>백엔드 : </span>
+              <div className={styles.plusMinusBtn}>
+                <div className={styles.countNum}>
+                  <input type="number" onChange={handleInputChange} name="backend" defaultValue={0} onFocus={(e) => e.target.select()} />
+                  <span>명</span>
+                </div>
               </div>
-            </div>
-          </li>
-          <li className={styles.crewType}>
-            <span className={styles.typeName}>PM : </span>
-            <div className={styles.plusMinusBtn}>
-              <div className={styles.countNum}>
-                <input type="number" onChange={handleInputChange} name="PM" defaultValue={0} onFocus={(e) => e.target.select()} />
-                <span>명</span>
+            </li>
+            <li className={styles.crewType}>
+              <span className={styles.typeName}>PM : </span>
+              <div className={styles.plusMinusBtn}>
+                <div className={styles.countNum}>
+                  <input type="number" onChange={handleInputChange} name="PM" defaultValue={0} onFocus={(e) => e.target.select()} />
+                  <span>명</span>
+                </div>
               </div>
-            </div>
-          </li>
-          <li className={styles.crewType}>
-            <span className={styles.typeName}>기타 : </span>
-            <div className={styles.plusMinusBtn}>
-              <div className={styles.countNum}>
-                <input type="number" onChange={handleInputChange} name="others" defaultValue={0} onFocus={(e) => e.target.select()} />
-                <span>명</span>
+            </li>
+            <li className={styles.crewType}>
+              <span className={styles.typeName}>기타 : </span>
+              <div className={styles.plusMinusBtn}>
+                <div className={styles.countNum}>
+                  <input type="number" onChange={handleInputChange} name="others" defaultValue={0} onFocus={(e) => e.target.select()} />
+                  <span>명</span>
+                </div>
               </div>
+            </li>
+          </ul>
+        ) : (
+          <ul className={styles.items}>
+            <div className={styles.countNum}>
+              <input
+                type="number"
+                name="crewCount"
+                id="web"
+                defaultValue={0}
+                onChange={handleStudyCrewCount}
+                onFocus={(e) => e.target.select()}
+              />
+              <span>명</span>
             </div>
-          </li>
-        </ul>
+          </ul>
+        )}
       </div>
 
       {/* =====================출시 플랫폼======================= */}
-      <div className={styles.wrapper}>
-        <div className={styles.title}>출시 플랫폼</div>
-        <ul className={styles.items}>
-          <li>
-            <input
-              type="checkbox"
-              name="platforms"
-              id="web"
-              value="웹"
-              checked={selectedPlatforms.includes("웹")}
-              onChange={() => handlePlatformsChange("웹")}
-              className={styles.radioBtn}
-            />
-            <label className={styles.fieldSelect} htmlFor="web">
-              <div className={`${styles.select} ${selectedPlatforms.includes("웹") && styles.active} `}>웹</div>
-            </label>
-          </li>
-          <li>
-            <input
-              type="checkbox"
-              name="platforms"
-              id="android"
-              value="안드로이드 앱"
-              checked={selectedPlatforms.includes("안드로이드 앱")}
-              onChange={() => handlePlatformsChange("안드로이드 앱")}
-              className={styles.radioBtn}
-            />
-            <label className={styles.fieldSelect} htmlFor="android">
-              <div className={`${styles.select} ${selectedPlatforms.includes("안드로이드 앱") && styles.active} `}>안드로이드 앱</div>
-            </label>
-          </li>
-          <li>
-            <input
-              type="checkbox"
-              name="platforms"
-              id="ios"
-              value="ios 앱"
-              checked={selectedPlatforms.includes("ios 앱")}
-              onChange={() => handlePlatformsChange("ios 앱")}
-              className={styles.radioBtn}
-            />
-            <label className={styles.fieldSelect} htmlFor="ios">
-              <div className={`${styles.select} ${selectedPlatforms.includes("ios 앱") && styles.active} `}>ios 앱</div>
-            </label>
-          </li>
-        </ul>
-      </div>
+      {bType === "project" && (
+        <div className={styles.wrapper}>
+          <div className={styles.title}>출시 플랫폼</div>
+          <ul className={styles.items}>
+            <li>
+              <input
+                type="checkbox"
+                name="platforms"
+                id="web"
+                value="웹"
+                checked={selectedPlatforms.includes("웹")}
+                onChange={() => handlePlatformsChange("웹")}
+                className={styles.radioBtn}
+              />
+              <label className={styles.fieldSelect} htmlFor="web">
+                <div className={`${styles.select} ${selectedPlatforms.includes("웹") && styles.active} `}>웹</div>
+              </label>
+            </li>
+            <li>
+              <input
+                type="checkbox"
+                name="platforms"
+                id="android"
+                value="안드로이드 앱"
+                checked={selectedPlatforms.includes("안드로이드 앱")}
+                onChange={() => handlePlatformsChange("안드로이드 앱")}
+                className={styles.radioBtn}
+              />
+              <label className={styles.fieldSelect} htmlFor="android">
+                <div className={`${styles.select} ${selectedPlatforms.includes("안드로이드 앱") && styles.active} `}>안드로이드 앱</div>
+              </label>
+            </li>
+            <li>
+              <input
+                type="checkbox"
+                name="platforms"
+                id="ios"
+                value="ios 앱"
+                checked={selectedPlatforms.includes("ios 앱")}
+                onChange={() => handlePlatformsChange("ios 앱")}
+                className={styles.radioBtn}
+              />
+              <label className={styles.fieldSelect} htmlFor="ios">
+                <div className={`${styles.select} ${selectedPlatforms.includes("ios 앱") && styles.active} `}>ios 앱</div>
+              </label>
+            </li>
+          </ul>
+        </div>
+      )}
 
       {/* =====================프로젝트 설명======================= */}
       <div className={styles.wrapper}>
