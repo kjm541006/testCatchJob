@@ -60,7 +60,7 @@ function App() {
         <Route path="/join" element={<SocialSigninPage />} />
         <Route path="/signin" element={<BasicSigninPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/mypage" element={savedToken != null ? <MyPage /> : <LoginAlertPage />} />
+        <Route path="/mypage" element={savedToken != null ? <EditSigninPage /> : <LoginAlertPage />} />
         <Route path="/edit" element={<EditSigninPage />} />
         {/* <Route path="/userInfo/:userId" element={<UserInfo />} /> */}
         <Route path="/" element={<PortfolioMainPage />} />
