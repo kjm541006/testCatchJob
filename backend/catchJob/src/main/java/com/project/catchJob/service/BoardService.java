@@ -1,6 +1,7 @@
 package com.project.catchJob.service;
 
 import java.io.File;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,32 +144,59 @@ public class BoardService {
 //	}
     
     // 파일 저장
-    public String saveFile(MultipartFile file) {
-    	try {
-	    	// 저장 경로 지정
-	    	//String savePath = new File("").getAbsolutePath() + "/src/main/resources/static/upload/";
-//    		String savePath = new File(filePath).getAbsolutePath() + "/";
-    		String savePath = filePath + "/";
-    		File dir = new File(savePath);
-    		if(!dir.exists()) {
-    			dir.mkdir(); // 폴더 없다면 폴더 생성
-    		}
-	    	// 파일 이름 가져옴
-	    	String originalFileName = file.getOriginalFilename();
-	    	// 저장될 파일 이름 설정
-	    	String storedFileName = UUID.randomUUID() + "_" + originalFileName;
-	    	// 지정된 경로에 파일 저장
-	    	File finFile = new File(savePath + storedFileName);
-			file.transferTo(finFile);
-			
-			// 저장된 파일명 반환
-			return storedFileName;
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error ===================" + e.getMessage());
-			return null;
-		} 
+	public String saveFile(MultipartFile file) {
+        try {
+            // 저장 경로 지정
+            File dir = new File(filePath);
+            if (!dir.exists()) {
+                dir.mkdirs(); // 폴더 없다면 폴더 생성
+            }
+            // 파일 이름 가져옴
+            String originalFileName = file.getOriginalFilename();
+            // 저장될 파일 이름 설정
+            String storedFileName = UUID.randomUUID() + "_" + originalFileName;
+            // 지정된 경로에 파일 저장
+            File finFile = new File(dir, storedFileName);
+            file.transferTo(finFile);
+
+            System.out.println("success ===================" + storedFileName);
+
+            // 저장된 파일명 반환
+            return storedFileName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error ===================" + e.getMessage());
+            return null;
+        }
     }
+//    public String saveFile(MultipartFile file) {
+//    	try {
+//    		// 저장 경로 지정
+////	    	String savePath = new File("").getAbsolutePath() + "/src/main/resources/static/upload/";
+////    		String savePath = new File(filePath).getAbsolutePath() + "/";
+//    		String savePath = filePath + "/";
+//    		File dir = new File(savePath);
+//    		if(!dir.exists()) {
+//    			dir.mkdir(); // 폴더 없다면 폴더 생성
+//    		}
+//    		// 파일 이름 가져옴
+//    		String originalFileName = file.getOriginalFilename();
+//    		// 저장될 파일 이름 설정
+//    		String storedFileName = UUID.randomUUID() + "_" + originalFileName;
+//    		// 지정된 경로에 파일 저장
+//    		File finFile = new File(savePath + storedFileName);
+//    		file.transferTo(finFile);
+//    		
+//    		System.out.println("success ===================" + storedFileName);
+//    		
+//    		// 저장된 파일명 반환
+//    		return storedFileName;
+//    	} catch (Exception e) {
+//    		e.printStackTrace();
+//    		System.out.println("Error ===================" + e.getMessage());
+//    		return null;
+//    	} 
+//    }
     
     // 글 수정
     public void edit(Long boardId, String bTitle, String bContents, List<String> tags, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
