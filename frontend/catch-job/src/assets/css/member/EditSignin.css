@@ -25,7 +25,7 @@
 .entire-box-edit{
   display: flex;
   padding: 0px 2px 0px 2px;
-  margin-top: 150px;
+  margin-top: 100px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -50,7 +50,7 @@
 }
 
 .edit-inform{
-  margin-bottom: 50px;
+  margin-bottom: 90px;
 }
 
 .input-box-edit {
@@ -88,6 +88,7 @@
 .choosejob-edit {
   display: flex;
   align-items: center; 
+  margin-top: 15px;
   margin-bottom: 15px;
 }
 
@@ -133,6 +134,7 @@
   background: #FFF;
   font-weight: bold;
   margin: 0px 30px 10px 30px;
+  font-size: 14px;
 }
 
 .cancel-edit:active {
@@ -155,9 +157,17 @@
   font-weight: bold;
   color:#FFF;
   margin: 0px 30px 10px 30px;
+  font-size: 14px;
 }
 
 .enroll-edit:active{
   background-color: #ffffff;
   border: none;
+}
+
+.profile-image {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 100px; /* 원하는 크기로 조절하세요. */
+  height: 100px; /* 원하는 크기로 조절하세요. */
 }

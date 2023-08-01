@@ -100,7 +100,7 @@ const LoginPage = () => {
 
           <div className="sign-in">
             <div className="entire-text">아직 회원이 아니세요?</div>
-            <Link to="/join" className="sign-in-now">
+            <Link to={"/join"} className="sign-in-now">
               회원가입 하기
             </Link>
           </div>
