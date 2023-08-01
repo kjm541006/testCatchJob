@@ -3,6 +3,9 @@ import EditSignin from "../assets/css/member/EditSignin.css";
 import axios from 'axios';
 import MyPage from './MyPage';
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faCommentDots, faHeart, faCheck, faPencil } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const EditSigninPage = () => {
   const [email, setEmail] = useState("");
@@ -11,6 +14,7 @@ const EditSigninPage = () => {
   const [selectedCarrers, setSelectedCarrers] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imageFileName, setImageFileName] = useState("");
+  const navigate = useNavigate();
   
   useEffect(() => {
     async function fetchData() {
@@ -22,6 +26,7 @@ const EditSigninPage = () => {
       };
       try {
         const response = await axios.get("http://43.202.98.45:8089/memberInfo", axiosConfig);
+        setImageFile(response.data.mOriginalFileName);
         setEmail(response.data.email);
         setName(response.data.name);
         setSelectedJobs(response.data.job);
@@ -33,26 +38,36 @@ const EditSigninPage = () => {
     fetchData();
   }, []);
 
-  const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
-    }
-  };
+  const handleUpdateClick = async () => {
+    const password = prompt("비밀번호를 입력해 주세요.");
+  
+    if (password) {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      };
+      try {
+        const response = await axios.post('http://43.202.98.45:8089/memberPwd', { pwd: password }, config);
+        console.log(response.data);
 
-  const uploadImage = async () => {
-    const formData = new FormData();
-    formData.append("image", imageFile);
-    
-    // 이미지를 업로드하고 저장하는 로직 구현
-    try {
-      const response = await axios.post("your-api-endpoint", formData);
-      if (response.data && response.data.fileName) {
-        setImageFileName(response.data.fileName);
+        if (response.data === "비밀번호 일치") {
+          navigate("/realmypage");
+        }
+      } catch (error) {
+        if (error.response && error.response.status >= 400){
+          alert("비밀번호가 일치하지 않습니다. 다시 작성해주세요.");
+          handleUpdateClick();
+        } else {
+          console.error('Error:', error);
+        }
       }
-    } catch (error) {
-      console.error(error);
+    } else {
+      alert("비밀번호를 입력해야 회원 정보를 수정할 수 있습니다.");
     }
   };
+  
   return (
     <div className="body-edit">
     <div className="section-edit">
@@ -64,14 +79,7 @@ const EditSigninPage = () => {
 
         <div className="profile-image-container">
             <label htmlFor="profile-image-input">
-            <img src={'/profile.png'} alt="" className="profile-image" />
-              <input
-                type="file"
-                id="profile-image-input"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="profile-image-input"
-              />
+            <img src={imageFile ? `${imageFile}`: "/profile.png"} alt="" className="profile-image"/>
           </label>
         </div>
         
@@ -124,7 +132,8 @@ const EditSigninPage = () => {
 
           <div className="enrollbutton-edit">
             <Link to={"/"} className="cancel-edit">메인으로</Link>
-            <button className="enroll-edit">수정하기</button>
+            <button className="enroll-edit" onClick={handleUpdateClick}>수정하기</button>
+
           </div>
         </div>
       </div>

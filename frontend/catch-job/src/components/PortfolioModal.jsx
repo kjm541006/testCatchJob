@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import styles from "../assets/css/PortfolioModal.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faHeart, faPenToSquare, faShare, faTrash } from "@fortawesome/free-solid-svg-icons";
-import img from "../assets/img/port_img.jpeg";
 import axios from "axios";
 import ShareModal from "../components/ShareModal";
 import { useLocation } from "react-router-dom";
