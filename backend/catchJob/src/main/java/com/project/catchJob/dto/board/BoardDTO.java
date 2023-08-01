@@ -113,8 +113,11 @@ public class BoardDTO {
 				.collect(Collectors.toList());
 				
 		//String bFileUrl = "/upload/" + board.getBFileName();
-		String bFileUrl = filePath + "/" + board.getBFileName();
-		String bCoverFileUrl = filePath + "/" + board.getBCoverFileName();
+//		String bFileUrl = filePath + "/" + board.getBFileName();
+//		String bCoverFileUrl = filePath + "/" + board.getBCoverFileName();
+		String bFileUrl = "http://43.202.98.45:8089/upload/" + board.getBFileName();
+		String bCoverFileUrl = "http://43.202.98.45:8089/upload/" + board.getBCoverFileName();
+
 		
 		return BoardDTO.builder()
 				.boardId(board.getBoardId())
@@ -189,7 +192,7 @@ public class BoardDTO {
 	    }
 
 	    if (board.getBCoverFileName() != null) {
-	        bCoverFileUrl = filePath + "/" + board.getBCoverFileName();
+//	        bCoverFileUrl = filePath + "/" + board.getBCoverFileName();
 	        bCoverFileUrl = "http://43.202.98.45:8089/upload/" + board.getBCoverFileName();
 	    }
 
