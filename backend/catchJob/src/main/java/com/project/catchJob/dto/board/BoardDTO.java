@@ -62,8 +62,8 @@ public class BoardDTO {
 	
 	private List<String> tags;
 	
-	private boolean removeBFile;
-	private boolean removeBCoverFile;
+//	private boolean removeBFile;
+//	private boolean removeBCoverFile;
 	
 	private BoardMemberDTO member;
 	private List<B_commentsDTO> comments;

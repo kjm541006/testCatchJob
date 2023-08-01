@@ -35,6 +35,7 @@ public class CatchJobApplication {
 		@Bean
 		public CommonsMultipartResolver multipartResolver() {
             CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+            multipartResolver.setMaxUploadSize(20971520); // 20MB 설정
             return multipartResolver;
         }
 	}

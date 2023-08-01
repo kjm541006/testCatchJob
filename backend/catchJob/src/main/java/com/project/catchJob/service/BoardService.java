@@ -95,13 +95,13 @@ public class BoardService {
 
 	    Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 	    		.orElseThrow(UnauthorizedException::new);
-	    Member member = memberRepo.findByEmail(optAuthenticatedMember.getEmail());
+	    //Member member = memberRepo.findByEmail(optAuthenticatedMember.getEmail());
 
 	    Board board = Board.builder()
 	            .bTitle(bTitle)
 	            .bContents(bContents)
 	            .tags(tags)
-	            .member(member)
+	            .member(optAuthenticatedMember)
 	            .build();
 
 	    // 파일 저장
@@ -165,32 +165,48 @@ public class BoardService {
 			return storedFileName;
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("Error ===================" + e.getMessage());
 			return null;
 		} 
     }
     
     // 글 수정
-    public void edit(BoardDTO boardDTO, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
-    	
-	    Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
-	    		.orElseThrow(UnauthorizedException::new);
-	    
-	    Board board = boardRepo.findById(boardDTO.getBoardId())
-	    		.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+    public void edit(Long boardId, String bTitle, String bContents, List<String> tags, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
+
+    	Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+    	    		.orElseThrow(UnauthorizedException::new);
+    	    
+    	Board board = boardRepo.findById(boardId)
+    	    		.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
 	    
 	    if(!optAuthenticatedMember.getEmail().equals(board.getMember().getEmail())) {
 	    	throw new UnauthorizedException();
 	    }
 	    
-	    board.setBTitle(boardDTO.getBTitle());
-	    board.setBContents(boardDTO.getBContents());
-	    board.setTags(boardDTO.getTags());
-	    board.setBFileName(boardDTO.getBFileName());
-	    board.setBCoverFileName(boardDTO.getBCoverFileName());
-	 
-//	    // 파일 삭제
-//	    if(boardDTO.isRemoveBFile()) {
-	    
+	    board.setBTitle(bTitle);
+	    board.setBContents(bContents);
+	    board.setTags(tags);
+	    board.setBFileName(board.getBFileName());
+	    board.setBCoverFileName(board.getBCoverFileName());
+
+	    // 작동가능
+//	    public void edit(BoardDTO boardDTO, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
+//	    	
+//	    	Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+//	    			.orElseThrow(UnauthorizedException::new);
+//	    	
+//	    	Board board = boardRepo.findById(boardDTO.getBoardId())
+//	    			.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+//	    	
+//	    	if(!optAuthenticatedMember.getEmail().equals(board.getMember().getEmail())) {
+//	    		throw new UnauthorizedException();
+//	    	}
+//	    	
+//	    	board.setBTitle(boardDTO.getBTitle());
+//	    	board.setBContents(boardDTO.getBContents());
+//	    	board.setTags(boardDTO.getTags());
+//	    	board.setBFileName(boardDTO.getBFileName());
+//	    	board.setBCoverFileName(boardDTO.getBCoverFileName());
     	// 파일 저장
 	    if(bFile != null && !bFile.isEmpty()) {
 	    	String fileName = saveFile(bFile);
