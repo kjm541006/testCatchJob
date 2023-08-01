@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import EditSignin from "../assets/css/member/EditSignin.css";
 import axios from 'axios';
 import MyPage from './MyPage';
-
-//axios 기능 구현해야함
+import { Link } from "react-router-dom";
 
 const EditSigninPage = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
   const [selectedJobs, setSelectedJobs] = useState("");
   const [selectedCarrers, setSelectedCarrers] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [imageFileName, setImageFileName] = useState("");
   
   useEffect(() => {
     async function fetchData() {
@@ -24,8 +24,8 @@ const EditSigninPage = () => {
         const response = await axios.get("http://43.202.98.45:8089/memberInfo", axiosConfig);
         setEmail(response.data.email);
         setName(response.data.name);
-        setSelectedJobs(response.data.selectedJobs);
-        setSelectedCarrers(response.data.selectedCarrers);
+        setSelectedJobs(response.data.job);
+        setSelectedCarrers(response.data.hasCareer);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -33,6 +33,26 @@ const EditSigninPage = () => {
     fetchData();
   }, []);
 
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
+  const uploadImage = async () => {
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    
+    // 이미지를 업로드하고 저장하는 로직 구현
+    try {
+      const response = await axios.post("your-api-endpoint", formData);
+      if (response.data && response.data.fileName) {
+        setImageFileName(response.data.fileName);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="body-edit">
     <div className="section-edit">
@@ -40,7 +60,20 @@ const EditSigninPage = () => {
         <h1 className="catchJob-edit">
           catch<span className="red-letter">J</span>ob
         </h1>
-        <h3 className="edit-inform">회원정보수정</h3>
+        <h3 className="edit-inform">회원정보조회</h3>
+
+        <div className="profile-image-container">
+            <label htmlFor="profile-image-input">
+            <img src={'/profile.png'} alt="" className="profile-image" />
+              <input
+                type="file"
+                id="profile-image-input"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="profile-image-input"
+              />
+          </label>
+        </div>
         
         <div className="input-text-edit">이메일</div>
         <input type="text" className="input-box-edit" tabIndex="1" value={email} readOnly style={{color:'#807d7d'}}/>
@@ -90,8 +123,8 @@ const EditSigninPage = () => {
           </div>
 
           <div className="enrollbutton-edit">
-            <button className="cancel-edit">취소</button>
-            <button className="enroll-edit">등록</button>
+            <Link to={"/"} className="cancel-edit">메인으로</Link>
+            <button className="enroll-edit">수정하기</button>
           </div>
         </div>
       </div>

@@ -134,6 +134,7 @@
   background: #FFF;
   font-weight: bold;
   margin: 0px 30px 10px 30px;
+  font-size: 14px;
 }
 
 .cancel-edit:active {
@@ -156,9 +157,17 @@
   font-weight: bold;
   color:#FFF;
   margin: 0px 30px 10px 30px;
+  font-size: 14px;
 }
 
 .enroll-edit:active{
   background-color: #ffffff;
   border: none;
+}
+
+.profile-image {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 100px; /* 원하는 크기로 조절하세요. */
+  height: 100px; /* 원하는 크기로 조절하세요. */
 }
