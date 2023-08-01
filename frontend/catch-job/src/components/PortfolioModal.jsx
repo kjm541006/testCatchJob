@@ -146,7 +146,7 @@ const PortfolioModal = ({ item, onClose }) => {
               </div>
             </div>
           </div>
-          <div className={`${styles.realContent}`}>{item.bContents}</div>
+          <div className={`${styles.realContent}`}dangerouslySetInnerHTML={{ __html: item.bContents }}></div>
           <div className={`${styles.tagList}`}>
             {item.tags[0] && <div className={`${styles.tagElement}`}>{item.tags[0]}</div>}
             {item.tags[1] && <div className={`${styles.tagElement}`}>{item.tags[1]}</div>}
