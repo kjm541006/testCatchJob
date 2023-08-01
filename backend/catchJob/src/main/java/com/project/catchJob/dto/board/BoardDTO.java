@@ -184,11 +184,13 @@ public class BoardDTO {
 	    String bCoverFileUrl = "";
 
 	    if (board.getBFileName() != null) {
-	        bFileUrl = filePath + "/" + board.getBFileName();
+//	        bFileUrl = filePath + "/" + board.getBFileName();
+	    	bFileUrl = "http://43.202.98.45:8089/upload/" + board.getBFileName();
 	    }
 
 	    if (board.getBCoverFileName() != null) {
 	        bCoverFileUrl = filePath + "/" + board.getBCoverFileName();
+	        bCoverFileUrl = "http://43.202.98.45:8089/upload/" + board.getBCoverFileName();
 	    }
 
 		return BoardDTO.builder()
