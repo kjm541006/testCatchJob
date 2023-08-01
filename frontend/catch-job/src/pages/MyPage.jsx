@@ -1,54 +1,89 @@
-import axios from "axios";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { selectCurrentToken } from "../redux/login";
+import React, { useState, useEffect } from 'react';
+import EditSignin from "../assets/css/member/EditSignin.css";
 
-const MyPage = () => {
-  const dispatch = useDispatch();
-  const userEmail = localStorage.getItem("email");
+//axios 기능 구현해야함
 
-  const currentToken = useSelector(selectCurrentToken);
-  console.log(currentToken);
+const EditSigninPage = () => {
+  const [email, setEmail] = useState(localStorage.getItem('email') || '');
+  const [name, setName] = useState(localStorage.getItem('name') || '');
+  const [password, setPassword] = useState("");
+  const [selectedJobs, setSelectedJobs] = useState("");
+  const [selectedCarrers, setSelectedCarrers] = useState("");
 
-  const fetchMemberInfo = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get("http://43.202.98.45:8089/memberInfo", {
-        headers: {
-          Authorization: token,
-        },
-        params: {
-          // 쿼리 파라미터에 데이터 전달
-          email: userEmail,
-          pwd: "asdf",
-        },
-      });
-
-      // 받아온 회원 정보 처리
-      const memberInfo = response.data;
-      console.log(memberInfo);
-
-      // Store user's name and email
-      // const { name, email } = memberInfo;
-      // dispatch(setCredentials({ name, email, accessToken: token }));
-      // 처리 로직 작성
-    } catch (error) {
-      console.error(error);
-    }
+  const handleJobCheckboxChange = (job) => {
+    setSelectedJobs(job);
   };
 
-  // fetchMemberInfo 함수 호출
-  useEffect(() => {
-    fetchMemberInfo();
-  }, []);
-  // fetchMemberInfo();
+  const handleCarrerChange = (carrer) => {
+    setSelectedCarrers(carrer);
+  };
 
   return (
-    <div>
-      memberInfo
-      {/* <button onClick={fetchMemberInfo}>정보 가져오기</button> */}
+    <div className="body-edit">
+    <div className="section-edit">
+      <div className="entire-box-edit">
+        <h1 className="catchJob-edit">
+          catch<span className="red-letter">J</span>ob
+        </h1>
+        <h3 className="edit-inform">회원정보조회</h3>
+        
+        <div className="input-text-edit">이메일</div>
+        <input type="text" className="input-box-edit" tabIndex="1" value={email} readOnly style={{color:'#807d7d'}}/>
+        <div className="input-text-edit">이름</div>
+        <input type="text" className="input-box-edit" tabIndex="2" value={name} readOnly style={{color:'#807d7d'}}/>
+        <div className="input-text-edit">비밀번호</div>
+        <input type="text" className="input-box-edit" tabIndex="3" value={password}/>
+
+        <div className="input-text-edit">직무</div>
+          <div className="choosejob-edit" id="pick-edit">
+            <div className="choosejobone-edit">
+              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("웹디자이너")}/>
+              <div className="choosejob-text-edit">웹디자이너</div>
+            </div>
+            <div className="choosejobone-edit">
+              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("웹퍼블리셔")}/>
+              <div className="choosejob-text-edit">웹퍼블리셔</div>
+            </div>
+            <div className="choosejobone-edit">
+              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("프론트엔드")}/>
+              <div className="choosejob-text-edit">프론트엔드</div>
+            </div>
+          </div>
+          <div className="choosejob-edit">
+          <div className="choosejobone-edit">
+              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("백엔드")}/>
+              <div className="choosejob-text-edit">백엔드</div>
+            </div>
+            <div className="choosejobone-edit">
+              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("PM")}/>
+              <div className="choosejob-text-edit">PM</div>
+            </div>
+            <div className="choosejobone-edit">
+              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("웹퍼블리셔")}/>
+              <div className="choosejob-text-edit">기타</div>
+            </div>
+          </div>
+
+        <div className="input-text-edit">경력 여부</div>
+        <div className="choosejob-edit" id="pick-edit">
+            <div className="choosejobone-edit" id="carrer-edit">
+              <input type="radio" className="custom-checkbox-edit"  name="career-edit" onChange={() => handleCarrerChange("신입")}/>
+              <div className="choosejob-text-edit">신입</div>
+            </div>
+            <div className="choosejobone" id="carrer">
+              <input type="radio" className="custom-checkbox-edit" name="career-edit" onChange={() => handleCarrerChange("경력")}/>
+              <div className="choosejob-text-edit">경력</div>
+            </div>
+        </div>
+
+        <div className="enrollbutton-edit">
+          <button className="cancel-edit">취소</button>
+          <button className="enroll-edit">등록</button>
+        </div>
+      </div>   
     </div>
+  </div>
   );
 };
 
-export default MyPage;
+export default EditSigninPage;

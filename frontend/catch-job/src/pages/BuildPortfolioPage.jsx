@@ -56,6 +56,7 @@ const BuildPortfolioPage = () => {
     try {
       const response = await axios.post("http://43.202.98.45:8089/buildportfolio", formData, axiosConfig);
       console.log(response.data);
+      console.log("성공")
     } catch (error) {
       console.error("Error:", error);
     }

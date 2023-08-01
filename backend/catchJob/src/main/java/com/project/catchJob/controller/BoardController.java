@@ -69,7 +69,7 @@ public class BoardController {
 	
 	// 글 등록
 //	@PostMapping("/portfolio/build")
-	@PostMapping(value = "/buildportfolio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = " /buildportfolio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> registerBoard(
 	        @RequestParam(value = "bTitle") String bTitle,
 	        @RequestParam(value = "bContents") String bContents,
