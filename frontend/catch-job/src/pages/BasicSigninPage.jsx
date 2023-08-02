@@ -46,8 +46,8 @@ const BasicSigninPage = () => {
     setSelectedJobs(job);
   };
 
-  const handleCarrerChange = (carrer) => {
-    setSelectedCarrers(carrer);
+  const handleCarrerChange = (career) => {
+    setSelectedCarrers(career);
   };
 
   const registerUser = () => {

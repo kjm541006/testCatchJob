@@ -4,6 +4,7 @@ import "react-quill/dist/quill.snow.css"; // 테마 스타일 가져오기
 import styles from "../assets/css/BuildPortfolio.module.css";
 import DetailModal from "../components/DetailModal";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const BuildPortfolioPage = () => {
   const [value, setValue] = useState("");
@@ -15,6 +16,7 @@ const BuildPortfolioPage = () => {
   const [prevCover, setPrevCover] = useState("");
   const [prevTags, setPrevTags] = useState([]);
   const [prevCoverURL, setPrevCoverURL] = useState("");
+  const navigate = useNavigate();
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -60,6 +62,7 @@ const BuildPortfolioPage = () => {
     } catch (error) {
       console.error("Error:", error);
     }
+    navigate("/");
   };
 
   const modules = {
