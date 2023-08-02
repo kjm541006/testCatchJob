@@ -60,14 +60,15 @@
   border-radius: 4px;
   border: 1px solid #CCC;
   background: #FFF;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   padding-left: 10px;
 }
 
 .input_text_edit{
   height: 30px;
   color: #0D0D0D;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: bold;
   display: flex;
   align-items: flex-start;
