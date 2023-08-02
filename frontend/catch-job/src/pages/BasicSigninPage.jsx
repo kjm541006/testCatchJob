@@ -159,40 +159,44 @@ const BasicSigninPage = () => {
 
           <div className="input-text-basic">직무</div>
           <div className="choosejob" id="pick">
-            
+            <label>
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹디자이너")} />
                 <div className="choosejob-text-basic">웹디자이너</div>
               </div>
-           
+            </label>
+            <label>
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹퍼블리셔")} />
                 <div className="choosejob-text-basic">웹퍼블리셔</div>
               </div>
-            
+            </label>
+            <label>
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("프론트엔드")} />
                 <div className="choosejob-text-basic">프론트엔드</div>
               </div>
-           
+            </label>
           </div>
           <div className="choosejob">
-            
+            <label>
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("백엔드")} />
                 <div className="choosejob-text-basic">백엔드</div>
               </div>
-           
+            </label>
+            <label>
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("PM")} />
                 <div className="choosejob-text-basic">PM</div>
               </div>
-          
+            </label>
+            <label>
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("기타")} />
                 <div className="choosejob-text-basic">기타</div>
               </div>
-           
+            </label>
           </div>
 
           <div className="input-text-basic">경력 여부</div>

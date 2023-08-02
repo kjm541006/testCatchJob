@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 
-const EditSigninPage = () => {
+const MyPage = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -69,23 +69,23 @@ const EditSigninPage = () => {
     const token = localStorage.getItem("token");
     const config = {
       headers: {
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       },
     };
     
     const formData = new FormData();
     formData.append("mOriginalFileName", imageFileName);
-    const userData = {
-      pwd: password,
-      name: name,
-      job: selectedJobs,
-      hasCareer: selectedCarrers,
-    };
+    formData.append("pwd", password);
+    formData.append("name", name);
+    formData.append("job", selectedJobs);
+    formData.append("hasCareer", selectedCarrers);
+
+
       console.log(formData);
-      console.log(userData);
 
     try {
-      const response = await axios.post("http://43.202.98.45:8089/memberUpdate", config, formData, userData);
+      const response = await axios.put("http://43.202.98.45:8089/memberUpdate", formData, config);
       if (response.status >= 200 && response.status < 300) {
       console.log(response.data);
       alert("회원정보수정을 성공하였습니다.");
@@ -139,32 +139,44 @@ const EditSigninPage = () => {
         
         <div className={`${styles.input_text_edit}`}>직무</div>
           <div className={`${styles.choosejob_edit}`} id="pick-edit">
+          <label>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "웹디자이너"}  onChange={() =>handleSelectedJobsChange("웹디자이너")}/>
               <div className={`${styles.choosejob_text_edit}`}>웹디자이너</div>
             </div>
+            </label>
+            <label>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "웹퍼블리셔"}   onChange={() =>handleSelectedJobsChange("웹퍼블리셔")}/>
               <div className={`${styles.choosejob_text_edit}`}>웹퍼블리셔</div>
             </div>
+            </label>
+            <label>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "프론트엔드"}   onChange={() =>handleSelectedJobsChange("프론트엔드")}/>
               <div className={`${styles.choosejob_text_edit}`}>프론트엔드</div>
             </div>
+            </label>
           </div>
           <div className={`${styles.choosejob_edit}`}>
+          <label>
           <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "백엔드"}  onChange={() =>handleSelectedJobsChange("백엔드")}/>
               <div className={`${styles.choosejob_text_edit}`}>백엔드</div>
             </div>
+            </label>
+            <label>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "PM"}  onChange={() =>handleSelectedJobsChange("PM")}/>
               <div className={`${styles.choosejob_text_edit}`}>PM</div>
             </div>
+            </label>
+            <label>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "기타"}  onChange={() =>handleSelectedJobsChange("기타")}/>
               <div className={`${styles.choosejob_text_edit}`}>기타</div>
             </div>
+            </label>
           </div>
 
           <div className={`${styles.input_text_edit}`}>경력 여부</div>
@@ -189,7 +201,7 @@ const EditSigninPage = () => {
   );
 };
 
-export default EditSigninPage;
+export default MyPage;
 
 
 

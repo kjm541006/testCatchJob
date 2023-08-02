@@ -5,6 +5,7 @@ import { faComment, faHeart, faPenToSquare, faShare, faTrash } from "@fortawesom
 import axios from "axios";
 import ShareModal from "../components/ShareModal";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const PortfolioModal = ({ item, onClose }) => {
   const token = localStorage.getItem("token");
@@ -18,6 +19,7 @@ const PortfolioModal = ({ item, onClose }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
   const [firstModalUrl, setFirstModalUrl] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     // item이 변경될 때마다 URL을 업데이트합니다.
@@ -44,6 +46,11 @@ const PortfolioModal = ({ item, onClose }) => {
   const handleShare = (event) => {
     event.stopPropagation();
     setIsModalOpen(true);
+  };
+
+  const handleEdit = (event) => {
+    event.stopPropagation();
+    navigate("/portfolio/build", { state: { boardId: item.boardId } });
   };
 
   const formatCommentDate = (dateString) => {
@@ -177,7 +184,7 @@ const PortfolioModal = ({ item, onClose }) => {
           </button>
           <div className={`${styles.buttonMent}`}>공유하기</div>
         </div>
-        <div className={`${styles.buttonSet}`}>
+        <div className={`${styles.buttonSet}`} onClick={handleEdit}>
           <button className={`${styles.modalButton}`}>
             <FontAwesomeIcon icon={faPenToSquare} className={`${styles.faIcon}`} />
           </button>
