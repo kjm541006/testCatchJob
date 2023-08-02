@@ -89,7 +89,7 @@ public class BoardDTO {
 		Member writer = board.getMember();
 		if (writer != null) {
 			
-			String fileUrl = "http://43.202.98.45:8089/upload/" + member.getMProfile().getMOriginalFileName();
+			String fileUrl = "http://43.202.98.45:8089/upload/" + member.getMProfile().getMStoredFileName();
 			
 		    memberDTO = new BoardMemberDTO();
 		    memberDTO.setEmail(writer.getEmail());
@@ -158,7 +158,7 @@ public class BoardDTO {
 		Member member = board.getMember();
 		if (member != null) {
 			
-			String fileUrl = "http://43.202.98.45:8089/upload/" + member.getMProfile().getMOriginalFileName();
+			String fileUrl = "http://43.202.98.45:8089/upload/" + member.getMProfile().getMStoredFileName();
 			
 		    memberDTO = new BoardMemberDTO();
 		    memberDTO.setEmail(member.getEmail());

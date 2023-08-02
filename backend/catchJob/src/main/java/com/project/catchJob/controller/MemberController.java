@@ -207,7 +207,7 @@ public class MemberController {
 //		return ResponseEntity.badRequest().body("회원 수정 실패");
 //	}
 	// 작동코드(아마 최종)
-	@PutMapping(value = "/memberUpdate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "/memberUpdate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> memberUpdate(@RequestHeader("Authorization") String jwtToken,
 			@RequestParam(value = "name") String name,
 			@RequestParam(value = "pwd") String pwd,

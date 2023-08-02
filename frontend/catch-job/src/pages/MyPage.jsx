@@ -75,17 +75,16 @@ const MyPage = () => {
     };
     
     const formData = new FormData();
-    formData.append("mOriginalFileName", imageFileName);
-    formData.append("pwd", password);
     formData.append("name", name);
+    formData.append("pwd", password);
     formData.append("job", selectedJobs);
     formData.append("hasCareer", selectedCarrers);
-
+    formData.append("mOriginalFileName", imageFileName);    
 
       console.log(formData);
 
     try {
-      const response = await axios.put("http://43.202.98.45:8089/memberUpdate", formData, config);
+      const response = await axios.post("http://43.202.98.45:8089/memberUpdate", formData, config);
       if (response.status >= 200 && response.status < 300) {
       console.log(response.data);
       alert("회원정보수정을 성공하였습니다.");

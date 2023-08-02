@@ -244,21 +244,19 @@ public class MemberService {
 			optAuthenticatedMember.setJob(job);
 			optAuthenticatedMember.setHasCareer(hasCareer);
 			
-			if(optAuthenticatedMember.getFileAttached() == 0 && mFile != null) {
+			if(mFile != null) {
 				optAuthenticatedMember.setFileAttached(1);
 				
-				if(mFile != null) {
-					String originalFileName = mFile.getOriginalFilename();
-					String storedFileName = UUID.randomUUID() + originalFileName;
-					String savePath = filePath + storedFileName;
-					mFile.transferTo(new File(savePath));
-					
-					// 기존 M_profile 객체 수정
-					M_profile currentProfile = optAuthenticatedMember.getMProfile();
-					currentProfile.setMOriginalFileName(originalFileName);
-					currentProfile.setMStoredFileName(storedFileName);
-					mProfileRepo.save(currentProfile);
-				}
+				String originalFileName = mFile.getOriginalFilename();
+				String storedFileName = UUID.randomUUID() + originalFileName;
+				String savePath = filePath + "/" + storedFileName;
+				mFile.transferTo(new File(savePath));
+				
+				// 기존 M_profile 객체 수정
+				M_profile currentProfile = optAuthenticatedMember.getMProfile();
+				currentProfile.setMOriginalFileName(originalFileName);
+				currentProfile.setMStoredFileName(storedFileName);
+				mProfileRepo.save(currentProfile);
 			}
 			return memberRepo.save(optAuthenticatedMember);
 		} else {
