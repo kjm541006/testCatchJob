@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -87,10 +88,11 @@ public class Board {
 	public void removeBCoverFile() {
 		this.bCoverFileName = null;
 	}
- 	
+	
 	@JsonIgnore
 	@Builder.Default // 이 녀석이 없으면 lombok의 builder로 객체를 생성할 때 List가 선언한대로 제대로 초기화되지 않는다.
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OrderBy("bComId DESC")
 	private List<B_comments> boardCommentsList = new ArrayList<>();
 	
 	@JsonIgnore
