@@ -7,7 +7,7 @@
 }
 .section-edit {
   width: 640px;
-  height: 890px; 
+  height: 1000px; 
   border-radius: 32px;
   background: #ffffff;
   display: flex;
@@ -25,7 +25,7 @@
 .entire-box-edit{
   display: flex;
   padding: 0px 2px 0px 2px;
-  margin-top: 150px;
+  margin-top: 50px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -41,7 +41,7 @@
   font-size: 46px;
   font-weight: bold;
   position: fixed;
-  top: 80px;
+  top: 60px;
 }
 
 .catchJob-edit .red-letter{
@@ -88,6 +88,7 @@
 .choosejob-edit {
   display: flex;
   align-items: center; 
+  margin-top: 15px;
   margin-bottom: 15px;
 }
 
@@ -133,6 +134,7 @@
   background: #FFF;
   font-weight: bold;
   margin: 0px 30px 10px 30px;
+  font-size: 14px;
 }
 
 .cancel-edit:active {
@@ -155,9 +157,42 @@
   font-weight: bold;
   color:#FFF;
   margin: 0px 30px 10px 30px;
+  font-size: 14px;
 }
 
 .enroll-edit:active{
   background-color: #ffffff;
   border: none;
+}
+
+.profile-image-container {
+  position: relative;
+  margin-bottom: 50px; 
+}
+
+.profile-image {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 100px; 
+  height: 100px; 
+  border:1px solid #b2b2b2;
+  cursor: pointer; 
+}
+
+.upload-profile-img{
+  display: flex;
+  position: absolute;
+  border-radius: 50%;
+  width: 30px; 
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+  background-color: #444444;
+  top:70px;
+  left:70px;
+  cursor: pointer; 
+}
+
+.upload-profile-pencil{
+  color: #ffffff;
 }

@@ -11,7 +11,7 @@ const DetailModal = ({ setShowModal, onSave, prevCover, prevCoverURL, prevTags }
     const file = e.target.files[0];
     const fileURL = URL.createObjectURL(file);
     setUploadedFile(fileURL);
-    setBCoverFileName(file.name);
+    setBCoverFileName(file);
   };
 
   const handleKeyDown = (e) => {
@@ -35,8 +35,11 @@ const DetailModal = ({ setShowModal, onSave, prevCover, prevCoverURL, prevTags }
   const saveButtonHandler = () => {
     console.log("bCoverFileName:", bCoverFileName); // 커버 파일 이름 확인
     console.log("tags:", tags); // 태그 확인
-    onSave(bCoverFileName, uploadedFile, tags); // uploadedFile 전달 추가
-    setShowModal(false);
+    const formData = new FormData();
+    formData.append("bCoverFileName", bCoverFileName);
+  
+    onSave(bCoverFileName, uploadedFile, tags, formData); // formData 전달 추가
+    setShowModal(false);  
   };
 
   return (

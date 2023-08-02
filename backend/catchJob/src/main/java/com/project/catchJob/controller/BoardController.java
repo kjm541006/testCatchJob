@@ -69,20 +69,25 @@ public class BoardController {
 	
 	// 글 등록
 //	@PostMapping("/portfolio/build")
-	@PostMapping(value = " /buildportfolio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "/buildportfolio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> registerBoard(
 	        @RequestParam(value = "bTitle") String bTitle,
 	        @RequestParam(value = "bContents") String bContents,
-	        @RequestParam(value = "tags") List<String> tags,
+	        @RequestParam(value = "tags") String tagsJson, // tags 값을 JSON 문자열로 받습니다.
 	        @RequestHeader("Authorization") String jwtToken,
 	        @RequestPart(value = "bFileName", required = false) MultipartFile bFile,
 	        @RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile)
 	        throws Exception {
 
+	    // JSON 문자열을 List<String> 타입으로 변환
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    List<String> tags = objectMapper.readValue(tagsJson, new TypeReference<List<String>>() {});
+
 	    boardService.create(bTitle, bContents, tags, bFile, bCoverFile, jwtToken);
 
 	    return ResponseEntity.ok().build();
 	}
+
 	
 	// 가능코드
 //	@PostMapping(value = "/buildportfolio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -103,18 +108,39 @@ public class BoardController {
 //	@PutMapping("/portfolio/edit/{board_id}")
 	@PutMapping(value = "/portfolio/edit/{board_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> editBoard(
-			@RequestPart(value = "board") BoardDTO boardDTO,
-	        @PathVariable("board_id") Long boardId,
-	        @RequestHeader("Authorization") String jwtToken, 
-	        @RequestPart(value = "bFileName", required = false) MultipartFile bFile, 
-			@RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile) 
-	        throws Exception {
-		
-	    boardDTO.setBoardId(boardId);
-	    boardService.edit(boardDTO, bFile, bCoverFile, jwtToken);
+		@PathVariable("board_id") Long boardId,	
+		@RequestParam(value = "bTitle") String bTitle,
+	    @RequestParam(value = "bContents") String bContents,
+	    @RequestParam(value = "tags") String tagsJson, // tags 값을 JSON 문자열로 받습니다.
+	    @RequestHeader("Authorization") String jwtToken,
+	    @RequestPart(value = "bFileName", required = false) MultipartFile bFile,
+	    @RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile)
+	    throws Exception {
+
+		// JSON 문자열을 List<String> 타입으로 변환
+		ObjectMapper objectMapper = new ObjectMapper();
+		List<String> tags = objectMapper.readValue(tagsJson, new TypeReference<List<String>>() {});
+
+	    boardService.edit(boardId, bTitle, bContents, tags, bFile, bCoverFile, jwtToken);
 	    
 	    return ResponseEntity.ok().build();
 	}
+	
+	// 작동가능
+//	@PutMapping(value = "/portfolio/edit/{board_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//	public ResponseEntity<?> editBoard(
+//			@RequestPart(value = "board") BoardDTO boardDTO,
+//			@PathVariable("board_id") Long boardId,
+//			@RequestHeader("Authorization") String jwtToken, 
+//			@RequestPart(value = "bFileName", required = false) MultipartFile bFile, 
+//			@RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile) 
+//					throws Exception {
+//		
+//		boardDTO.setBoardId(boardId);
+//		boardService.edit(boardDTO, bFile, bCoverFile, jwtToken);
+//		
+//		return ResponseEntity.ok().build();
+//	}
 	
 	// 글 삭제
 //	@DeleteMapping("/portfolio/delete/{board_id}")

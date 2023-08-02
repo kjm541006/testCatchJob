@@ -7,14 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-//import com.project.catchJob.domain.board.B_tag;
 import com.project.catchJob.domain.board.Board;
-//import com.project.catchJob.domain.board.Tag;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.member.BoardMemberDTO;
-import com.project.catchJob.repository.board.B_likeRepository;
 import com.project.catchJob.service.BoardService;
 
 import lombok.AllArgsConstructor;
@@ -66,8 +62,8 @@ public class BoardDTO {
 	
 	private List<String> tags;
 	
-	private boolean removeBFile;
-	private boolean removeBCoverFile;
+//	private boolean removeBFile;
+//	private boolean removeBCoverFile;
 	
 	private BoardMemberDTO member;
 	private List<B_commentsDTO> comments;
@@ -117,8 +113,11 @@ public class BoardDTO {
 				.collect(Collectors.toList());
 				
 		//String bFileUrl = "/upload/" + board.getBFileName();
-		String bFileUrl = filePath + "/" + board.getBFileName();
-		String bCoverFileUrl = filePath + "/" + board.getBCoverFileName();
+//		String bFileUrl = filePath + "/" + board.getBFileName();
+//		String bCoverFileUrl = filePath + "/" + board.getBCoverFileName();
+		String bFileUrl = "http://43.202.98.45:8089/upload/" + board.getBFileName();
+		String bCoverFileUrl = "http://43.202.98.45:8089/upload/" + board.getBCoverFileName();
+
 		
 		return BoardDTO.builder()
 				.boardId(board.getBoardId())
@@ -188,11 +187,13 @@ public class BoardDTO {
 	    String bCoverFileUrl = "";
 
 	    if (board.getBFileName() != null) {
-	        bFileUrl = filePath + "/" + board.getBFileName();
+//	        bFileUrl = filePath + "/" + board.getBFileName();
+	    	bFileUrl = "http://43.202.98.45:8089/upload/" + board.getBFileName();
 	    }
 
 	    if (board.getBCoverFileName() != null) {
-	        bCoverFileUrl = filePath + "/" + board.getBCoverFileName();
+//	        bCoverFileUrl = filePath + "/" + board.getBCoverFileName();
+	        bCoverFileUrl = "http://43.202.98.45:8089/upload/" + board.getBCoverFileName();
 	    }
 
 		return BoardDTO.builder()
