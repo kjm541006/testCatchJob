@@ -1,6 +1,8 @@
 package com.project.catchJob.domain.member;
 
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,6 +93,32 @@ public class Member {
 	@OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private M_profile mProfile;
 
+	public String getFileNameFromUrl(String urlString) {
+		try {
+	        URL url = new URL(urlString);
+	        String path = url.getPath();
+	        File file = new File(path);
+	        return file.getName();
+	    } catch (Exception e) {
+	    	System.out.println("----" + urlString + "에서 파일명 추출 실패----" + e);
+	        throw new RuntimeException("URL에서 파일명을 추출하는 중 오류가 발생했습니다.", e);
+	    }
+	}
+	
+	public M_profile createDefaultProfile(String defaultProfileUrl) {
+		// 기본 프로필 이미지 생성
+		String defaultProfileFileName = getFileNameFromUrl(defaultProfileUrl);
+		M_profile defaultProfile = M_profile.builder()
+	            .mOriginalFileName(defaultProfileFileName)
+	            .mStoredFileName(defaultProfileFileName)
+	            .member(this)
+	            .build();
+		
+		// 멤버에 프로필 이미지 설정
+		this.setMProfile(defaultProfile);
+		
+		return defaultProfile;
+	}
 	
 //	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 //	private List<Community> communityList = new ArrayList<>();

@@ -3,14 +3,18 @@ package com.project.catchJob.controller;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.project.catchJob.domain.member.GoogleOAuth;
 import com.project.catchJob.domain.member.Member;
@@ -53,20 +57,33 @@ public class MemberController {
 			if(memberDTO == null || memberDTO.getPwd() == null) {
 				throw new RuntimeException("비밀번호 공란");
 			}
-			MemberDTO responseMemberDTO = MemberDTO.builder()
-					.email(memberDTO.getEmail())
-					.pwd(pwdEncoder.encrypt(memberDTO.getEmail(), memberDTO.getPwd()))
-					.name(memberDTO.getName())
-					.job(memberDTO.getJob())
-					.hasCareer(memberDTO.getHasCareer())
-					.type("일반")
-					.build();
-			memberService.createMember(responseMemberDTO);
-			return ResponseEntity.ok().body(responseMemberDTO);
+
+			Member responseMember = memberService.createMember(memberDTO);
+			return ResponseEntity.ok().body(responseMember);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
 		}		
 	}
+	// 작동가능
+//	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
+//		try {
+//			if(memberDTO == null || memberDTO.getPwd() == null) {
+//				throw new RuntimeException("비밀번호 공란");
+//			}
+//			MemberDTO responseMemberDTO = MemberDTO.builder()
+//					.email(memberDTO.getEmail())
+//					.pwd(pwdEncoder.encrypt(memberDTO.getEmail(), memberDTO.getPwd()))
+//					.name(memberDTO.getName())
+//					.job(memberDTO.getJob())
+//					.hasCareer(memberDTO.getHasCareer())
+//					.type("일반")
+//					.build();
+//			memberService.createMember(responseMemberDTO);
+//			return ResponseEntity.ok().body(responseMemberDTO);
+//		} catch (Exception e) {
+//			return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
+//		}		
+//	}
 	
 	
 	/*
@@ -109,11 +126,13 @@ public class MemberController {
 	// 로그인
 	@PostMapping("/login") 
 	public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO) {
+		log.info("로그인 요청: 이메일 = {}, 비밀번호 = {}", memberDTO.getEmail(), memberDTO.getPwd());
+		
 		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
 		
 		// log.info("{} 로그인 성공", member.toString());
 		if(member != null) {
-			
+			log.info("인증 성공. 이메일 = {}, 이름 = {}", member.getEmail(), member.getName());
 			// 토큰 생성
 			final String token = tokenProvider.createToken(member);
 			log.info("token 생성 성공", token);
@@ -130,6 +149,7 @@ public class MemberController {
 			return ResponseEntity.ok().body(responseMemberDTO);
 		}
 		else {
+			log.error("인증 실패");
 			return ResponseEntity.badRequest().body("로그인 실패");
 		}
 	}
@@ -173,35 +193,45 @@ public class MemberController {
 	}
 	
 	// 마이페이지 (회원수정)
-	@PutMapping("/memberUpdate")
-	public ResponseEntity<?> memberUpdate(@RequestHeader("Authorization") String jwtToken, @RequestBody MemberDTO memberDTO) {
-		Member updateMember = memberService.updateMember(jwtToken, memberDTO);
+//	@PutMapping("/memberUpdate")
+//	@PutMapping(value = "/memberUpdate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//	public ResponseEntity<?> memberUpdate(@RequestHeader("Authorization") String jwtToken,
+//										  @ModelAttribute MemberDTO memberDTO,
+//										  @RequestPart(value = "mOriginalFileName", required = false) MultipartFile mFile) throws Exception {
+//
+//		Member updateMember = memberService.updateMember(jwtToken, memberDTO, mFile);
+//		
+//		if(updateMember != null) {
+//			return ResponseEntity.ok().body(updateMember);
+//		} 
+//		return ResponseEntity.badRequest().body("회원 수정 실패");
+//	}
+	// 작동코드(아마 최종)
+	@PutMapping(value = "/memberUpdate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<?> memberUpdate(@RequestHeader("Authorization") String jwtToken,
+			@RequestParam(value = "name") String name,
+			@RequestParam(value = "pwd") String pwd,
+			@RequestParam(value = "job") String job,
+			@RequestParam(value = "hasCareer") String hasCareer,
+			@RequestPart(value = "mOriginalFileName", required = false) MultipartFile mFile) throws Exception {
+		
+		Member updateMember = memberService.updateMember(jwtToken, name, pwd, job, hasCareer, mFile);
 		
 		if(updateMember != null) {
 			return ResponseEntity.ok().body(updateMember);
 		} 
 		return ResponseEntity.badRequest().body("회원 수정 실패");
-
 	}
-//	public ResponseEntity<?> memberUpdate(@RequestBody MemberDTO memberDTO) {
-//		Member updateMember = memberService.updateMember(memberDTO);
+	// 작동코드
+//	public ResponseEntity<?> memberUpdate(@RequestHeader("Authorization") String jwtToken, @RequestBody MemberDTO memberDTO
+//			) {
+//		Member updateMember = memberService.updateMember(jwtToken, memberDTO);
 //		
 //		if(updateMember != null) {
-//			MemberDTO responseMemberDTO = memberDTO.builder()
-//					.email(memberDTO.getEmail()) // 이메일은 수정불가. 기존의 이메일
-//					.name(updateMember.getName())
-//					.pwd(updateMember.getPwd())
-//					.job(updateMember.getJob())
-//					.hasCareer(updateMember.getHasCareer())
-//					.token(memberDTO.getToken()) // 토큰은 기존의 발급받은 토큰 사용
-//					.type(memberDTO.getType())
-//					.fileAttached(updateMember.getFileAttached())
-//					.build();
-//			
-//			return ResponseEntity.ok().body(responseMemberDTO);
-//		} else {
-//			return ResponseEntity.badRequest().body("회원 수정 실패");
-//		}
+//			return ResponseEntity.ok().body(updateMember);
+//		} 
+//		return ResponseEntity.badRequest().body("회원 수정 실패");
 //	}
+
 
 }

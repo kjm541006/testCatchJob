@@ -88,10 +88,13 @@ public class BoardDTO {
 		BoardMemberDTO memberDTO = null;
 		Member writer = board.getMember();
 		if (writer != null) {
+			
+			String fileUrl = "http://43.202.98.45:8089/upload/" + member.getMProfile().getMOriginalFileName();
+			
 		    memberDTO = new BoardMemberDTO();
 		    memberDTO.setEmail(writer.getEmail());
 		    memberDTO.setName(writer.getName());
-		    // memberDTO.setMOriginalFileName(writer.getMProfile().getMOriginalFileName());
+		    memberDTO.setMOriginalFileName(fileUrl);
 		}
 		
 		// 내가 좋아요했는지 여부 확인
@@ -154,10 +157,13 @@ public class BoardDTO {
 		BoardMemberDTO memberDTO = null;
 		Member member = board.getMember();
 		if (member != null) {
+			
+			String fileUrl = "http://43.202.98.45:8089/upload/" + member.getMProfile().getMOriginalFileName();
+			
 		    memberDTO = new BoardMemberDTO();
 		    memberDTO.setEmail(member.getEmail());
 		    memberDTO.setName(member.getName());
-		    // memberDTO.setMOriginalFileName(member.getMProfile().getMOriginalFileName());
+		    memberDTO.setMOriginalFileName(fileUrl);
 		}
 
 		int bComment = board.getBoardCommentsList().size(); // 댓글 수 계산
