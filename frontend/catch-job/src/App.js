@@ -64,6 +64,7 @@ function App() {
         <Route path="/signin" element={!isLoggedIn ? <BasicSigninPage /> : <SigninAlertPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/mypage" element={savedToken != null ? <EditSigninPage /> : <LoginAlertPage />} />
+        <Route path="/realmypage" element={<MyPage />} />
         <Route path="/edit" element={<EditSigninPage />} />
         {/* <Route path="/userInfo/:userId" element={<UserInfo />} /> */}
         <Route path="/" element={<PortfolioMainPage />} />
