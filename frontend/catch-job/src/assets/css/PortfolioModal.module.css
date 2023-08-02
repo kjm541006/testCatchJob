@@ -19,7 +19,7 @@
 .entireButtonSet{
   position: absolute;
   top: 0px;
-  right: calc((100vw - 0px) * 0.14);  
+  right: calc((100vw - 0px) * 0.18);  
   align-items: center;
   justify-content: center;
   display: flex;
