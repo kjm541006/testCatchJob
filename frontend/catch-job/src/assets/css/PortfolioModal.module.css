@@ -16,14 +16,24 @@
   flex-direction: column; 
 }
 
-.buttonSet{
+.entireButtonSet{
   position: absolute;
-  top: 15px;
-  right: 400px;
+  top: 0px;
+  right: calc((100vw - 0px) * 0.14);  
   align-items: center;
   justify-content: center;
   display: flex;
   flex-direction: column;
+  z-index: 9999;
+}
+
+.buttonSet{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .modalButton {

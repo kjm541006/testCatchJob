@@ -105,35 +105,37 @@ const PortfolioModal = ({ item, onClose }) => {
   return (
     <>
       <div className={`${styles.modalBackdrop}`} onClick={onClose}>
+      <div className={`${styles.entireButtonSet}`}>
         <div className={`${styles.buttonSet}`}>
           <button className={`${styles.modalButton}`} style={{ backgroundColor: "#E2432E" }} onClick={handleLike}>
             <FontAwesomeIcon icon={faHeart} className={`${styles.faIcon}`} style={{ color: isLiked ? "#ffb5b5" : "#ffffff" }} />
           </button>
           <div className={`${styles.buttonMent}`}>좋아요</div>
         </div>
-        <div className={`${styles.buttonSet}`} style={{ top: "130px", right: "408px" }} onClick={handleComment}>
+        <div className={`${styles.buttonSet}`} onClick={handleComment}>
           <button className={`${styles.modalButton}`}>
             <FontAwesomeIcon icon={faComment} className={`${styles.faIcon}`} />
           </button>
           <div className={`${styles.buttonMent}`}>댓글</div>
         </div>
-        <div className={`${styles.buttonSet}`} style={{ top: "247px", right: "394px" }} onClick={handleShare}>
+        <div className={`${styles.buttonSet}`} onClick={handleShare}>
           <button className={`${styles.modalButton}`}>
             <FontAwesomeIcon icon={faShare} className={`${styles.faIcon}`} />
           </button>
           <div className={`${styles.buttonMent}`}>공유하기</div>
         </div>
-        <div className={`${styles.buttonSet}`} style={{ top: "362px", right: "394px" }}>
+        <div className={`${styles.buttonSet}`} >
           <button className={`${styles.modalButton}`}>
             <FontAwesomeIcon icon={faPenToSquare} className={`${styles.faIcon}`} />
           </button>
           <div className={`${styles.buttonMent}`}>수정하기</div>
         </div>
-        <div className={`${styles.buttonSet}`} style={{ top: "477px", right: "394px" }}>
+        <div className={`${styles.buttonSet}`} >
           <button className={`${styles.modalButton}`}>
             <FontAwesomeIcon icon={faTrash} className={`${styles.faIcon}`} />
           </button>
           <div className={`${styles.buttonMent}`}>삭제하기</div>
+        </div>
         </div>
 
         <div className={`${styles.modalContent}`} onClick={(e) => e.stopPropagation()}>
