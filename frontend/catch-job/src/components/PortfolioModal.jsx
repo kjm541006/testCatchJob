@@ -105,39 +105,6 @@ const PortfolioModal = ({ item, onClose }) => {
   return (
     <>
       <div className={`${styles.modalBackdrop}`} onClick={onClose}>
-      <div className={`${styles.entireButtonSet}`}>
-        <div className={`${styles.buttonSet}`}>
-          <button className={`${styles.modalButton}`} style={{ backgroundColor: "#E2432E" }} onClick={handleLike}>
-            <FontAwesomeIcon icon={faHeart} className={`${styles.faIcon}`} style={{ color: isLiked ? "#ffb5b5" : "#ffffff" }} />
-          </button>
-          <div className={`${styles.buttonMent}`}>좋아요</div>
-        </div>
-        <div className={`${styles.buttonSet}`} onClick={handleComment}>
-          <button className={`${styles.modalButton}`}>
-            <FontAwesomeIcon icon={faComment} className={`${styles.faIcon}`} />
-          </button>
-          <div className={`${styles.buttonMent}`}>댓글</div>
-        </div>
-        <div className={`${styles.buttonSet}`} onClick={handleShare}>
-          <button className={`${styles.modalButton}`}>
-            <FontAwesomeIcon icon={faShare} className={`${styles.faIcon}`} />
-          </button>
-          <div className={`${styles.buttonMent}`}>공유하기</div>
-        </div>
-        <div className={`${styles.buttonSet}`} >
-          <button className={`${styles.modalButton}`}>
-            <FontAwesomeIcon icon={faPenToSquare} className={`${styles.faIcon}`} />
-          </button>
-          <div className={`${styles.buttonMent}`}>수정하기</div>
-        </div>
-        <div className={`${styles.buttonSet}`} >
-          <button className={`${styles.modalButton}`}>
-            <FontAwesomeIcon icon={faTrash} className={`${styles.faIcon}`} />
-          </button>
-          <div className={`${styles.buttonMent}`}>삭제하기</div>
-        </div>
-        </div>
-
         <div className={`${styles.modalContent}`} onClick={(e) => e.stopPropagation()}>
           <div className={`${styles.contentInfo}`}>
             <img className={`${styles.user_img}`} src={item.member.mOriginalFileName} alt="img" />
@@ -148,7 +115,7 @@ const PortfolioModal = ({ item, onClose }) => {
               </div>
             </div>
           </div>
-          <div className={`${styles.realContent}`}dangerouslySetInnerHTML={{ __html: item.bContents }}></div>
+          <div className={`${styles.realContent}`} dangerouslySetInnerHTML={{ __html: item.bContents }}></div>
           <div className={`${styles.tagList}`}>
             {item.tags[0] && <div className={`${styles.tagElement}`}>{item.tags[0]}</div>}
             {item.tags[1] && <div className={`${styles.tagElement}`}>{item.tags[1]}</div>}
@@ -189,6 +156,38 @@ const PortfolioModal = ({ item, onClose }) => {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+      <div className={`${styles.entireButtonSet}`}>
+        <div className={`${styles.buttonSet}`}>
+          <button className={`${styles.modalButton}`} style={{ backgroundColor: "#E2432E" }} onClick={handleLike}>
+            <FontAwesomeIcon icon={faHeart} className={`${styles.faIcon}`} style={{ color: isLiked ? "#ffb5b5" : "#ffffff" }} />
+          </button>
+          <div className={`${styles.buttonMent}`}>좋아요</div>
+        </div>
+        <div className={`${styles.buttonSet}`} onClick={handleComment}>
+          <button className={`${styles.modalButton}`}>
+            <FontAwesomeIcon icon={faComment} className={`${styles.faIcon}`} />
+          </button>
+          <div className={`${styles.buttonMent}`}>댓글</div>
+        </div>
+        <div className={`${styles.buttonSet}`} onClick={handleShare}>
+          <button className={`${styles.modalButton}`}>
+            <FontAwesomeIcon icon={faShare} className={`${styles.faIcon}`} />
+          </button>
+          <div className={`${styles.buttonMent}`}>공유하기</div>
+        </div>
+        <div className={`${styles.buttonSet}`}>
+          <button className={`${styles.modalButton}`}>
+            <FontAwesomeIcon icon={faPenToSquare} className={`${styles.faIcon}`} />
+          </button>
+          <div className={`${styles.buttonMent}`}>수정하기</div>
+        </div>
+        <div className={`${styles.buttonSet}`}>
+          <button className={`${styles.modalButton}`}>
+            <FontAwesomeIcon icon={faTrash} className={`${styles.faIcon}`} />
+          </button>
+          <div className={`${styles.buttonMent}`}>삭제하기</div>
         </div>
       </div>
       {isModalOpen && <ShareModal item={item} onClose={() => setIsModalOpen(false)} modalUrl={firstModalUrl} />}
