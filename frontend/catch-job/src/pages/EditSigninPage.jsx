@@ -33,40 +33,14 @@ const EditSigninPage = () => {
         setSelectedCarrers(response.data.hasCareer);
       } catch (error) {
         console.error('Error fetching data:', error);
+        if (error.response.status === 500) {
+          // 서버 내부 에러 처리
+          alert("정보 조회에 실패했습니다.(서버 에러) ");
+        }
       }
     }
     fetchData();
   }, []);
-
-  const handleUpdateClick = async () => {
-    const password = prompt("비밀번호를 입력해 주세요.");
-  
-    if (password) {
-      const token = localStorage.getItem("token");
-      const config = {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      };
-      try {
-        const response = await axios.post('http://43.202.98.45:8089/memberPwd', { pwd: password }, config);
-        console.log(response.data);
-
-        if (response.data === "비밀번호 일치") {
-          navigate("/realmypage");
-        }
-      } catch (error) {
-        if (error.response && error.response.status >= 400){
-          alert("비밀번호가 일치하지 않습니다. 다시 작성해주세요.");
-          handleUpdateClick();
-        } else {
-          console.error('Error:', error);
-        }
-      }
-    } else {
-      alert("비밀번호를 입력해야 회원 정보를 수정할 수 있습니다.");
-    }
-  };
   
   return (
     <div className="body-edit">
@@ -83,56 +57,23 @@ const EditSigninPage = () => {
           </label>
         </div>
         
-        <div className="input-text-edit">이메일</div>
-        <input type="text" className="input-box-edit" tabIndex="1" value={email} readOnly style={{color:'#807d7d'}}/>
-        <div className="input-text-edit">이름</div>
-        <input type="text" className="input-box-edit" tabIndex="2" value={name} readOnly style={{color:'#807d7d'}}/>
-
-        <div className="input-text-edit">직무</div>
-          <div className="choosejob-edit" id="pick-edit">
-            <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" checked={selectedJobs === "웹디자이너"} />
-              <div className="choosejob-text-edit">웹디자이너</div>
-            </div>
-            <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" checked={selectedJobs === "웹퍼블리셔"}  />
-              <div className="choosejob-text-edit">웹퍼블리셔</div>
-            </div>
-            <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" checked={selectedJobs === "프론트엔드"}  />
-              <div className="choosejob-text-edit">프론트엔드</div>
-            </div>
+        <div className="personDate">
+          <div className="input-text-edit">이메일
+            <span className="input-box-edit"  style={{color:'#807d7d'}}>{email}</span>
           </div>
-          <div className="choosejob-edit">
-          <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" checked={selectedJobs === "백엔드"} />
-              <div className="choosejob-text-edit">백엔드</div>
-            </div>
-            <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" checked={selectedJobs === "PM"} />
-              <div className="choosejob-text-edit">PM</div>
-            </div>
-            <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" checked={selectedJobs === "기타"} />
-              <div className="choosejob-text-edit">기타</div>
-            </div>
+          <div className="input-text-edit">이름
+            <span className="input-box-edit"  style={{color:'#807d7d'}}>{name}</span>
           </div>
-
-          <div className="input-text-edit">경력 여부</div>
-          <div className="choosejob-edit" id="pick-edit">
-            <div className="choosejobone-edit" id="carrer-edit">
-              <input type="radio" className="custom-checkbox-edit"  name="career-edit" checked={selectedCarrers === "신입"}  />
-              <div className="choosejob-text-edit">신입</div>
-            </div>
-            <div className="choosejobone" id="carrer">
-              <input type="radio" className="custom-checkbox-edit" name="career-edit" checked={selectedCarrers === "경력"} />
-              <div className="choosejob-text-edit">경력</div>
-            </div>
+          <div className="input-text-edit">직무
+            <span className="input-box-edit"  style={{color:'#807d7d'}}>{selectedJobs}</span>
           </div>
-
+          <div className="input-text-edit">경력 여부
+            <span className="input-box-edit"  style={{color:'#807d7d'}}>{selectedCarrers}</span>
+          </div>
+          </div>
           <div className="enrollbutton-edit">
             <Link to={"/"} className="cancel-edit">메인으로</Link>
-            <button className="enroll-edit" onClick={handleUpdateClick}>수정하기</button>
+            <Link to={"/password"} className="enroll-edit">수정하기</Link>
 
           </div>
         </div>

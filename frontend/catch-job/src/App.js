@@ -25,6 +25,7 @@ import LoginAlertPage from "./pages/LoginAlertPage";
 import axios from "axios";
 import NewsPage from "./pages/NewsPage";
 import SigninAlertPage from "./pages/SigninAlertPage";
+import PasswordCheck from "./pages/PasswordCheck";
 
 function App() {
   const dispatch = useDispatch();
@@ -66,6 +67,7 @@ function App() {
         <Route path="/mypage" element={savedToken != null ? <EditSigninPage /> : <LoginAlertPage />} />
         <Route path="/realmypage" element={<MyPage />} />
         <Route path="/edit" element={<EditSigninPage />} />
+        <Route path="/password" element={<PasswordCheck />} />
         {/* <Route path="/userInfo/:userId" element={<UserInfo />} /> */}
         <Route path="/" element={<PortfolioMainPage />} />
         {/* <Route path="/recruit" element={<Recruit />} /> */}
