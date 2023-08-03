@@ -94,6 +94,9 @@ public class Project {
 		this.member = member;
 		member.getProjectList().add(this);
 	}
+	
+	@OneToMany(mappedBy = "member")
+	private List<Project> projectList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "project")
 	private List<P_comments> projectCommentsList = new ArrayList<>();

@@ -9,4 +9,5 @@ public interface ProjectService {
 
 	Project addProject(ProjectDTO projectDTO, String userEmail);
 	List<Project> getAllProjects();
+	Project getProjectByProjectId(Long projectId);
 }

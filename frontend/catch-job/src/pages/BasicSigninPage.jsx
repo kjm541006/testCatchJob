@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
 const BasicSigninPage = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -69,9 +68,10 @@ const BasicSigninPage = () => {
 
     console.log(userData);
 
-    // axios.post('localhost:8089/register', userData, {
     axios
-      .post("http://43.202.98.45:8089/register", userData, {
+      .post("http://localhost:8089/register", userData, {
+        // axios
+        // .post("http://43.202.98.45:8089/register", userData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -217,7 +217,9 @@ const BasicSigninPage = () => {
 
           <div className="enrollbutton">
             <button className="cancel-basic">취소</button>
-            <button className="enroll-basic" onClick={registerUser}>등록</button>
+            <button className="enroll-basic" onClick={registerUser}>
+              등록
+            </button>
           </div>
 
           <div className="log-in-basic">
