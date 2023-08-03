@@ -1,84 +1,80 @@
-import React, { useState, useEffect } from "react";
-import "../assets/css/member/EditSignin.css";
-
-//axios 기능 구현해야함
+import React, { useState, useEffect } from 'react';
+import EditSignin from "../assets/css/member/EditSignin.css";
+import axios from 'axios';
+import MyPage from './MyPage';
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faCommentDots, faHeart, faCheck, faPencil } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const EditSigninPage = () => {
-  const [email, setEmail] = useState(localStorage.getItem("email") || "");
-  const [name, setName] = useState(localStorage.getItem("name") || "");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [selectedJobs, setSelectedJobs] = useState("");
   const [selectedCarrers, setSelectedCarrers] = useState("");
-
-  const handleJobCheckboxChange = (job) => {
-    setSelectedJobs(job);
-  };
-
-  const handleCarrerChange = (carrer) => {
-    setSelectedCarrers(carrer);
-  };
-
+  const [imageFile, setImageFile] = useState(null);
+  const [imageFileName, setImageFileName] = useState("");
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    async function fetchData() {
+      const token = localStorage.getItem("token");
+      const axiosConfig = {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      };
+      try {
+        const response = await axios.get("http://43.202.98.45:8089/memberInfo", axiosConfig);
+        setImageFile(response.data.mOriginalFileName);
+        setEmail(response.data.email);
+        setName(response.data.name);
+        setSelectedJobs(response.data.job);
+        setSelectedCarrers(response.data.hasCareer);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        if (error.response.status === 500) {
+          // 서버 내부 에러 처리
+          alert("정보 조회에 실패했습니다.(서버 에러) ");
+        }
+      }
+    }
+    fetchData();
+  }, []);
+  
   return (
     <div className="body-edit">
-      <div className="section-edit">
-        <div className="entire-box-edit">
-          <h1 className="catchJob-edit">
-            catch<span className="red-letter">J</span>ob
-          </h1>
-          <h3 className="edit-inform">회원정보수정</h3>
+    <div className="section-edit">
+      <div className="entire-box-edit">
+        <h1 className="catchJob-edit">
+          catch<span className="red-letter">J</span>ob
+        </h1>
+        <h3 className="edit-inform">회원정보조회</h3>
 
-          <div className="input-text-edit">이메일</div>
-          <input type="text" className="input-box-edit" tabIndex="1" value={email} readOnly style={{ color: "#807d7d" }} />
-          <div className="input-text-edit">이름</div>
-          <input type="text" className="input-box-edit" tabIndex="2" value={name} readOnly style={{ color: "#807d7d" }} />
-          <div className="input-text-edit">비밀번호</div>
-          <input type="text" className="input-box-edit" tabIndex="3" value={password} />
-
-          <div className="input-text-edit">직무</div>
-          <div className="choosejob-edit" id="pick-edit">
-            <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("웹디자이너")} />
-              <div className="choosejob-text-edit">웹디자이너</div>
-            </div>
-            <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("웹퍼블리셔")} />
-              <div className="choosejob-text-edit">웹퍼블리셔</div>
-            </div>
-            <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("프론트엔드")} />
-              <div className="choosejob-text-edit">프론트엔드</div>
-            </div>
+        <div className="profile-image-container">
+            <label htmlFor="profile-image-input">
+            <img src={imageFile ? `${imageFile}`: "/profile.png"} alt="" className="profile-image"/>
+          </label>
+        </div>
+        
+        <div className="personDate">
+          <div className="input-text-edit">이메일
+            <span className="input-box-edit"  style={{color:'#807d7d'}}>{email}</span>
           </div>
-          <div className="choosejob-edit">
-            <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("백엔드")} />
-              <div className="choosejob-text-edit">백엔드</div>
-            </div>
-            <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("PM")} />
-              <div className="choosejob-text-edit">PM</div>
-            </div>
-            <div className="choosejobone-edit">
-              <input type="radio" className="custom-checkbox-edit" name="job-edit" onChange={() => handleJobCheckboxChange("웹퍼블리셔")} />
-              <div className="choosejob-text-edit">기타</div>
-            </div>
+          <div className="input-text-edit">이름
+            <span className="input-box-edit"  style={{color:'#807d7d'}}>{name}</span>
           </div>
-
-          <div className="input-text-edit">경력 여부</div>
-          <div className="choosejob-edit" id="pick-edit">
-            <div className="choosejobone-edit" id="carrer-edit">
-              <input type="radio" className="custom-checkbox-edit" name="career-edit" onChange={() => handleCarrerChange("신입")} />
-              <div className="choosejob-text-edit">신입</div>
-            </div>
-            <div className="choosejobone" id="carrer">
-              <input type="radio" className="custom-checkbox-edit" name="career-edit" onChange={() => handleCarrerChange("경력")} />
-              <div className="choosejob-text-edit">경력</div>
-            </div>
+          <div className="input-text-edit">직무
+            <span className="input-box-edit"  style={{color:'#807d7d'}}>{selectedJobs}</span>
           </div>
-
+          <div className="input-text-edit">경력 여부
+            <span className="input-box-edit"  style={{color:'#807d7d'}}>{selectedCarrers}</span>
+          </div>
+          </div>
           <div className="enrollbutton-edit">
-            <button className="cancel-edit">취소</button>
-            <button className="enroll-edit">등록</button>
+            <Link to={"/"} className="cancel-edit">메인으로</Link>
+            <Link to={"/password"} className="enroll-edit">수정하기</Link>
+
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@
 }
 .section-basic {
   width: 640px;
-  height: 1200px;
+  height: 1100px;
   border-radius: 32px;
   background: #ffffff;
   display: flex;
@@ -28,7 +28,7 @@
   align-items: center;
   justify-content: center;
   width: 332px;
-  height: 1030px;
+  height: 800px;
   /* background-color: #999999; */
 }
 
@@ -52,14 +52,15 @@
   border-radius: 4px;
   border: 1px solid #ccc;
   background: #fff;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   padding-left: 10px;
 }
 
 .input-text-basic {
   height: 30px;
   color: #0d0d0d;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: bold;
   display: flex;
   align-items: flex-start;
@@ -74,10 +75,11 @@
 
 .eye-icon-basic {
   position: absolute;
-  top: 40%;
+  top: 50%;
   right: 10px;
   transform: translateY(-50%);
   cursor: pointer;
+  color: #444444;
 }
 
 .entire-text-basic {
@@ -168,7 +170,7 @@
   align-items: flex-start;
   gap: 40px;
   position: fixed;
-  top: 1100px;
+  top: 1000px;
 }
 
 .log-in-now-basic {

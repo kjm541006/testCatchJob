@@ -39,10 +39,6 @@ const LoginPage = () => {
       const token = response.data.token;
       const name = response.data.name;
       const email = response.data.email;
-      if (response.status === 400) {
-        alert("회원을 찾지 못했습니다.");
-        return;
-      }
       console.log(token);
       console.log(name);
       console.log(email);
@@ -55,10 +51,23 @@ const LoginPage = () => {
         window.location.reload();
       }, 100);
     } catch (error) {
-      if (error.response.status === 500) {
+      if (error.response.status === 400) {
+        alert("회원을 찾지 못했습니다.");
+      }
+      else if (error.response.status === 500) {
         // 서버 내부 에러 처리
         alert("로그인에 실패했습니다.(서버 에러) ");
       }
+      else {
+        // 기타 에러 처리
+        alert("로그인에 실패했습니다. 다시 시도해주세요.");
+      }
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleLogin();
     }
   };
 
@@ -78,6 +87,7 @@ const LoginPage = () => {
               className="input-box"
               tabIndex="2"
               value={password}
+              onKeyPress={handleKeyPress}
               onChange={(e) => setPassword(e.target.value)}
             />
             <div className="eye-icon" onClick={togglePasswordVisibility}>
@@ -100,7 +110,7 @@ const LoginPage = () => {
 
           <div className="sign-in">
             <div className="entire-text">아직 회원이 아니세요?</div>
-            <Link to="/join" className="sign-in-now">
+            <Link to={"/join"} className="sign-in-now">
               회원가입 하기
             </Link>
           </div>

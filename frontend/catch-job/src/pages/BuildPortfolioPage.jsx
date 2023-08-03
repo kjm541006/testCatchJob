@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // 테마 스타일 가져오기
 import styles from "../assets/css/BuildPortfolio.module.css";
 import DetailModal from "../components/DetailModal";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const BuildPortfolioPage = () => {
   const [value, setValue] = useState("");
@@ -15,6 +17,24 @@ const BuildPortfolioPage = () => {
   const [prevCover, setPrevCover] = useState("");
   const [prevTags, setPrevTags] = useState([]);
   const [prevCoverURL, setPrevCoverURL] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const boardId = location.state.boardId;
+
+  useEffect(() => {
+    const ifHaveId = async () => {
+      try {
+        const response = await axios.get(`http://43.202.98.45:8089/${boardId}`); // 수정 엔드포인트에 맞춰서 쓰기
+      } catch (error) {
+        return;
+      }
+    }
+
+    if (boardId) {
+      ifHaveId(); 
+    }
+  }, [boardId]);
+
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -56,9 +76,11 @@ const BuildPortfolioPage = () => {
     try {
       const response = await axios.post("http://43.202.98.45:8089/buildportfolio", formData, axiosConfig);
       console.log(response.data);
+      console.log("성공")
     } catch (error) {
       console.error("Error:", error);
     }
+    navigate("/");
   };
 
   const modules = {
