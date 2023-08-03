@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,6 +30,7 @@ import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.board.B_commentsDTO;
 import com.project.catchJob.dto.board.BoardDTO;
+import com.project.catchJob.dto.board.BoardEditDTO;
 import com.project.catchJob.dto.board.CommentResponse;
 import com.project.catchJob.dto.board.TagDTO;
 import com.project.catchJob.exception.UnauthorizedException;
@@ -60,18 +62,6 @@ public class BoardService {
 	@Autowired private B_commentsRepository bCommRepo; // 댓글
 	@Autowired private B_likeRepository bLikeRepo; // 좋아요
 	@Autowired private TokenProvider tokenProvider;
-	
-//	private String uploadFolderPath = "catchJob/upload/"; 
-	private String uploadFolderPath = "D:ding/";
-	// 서버 실제 디렉토리 구조
-//	private String fileUrlPath = "/upload/";
-	private String fileUrlPath = "D:ding/img/";
-	// 사용자가 파일에 액세스하는 경우 필요한 url 경로
-	// 경로를 구분해서 사용하면 서버와 클라이언트 간의 엑세스 권한 분리해서 관리 가능
-	
-	public String getFileUrlPath() {
-		return fileUrlPath;
-	}
 	
 	// 글 목록
 	public List<BoardDTO> getBoardList(String jwtToken) {
@@ -143,6 +133,30 @@ public class BoardService {
             return null;
         }
     }
+	
+	// 글 수정 전 조회
+	public BoardEditDTO getBoard(Long boardId, String jwtToken) {
+		
+		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+	    		.orElseThrow(UnauthorizedException::new);
+		
+		Board board = boardRepo.findById(boardId)
+    	    		.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+	    
+		if(!optAuthenticatedMember.getEmail().equals(board.getMember().getEmail())) {
+	    	throw new UnauthorizedException();
+	    	
+	    }
+		BoardEditDTO boardDTO = BoardEditDTO.builder()
+				.bTitle(board.getBTitle())
+				.bContents(board.getBContents())
+				.tags(board.getTags())
+				.bFileName(board.getBFileName())
+				.bCoverFileName(board.getBCoverFileName())
+				.build();
+		
+		return boardDTO;
+	}
     
     // 글 수정
     public void edit(Long boardId, String bTitle, String bContents, List<String> tags, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
@@ -201,7 +215,7 @@ public class BoardService {
     }
     
     // 글 삭제
-    public void delete(Long boardId, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
+    public void delete(Long boardId, String jwtToken) {
     	
 	    Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 	    		.orElseThrow(UnauthorizedException::new);
@@ -212,6 +226,8 @@ public class BoardService {
 	    if(!optAuthenticatedMember.getEmail().equals(board.getMember().getEmail())) {
 	    	throw new UnauthorizedException();
 	    }
+	    String bFile = board.getBFileName();
+	    String bCoverFile = board.getBCoverFileName();
 	    
 	    if(bFile != null && !bFile.isEmpty()) {
 	    	String fileName = board.getBFileName();
@@ -223,10 +239,32 @@ public class BoardService {
 	    }
 	    boardRepo.deleteById(boardId);
     }
+//    public void delete(Long boardId, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
+//    	
+//    	Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+//    			.orElseThrow(UnauthorizedException::new);
+//    	
+//    	Board board = boardRepo.findById(boardId)
+//    			.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+//    	
+//    	if(!optAuthenticatedMember.getEmail().equals(board.getMember().getEmail())) {
+//    		throw new UnauthorizedException();
+//    	}
+//    	
+//    	if(bFile != null && !bFile.isEmpty()) {
+//    		String fileName = board.getBFileName();
+//    		deleteFile(fileName);
+//    	}
+//    	if(bCoverFile != null && !bCoverFile.isEmpty()) {
+//    		String fileName = board.getBCoverFileName();
+//    		deleteFile(fileName);
+//    	}
+//    	boardRepo.deleteById(boardId);
+//    }
     
     // 파일 삭제
     public void deleteFile(String fileName) {
-    	File file = new File(filePath + fileName);
+    	File file = new File(filePath + "/" + fileName);
     	if(file.exists()) {
     		file.delete();
     	}

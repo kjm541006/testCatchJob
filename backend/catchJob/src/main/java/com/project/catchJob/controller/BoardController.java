@@ -26,6 +26,7 @@ import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.board.B_commentsDTO;
 import com.project.catchJob.dto.board.BoardDTO;
+import com.project.catchJob.dto.board.BoardEditDTO;
 import com.project.catchJob.dto.board.CommentResponse;
 import com.project.catchJob.exception.UnauthorizedException;
 import com.project.catchJob.repository.board.B_commentsRepository;
@@ -104,9 +105,15 @@ public class BoardController {
 //		return ResponseEntity.ok().build();
 //	}
 
+	// 글 수정 전 조회
+	@GetMapping("/{board_id}")
+	public ResponseEntity<?> getBoard(@PathVariable("board_id") Long boardId,@RequestHeader("Authorization") String jwtToken) {
+		BoardEditDTO board = boardService.getBoard(boardId, jwtToken);
+		return ResponseEntity.ok().body(board);
+	}
+	
 	// 글 수정
-//	@PutMapping("/portfolio/edit/{board_id}")
-	@PutMapping(value = "/portfolio/edit/{board_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "/portfolio/edit/{board_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> editBoard(
 		@PathVariable("board_id") Long boardId,	
 		@RequestParam(value = "bTitle") String bTitle,
@@ -143,18 +150,27 @@ public class BoardController {
 //	}
 	
 	// 글 삭제
-//	@DeleteMapping("/portfolio/delete/{board_id}")
-	@DeleteMapping(value = "/portfolio/delete/{board_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@DeleteMapping("/portfolio/delete/{board_id}")
 	public ResponseEntity<?> deleteBoard(
 			@PathVariable("board_id") Long boardId,
-	        @RequestHeader("Authorization") String jwtToken, 
-	        @RequestPart(value = "bFileName", required = false) MultipartFile bFile, 
-			@RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile)
+	        @RequestHeader("Authorization") String jwtToken) 
 	        throws Exception { 
 		
-	    boardService.delete(boardId, bFile, bCoverFile, jwtToken);
+	    boardService.delete(boardId, jwtToken);
 	    return ResponseEntity.ok().build();
 	}
+	// 아직 모를
+//	@DeleteMapping(value = "/portfolio/delete/{board_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//	public ResponseEntity<?> deleteBoard(
+//			@PathVariable("board_id") Long boardId,
+//			@RequestHeader("Authorization") String jwtToken, 
+//			@RequestPart(value = "bFileName", required = false) MultipartFile bFile, 
+//			@RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile)
+//					throws Exception { 
+//		
+//		boardService.delete(boardId, bFile, bCoverFile, jwtToken);
+//		return ResponseEntity.ok().build();
+//	}
 	
 	//======================== 댓글 ========================
 	

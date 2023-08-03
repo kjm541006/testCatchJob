@@ -221,6 +221,6 @@ public class BoardDTO {
 				.tags(board.getTags()) // 태그
 				.comments(comments) // 댓글
 				.build();
-	}
+	}	
 	
 }

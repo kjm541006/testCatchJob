@@ -48,7 +48,6 @@ public class MemberController {
 	@Autowired
 	private OAuthService oAuthService;
 	
-
 	
 	// 회원등록
 	@PostMapping("/register")
@@ -64,65 +63,7 @@ public class MemberController {
 			return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
 		}		
 	}
-	// 작동가능
-//	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
-//		try {
-//			if(memberDTO == null || memberDTO.getPwd() == null) {
-//				throw new RuntimeException("비밀번호 공란");
-//			}
-//			MemberDTO responseMemberDTO = MemberDTO.builder()
-//					.email(memberDTO.getEmail())
-//					.pwd(pwdEncoder.encrypt(memberDTO.getEmail(), memberDTO.getPwd()))
-//					.name(memberDTO.getName())
-//					.job(memberDTO.getJob())
-//					.hasCareer(memberDTO.getHasCareer())
-//					.type("일반")
-//					.build();
-//			memberService.createMember(responseMemberDTO);
-//			return ResponseEntity.ok().body(responseMemberDTO);
-//		} catch (Exception e) {
-//			return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
-//		}		
-//	}
 	
-	
-	/*
-
-	// 회원등록
-	@PostMapping("/register") 
-	public ResponseEntity<?> registerMember(@RequestBody MemberDTO memberDTO) {
-		try {
-			if(memberDTO == null || memberDTO.getPwd() == null) {
-				throw new RuntimeException("비밀번호 공란");
-			}
-			
-			// 요청을 이용해 저장할 멤버 만들기
-			Member member = Member.builder()
-					.email(memberDTO.getEmail())
-					//.pwd(pwdEncoder.encrypt(memberDTO.getPwd())) pwd로하면 같은 pwd끼리 동일한 pwd로 저장되어서 email별로 다르게 저장
-					.pwd(pwdEncoder.encrypt(memberDTO.getEmail(), memberDTO.getPwd())) 
-					.name(memberDTO.getName())
-					.job(memberDTO.getJob())
-					.hasCareer(memberDTO.getHasCareer())
-					.build();
-			// 서비스를 이용해 리포지토리에 멤버 저장하기
-			Member registerMember = memberService.createMember(member);
-			MemberDTO responseMemberDTO = MemberDTO.builder()
-					.email(registerMember.getEmail())
-					.pwd(registerMember.getPwd())
-					.name(registerMember.getName())
-					.job(registerMember.getJob())
-					.hasCareer(registerMember.getHasCareer())
-					.build();
-			return ResponseEntity.ok().body(responseMemberDTO);
-		} catch (Exception e) {
-			// 멤버 정보는 항상 하나이므로 리스트로 만들어야하는 ResponseDTO를 사용하지 않고 그냥 member 리턴
-//			 ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
-//			 return ResponseEntity.badRequest().body(registerMember(memberDTO));
-			 return ResponseEntity.badRequest().body("해당 이메일은 이미 존재합니다. 다른 이메일을 입력해주세요.");
-		}
-	}
-	*/
 	// 로그인
 	@PostMapping("/login") 
 	public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO) {
@@ -171,15 +112,6 @@ public class MemberController {
 		}
 		return ResponseEntity.badRequest().body("회원 조회 실패");
 	}
-//	public ResponseEntity<?> memberInfo(@RequestBody MemberDTO memberDTO) {
-//		Member member = memberService.getByCredentials(memberDTO.getEmail(), memberDTO.getPwd(), pwdEncoder);
-//		
-//		if(member != null) {
-//			MemberDTO responseMemberDTO = MemberDTO.toMemberDTO(member);
-//			return ResponseEntity.ok().body(responseMemberDTO);
-//		}
-//		return ResponseEntity.badRequest().body("회원 조회 실패");
-//	}
 	
 	// 마이페이지 (비번조회)
 	@PostMapping("/memberPwd")
@@ -193,20 +125,6 @@ public class MemberController {
 	}
 	
 	// 마이페이지 (회원수정)
-//	@PutMapping("/memberUpdate")
-//	@PutMapping(value = "/memberUpdate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//	public ResponseEntity<?> memberUpdate(@RequestHeader("Authorization") String jwtToken,
-//										  @ModelAttribute MemberDTO memberDTO,
-//										  @RequestPart(value = "mOriginalFileName", required = false) MultipartFile mFile) throws Exception {
-//
-//		Member updateMember = memberService.updateMember(jwtToken, memberDTO, mFile);
-//		
-//		if(updateMember != null) {
-//			return ResponseEntity.ok().body(updateMember);
-//		} 
-//		return ResponseEntity.badRequest().body("회원 수정 실패");
-//	}
-	// 작동코드(아마 최종)
 	@PostMapping(value = "/memberUpdate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> memberUpdate(@RequestHeader("Authorization") String jwtToken,
 			@RequestParam(value = "name") String name,
@@ -222,16 +140,4 @@ public class MemberController {
 		} 
 		return ResponseEntity.badRequest().body("회원 수정 실패");
 	}
-	// 작동코드
-//	public ResponseEntity<?> memberUpdate(@RequestHeader("Authorization") String jwtToken, @RequestBody MemberDTO memberDTO
-//			) {
-//		Member updateMember = memberService.updateMember(jwtToken, memberDTO);
-//		
-//		if(updateMember != null) {
-//			return ResponseEntity.ok().body(updateMember);
-//		} 
-//		return ResponseEntity.badRequest().body("회원 수정 실패");
-//	}
-
-
 }
