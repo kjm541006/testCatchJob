@@ -29,13 +29,13 @@ public class CatchJobApplication {
 	    return objectMapper;
 	}
 	
-	@Configuration
-	public class WebConfig implements WebMvcConfigurer {
-		// 멀티파트 해결자 빈 등록
-		@Bean
-		public CommonsMultipartResolver multipartResolver() {
-            CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-            return multipartResolver;
-        }
-	}
+//	@Configuration
+//	public class WebConfig implements WebMvcConfigurer {
+//		// 멀티파트 해결자 빈 등록
+//		@Bean
+//		public CommonsMultipartResolver multipartResolver() {
+//            CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+//            return multipartResolver;
+//        }
+//	}
 }
