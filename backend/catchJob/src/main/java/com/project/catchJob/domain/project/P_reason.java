@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.catchJob.domain.member.Member;
 
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class P_reason {
 	
 	private String sRContents; // 모집사유
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member member;
@@ -32,6 +34,7 @@ public class P_reason {
 		member.getP_ReasonList().add(this);
 	}
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "project_id", nullable = false, updatable = false)
 	private Project project;

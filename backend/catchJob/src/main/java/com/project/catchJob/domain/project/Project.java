@@ -95,15 +95,19 @@ public class Project {
 		member.getProjectList().add(this);
 	}
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "project")
 	private List<P_comments> projectCommentsList = new ArrayList<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "project")
 	private List<P_like> projectLikeList = new ArrayList<>();	
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "project")
 	private List<P_reason> projectReasonList = new ArrayList<>();	
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "project")
 	private List<P_member> projectMemberList = new ArrayList<>();	
 }

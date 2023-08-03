@@ -6,13 +6,18 @@ import java.util.Map;
 import java.util.Set;
 
 import com.project.catchJob.domain.member.Member;
+import com.project.catchJob.dto.board.B_commentsDTO;
+import com.project.catchJob.dto.member.BoardMemberDTO;
+import com.project.catchJob.dto.member.MemberInfoDTO;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@Builder
 @Getter
 @Setter
 @ToString(exclude = {"member", "projectCommentsList", "projectLikeList", "projectReasonList"})
@@ -33,13 +38,18 @@ public class ProjectDTO {
 //    private int backend;
 //    private int PM;
 //    private int others;
-    private Set<String> platforms;
+//    private Set<String> platforms;
+    private List<String> platforms;
     private int pCnt;
     private int pLike;
-    private Date pDate;
-    private Long memberId;
+    private boolean isLike;
+//    private Date pDate;
+//    private Long memberId;
     private Map<String, Integer> crew;
     private String email;
+    
+	private MemberInfoDTO member;
+	private List<P_commentsDTO> comments;
 }
 	
 	// Assuming you have corresponding DTO classes for P_comments, P_like, P_reason, and P_member

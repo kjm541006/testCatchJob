@@ -71,20 +71,6 @@ public class BoardDTO {
 	// board에서 BoardDTO로 변환하는 메서드
 	public static BoardDTO toDTO(Board board, Member member, BoardService boardService, String filePath) {
 		
-		// 필요한 사용자 정보를 memberDTO에 저장
-//		MemberDTO memberDTO = new MemberDTO();
-//		memberDTO.setEmail(member.getEmail());
-//		memberDTO.setName(member.getName());
-		//memberDTO.setMOriginalFileName(member.getMProfile().getMOriginalFileName());
-
-		// 구현 되는 코드
-//		BoardMemberDTO memberDTO = new BoardMemberDTO();
-//		Member member = board.getMember();
-//		if(member != null) {
-//			memberDTO.setEmail(board.getMember().getEmail());
-//			memberDTO.setName(board.getMember().getName());
-//			//memberDTO.setMOriginalFileName(board.getMember().getMProfile().getMOriginalFileName());
-//		}
 		BoardMemberDTO memberDTO = null;
 		Member writer = board.getMember();
 		if (writer != null) {
@@ -105,23 +91,22 @@ public class BoardDTO {
 		String[] tags = tagList.toArray(new String[0]);
 		
 		int bComment = board.getBoardCommentsList().size(); // 게시글에 작성된 댓글 수를 구함
+		String url = "http://43.202.98.45:8089/upload/";
 		
 		List<B_commentsDTO> commentDTOList = board.getBoardCommentsList().stream()
 				.map(comment -> B_commentsDTO.builder()
+						.commentId(comment.getBComId())
 						.commentContent(comment.getBComContent())
 						.commentDate(comment.getBComDate())
 						.memberName(comment.getMember().getName())
 						.memberEmail(comment.getMember().getEmail())
+						.memberProfile(url + comment.getMember().getMProfile().getMStoredFileName())
 						.build())
 				.collect(Collectors.toList());
-				
-		//String bFileUrl = "/upload/" + board.getBFileName();
-//		String bFileUrl = filePath + "/" + board.getBFileName();
-//		String bCoverFileUrl = filePath + "/" + board.getBCoverFileName();
-		String bFileUrl = "http://43.202.98.45:8089/upload/" + board.getBFileName();
-		String bCoverFileUrl = "http://43.202.98.45:8089/upload/" + board.getBCoverFileName();
-
 		
+//		String bFileUrl = "http://43.202.98.45:8089/upload/" + board.getBFileName();
+//		String bCoverFileUrl = "http://43.202.98.45:8089/upload/" + board.getBCoverFileName();
+
 		return BoardDTO.builder()
 				.boardId(board.getBoardId())
 				.bTitle(board.getBTitle())
@@ -130,12 +115,8 @@ public class BoardDTO {
 				.bLike(board.getBLike())
 				.isLike(isLike) // isLike 설정
 				.bComment(bComment)
-				.bFileName(bFileUrl) // 경로+파일명
-//				.bFileName(board.getBFileName())
-//				.bFileUrl(bFileUrl)
-				.bCoverFileName(bCoverFileUrl) // 경로+파일명
-//				.bCoverFileName(board.getBCoverFileName())
-//				.bCoverFileUrl(bCoverFileUrl)
+				.bFileName(url + board.getBFileName()) // 경로+파일명
+				.bCoverFileName(url + board.getBCoverFileName()) // 경로+파일명
 				.bDate(board.getBDate())
 				.member(memberDTO) // 멤버 정보 설정
 				.tags(board.getTags()) // 태그
@@ -146,14 +127,6 @@ public class BoardDTO {
 	// 로그인하지 않은 사용자
 	public static BoardDTO toDTOWithoutMember(Board board, String filePath) {
 		// 필요한 사용자 정보를 memberDTO에 저장
-		// 구현 되는 코드
-//		BoardMemberDTO memberDTO = new BoardMemberDTO();
-//		Member member = board.getMember();
-//		if(member != null) {
-//			memberDTO.setEmail(board.getMember().getEmail());
-//			memberDTO.setName(board.getMember().getName());
-//			//memberDTO.setMOriginalFileName(board.getMember().getMProfile().getMOriginalFileName());
-//		}
 		BoardMemberDTO memberDTO = null;
 		Member member = board.getMember();
 		if (member != null) {
@@ -168,25 +141,18 @@ public class BoardDTO {
 
 		int bComment = board.getBoardCommentsList().size(); // 댓글 수 계산
 
-//		List<B_commentsDTO> commentDTOList = board.getBoardCommentsList().stream()
-//				.map(comment -> B_commentsDTO.builder()
-//						.commentContent(comment.getBComContent())
-//						.commentDate(comment.getBComDate())
-//						.memberName(comment.getMember().getName())
-//						.memberEmail(comment.getMember().getEmail())
-//						.build())
-//				.collect(Collectors.toList());
-//
-//		List<String> tagList = board.getTags();
-//		String[] tags = tagList.toArray(new String[0]);
-
 		List<String> tags = board.getTags() != null ? board.getTags() : new ArrayList<>();
+		
+		String url = "http://43.202.98.45:8089/upload/";
+		
 		List<B_commentsDTO> comments = board.getBoardCommentsList() != null ? board.getBoardCommentsList().stream()
 		        .map(comment -> B_commentsDTO.builder()
+		        	.commentId(comment.getBComId())	
 		            .commentContent(comment.getBComContent())
 		            .commentDate(comment.getBComDate())
 		            .memberName(comment.getMember().getName())
 		            .memberEmail(comment.getMember().getEmail())
+		            .memberProfile(url + comment.getMember().getMProfile().getMStoredFileName())
 		            .build())
 		        .collect(Collectors.toList()) : new ArrayList<>();
 		String bFileUrl = "";
@@ -194,12 +160,12 @@ public class BoardDTO {
 
 	    if (board.getBFileName() != null) {
 //	        bFileUrl = filePath + "/" + board.getBFileName();
-	    	bFileUrl = "http://43.202.98.45:8089/upload/" + board.getBFileName();
+	    	bFileUrl = url + board.getBFileName();
 	    }
 
 	    if (board.getBCoverFileName() != null) {
 //	        bCoverFileUrl = filePath + "/" + board.getBCoverFileName();
-	        bCoverFileUrl = "http://43.202.98.45:8089/upload/" + board.getBCoverFileName();
+	        bCoverFileUrl = url + board.getBCoverFileName();
 	    }
 
 		return BoardDTO.builder()
@@ -211,11 +177,7 @@ public class BoardDTO {
 				.isLike(false) // 로그인하지 않은 사용자는 항상 false
 				.bComment(bComment) // 댓글 수 계산
 				.bFileName(bFileUrl)
-//				.bFileName(board.getBFileName())
-//				.bFileUrl(bFileUrl)
 				.bCoverFileName(bCoverFileUrl)
-//				.bCoverFileName(board.getBCoverFileName())
-//				.bCoverFileUrl(bCoverFileUrl)
 				.bDate(board.getBDate())
 				.member(memberDTO) // 멤버 정보 설정
 				.tags(board.getTags()) // 태그

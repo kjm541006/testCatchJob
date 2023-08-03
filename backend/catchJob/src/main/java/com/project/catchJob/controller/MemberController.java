@@ -78,12 +78,15 @@ public class MemberController {
 			final String token = tokenProvider.createToken(member);
 			log.info("token 생성 성공", token);
 			
+			String profile = "http://43.202.98.45:8089/upload/" + member.getMProfile().getMStoredFileName();
+			
 			final MemberDTO responseMemberDTO = MemberDTO.builder()
 					.name(member.getName())
 					.email(member.getEmail())
 					.pwd(pwdEncoder.encrypt(member.getEmail(), member.getPwd()))
 					.job(member.getJob())
 					.hasCareer(member.getHasCareer())
+					.mOriginalFileName(profile)
 					.token(token)
 					.build();
 			

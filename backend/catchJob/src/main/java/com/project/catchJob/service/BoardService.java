@@ -4,7 +4,6 @@ import java.io.File;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,21 +23,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.catchJob.domain.board.B_comments;
 import com.project.catchJob.domain.board.B_like;
-//import com.project.catchJob.domain.board.B_tag;
 import com.project.catchJob.domain.board.Board;
-//import com.project.catchJob.domain.board.Tag;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.board.B_commentsDTO;
 import com.project.catchJob.dto.board.BoardDTO;
 import com.project.catchJob.dto.board.BoardEditDTO;
 import com.project.catchJob.dto.board.CommentResponse;
-import com.project.catchJob.dto.board.TagDTO;
+//import com.project.catchJob.dto.board.TagDTO;
 import com.project.catchJob.exception.UnauthorizedException;
 import com.project.catchJob.repository.board.B_commentsRepository;
 import com.project.catchJob.repository.board.B_likeRepository;
-//import com.project.catchJob.repository.board.B_tagRepository;
 import com.project.catchJob.repository.board.BoardRepository;
-//import com.project.catchJob.repository.board.TagRepository;
 import com.project.catchJob.repository.member.MemberRepository;
 import com.project.catchJob.security.TokenProvider;
 
@@ -48,13 +43,13 @@ public class BoardService {
 	
 	@Value("${file.path}") private String filePath;
 	private final CommonService commonService;
-	private final List<TagDTO> tagDTOList;
+//	private final List<TagDTO> tagDTOList;
 	@PersistenceContext private EntityManager entityManager;
 	
 	@Autowired
 	public BoardService(CommonService commonService) {
 		this.commonService = commonService;
-		this.tagDTOList = new ArrayList<>();
+//		this.tagDTOList = new ArrayList<>();
 	}
 	
 	@Autowired private MemberRepository memberRepo;
@@ -147,12 +142,15 @@ public class BoardService {
 	    	throw new UnauthorizedException();
 	    	
 	    }
+		
+		String url = "http://43.202.98.45:8089/upload/";
+		
 		BoardEditDTO boardDTO = BoardEditDTO.builder()
 				.bTitle(board.getBTitle())
 				.bContents(board.getBContents())
 				.tags(board.getTags())
-				.bFileName(board.getBFileName())
-				.bCoverFileName(board.getBCoverFileName())
+				.bFileName(url + board.getBFileName())
+				.bCoverFileName(url + board.getBCoverFileName())
 				.build();
 		
 		return boardDTO;
@@ -177,24 +175,6 @@ public class BoardService {
 	    board.setBFileName(board.getBFileName());
 	    board.setBCoverFileName(board.getBCoverFileName());
 
-	    // 작동가능
-//	    public void edit(BoardDTO boardDTO, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
-//	    	
-//	    	Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
-//	    			.orElseThrow(UnauthorizedException::new);
-//	    	
-//	    	Board board = boardRepo.findById(boardDTO.getBoardId())
-//	    			.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
-//	    	
-//	    	if(!optAuthenticatedMember.getEmail().equals(board.getMember().getEmail())) {
-//	    		throw new UnauthorizedException();
-//	    	}
-//	    	
-//	    	board.setBTitle(boardDTO.getBTitle());
-//	    	board.setBContents(boardDTO.getBContents());
-//	    	board.setTags(boardDTO.getTags());
-//	    	board.setBFileName(boardDTO.getBFileName());
-//	    	board.setBCoverFileName(boardDTO.getBCoverFileName());
     	// 파일 저장
 	    if(bFile != null && !bFile.isEmpty()) {
 	    	String fileName = saveFile(bFile);
@@ -239,28 +219,6 @@ public class BoardService {
 	    }
 	    boardRepo.deleteById(boardId);
     }
-//    public void delete(Long boardId, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
-//    	
-//    	Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
-//    			.orElseThrow(UnauthorizedException::new);
-//    	
-//    	Board board = boardRepo.findById(boardId)
-//    			.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
-//    	
-//    	if(!optAuthenticatedMember.getEmail().equals(board.getMember().getEmail())) {
-//    		throw new UnauthorizedException();
-//    	}
-//    	
-//    	if(bFile != null && !bFile.isEmpty()) {
-//    		String fileName = board.getBFileName();
-//    		deleteFile(fileName);
-//    	}
-//    	if(bCoverFile != null && !bCoverFile.isEmpty()) {
-//    		String fileName = board.getBCoverFileName();
-//    		deleteFile(fileName);
-//    	}
-//    	boardRepo.deleteById(boardId);
-//    }
     
     // 파일 삭제
     public void deleteFile(String fileName) {
