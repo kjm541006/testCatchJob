@@ -23,6 +23,11 @@ public class CatchJobApplication extends SpringBootServletInitializer {
         app.run(args);
     }
 
+<<<<<<< HEAD
+	    return objectMapper;
+	}
+	
+=======
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(CatchJobApplication.class);
@@ -89,15 +94,23 @@ public class CatchJobApplication extends SpringBootServletInitializer {
 //	    return objectMapper;
 //	}
 //	
+>>>>>>> 8a5fa7f1c951aa545590e08cd823e7e813269155
 //	@Configuration
 //	public class WebConfig implements WebMvcConfigurer {
 //		// 멀티파트 해결자 빈 등록
 //		@Bean
 //		public CommonsMultipartResolver multipartResolver() {
 //            CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+<<<<<<< HEAD
+//            return multipartResolver;
+//        }
+//	}
+}
+=======
 //            multipartResolver.setMaxUploadSize(20971520); // 20MB 설정
 //            return multipartResolver;
 //        }
 //	}
 //
 //}
+>>>>>>> 8a5fa7f1c951aa545590e08cd823e7e813269155

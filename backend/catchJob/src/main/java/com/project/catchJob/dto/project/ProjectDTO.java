@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.project.catchJob.domain.member.Member;
+import com.project.catchJob.dto.member.MemberDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,6 +41,8 @@ public class ProjectDTO {
     private Long memberId;
     private Map<String, Integer> crew;
     private String email;
+    private MemberDTO member;
+    
 }
 	
 	// Assuming you have corresponding DTO classes for P_comments, P_like, P_reason, and P_member
