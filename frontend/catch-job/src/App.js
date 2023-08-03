@@ -25,6 +25,7 @@ import LoginAlertPage from "./pages/LoginAlertPage";
 import axios from "axios";
 import NewsPage from "./pages/NewsPage";
 import SigninAlertPage from "./pages/SigninAlertPage";
+import StudyDetailPage from "./pages/study&project/StudyDetailPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -64,12 +65,15 @@ function App() {
         <Route path="/signin" element={!isLoggedIn ? <BasicSigninPage /> : <SigninAlertPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/mypage" element={savedToken != null ? <EditSigninPage /> : <LoginAlertPage />} />
+        <Route path="/realmypage" element={<MyPage />} />
         <Route path="/edit" element={<EditSigninPage />} />
         {/* <Route path="/userInfo/:userId" element={<UserInfo />} /> */}
         <Route path="/" element={<PortfolioMainPage />} />
         {/* <Route path="/recruit" element={<Recruit />} /> */}
         {/* <Route path="/study/*" element={<StudyRoutes />} /> */}
         <Route path="/community/*" element={<CommunityRoutes />} />
+        <Route path="/studyDetail/*" element={<StudyDetailPage />} />
+        <Route path="/projectDetail/*" element={<StudyDetailPage />} />
       </Routes>
     </div>
   );
