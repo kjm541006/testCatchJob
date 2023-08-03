@@ -22,7 +22,6 @@ const PortfolioModal = ({ item, onClose }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // item이 변경될 때마다 URL을 업데이트합니다.
     if (item) {
       const newModalUrl = window.location.origin + location.pathname + "?boardId=" + item.boardId;
       setFirstModalUrl(newModalUrl);
@@ -52,6 +51,24 @@ const PortfolioModal = ({ item, onClose }) => {
     event.stopPropagation();
     navigate("/portfolio/build", { state: { boardId: item.boardId } });
   };
+
+  const handleDelete = async (event) => {
+    event.stopPropagation();
+    const response = await axios.delete(`http://43.202.98.45:8089/portfolio/delete/${item.boardId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    
+    if (response.status === 200) {
+      console.log("게시물이 삭제되었습니다.");
+      onClose();
+      window.location.reload();
+    } else {
+      console.log("게시물 삭제에 실패하였습니다.");
+    }
+  };
+  
 
   const formatCommentDate = (dateString) => {
     const date = new Date(dateString);
@@ -131,7 +148,7 @@ const PortfolioModal = ({ item, onClose }) => {
           <div className={`${styles.contentFile}`}>
             첨부파일:{" "}
             <a href={item.bFileName} download target="_blank" rel="noopener noreferrer">
-              <span className={`${styles.contentFileName}`}>{item.bFileName}</span>
+            <span className={`${styles.contentFileName}`}>{item.bFileName.split('/').pop()}</span>
             </a>
           </div>
           <div className={`${styles.contentComment}`} ref={contentCommentRef}>
@@ -165,6 +182,7 @@ const PortfolioModal = ({ item, onClose }) => {
           </div>
         </div>
       </div>
+    {item && (
       <div className={`${styles.entireButtonSet}`}>
         <div className={`${styles.buttonSet}`}>
           <button className={`${styles.modalButton}`} style={{ backgroundColor: "#E2432E" }} onClick={handleLike}>
@@ -184,19 +202,24 @@ const PortfolioModal = ({ item, onClose }) => {
           </button>
           <div className={`${styles.buttonMent}`}>공유하기</div>
         </div>
+        {item.member.email === writerEmail &&
+        <>
         <div className={`${styles.buttonSet}`} onClick={handleEdit}>
           <button className={`${styles.modalButton}`}>
             <FontAwesomeIcon icon={faPenToSquare} className={`${styles.faIcon}`} />
           </button>
           <div className={`${styles.buttonMent}`}>수정하기</div>
         </div>
-        <div className={`${styles.buttonSet}`}>
+        <div className={`${styles.buttonSet}`}  onClick={handleDelete}>
           <button className={`${styles.modalButton}`}>
             <FontAwesomeIcon icon={faTrash} className={`${styles.faIcon}`} />
           </button>
           <div className={`${styles.buttonMent}`}>삭제하기</div>
         </div>
+        </>
+        }
       </div>
+      )}
       {isModalOpen && <ShareModal item={item} onClose={() => setIsModalOpen(false)} modalUrl={firstModalUrl} />}
     </>
   );

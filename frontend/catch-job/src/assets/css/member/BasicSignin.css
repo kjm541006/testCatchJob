@@ -184,3 +184,8 @@
 .log-in-now-basic:active {
   color: #ffffff;
 }
+
+.labelOne{
+  display:flex;
+  width:115px;
+}
