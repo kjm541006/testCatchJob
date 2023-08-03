@@ -19,18 +19,37 @@ const BuildPortfolioPage = () => {
   const [prevCoverURL, setPrevCoverURL] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const boardId = location.state.boardId;
+  const boardId = location.state?.boardId || "";
+
 
   useEffect(() => {
     const ifHaveId = async () => {
       try {
         const response = await axios.get(`http://43.202.98.45:8089/${boardId}`); // 수정 엔드포인트에 맞춰서 쓰기
+        
+        setTitle(response.data.bTitle);
+        setValue(response.data.bContents);
+        setUploadedFile(new File([], response.data.bFileName));        
+        setPrevCoverURL(response.data.bCoverFileName);
+        setPrevTags(response.data.tags);
+        setPrevCover(response.data.bCoverFileName);
+
+        console.log(response.data.bTitle);
+        console.log(response.data.bContents);
+        console.log(response.data.bFileName);
+        console.log(response.data.bCoverFileName);
+        console.log(response.data.tags);
+        console.log("-------");
+
       } catch (error) {
-        return;
+        console.log(error);
       }
     }
 
-    if (boardId) {
+    if (boardId === "") {
+      return;
+    }
+    else{
       ifHaveId(); 
     }
   }, [boardId]);
@@ -74,9 +93,16 @@ const BuildPortfolioPage = () => {
     formData.append("bCoverFileName", bCoverFileName);
 
     try {
+      if (!boardId){
       const response = await axios.post("http://43.202.98.45:8089/buildportfolio", formData, axiosConfig);
       console.log(response.data);
       console.log("성공")
+      }
+      else{
+        const response = await axios.post(`http://43.202.98.45:8089/portfolio/edit/${boardId}`, formData, axiosConfig);
+        console.log(response.data);
+        console.log("성공");
+      }
     } catch (error) {
       console.error("Error:", error);
     }
@@ -109,7 +135,7 @@ const BuildPortfolioPage = () => {
           <ReactQuill value={value} onChange={handleChange} modules={modules} theme="snow" className={`${styles.customQuillEditor}`} />
         </div>
         <div className={`${styles.fileName}`}>
-          <span>{uploadedFile ? uploadedFile.name : ""}</span>
+        {uploadedFile ? <span>{uploadedFile.name.split('/').pop()}</span> : null}
           {uploadedFile && (
             <span className={`${styles.removeBtn}`} onClick={() => setUploadedFile("")}>
               X

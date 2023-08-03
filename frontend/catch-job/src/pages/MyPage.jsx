@@ -139,19 +139,19 @@ const MyPage = () => {
         
         <div className={`${styles.input_text_edit}`}>직무</div>
           <div className={`${styles.choosejob_edit}`} id="pick-edit">
-          <label>
+          <label className={`${styles.labelOne}`}>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "웹디자이너"}  onChange={() =>handleSelectedJobsChange("웹디자이너")}/>
               <div className={`${styles.choosejob_text_edit}`}>웹디자이너</div>
             </div>
             </label>
-            <label>
+            <label className={`${styles.labelOne}`}>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "웹퍼블리셔"}   onChange={() =>handleSelectedJobsChange("웹퍼블리셔")}/>
               <div className={`${styles.choosejob_text_edit}`}>웹퍼블리셔</div>
             </div>
             </label>
-            <label>
+            <label className={`${styles.labelOne}`}>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "프론트엔드"}   onChange={() =>handleSelectedJobsChange("프론트엔드")}/>
               <div className={`${styles.choosejob_text_edit}`}>프론트엔드</div>
@@ -159,19 +159,19 @@ const MyPage = () => {
             </label>
           </div>
           <div className={`${styles.choosejob_edit}`}>
-          <label>
+          <label className={`${styles.labelOne}`}>
           <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "백엔드"}  onChange={() =>handleSelectedJobsChange("백엔드")}/>
               <div className={`${styles.choosejob_text_edit}`}>백엔드</div>
             </div>
             </label>
-            <label>
+            <label className={`${styles.labelOne}`}>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "PM"}  onChange={() =>handleSelectedJobsChange("PM")}/>
               <div className={`${styles.choosejob_text_edit}`}>PM</div>
             </div>
             </label>
-            <label>
+            <label className={`${styles.labelOne}`}>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "기타"}  onChange={() =>handleSelectedJobsChange("기타")}/>
               <div className={`${styles.choosejob_text_edit}`}>기타</div>
@@ -181,14 +181,18 @@ const MyPage = () => {
 
           <div className={`${styles.input_text_edit}`}>경력 여부</div>
           <div className={`${styles.choosejob_edit}`} id="pick-edit">
+          <label className={`${styles.labelOne}`}>
             <div className={`${styles.choosejobone_edit}`} id="carrer-edit">
               <input type="radio" className={`${styles.custom_checkbox_edit}`}  name="career-edit" checked={selectedCarrers === "신입"} onChange={() =>handleSelectedCarrersChange("신입")} />
               <div className={`${styles.choosejob_text_edit}`}>신입</div>
             </div>
-            <div className={`${styles.choosejobone_edit}`} id="carrer">
+            </label>
+            <label className={`${styles.labelOne}`}>
+            <div className={`${styles.choosejobone_edit}`} id="carrer-edit">
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="career-edit" checked={selectedCarrers === "경력"} onChange={() =>handleSelectedCarrersChange("경력")}/>
               <div className={`${styles.choosejob_text_edit}`}>경력</div>
             </div>
+            </label>
           </div>
 
           <div className={`${styles.enrollbutton_edit}`}>

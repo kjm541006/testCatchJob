@@ -198,3 +198,8 @@
 .upload_profile_pencil{
   color: #ffffff;
 }
+
+.labelOne{
+  display:flex;
+  width:115px;
+}
