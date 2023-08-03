@@ -148,5 +148,14 @@ public class MemberService {
         return memberRepo.findById(memberId)
                 .orElseThrow(() -> new Exception("해당 회원이 없습니다"));
     }
+	
+	// 회원 탈퇴
+	public void deleteMember(String jwtToken) {
+		
+		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+				.orElseThrow(UnauthorizedException::new);
+		
+		memberRepo.deleteById(optAuthenticatedMember.getMemberId());
+	}
 
 }

@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -142,5 +143,13 @@ public class MemberController {
 			return ResponseEntity.ok().body(updateMember);
 		} 
 		return ResponseEntity.badRequest().body("회원 수정 실패");
+	}
+	
+	// 회원 탈퇴
+	@DeleteMapping("/deleteMember")
+	public ResponseEntity<?> deleteMember(@RequestHeader("Authorization") String jwtToken) {
+		
+		memberService.deleteMember(jwtToken);
+		return ResponseEntity.ok().body("회원 탈퇴 성공");
 	}
 }
