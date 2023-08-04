@@ -53,12 +53,10 @@ const LoginPage = () => {
     } catch (error) {
       if (error.response.status === 400) {
         alert("회원을 찾지 못했습니다.");
-      }
-      else if (error.response.status === 500) {
+      } else if (error.response.status === 500) {
         // 서버 내부 에러 처리
         alert("로그인에 실패했습니다.(서버 에러) ");
-      }
-      else {
+      } else {
         // 기타 에러 처리
         alert("로그인에 실패했습니다. 다시 시도해주세요.");
       }
@@ -66,7 +64,7 @@ const LoginPage = () => {
   };
 
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleLogin();
     }
   };

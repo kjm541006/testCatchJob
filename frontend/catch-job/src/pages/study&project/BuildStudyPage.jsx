@@ -18,6 +18,7 @@ const BuildStudyPage = () => {
     backend: 0,
     PM: 0,
     others: 0,
+    studyCrew: 0,
   });
   const [crewCount, setCrewCount] = useState(0);
   const titleRef = useRef();
@@ -32,6 +33,13 @@ const BuildStudyPage = () => {
   useEffect(() => {
     console.log(bType);
   }, [bType]);
+
+  const alertMaxTitleLength = (e) => {
+    console.log(e.target.value.length);
+    if (e.target.value.length === 30) {
+      alert("제목의 최대 글자 수는 30자 입니다.");
+    }
+  };
 
   const changeTypeToProject = () => {
     setBType("project");
@@ -92,9 +100,9 @@ const BuildStudyPage = () => {
     e.preventDefault();
 
     console.log(bType);
+    const titleValue = titleRef.current.value;
+    const detailValue = detail.current.value;
     if (bType === "project") {
-      const titleValue = titleRef.current.value;
-      const detailValue = detail.current.value;
       const crewCountsArray = Object.values(crewCounts);
       const sumCrewCounts = crewCountsArray.reduce((a, b) => a + b, 0);
 
@@ -127,6 +135,33 @@ const BuildStudyPage = () => {
         console.error("에러가 발생했습니다.", error);
       }
     } else {
+      if (!titleValue || !selectedField || !selectedTerm || !selectedLoc || crewCounts.studyCrew === 0 || !detailValue) {
+        alert("모든 필드를 올바르게 입력해주세요.");
+        return;
+      }
+      buildData = {
+        type: bType,
+        title: titleValue,
+        field: selectedField,
+        term: selectedTerm,
+        loc: selectedLoc,
+        crew: crewCounts,
+        detail: detailValue,
+        email: userEmail,
+      };
+
+      try {
+        // const response = await axios.post(`http://localhost:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+        const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+        console.log(response);
+        if (response && response.status >= 200 && response.status < 300) {
+          alert("성공적으로 등록되었습니다.");
+          navigate(-1);
+        }
+      } catch (error) {
+        // 에러가 발생한 경우
+        console.error("에러가 발생했습니다.", error);
+      }
     }
   };
 
@@ -145,7 +180,15 @@ const BuildStudyPage = () => {
       {/* =====================프로젝트 명======================= */}
       <div className={styles.wrapper}>
         {bType === "project" ? <div className={styles.title}>프로젝트 명</div> : <div className={styles.title}>스터디 명</div>}
-        <input type="text" name="title" placeholder="제목" className={styles.titleInput} ref={titleRef} maxLength={30} />
+        <input
+          type="text"
+          name="title"
+          placeholder="제목"
+          className={styles.titleInput}
+          ref={titleRef}
+          maxLength="30"
+          onChange={alertMaxTitleLength}
+        />
       </div>
 
       {/* =====================프로젝트 분야======================= */}
@@ -489,10 +532,10 @@ const BuildStudyPage = () => {
             <div className={styles.countNum}>
               <input
                 type="number"
-                name="crewCount"
-                id="web"
+                name="studyCrew"
+                // id="web"
                 defaultValue={0}
-                onChange={handleStudyCrewCount}
+                onChange={handleInputChange}
                 onFocus={(e) => e.target.select()}
               />
               <span>명</span>
