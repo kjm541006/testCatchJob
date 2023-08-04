@@ -10,7 +10,7 @@ import com.project.catchJob.domain.project.Project;
 import com.project.catchJob.dto.board.CommentResponse;
 import com.project.catchJob.dto.project.P_commentsDTO;
 import com.project.catchJob.dto.project.ProjectDTO;
-import com.project.catchJob.dto.project.ProjectMemberDTO;
+import com.project.catchJob.dto.project.P_memberDTO;
 
 public interface ProjectService {
 
@@ -28,5 +28,6 @@ public interface ProjectService {
 	void delete(String email, Long projectId) throws Exception;
 	Project updateLike(Long projectId, boolean b) throws Exception;
 	void end(Long projectId, String jwtToken);
-	P_member apply(Long projectId, ProjectMemberDTO memberDTO, String jwtToken);
+	P_member apply(Long projectId, String job, P_memberDTO memberDTO, String jwtToken);
+	void cancel(Long projectMemberId, String jwtToken);
 }

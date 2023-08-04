@@ -15,11 +15,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjectMemberDTO {
+public class P_memberDTO {
 	
-	private Long pMemId;
-	private String pMemJob;
-	private String pMemReason;
+	private Long projectMemberId;
+	private String projectJob;
+	private String projectReason;
     private String memberName;
 	private String memberEmail;	
 

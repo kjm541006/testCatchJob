@@ -7,7 +7,7 @@ import com.project.catchJob.dto.board.B_commentsDTO;
 import com.project.catchJob.dto.board.CommentResponse;
 import com.project.catchJob.dto.project.P_commentsDTO;
 import com.project.catchJob.dto.project.ProjectDTO;
-import com.project.catchJob.dto.project.ProjectMemberDTO;
+import com.project.catchJob.dto.project.P_memberDTO;
 import com.project.catchJob.exception.UnauthorizedException;
 import com.project.catchJob.repository.member.MemberRepository;
 import com.project.catchJob.security.JwtUtils;
@@ -170,24 +170,25 @@ public class ProjectController {
     @PostMapping("/studyDetail/apply/{id}")
     public ResponseEntity<?> apply(
 			@PathVariable("id") Long projectId,
-			@RequestBody ProjectMemberDTO memberDTO,
+			@RequestParam("job") String job,
+			@RequestBody P_memberDTO memberDTO,
 	        @RequestHeader("Authorization") String jwtToken) 
 	        throws Exception { 
 		
-    	P_member member = projectService.apply(projectId, memberDTO, jwtToken);
+    	P_member member = projectService.apply(projectId, job, memberDTO, jwtToken);
 	    return ResponseEntity.ok().body(member);
 	}
     
     // 지원 취소 (지원자)
-    @PutMapping("/studyDetail/cancel/{id}")
+    @DeleteMapping("/studyDetail/cancel/{id}")
     public ResponseEntity<?> cancel(
-			@PathVariable("id") Long projectId,
-			@RequestBody ProjectMemberDTO memberDTO,
+			@PathVariable("id") Long projectMemberId,
+			@RequestBody P_memberDTO memberDTO,
 	        @RequestHeader("Authorization") String jwtToken) 
 	        throws Exception { 
 		
-    	P_member member = projectService.apply(projectId, memberDTO, jwtToken);
-	    return ResponseEntity.ok().body(member);
+    	projectService.cancel(projectMemberId, jwtToken);
+	    return ResponseEntity.ok().build();
 	} 
     
     

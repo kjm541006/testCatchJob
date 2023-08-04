@@ -28,9 +28,9 @@ public class P_member {
 	@Id @GeneratedValue
 	private Long pMemId; // 프로젝트모집인원 아이디
 	
-	private String pMemJob; // 직무
+	private String job; // 직무
 	
-	private String pMemReason; // 사유
+	private String reason; // 사유
 	
 	@JsonIgnore
 	@ManyToOne
@@ -51,5 +51,5 @@ public class P_member {
 		this.member = member;
 		member.getP_MemberList().add(this);
 	}
-	
+
 }
