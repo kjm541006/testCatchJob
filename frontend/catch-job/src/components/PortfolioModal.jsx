@@ -36,10 +36,26 @@ const PortfolioModal = ({ item, onClose }) => {
     return null;
   }
 
-  const handleLike = (event) => {
+  const handleLike = async (event) => {
     event.stopPropagation();
-    setIsLiked((prevIsLiked) => !prevIsLiked);
+    try {
+      const response = await axios.post(`http://43.202.98.45:8089/like/${item.boardId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (response.status === 200) {
+        console.log("좋아요 처리 완료");
+        setIsLiked((prevIsLiked) => !prevIsLiked);
+      } else {
+        console.log("좋아요 처리 실패");
+      }
+    } catch (error) {
+      console.log("좋아요 처리 중 오류 발생:", error);
+    }
   };
+  
 
   const handleComment = (event) => {
     event.stopPropagation();
@@ -221,12 +237,14 @@ const PortfolioModal = ({ item, onClose }) => {
             {item.tags[1] && <div className={`${styles.tagElement}`}>{item.tags[1]}</div>}
             {item.tags[2] && <div className={`${styles.tagElement}`}>{item.tags[2]}</div>}
           </div>
+          {item.bFileName && (
           <div className={`${styles.contentFile}`}>
             첨부파일:{" "}
             <a href={item.bFileName} download target="_blank" rel="noopener noreferrer">
             <span className={`${styles.contentFileName}`}>{item.bFileName.split('/').pop()}</span>
             </a>
           </div>
+          )}
           <div className={`${styles.contentComment}`} ref={contentCommentRef}>
             <div className={`${styles.comments}`}>Comments</div>
             <textarea

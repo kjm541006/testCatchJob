@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ReactQuill, { Quill } from "react-quill";
+import ReactQuill,{ Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css"; // 테마 스타일 가져오기
 import styles from "../assets/css/BuildPortfolio.module.css";
 import DetailModal from "../components/DetailModal";
@@ -7,8 +7,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import ImageResize from 'quill-image-resize';
-Quill.register('modules/imageResize', ImageResize);
-
+Quill.register({
+  'modules/ImageResize': ImageResize
+});
 const BuildPortfolioPage = () => {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
@@ -80,16 +81,23 @@ const BuildPortfolioPage = () => {
 
   const handleSaveContent = async () => {
     const token = localStorage.getItem("token");
+    
+    if (!bCoverFileName) {
+      alert("게시물을 저장하려면 커버 사진을 올려주세요.");
+      return;
+    }
+
     const axiosConfig = {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       },
     };
+    const bContents = value.replace(/<p>/g, "<br>").replace(/<\/p>/g, "");
 
     const formData = new FormData();
     formData.append("bTitle", title);
-    formData.append("bContents", value);
+    formData.append("bContents", bContents);
     formData.append("tags", JSON.stringify(tags));
     formData.append("bFileName", uploadedFile);
     formData.append("bCoverFileName", bCoverFileName);
@@ -115,13 +123,16 @@ const BuildPortfolioPage = () => {
     toolbar: [
       [{ header: [1, 2, false] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
-      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
       ["image"],
+      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+      ['br']
     ],
-    imageResize: {
-      parchment: Quill.import("parchment"),
-      modules: ["Resize", "DisplaySize"],
+    ImageResize: {
+      parchment: Quill.import('parchment')
     },
+    clipboard: {
+      matchVisual: false,
+    }
   };
 
   return (
