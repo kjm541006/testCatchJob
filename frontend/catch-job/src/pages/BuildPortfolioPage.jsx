@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css"; // 테마 스타일 가져오기
 import styles from "../assets/css/BuildPortfolio.module.css";
 import DetailModal from "../components/DetailModal";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import ImageResize from 'quill-image-resize';
+Quill.register('modules/imageResize', ImageResize);
 
 const BuildPortfolioPage = () => {
   const [value, setValue] = useState("");
@@ -96,12 +98,12 @@ const BuildPortfolioPage = () => {
       if (!boardId){
       const response = await axios.post("http://43.202.98.45:8089/buildportfolio", formData, axiosConfig);
       console.log(response.data);
-      console.log("성공")
+      console.log("새로운 게시글 작성 성공")
       }
       else{
         const response = await axios.post(`http://43.202.98.45:8089/portfolio/edit/${boardId}`, formData, axiosConfig);
         console.log(response.data);
-        console.log("성공");
+        console.log("게시글 수정 성공");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -116,6 +118,10 @@ const BuildPortfolioPage = () => {
       [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
       ["image"],
     ],
+    imageResize: {
+      parchment: Quill.import("parchment"),
+      modules: ["Resize", "DisplaySize"],
+    },
   };
 
   return (
