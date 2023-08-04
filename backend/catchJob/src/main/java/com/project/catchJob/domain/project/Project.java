@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -96,18 +97,18 @@ public class Project {
 	}
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "project")
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<P_comments> projectCommentsList = new ArrayList<>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "project")
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<P_like> projectLikeList = new ArrayList<>();	
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "project")
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<P_reason> projectReasonList = new ArrayList<>();	
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "project")
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<P_member> projectMemberList = new ArrayList<>();	
 }

@@ -15,12 +15,14 @@ public interface ProjectService {
 	Project addProject(ProjectDTO projectDTO, String userEmail);
 	List<Project> getAllProjects();
 	ProjectDTO getProjectByProjectId(Long projectId);
+	void edit(Long projectId, ProjectDTO projectDTO, String jwtToken);
+	void delete(Long projectId, String jwtToken);
 	CommentResponse createComment(P_commentsDTO commentDTO, Long projectId, String jwtToken);
 	CommentResponse editComment(P_commentsDTO commentDTO, Long commentId, String jwtToken);
 	void deleteComment(Long commentId, String jwtToken);
 	int updateCnt(Long projectId) throws NotFoundException;
 	boolean isUserLiked(String email, Long projectId);
-	void insert(String email, Long projectId);
-	void delete(String email, Long projectId);
-	Project updateLike(Long projectId, boolean b);
+	void insert(String email, Long projectId) throws Exception;
+	void delete(String email, Long projectId) throws Exception;
+	Project updateLike(Long projectId, boolean b) throws Exception;
 }

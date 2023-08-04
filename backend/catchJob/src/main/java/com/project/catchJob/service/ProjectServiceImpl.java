@@ -7,8 +7,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -46,6 +49,7 @@ public class ProjectServiceImpl implements ProjectService {
 	@Autowired private CommonService commonService;
 	@Autowired private P_commentsRepository pCommRepo;
 	@Autowired private PLikeRepository pLikeRepo;
+	@PersistenceContext private EntityManager entityManager;
 	
 	@Override
 	public Project addProject(ProjectDTO projectDTO, String userEmail) {
@@ -65,19 +69,10 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRepository.save(project);
 	}
 	
+	@Override
 	 public List<Project> getAllProjects() {
 	        return projectRepository.findAll();
 	    }
-	 
-//	 public MemberDTO toMemberDTO(Member member) {
-//		    MemberDTO memberDTO = new MemberDTO();
-//		    memberDTO.setMemberId(member.getMemberId());
-//		    memberDTO.setName(member.getName());
-//		    memberDTO.setEmail(member.getEmail());
-//		    // 기타 필요한 필드 설정
-//
-//		    return memberDTO;
-//		}
 
 	 @Override
 	 public ProjectDTO getProjectByProjectId(Long projectId) {
@@ -130,6 +125,47 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 		return null;
 	 }
+	 
+	 	// 글 수정
+		@Override
+		public void edit(Long projectId, ProjectDTO projectDTO, String jwtToken) {
+			
+			Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+		    		.orElseThrow(UnauthorizedException::new);
+			
+			Project project = projectRepository.findById(projectId)
+					.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+			
+			if(!optAuthenticatedMember.getEmail().equals(project.getMember().getEmail())) {
+		    	throw new UnauthorizedException();
+		    }
+			project.setType(projectDTO.getType());
+			project.setTitle(projectDTO.getTitle());
+			project.setField(projectDTO.getField());
+			project.setLoc(projectDTO.getLoc());
+			project.setTerm(projectDTO.getTerm());
+			project.setDetail(projectDTO.getDetail());
+			project.setPlatforms(projectDTO.getPlatforms());
+			project.setCrew(projectDTO.getCrew());
+			
+			projectRepository.save(project);
+		}
+
+		// 글 삭제
+		@Override
+		public void delete(Long projectId, String jwtToken) {
+			
+			Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+		    		.orElseThrow(UnauthorizedException::new);
+			
+			Project project = projectRepository.findById(projectId)
+					.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+			
+			if(!optAuthenticatedMember.getEmail().equals(project.getMember().getEmail())) {
+		    	throw new UnauthorizedException();
+		    }
+			projectRepository.deleteById(projectId);
+		}
 	 
 	//======================== 댓글 ========================
 	 
@@ -210,20 +246,47 @@ public class ProjectServiceImpl implements ProjectService {
 
 	// 좋아요 추가
 	@Override
-	public void insert(String email, Long projectId) {
+	public void insert(String email, Long projectId) throws Exception {
+		Member member = memberRepository.findOptionalByEmail(email)
+	            .orElseThrow(() -> new NotFoundException());
 		
+		Project project = projectRepository.findById(projectId)
+				.orElseThrow(() -> new NotFoundException());
+		
+		P_like like = P_like.builder()
+				.project(project)
+				.member(member)
+				.build();
+		
+		pLikeRepo.save(like);
 	}
 
 	// 좋아요 취소
 	@Override
-	public void delete(String email, Long projectId) {
+	public void delete(String email, Long projectId) throws Exception {
+		Member member = memberRepository.findOptionalByEmail(email)
+	            .orElseThrow(() -> new NotFoundException());
 		
+		Project project = projectRepository.findById(projectId)
+				.orElseThrow(() -> new NotFoundException());
+		
+		P_like like = pLikeRepo.findByMemberAndProject(member, project)
+				.orElseThrow(() -> new NotFoundException());
+		
+		pLikeRepo.delete(like);
 	}
 
 	// 좋아요 수 업데이트
+	@Transactional
 	@Override
-	public Project updateLike(Long projectId, boolean b) {
-		return null;
+	public Project updateLike(Long projectId, boolean b) throws Exception {
+		int increment = b ? 1 : -1;
+		projectRepository.updateLike(projectId, increment);
+		entityManager.flush();
+		entityManager.clear();
+		Project project = projectRepository.findById(projectId).orElseThrow(NotFoundException::new);
+	
+		return project;
 	}
 	
 	//======================== 조회수 ========================
@@ -235,4 +298,5 @@ public class ProjectServiceImpl implements ProjectService {
 		Project project = projectRepository.findById(projectId).orElseThrow(NotFoundException::new);
 		return project.getPCnt();
 	}
+
 }

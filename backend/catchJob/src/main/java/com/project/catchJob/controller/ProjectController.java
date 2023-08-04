@@ -51,8 +51,10 @@ import com.project.catchJob.dto.board.B_commentsDTO;
 import com.project.catchJob.dto.board.CommentResponse;
 import com.project.catchJob.dto.project.P_commentsDTO;
 import com.project.catchJob.dto.project.ProjectDTO;
+import com.project.catchJob.exception.UnauthorizedException;
 import com.project.catchJob.repository.member.MemberRepository;
 import com.project.catchJob.security.JwtUtils;
+import com.project.catchJob.service.CommonService;
 import com.project.catchJob.service.MemberService;
 import com.project.catchJob.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -84,7 +86,7 @@ public class ProjectController {
 	@Autowired
     private final ProjectService projectService;
     private final MemberService memberService;
-    
+    @Autowired CommonService commonService;
     @Autowired private JwtUtils jwtUtils;
 
     @PostMapping("/buildproject")
@@ -103,20 +105,6 @@ public class ProjectController {
         return ResponseEntity.ok(projects);
     }
     
-//    @GetMapping("/studyDetail/{id}")
-//    public ResponseEntity<Project> getProjectById(@PathVariable Long id) {
-//        Project project = projectService.getProjectById(id);
-//        return ResponseEntity.ok(project);
-//    }
-    
-//    
-//    @GetMapping("/studyDetail")
-//    public ResponseEntity<Project> getProjectByProjectId(@RequestParam("projectId") Long projectId) {
-//    	System.out.println(projectId);
-//        Project project = projectService.getProjectByProjectId(projectId);
-//        return ResponseEntity.ok(project);
-//    }
-    
     // 글 조회
     @GetMapping("/studyDetail/{id}")
     public ResponseEntity<?> getProjectByProjectId(@PathVariable("id") Long projectId) throws NotFoundException {
@@ -126,6 +114,26 @@ public class ProjectController {
         
         return ResponseEntity.ok(project);
     }
+    
+    // 글 수정
+    @PutMapping("/studyDetail/edit/{id}")
+    public ResponseEntity<?> edit(@PathVariable("id") Long projectId, 
+    							  @RequestBody ProjectDTO projectDTO,
+    							  @RequestHeader("Authorization") String jwtToken) {
+    	projectService.edit(projectId, projectDTO, jwtToken);
+    	return ResponseEntity.ok().build();
+    }
+    
+    // 글 삭제
+    @DeleteMapping("/studyDetail/delete/{id}")
+	public ResponseEntity<?> deleteBoard(
+			@PathVariable("id") Long projectId,
+	        @RequestHeader("Authorization") String jwtToken) 
+	        throws Exception { 
+		
+	    projectService.delete(projectId, jwtToken);
+	    return ResponseEntity.ok().build();
+	}
     
   //======================== 댓글 ========================
     
@@ -166,5 +174,25 @@ public class ProjectController {
     
     //======================== 좋아요 ========================
     
+    @PostMapping("/studyDetail/like/{id}")
+    public ResponseEntity<?> like(@RequestHeader("Authorization") String jwtToken, 
+    							  @PathVariable("id") Long projectId) throws Exception {
+    	Member authenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+    			.orElseThrow(UnauthorizedException::new);
+		String email = authenticatedMember.getEmail();
+		boolean isLiked = projectService.isUserLiked(email, projectId);
+		
+		Project project;
+		if(isLiked) {
+			projectService.delete(email, projectId);
+			project = projectService.updateLike(projectId, false);
+		} else {
+			projectService.insert(email, projectId);
+			project = projectService.updateLike(projectId, true);
+		}
+		int updatedLikeCount = project.getPLike();
+		
+		return ResponseEntity.ok(updatedLikeCount);
+    }
 
 }

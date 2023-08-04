@@ -128,18 +128,6 @@ public class BoardController {
 	    boardService.delete(boardId, jwtToken);
 	    return ResponseEntity.ok().build();
 	}
-	// 아직 모를
-//	@DeleteMapping(value = "/portfolio/delete/{board_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//	public ResponseEntity<?> deleteBoard(
-//			@PathVariable("board_id") Long boardId,
-//			@RequestHeader("Authorization") String jwtToken, 
-//			@RequestPart(value = "bFileName", required = false) MultipartFile bFile, 
-//			@RequestPart(value = "bCoverFileName", required = false) MultipartFile bCoverFile)
-//					throws Exception { 
-//		
-//		boardService.delete(boardId, bFile, bCoverFile, jwtToken);
-//		return ResponseEntity.ok().build();
-//	}
 	
 	//======================== 댓글 ========================
 	
