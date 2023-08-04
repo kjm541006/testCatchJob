@@ -76,7 +76,7 @@ const PasswordCheck = () => {
             </div>
             <button className={`${styles.enroll_edit}`} onClick={handleUpdateClick}>입력하기</button>
           </div>
-          <div className={`${styles.errrorMent}`}>
+          <div className={`${styles.errorMent}`}>
           {errorMessage && (<p className={`${styles.error_message}`}>{errorMessage}</p>)}
         </div>
       </div>

@@ -20,6 +20,10 @@ const PortfolioModal = ({ item, onClose }) => {
   const location = useLocation();
   const [firstModalUrl, setFirstModalUrl] = useState("");
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [editableCommentId, setEditableCommentId] = useState(null);
+  const [editComment, setEditComment] = useState("");
+
 
   useEffect(() => {
     if (item) {
@@ -86,7 +90,22 @@ const PortfolioModal = ({ item, onClose }) => {
     setComment(e.target.value);
   };
 
-  const submitComment = async () => {
+  const handleEditCommentChange = (e) => {
+    setEditComment(e.target.value);
+  };
+
+  const toggleCommentEdit = (commentId) => {
+    setEditableCommentId(commentId === editableCommentId ? null : commentId);
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      submitComment();
+    }
+  };
+
+  const submitComment = async () => { //새로운 댓글 전송 부분
+    if(comment){
     const response = await axios.post(
       `http://43.202.98.45:8089/portfolio/comment/${item.boardId}`,
       {
@@ -123,8 +142,65 @@ const PortfolioModal = ({ item, onClose }) => {
       setComment("");
     } else {
       console.log("댓글 전송 실패", Error);
+    }}
+    else{
+      setErrorMessage("내용을 작성해야 댓글 등록이 가능합니다.")
     }
   };
+
+  const handleSubmitEditedComment = async (commentId) => { //댓글 수정 전송 부분
+    if (!editComment) { // editComment 값이 비어있을 때 기존 댓글 내용 그대로 유지
+      setEditableCommentId(null);
+      return;
+    }
+    
+    const response = await axios.put(`http://43.202.98.45:8089/portfolio/comment/edit/${commentId}`,
+        {
+          commentContent: editComment,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (response.status === 200) {
+        // 댓글 수정 성공
+        const newCommentList = commentList.map((comment) => {
+          if (comment.commentId === commentId) {
+            return {
+              ...comment,
+              commentContent: editComment,
+            };
+          }
+          return comment;
+        });
+        setCommentList(newCommentList);
+        setEditableCommentId(null);
+        console.log("댓글 수정 성공")
+      } else {
+        console.log("댓글 수정 실패", Error);
+      }
+  };
+
+  const handleDeleteEditedComment = async (commentId) => {
+    const response = await axios.delete(`http://43.202.98.45:8089/portfolio/comment/delete/${commentId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    
+    if (response.status === 200) {
+      console.log("댓글이 삭제되었습니다.");
+      const newCommentList = commentList.filter((comment) => comment.commentId !== commentId);
+      setCommentList(newCommentList);
+    } else {
+      console.log("댓글 삭제에 실패하였습니다.");
+    }
+  };
+
+  
 
   return (
     <>
@@ -155,10 +231,11 @@ const PortfolioModal = ({ item, onClose }) => {
             <div className={`${styles.comments}`}>Comments</div>
             <textarea
               className={`${styles.commentBox}`}
-              placeholder="댓글을 작성하세요.(최대 작성 가능한 글자 수는 100자입니다.)"
+              placeholder={errorMessage ? errorMessage : "댓글을 작성하세요.(최대 작성 가능한 글자 수는 100자입니다.)"}             
               maxlength="100"
               value={comment}
               onChange={handleCommentChange}
+              onKeyPress={handleKeyPress}
             ></textarea>
             <button className={`${styles.commentEnter}`} onClick={submitComment}>
               등록
@@ -175,7 +252,22 @@ const PortfolioModal = ({ item, onClose }) => {
                     {formatCommentDate(comment.commentDate)}
                   </div>
                 </div>
-                <div className={`${styles.commentContent}`}>{comment.commentContent}</div>
+                <div className={`${styles.commentContent}`}>
+                {editableCommentId === comment.commentId ? (
+                <textarea 
+                className={`${styles.editCommentText}`}
+                value={editComment || comment.commentContent}               
+                maxlength="100"
+                onChange={handleEditCommentChange}/>) : (<div>{comment.commentContent}</div>)}       
+                  {comment.memberEmail === writerEmail &&                  
+                  <div className={`${styles.commentEdit}`}>
+                  {editableCommentId === comment.commentId ? (
+                      <button className={`${styles.commentEditButton}`} onClick={() => handleSubmitEditedComment(comment.commentId)}>수정 완료</button>) 
+                    : (<button className={`${styles.commentEditButton}`} onClick={() => toggleCommentEdit(comment.commentId)}>수정</button>)}
+                    <button className={`${styles.commentEditButton}`} onClick={() =>  handleDeleteEditedComment(comment.commentId)}>삭제</button>
+                  </div>
+                  }
+                </div>
                 <div className={`${styles.commentBar}`}></div>
               </div>
             ))}
