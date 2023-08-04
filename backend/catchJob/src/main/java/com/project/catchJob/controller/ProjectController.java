@@ -46,11 +46,13 @@
 package com.project.catchJob.controller;
 
 import com.project.catchJob.domain.member.Member;
+import com.project.catchJob.domain.project.P_member;
 import com.project.catchJob.domain.project.Project;
 import com.project.catchJob.dto.board.B_commentsDTO;
 import com.project.catchJob.dto.board.CommentResponse;
 import com.project.catchJob.dto.project.P_commentsDTO;
 import com.project.catchJob.dto.project.ProjectDTO;
+import com.project.catchJob.dto.project.ProjectMemberDTO;
 import com.project.catchJob.exception.UnauthorizedException;
 import com.project.catchJob.repository.member.MemberRepository;
 import com.project.catchJob.security.JwtUtils;
@@ -126,7 +128,7 @@ public class ProjectController {
     
     // 글 삭제
     @DeleteMapping("/studyDetail/delete/{id}")
-	public ResponseEntity<?> deleteBoard(
+	public ResponseEntity<?> delete(
 			@PathVariable("id") Long projectId,
 	        @RequestHeader("Authorization") String jwtToken) 
 	        throws Exception { 
@@ -134,6 +136,42 @@ public class ProjectController {
 	    projectService.delete(projectId, jwtToken);
 	    return ResponseEntity.ok().build();
 	}
+    
+    // 지원 완료
+    @PutMapping("/studyDetail/done/{id}")
+    public ResponseEntity<?> done(
+			@PathVariable("id") Long projectId,
+	        @RequestHeader("Authorization") String jwtToken) 
+	        throws Exception { 
+		
+	    projectService.end(projectId, jwtToken);
+	    return ResponseEntity.ok().build();
+	}
+    
+    // 지원
+    @PostMapping("/studyDetail/apply/{id}")
+    public ResponseEntity<?> apply(
+			@PathVariable("id") Long projectId,
+			@RequestBody ProjectMemberDTO memberDTO,
+	        @RequestHeader("Authorization") String jwtToken) 
+	        throws Exception { 
+		
+    	P_member member = projectService.apply(projectId, memberDTO, jwtToken);
+	    return ResponseEntity.ok().body(member);
+	}
+    
+    // 지원 취소
+    @PutMapping("/studyDetail/apply/{id}")
+    public ResponseEntity<?> cancel(
+			@PathVariable("id") Long projectId,
+			@RequestBody ProjectMemberDTO memberDTO,
+	        @RequestHeader("Authorization") String jwtToken) 
+	        throws Exception { 
+		
+    	P_member member = projectService.apply(projectId, memberDTO, jwtToken);
+	    return ResponseEntity.ok().body(member);
+	} 
+    
     
   //======================== 댓글 ========================
     

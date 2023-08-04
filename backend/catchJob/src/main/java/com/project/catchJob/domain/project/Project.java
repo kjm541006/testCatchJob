@@ -53,6 +53,9 @@ public class Project {
 	
 	private String term; // 모집기간
 	
+	@Column(columnDefinition="BOOLEAN DEFAULT false")
+	private boolean end; // 완료여부
+	
 	@Lob
 	@Column(length=50000)
 	private String detail;

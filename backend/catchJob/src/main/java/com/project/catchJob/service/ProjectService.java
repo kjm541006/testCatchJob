@@ -5,10 +5,12 @@ import java.util.List;
 
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 
+import com.project.catchJob.domain.project.P_member;
 import com.project.catchJob.domain.project.Project;
 import com.project.catchJob.dto.board.CommentResponse;
 import com.project.catchJob.dto.project.P_commentsDTO;
 import com.project.catchJob.dto.project.ProjectDTO;
+import com.project.catchJob.dto.project.ProjectMemberDTO;
 
 public interface ProjectService {
 
@@ -25,4 +27,6 @@ public interface ProjectService {
 	void insert(String email, Long projectId) throws Exception;
 	void delete(String email, Long projectId) throws Exception;
 	Project updateLike(Long projectId, boolean b) throws Exception;
+	void end(Long projectId, String jwtToken);
+	P_member apply(Long projectId, ProjectMemberDTO memberDTO, String jwtToken);
 }

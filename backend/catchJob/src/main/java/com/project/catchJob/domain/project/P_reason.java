@@ -29,10 +29,10 @@ public class P_reason {
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member member;
 	
-	public void setMember(Member member) {
-		this.member = member;
-		member.getP_ReasonList().add(this);
-	}
+//	public void setMember(Member member) {
+//		this.member = member;
+//		member.getP_ReasonList().add(this);
+//	}
 	
 	@JsonIgnore
 	@ManyToOne

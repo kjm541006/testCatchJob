@@ -22,6 +22,7 @@ import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.domain.project.P_comments;
 import com.project.catchJob.domain.project.P_like;
+import com.project.catchJob.domain.project.P_member;
 import com.project.catchJob.domain.project.Project;
 import com.project.catchJob.dto.board.B_commentsDTO;
 import com.project.catchJob.dto.board.CommentResponse;
@@ -30,10 +31,12 @@ import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.dto.member.MemberInfoDTO;
 import com.project.catchJob.dto.project.P_commentsDTO;
 import com.project.catchJob.dto.project.ProjectDTO;
+import com.project.catchJob.dto.project.ProjectMemberDTO;
 import com.project.catchJob.exception.UnauthorizedException;
 import com.project.catchJob.repository.member.MemberRepository;
 import com.project.catchJob.repository.project.PLikeRepository;
 import com.project.catchJob.repository.project.P_commentsRepository;
+import com.project.catchJob.repository.project.P_memberRepository;
 import com.project.catchJob.repository.project.ProjectRepository;
 import com.project.catchJob.security.JwtUtils;
 
@@ -42,204 +45,242 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class ProjectServiceImpl implements ProjectService {
-	
-	@Autowired private final ProjectRepository projectRepository;
-	@Autowired private MemberRepository memberRepository;
-	@Autowired private JwtUtils jwtUtils;
-	@Autowired private CommonService commonService;
-	@Autowired private P_commentsRepository pCommRepo;
-	@Autowired private PLikeRepository pLikeRepo;
-	@PersistenceContext private EntityManager entityManager;
-	
+
+	@Autowired
+	private final ProjectRepository projectRepository;
+	@Autowired
+	private MemberRepository memberRepository;
+	@Autowired
+	private JwtUtils jwtUtils;
+	@Autowired
+	private CommonService commonService;
+	@Autowired
+	private P_commentsRepository pCommRepo;
+	@Autowired
+	private PLikeRepository pLikeRepo;
+	@Autowired
+	private P_memberRepository pMemberRepo;
+	@PersistenceContext
+	private EntityManager entityManager;
+
 	@Override
 	public Project addProject(ProjectDTO projectDTO, String userEmail) {
 		Member member = memberRepository.findByEmail(projectDTO.getEmail());
-		
-		Project project = new Project();
-        project.setTitle(projectDTO.getTitle());
-        project.setField(projectDTO.getField());
-        project.setTerm(projectDTO.getTerm());
-        project.setPlatforms(projectDTO.getPlatforms() != null ? new ArrayList<>(projectDTO.getPlatforms()) : new ArrayList<>());
-        project.setType(projectDTO.getType());
-        project.setLoc(projectDTO.getLoc());
-        project.setCrew(projectDTO.getCrew());
-        project.setDetail(projectDTO.getDetail());
-        project.setMember(member);
-		
-        return projectRepository.save(project);
-	}
-	
-	@Override
-	 public List<Project> getAllProjects() {
-	        return projectRepository.findAll();
-	    }
 
-	 @Override
-	 public ProjectDTO getProjectByProjectId(Long projectId) {
-	 
+		Project project = new Project();
+		project.setTitle(projectDTO.getTitle());
+		project.setField(projectDTO.getField());
+		project.setTerm(projectDTO.getTerm());
+		project.setPlatforms(
+				projectDTO.getPlatforms() != null ? new ArrayList<>(projectDTO.getPlatforms()) : new ArrayList<>());
+		project.setType(projectDTO.getType());
+		project.setLoc(projectDTO.getLoc());
+		project.setCrew(projectDTO.getCrew());
+		project.setDetail(projectDTO.getDetail());
+		project.setMember(member);
+
+		return projectRepository.save(project);
+	}
+
+	@Override
+	public List<Project> getAllProjects() {
+		return projectRepository.findAll();
+	}
+
+	@Override
+	public ProjectDTO getProjectByProjectId(Long projectId) {
+
 		Project project = projectRepository.findById(projectId)
-	            .orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
-		
-		Member writer = project.getMember();		
-		
-		if(writer != null) {
-	
+				.orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
+
+		Member writer = project.getMember();
+
+		if (writer != null) {
+
 			String fileUrl = "http://43.202.98.45:8089/upload/";
-	
-			MemberInfoDTO memberDTO = MemberInfoDTO.builder()
-					.email(writer.getEmail())
-					.name(writer.getName())
-					.job(writer.getJob())
-					.hasCareer(writer.getHasCareer())
-					.mOriginalFileName(fileUrl + writer.getMProfile().getMStoredFileName())
-					.build();
-			
-			List<P_commentsDTO> comments = project.getProjectCommentsList() != null ? project.getProjectCommentsList().stream()
-					.map(comment -> P_commentsDTO.builder()
-							.commentId(comment.getPComId())
-							.commentContent(comment.getPComContent())
-							.commentDate(comment.getPComDate())
-							.memberName(comment.getMember().getName())
-							.memberEmail(comment.getMember().getEmail())
-							.memberProfile(fileUrl + comment.getMember().getMProfile().getMStoredFileName())
-							.build())
+
+			MemberInfoDTO memberDTO = MemberInfoDTO.builder().email(writer.getEmail()).name(writer.getName())
+					.job(writer.getJob()).hasCareer(writer.getHasCareer())
+					.mOriginalFileName(fileUrl + writer.getMProfile().getMStoredFileName()).build();
+
+			List<P_commentsDTO> comments = project.getProjectCommentsList() != null ? project.getProjectCommentsList()
+					.stream()
+					.map(comment -> P_commentsDTO.builder().commentId(comment.getPComId())
+							.commentContent(comment.getPComContent()).commentDate(comment.getPComDate())
+							.memberName(comment.getMember().getName()).memberEmail(comment.getMember().getEmail())
+							.memberProfile(fileUrl + comment.getMember().getMProfile().getMStoredFileName()).build())
 					.collect(Collectors.toList()) : new ArrayList<>();
-			
+
 			ProjectDTO projectDTO = new ProjectDTO();
 			projectDTO.setPCnt(project.getPCnt());
 			projectDTO.setPLike(project.getPLike());
 			projectDTO.setProjectId(project.getProjectId());
-	        projectDTO.setTitle(project.getTitle());
-	        projectDTO.setField(project.getField());
-	        projectDTO.setTerm(project.getTerm());
-	        projectDTO.setPlatforms(project.getPlatforms() != null ? new ArrayList<>(project.getPlatforms()) : new ArrayList<>());
-	        projectDTO.setType(project.getType());
-	        projectDTO.setLoc(project.getLoc());
-	        projectDTO.setCrew(project.getCrew());
-	        projectDTO.setDetail(project.getDetail());
-	        projectDTO.setEmail(memberDTO.getEmail());
-	        projectDTO.setMember(memberDTO);
-	        projectDTO.setComments(comments);
-			
-	        return projectDTO;
+			projectDTO.setTitle(project.getTitle());
+			projectDTO.setField(project.getField());
+			projectDTO.setTerm(project.getTerm());
+			projectDTO.setPlatforms(
+			project.getPlatforms() != null ? new ArrayList<>(project.getPlatforms()) : new ArrayList<>());
+			projectDTO.setType(project.getType());
+			projectDTO.setLoc(project.getLoc());
+			projectDTO.setCrew(project.getCrew());
+			projectDTO.setDetail(project.getDetail());
+			projectDTO.setEmail(memberDTO.getEmail());
+			projectDTO.setMember(memberDTO);
+			projectDTO.setComments(comments);
+
+			return projectDTO;
 		}
 		return null;
-	 }
-	 
-	 	// 글 수정
-		@Override
-		public void edit(Long projectId, ProjectDTO projectDTO, String jwtToken) {
-			
-			Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
-		    		.orElseThrow(UnauthorizedException::new);
-			
-			Project project = projectRepository.findById(projectId)
-					.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
-			
-			if(!optAuthenticatedMember.getEmail().equals(project.getMember().getEmail())) {
-		    	throw new UnauthorizedException();
-		    }
-			project.setType(projectDTO.getType());
-			project.setTitle(projectDTO.getTitle());
-			project.setField(projectDTO.getField());
-			project.setLoc(projectDTO.getLoc());
-			project.setTerm(projectDTO.getTerm());
-			project.setDetail(projectDTO.getDetail());
-			project.setPlatforms(projectDTO.getPlatforms());
-			project.setCrew(projectDTO.getCrew());
-			
-			projectRepository.save(project);
-		}
+	}
 
-		// 글 삭제
-		@Override
-		public void delete(Long projectId, String jwtToken) {
-			
-			Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
-		    		.orElseThrow(UnauthorizedException::new);
-			
-			Project project = projectRepository.findById(projectId)
-					.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
-			
-			if(!optAuthenticatedMember.getEmail().equals(project.getMember().getEmail())) {
-		    	throw new UnauthorizedException();
-		    }
-			projectRepository.deleteById(projectId);
+	// 글 수정
+	@Override
+	public void edit(Long projectId, ProjectDTO projectDTO, String jwtToken) {
+
+		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+				.orElseThrow(UnauthorizedException::new);
+
+		Project project = projectRepository.findById(projectId)
+				.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+
+		if (!optAuthenticatedMember.getEmail().equals(project.getMember().getEmail())) {
+			throw new UnauthorizedException();
 		}
-	 
-	//======================== 댓글 ========================
-	 
-	 // 댓글 등록
-	 @Override
-	 public CommentResponse createComment(P_commentsDTO commentDTO, Long projectId, String jwtToken) {
-		    
-	    	Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
-		    		.orElseThrow(UnauthorizedException::new);
-		    
-	    	Member member = memberRepository.findByEmail(optAuthenticatedMember.getEmail());
-	    	
-	    	Project project = projectRepository.findById(projectId).orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
-	    	
-	    	P_comments comments = P_comments.builder()
-	    			.pComContent(commentDTO.getCommentContent())
-	    			.member(member)
-	    			.project(project)
-	    			.build();
-	    	P_comments saveComm = pCommRepo.save(comments);
-	    	pCommRepo.flush();
-	    	return new CommentResponse(saveComm.getPComDate());
-	    }
-	 
-	 // 댓글 수정
-	 @Override
-	 public CommentResponse editComment(P_commentsDTO commentDTO, Long commentId, String jwtToken) {
-		 
-		 Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
-				 .orElseThrow(UnauthorizedException::new);
-		 
-		 P_comments comment = pCommRepo.findById(commentId).orElseThrow(() -> new EntityNotFoundException("댓글이 없음"));
-		 
-		 if(!optAuthenticatedMember.getEmail().equals(comment.getMember().getEmail())) {
-			 throw new UnauthorizedException();
-		 }
-		 comment.setPComContent(commentDTO.getCommentContent());
-		 comment.setPComDate(LocalDateTime.now());
-		 P_comments saveComm = pCommRepo.save(comment);
-		 pCommRepo.flush();
-		 return new CommentResponse(saveComm.getPComDate());
-	 }
+		project.setType(projectDTO.getType());
+		project.setTitle(projectDTO.getTitle());
+		project.setField(projectDTO.getField());
+		project.setLoc(projectDTO.getLoc());
+		project.setTerm(projectDTO.getTerm());
+		project.setDetail(projectDTO.getDetail());
+		project.setPlatforms(projectDTO.getPlatforms());
+		project.setCrew(projectDTO.getCrew());
+
+		projectRepository.save(project);
+	}
+
+	// 글 삭제
+	@Override
+	public void delete(Long projectId, String jwtToken) {
+
+		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+				.orElseThrow(UnauthorizedException::new);
+
+		Project project = projectRepository.findById(projectId)
+				.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+
+		if (!optAuthenticatedMember.getEmail().equals(project.getMember().getEmail())) {
+			throw new UnauthorizedException();
+		}
+		projectRepository.deleteById(projectId);
+	}
+
+	// 모집 완료
+	@Override
+	public void end(Long projectId, String jwtToken) {
+		
+		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+				.orElseThrow(UnauthorizedException::new);
+
+		Project project = projectRepository.findById(projectId)
+				.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+
+		if (!optAuthenticatedMember.getEmail().equals(project.getMember().getEmail())) {
+			throw new UnauthorizedException();
+		}
+		project.setEnd(true);
+		projectRepository.save(project);
+	}
+	
+	// 지원
+	@Override
+	public P_member apply(Long projectId, ProjectMemberDTO memberDTO, String jwtToken) {
+		
+		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+				.orElseThrow(UnauthorizedException::new);
+		Project project = projectRepository.findById(projectId)
+				.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+
+		P_member member = P_member.builder()
+				.pMemJob(memberDTO.getPMemJob())
+				.pMemReason(memberDTO.getPMemReason())
+				.member(optAuthenticatedMember)
+				.project(project)
+				.build();
+		
+		return pMemberRepo.save(member);
+	}
+
+	// ======================== 댓글 ========================
+
+	// 댓글 등록
+	@Override
+	public CommentResponse createComment(P_commentsDTO commentDTO, Long projectId, String jwtToken) {
+
+		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+				.orElseThrow(UnauthorizedException::new);
+
+		Member member = memberRepository.findByEmail(optAuthenticatedMember.getEmail());
+
+		Project project = projectRepository.findById(projectId)
+				.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+
+		P_comments comments = P_comments.builder().pComContent(commentDTO.getCommentContent()).member(member)
+				.project(project).build();
+		P_comments saveComm = pCommRepo.save(comments);
+		pCommRepo.flush();
+		return new CommentResponse(saveComm.getPComDate());
+	}
+
+	// 댓글 수정
+	@Override
+	public CommentResponse editComment(P_commentsDTO commentDTO, Long commentId, String jwtToken) {
+
+		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+				.orElseThrow(UnauthorizedException::new);
+
+		P_comments comment = pCommRepo.findById(commentId).orElseThrow(() -> new EntityNotFoundException("댓글이 없음"));
+
+		if (!optAuthenticatedMember.getEmail().equals(comment.getMember().getEmail())) {
+			throw new UnauthorizedException();
+		}
+		comment.setPComContent(commentDTO.getCommentContent());
+		comment.setPComDate(LocalDateTime.now());
+		P_comments saveComm = pCommRepo.save(comment);
+		pCommRepo.flush();
+		return new CommentResponse(saveComm.getPComDate());
+	}
 
 	// 댓글 삭제
 	@Override
 	public void deleteComment(Long commentId, String jwtToken) {
-		
+
 		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
-				 .orElseThrow(UnauthorizedException::new);
-		
+				.orElseThrow(UnauthorizedException::new);
+
 		P_comments comment = pCommRepo.findById(commentId).orElseThrow(() -> new EntityNotFoundException("댓글이 없음"));
-		
-		if(!optAuthenticatedMember.getEmail().equals(comment.getMember().getEmail())) {
+
+		if (!optAuthenticatedMember.getEmail().equals(comment.getMember().getEmail())) {
 			throw new UnauthorizedException();
-		 }
+		}
 		pCommRepo.deleteById(commentId);
-		 
+
 	}
-	
-	//======================== 좋아요 ========================
-	
+
+	// ======================== 좋아요 ========================
+
 	// 좋아요 확인
 	@Override
 	public boolean isUserLiked(String email, Long projectId) {
 		Member member = memberRepository.findOptionalByEmail(email).orElse(null);
-		if(member == null) {
+		if (member == null) {
 			return false;
 		}
-		
+
 		Project project = projectRepository.findById(projectId).orElse(null);
-		if(project == null) {
+		if (project == null) {
 			return false;
 		}
-		
+
 		Optional<P_like> like = pLikeRepo.findByMemberAndProject(member, project);
 		return like.isPresent();
 	}
@@ -247,32 +288,24 @@ public class ProjectServiceImpl implements ProjectService {
 	// 좋아요 추가
 	@Override
 	public void insert(String email, Long projectId) throws Exception {
-		Member member = memberRepository.findOptionalByEmail(email)
-	            .orElseThrow(() -> new NotFoundException());
-		
-		Project project = projectRepository.findById(projectId)
-				.orElseThrow(() -> new NotFoundException());
-		
-		P_like like = P_like.builder()
-				.project(project)
-				.member(member)
-				.build();
-		
+		Member member = memberRepository.findOptionalByEmail(email).orElseThrow(() -> new NotFoundException());
+
+		Project project = projectRepository.findById(projectId).orElseThrow(() -> new NotFoundException());
+
+		P_like like = P_like.builder().project(project).member(member).build();
+
 		pLikeRepo.save(like);
 	}
 
 	// 좋아요 취소
 	@Override
 	public void delete(String email, Long projectId) throws Exception {
-		Member member = memberRepository.findOptionalByEmail(email)
-	            .orElseThrow(() -> new NotFoundException());
-		
-		Project project = projectRepository.findById(projectId)
-				.orElseThrow(() -> new NotFoundException());
-		
-		P_like like = pLikeRepo.findByMemberAndProject(member, project)
-				.orElseThrow(() -> new NotFoundException());
-		
+		Member member = memberRepository.findOptionalByEmail(email).orElseThrow(() -> new NotFoundException());
+
+		Project project = projectRepository.findById(projectId).orElseThrow(() -> new NotFoundException());
+
+		P_like like = pLikeRepo.findByMemberAndProject(member, project).orElseThrow(() -> new NotFoundException());
+
 		pLikeRepo.delete(like);
 	}
 
@@ -285,12 +318,12 @@ public class ProjectServiceImpl implements ProjectService {
 		entityManager.flush();
 		entityManager.clear();
 		Project project = projectRepository.findById(projectId).orElseThrow(NotFoundException::new);
-	
+
 		return project;
 	}
-	
-	//======================== 조회수 ========================
-	
+
+	// ======================== 조회수 ========================
+
 	// 조회수 업데이트
 	@Override
 	public int updateCnt(Long projectId) throws NotFoundException {
@@ -298,5 +331,7 @@ public class ProjectServiceImpl implements ProjectService {
 		Project project = projectRepository.findById(projectId).orElseThrow(NotFoundException::new);
 		return project.getPCnt();
 	}
+
+
 
 }

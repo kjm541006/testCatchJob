@@ -25,6 +25,7 @@ import com.project.catchJob.domain.board.B_like;
 import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.project.P_comments;
 import com.project.catchJob.domain.project.P_like;
+import com.project.catchJob.domain.project.P_member;
 import com.project.catchJob.domain.project.P_reason;
 import com.project.catchJob.domain.project.Project;
 import com.project.catchJob.domain.study.S_comments;
@@ -166,6 +167,6 @@ public class Member {
 	private List<P_like> p_LikeList = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	private List<P_reason> p_ReasonList = new ArrayList<>();
+	private List<P_member> p_MemberList = new ArrayList<>();
 
 }

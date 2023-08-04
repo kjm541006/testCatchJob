@@ -310,7 +310,7 @@ public class BoardService {
 	            .board(board)
 	            .member(member)
 	            .build();
-
+	    
 	    bLikeRepo.save(like);
 	}
 
