@@ -187,7 +187,12 @@ public class ProjectServiceImpl implements ProjectService {
 		if (!optAuthenticatedMember.getEmail().equals(project.getMember().getEmail())) {
 			throw new UnauthorizedException();
 		}
-		project.setEnd(true);
+		boolean isEnd = project.isEnd();
+		if(isEnd) {
+			project.setEnd(false);
+		} else {
+			project.setEnd(true);
+		}
 		projectRepository.save(project);
 	}
 	

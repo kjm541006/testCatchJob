@@ -1,48 +1,3 @@
-//package com.project.catchJob.controller;
-//
-//import com.project.catchJob.domain.member.Member;
-//import com.project.catchJob.domain.project.Project;
-//import com.project.catchJob.dto.project.ProjectDTO;
-//import com.project.catchJob.repository.member.MemberRepository;
-//import com.project.catchJob.security.JwtUtils;
-//import com.project.catchJob.service.MemberService;
-//import com.project.catchJob.service.ProjectService;
-//import lombok.RequiredArgsConstructor;
-//
-//import javax.servlet.http.HttpServletRequest;
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RequestParam;
-//import org.springframework.web.bind.annotation.RestController;
-//
-//@RequiredArgsConstructor
-//@RestController
-//@RequestMapping("/")
-//public class ProjectController {
-//
-//	@Autowired
-//    private final ProjectService projectService;
-//    private final MemberService memberService;
-//    
-//    @Autowired
-//    private JwtUtils jwtUtils;
-//
-//    @PostMapping("/buildproject")
-//    public ResponseEntity<?> addProject(@RequestBody ProjectDTO projectDTO, HttpServletRequest request) {
-//    	String userEmail = jwtUtils.getEmailFromRequest(request);
-//    	Project savedProject = projectService.addProject(projectDTO, userEmail);
-//    	return ResponseEntity.ok(savedProject.getProjectId());
-//    }
-//
-////    public Member findMemberByEmail(String userEmail) {
-////        return memberService.findMemberByEmail(userEmail);
-////    }
-//}
 package com.project.catchJob.controller;
 
 import com.project.catchJob.domain.member.Member;
@@ -137,43 +92,7 @@ public class ProjectController {
 	    return ResponseEntity.ok().build();
 	}
     
-    // 지원 완료
-    @PutMapping("/studyDetail/done/{id}")
-    public ResponseEntity<?> done(
-			@PathVariable("id") Long projectId,
-	        @RequestHeader("Authorization") String jwtToken) 
-	        throws Exception { 
-		
-	    projectService.end(projectId, jwtToken);
-	    return ResponseEntity.ok().build();
-	}
-    
-    // 지원
-    @PostMapping("/studyDetail/apply/{id}")
-    public ResponseEntity<?> apply(
-			@PathVariable("id") Long projectId,
-			@RequestBody ProjectMemberDTO memberDTO,
-	        @RequestHeader("Authorization") String jwtToken) 
-	        throws Exception { 
-		
-    	P_member member = projectService.apply(projectId, memberDTO, jwtToken);
-	    return ResponseEntity.ok().body(member);
-	}
-    
-    // 지원 취소
-    @PutMapping("/studyDetail/apply/{id}")
-    public ResponseEntity<?> cancel(
-			@PathVariable("id") Long projectId,
-			@RequestBody ProjectMemberDTO memberDTO,
-	        @RequestHeader("Authorization") String jwtToken) 
-	        throws Exception { 
-		
-    	P_member member = projectService.apply(projectId, memberDTO, jwtToken);
-	    return ResponseEntity.ok().body(member);
-	} 
-    
-    
-  //======================== 댓글 ========================
+//======================== 댓글 ========================
     
     // 댓글 등록
     @PostMapping("/studyDetail/comment/{id}")
@@ -233,4 +152,44 @@ public class ProjectController {
 		return ResponseEntity.ok(updatedLikeCount);
     }
 
+    
+  //======================== 지원 ========================
+    
+    // 지원 완료/취소 (글 작성자)
+    @PutMapping("/studyDetail/done/{id}")
+    public ResponseEntity<?> end(
+			@PathVariable("id") Long projectId,
+	        @RequestHeader("Authorization") String jwtToken) 
+	        throws Exception { 
+		
+	    projectService.end(projectId, jwtToken);
+	    return ResponseEntity.ok().build();
+	}
+    
+    // 지원 (지원자)
+    @PostMapping("/studyDetail/apply/{id}")
+    public ResponseEntity<?> apply(
+			@PathVariable("id") Long projectId,
+			@RequestBody ProjectMemberDTO memberDTO,
+	        @RequestHeader("Authorization") String jwtToken) 
+	        throws Exception { 
+		
+    	P_member member = projectService.apply(projectId, memberDTO, jwtToken);
+	    return ResponseEntity.ok().body(member);
+	}
+    
+    // 지원 취소 (지원자)
+    @PutMapping("/studyDetail/cancel/{id}")
+    public ResponseEntity<?> cancel(
+			@PathVariable("id") Long projectId,
+			@RequestBody ProjectMemberDTO memberDTO,
+	        @RequestHeader("Authorization") String jwtToken) 
+	        throws Exception { 
+		
+    	P_member member = projectService.apply(projectId, memberDTO, jwtToken);
+	    return ResponseEntity.ok().body(member);
+	} 
+    
+    
+  
 }
