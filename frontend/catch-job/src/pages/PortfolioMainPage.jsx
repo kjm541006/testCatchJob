@@ -25,8 +25,13 @@ const PortfolioMainPage = () => {
   }, [itemFromURL]);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     axios
-      .get("http://43.202.98.45:8089/")
+      .get("http://43.202.98.45:8089/", {
+        headers: {
+          Authorization: `Bearer ${token}` // 토큰 값 설정
+        }
+      })
       .then((response) => {
         setData(response.data);
         console.log(response.data);
@@ -35,6 +40,7 @@ const PortfolioMainPage = () => {
         console.error("데이터 가져오기 에러:", error);
       });
   }, []);
+  
 
   useEffect(() => {
     console.log(isModalOpen);

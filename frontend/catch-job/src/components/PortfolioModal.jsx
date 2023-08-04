@@ -13,7 +13,7 @@ const PortfolioModal = ({ item, onClose }) => {
   const writerEmail = localStorage.getItem("email");
 
   const contentCommentRef = useRef(null);
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(item.isLike);
   const [comment, setComment] = useState("");
   const [commentList, setCommentList] = useState(item.comments || []);
   const [isModalOpen, setIsModalOpen] = useState(false);
