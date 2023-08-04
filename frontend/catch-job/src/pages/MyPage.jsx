@@ -199,6 +199,10 @@ const MyPage = () => {
             <Link to={"/"} className={`${styles.cancel_edit}`}>메인으로</Link>
             <button className={`${styles.enroll_edit}`} onClick={uploadData} >저장하기</button>
           </div>
+          <div className={`${styles.quitIdbox}`}>
+            <div className={`${styles.quitIdMent}`}>회원정보를 삭제하시겠어요?</div>
+            <div className={`${styles.quitIdButton}`}>회원 탈퇴하기</div>
+          </div>
         </div>
       </div>
     </div>
