@@ -26,7 +26,6 @@ import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.project.P_comments;
 import com.project.catchJob.domain.project.P_like;
 import com.project.catchJob.domain.project.P_member;
-import com.project.catchJob.domain.project.P_reason;
 import com.project.catchJob.domain.project.Project;
 import com.project.catchJob.domain.study.S_comments;
 import com.project.catchJob.domain.study.S_like;

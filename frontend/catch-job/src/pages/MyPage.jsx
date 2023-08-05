@@ -4,6 +4,8 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+
 
 const MyPage = () => {
   const [email, setEmail] = useState("");
@@ -13,8 +15,8 @@ const MyPage = () => {
   const [selectedCarrers, setSelectedCarrers] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imageFileName, setImageFileName] = useState("");
-  
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function fetchData() {
       const token = localStorage.getItem("token");
@@ -102,6 +104,31 @@ const MyPage = () => {
   const handleSelectedCarrersChange = (career) => {
     setSelectedCarrers(career);
   };
+
+  const DeleteMember =()=>{
+    const confirmDelete = window.confirm("정말로 탈퇴하시겠습니까?");
+    const token = localStorage.getItem("token");
+
+    if (confirmDelete) {
+      // axios를 사용하여 서버로 DELETE 요청을 보냅니다.
+      axios.delete('http://43.202.98.45:8089/deleteMember',{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(response => {
+        alert('회원 탈퇴가 완료되었습니다.')
+        localStorage.removeItem('token');
+        localStorage.removeItem('email');
+        localStorage.removeItem('name');
+        // 로그인 페이지 또는 메인 페이지 등으로 이동
+        window.location.href = '/login';
+      })
+      .catch(error => {
+        alert('회원 탈퇴에 실패했습니다.')        
+      });
+    }
+  }
   
   return (
     <div className={`${styles.body_edit}`}>
@@ -138,19 +165,19 @@ const MyPage = () => {
         
         <div className={`${styles.input_text_edit}`}>직무</div>
           <div className={`${styles.choosejob_edit}`} id="pick-edit">
-          <label>
+          <label className={`${styles.labelOne}`}>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "웹디자이너"}  onChange={() =>handleSelectedJobsChange("웹디자이너")}/>
               <div className={`${styles.choosejob_text_edit}`}>웹디자이너</div>
             </div>
             </label>
-            <label>
+            <label className={`${styles.labelOne}`}>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "웹퍼블리셔"}   onChange={() =>handleSelectedJobsChange("웹퍼블리셔")}/>
               <div className={`${styles.choosejob_text_edit}`}>웹퍼블리셔</div>
             </div>
             </label>
-            <label>
+            <label className={`${styles.labelOne}`}>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "프론트엔드"}   onChange={() =>handleSelectedJobsChange("프론트엔드")}/>
               <div className={`${styles.choosejob_text_edit}`}>프론트엔드</div>
@@ -158,19 +185,19 @@ const MyPage = () => {
             </label>
           </div>
           <div className={`${styles.choosejob_edit}`}>
-          <label>
+          <label className={`${styles.labelOne}`}>
           <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "백엔드"}  onChange={() =>handleSelectedJobsChange("백엔드")}/>
               <div className={`${styles.choosejob_text_edit}`}>백엔드</div>
             </div>
             </label>
-            <label>
+            <label className={`${styles.labelOne}`}>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "PM"}  onChange={() =>handleSelectedJobsChange("PM")}/>
               <div className={`${styles.choosejob_text_edit}`}>PM</div>
             </div>
             </label>
-            <label>
+            <label className={`${styles.labelOne}`}>
             <div className={`${styles.choosejobone_edit}`}>
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="job-edit" checked={selectedJobs === "기타"}  onChange={() =>handleSelectedJobsChange("기타")}/>
               <div className={`${styles.choosejob_text_edit}`}>기타</div>
@@ -180,19 +207,27 @@ const MyPage = () => {
 
           <div className={`${styles.input_text_edit}`}>경력 여부</div>
           <div className={`${styles.choosejob_edit}`} id="pick-edit">
+          <label className={`${styles.labelOne}`}>
             <div className={`${styles.choosejobone_edit}`} id="carrer-edit">
               <input type="radio" className={`${styles.custom_checkbox_edit}`}  name="career-edit" checked={selectedCarrers === "신입"} onChange={() =>handleSelectedCarrersChange("신입")} />
               <div className={`${styles.choosejob_text_edit}`}>신입</div>
             </div>
-            <div className={`${styles.choosejobone_edit}`} id="carrer">
+            </label>
+            <label className={`${styles.labelOne}`}>
+            <div className={`${styles.choosejobone_edit}`} id="carrer-edit">
               <input type="radio" className={`${styles.custom_checkbox_edit}`} name="career-edit" checked={selectedCarrers === "경력"} onChange={() =>handleSelectedCarrersChange("경력")}/>
               <div className={`${styles.choosejob_text_edit}`}>경력</div>
             </div>
+            </label>
           </div>
 
           <div className={`${styles.enrollbutton_edit}`}>
             <Link to={"/"} className={`${styles.cancel_edit}`}>메인으로</Link>
             <button className={`${styles.enroll_edit}`} onClick={uploadData} >저장하기</button>
+          </div>
+          <div className={`${styles.quitIdbox}`}>
+            <div className={`${styles.quitIdMent}`}>회원정보를 삭제하시겠어요?</div>
+            <div className={`${styles.quitIdButton}`}  onClick={DeleteMember}>회원 탈퇴하기</div>
           </div>
         </div>
       </div>

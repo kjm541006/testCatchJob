@@ -25,6 +25,7 @@ import LoginAlertPage from "./pages/LoginAlertPage";
 import axios from "axios";
 import NewsPage from "./pages/NewsPage";
 import SigninAlertPage from "./pages/SigninAlertPage";
+import StudyDetailPage from "./pages/study&project/StudyDetailPage";
 import PasswordCheck from "./pages/PasswordCheck";
 
 function App() {
@@ -73,6 +74,8 @@ function App() {
         {/* <Route path="/recruit" element={<Recruit />} /> */}
         {/* <Route path="/study/*" element={<StudyRoutes />} /> */}
         <Route path="/community/*" element={<CommunityRoutes />} />
+        <Route path="/studyDetail/*" element={<StudyDetailPage />} />
+        <Route path="/projectDetail/*" element={<StudyDetailPage />} />
       </Routes>
     </div>
   );

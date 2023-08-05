@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
 const BasicSigninPage = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -69,9 +68,10 @@ const BasicSigninPage = () => {
 
     console.log(userData);
 
-    // axios.post('localhost:8089/register', userData, {
     axios
-      .post("http://43.202.98.45:8089/register", userData, {
+      .post("http://localhost:8089/register", userData, {
+        // axios
+        // .post("http://43.202.98.45:8089/register", userData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -159,19 +159,19 @@ const BasicSigninPage = () => {
 
           <div className="input-text-basic">직무</div>
           <div className="choosejob" id="pick">
-            <label>
+            <label className="labelOne">
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹디자이너")} />
                 <div className="choosejob-text-basic">웹디자이너</div>
               </div>
             </label>
-            <label>
+            <label className="labelOne">
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹퍼블리셔")} />
                 <div className="choosejob-text-basic">웹퍼블리셔</div>
               </div>
             </label>
-            <label>
+            <label className="labelOne">
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("프론트엔드")} />
                 <div className="choosejob-text-basic">프론트엔드</div>
@@ -179,19 +179,19 @@ const BasicSigninPage = () => {
             </label>
           </div>
           <div className="choosejob">
-            <label>
+            <label className="labelOne">
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("백엔드")} />
                 <div className="choosejob-text-basic">백엔드</div>
               </div>
             </label>
-            <label>
+            <label className="labelOne">
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("PM")} />
                 <div className="choosejob-text-basic">PM</div>
               </div>
             </label>
-            <label>
+            <label className="labelOne">
               <div className="choosejobone">
                 <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("기타")} />
                 <div className="choosejob-text-basic">기타</div>
@@ -201,13 +201,13 @@ const BasicSigninPage = () => {
 
           <div className="input-text-basic">경력 여부</div>
           <div className="choosejob" id="pick">
-            <label>
+            <label className="labelOne">
               <div className="choosejobone" id="carrer">
                 <input type="radio" className="custom-checkbox" name="career" onChange={() => handleCarrerChange("신입")} />
                 <div className="choosejob-text-basic">신입</div>
               </div>
             </label>
-            <label>
+            <label className="labelOne">
               <div className="choosejobone" id="carrer">
                 <input type="radio" className="custom-checkbox" name="career" onChange={() => handleCarrerChange("경력")} />
                 <div className="choosejob-text-basic">경력</div>
@@ -217,7 +217,9 @@ const BasicSigninPage = () => {
 
           <div className="enrollbutton">
             <button className="cancel-basic">취소</button>
-            <button className="enroll-basic" onClick={registerUser}>등록</button>
+            <button className="enroll-basic" onClick={registerUser}>
+              등록
+            </button>
           </div>
 
           <div className="log-in-basic">

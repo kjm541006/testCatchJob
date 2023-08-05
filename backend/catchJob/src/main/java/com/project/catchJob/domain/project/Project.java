@@ -109,9 +109,5 @@ public class Project {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<P_reason> projectReasonList = new ArrayList<>();	
-	
-	@JsonIgnore
-	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<P_member> projectMemberList = new ArrayList<>();	
 }

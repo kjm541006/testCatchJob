@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import ReactQuill from "react-quill";
+import ReactQuill,{ Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css"; // 테마 스타일 가져오기
 import styles from "../assets/css/BuildPortfolio.module.css";
 import DetailModal from "../components/DetailModal";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-
+import ImageResize from 'quill-image-resize';
+Quill.register({
+  'modules/ImageResize': ImageResize
+});
 const BuildPortfolioPage = () => {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
@@ -19,18 +22,37 @@ const BuildPortfolioPage = () => {
   const [prevCoverURL, setPrevCoverURL] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const boardId = location.state.boardId;
+  const boardId = location.state?.boardId || "";
+
 
   useEffect(() => {
     const ifHaveId = async () => {
       try {
         const response = await axios.get(`http://43.202.98.45:8089/${boardId}`); // 수정 엔드포인트에 맞춰서 쓰기
+        
+        setTitle(response.data.bTitle);
+        setValue(response.data.bContents);
+        setUploadedFile(new File([], response.data.bFileName));        
+        setPrevCoverURL(response.data.bCoverFileName);
+        setPrevTags(response.data.tags);
+        setPrevCover(response.data.bCoverFileName);
+
+        console.log(response.data.bTitle);
+        console.log(response.data.bContents);
+        console.log(response.data.bFileName);
+        console.log(response.data.bCoverFileName);
+        console.log(response.data.tags);
+        console.log("-------");
+
       } catch (error) {
-        return;
+        console.log(error);
       }
     }
 
-    if (boardId) {
+    if (boardId === "") {
+      return;
+    }
+    else{
       ifHaveId(); 
     }
   }, [boardId]);
@@ -59,24 +81,38 @@ const BuildPortfolioPage = () => {
 
   const handleSaveContent = async () => {
     const token = localStorage.getItem("token");
+    
+    if (!bCoverFileName) {
+      alert("게시물을 저장하려면 커버 사진을 올려주세요.");
+      return;
+    }
+
     const axiosConfig = {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       },
     };
+    const bContents = value.replace(/<p>/g, "<br>").replace(/<\/p>/g, "");
 
     const formData = new FormData();
     formData.append("bTitle", title);
-    formData.append("bContents", value);
+    formData.append("bContents", bContents);
     formData.append("tags", JSON.stringify(tags));
     formData.append("bFileName", uploadedFile);
     formData.append("bCoverFileName", bCoverFileName);
 
     try {
+      if (!boardId){
       const response = await axios.post("http://43.202.98.45:8089/buildportfolio", formData, axiosConfig);
       console.log(response.data);
-      console.log("성공")
+      console.log("새로운 게시글 작성 성공")
+      }
+      else{
+        const response = await axios.post(`http://43.202.98.45:8089/portfolio/edit/${boardId}`, formData, axiosConfig);
+        console.log(response.data);
+        console.log("게시글 수정 성공");
+      }
     } catch (error) {
       console.error("Error:", error);
     }
@@ -87,9 +123,16 @@ const BuildPortfolioPage = () => {
     toolbar: [
       [{ header: [1, 2, false] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
-      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
       ["image"],
+      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+      ['br']
     ],
+    ImageResize: {
+      parchment: Quill.import('parchment')
+    },
+    clipboard: {
+      matchVisual: false,
+    }
   };
 
   return (
@@ -109,7 +152,7 @@ const BuildPortfolioPage = () => {
           <ReactQuill value={value} onChange={handleChange} modules={modules} theme="snow" className={`${styles.customQuillEditor}`} />
         </div>
         <div className={`${styles.fileName}`}>
-          <span>{uploadedFile ? uploadedFile.name : ""}</span>
+        {uploadedFile ? <span>{uploadedFile.name.split('/').pop()}</span> : null}
           {uploadedFile && (
             <span className={`${styles.removeBtn}`} onClick={() => setUploadedFile("")}>
               X

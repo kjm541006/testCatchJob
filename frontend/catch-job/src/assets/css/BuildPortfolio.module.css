@@ -102,3 +102,5 @@
   cursor: pointer;
   font-size: 13px;
 }
+
+.ql-editor br { content: "";display: block;margin: 1em 0; } 

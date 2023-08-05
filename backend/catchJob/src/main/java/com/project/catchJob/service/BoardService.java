@@ -29,7 +29,6 @@ import com.project.catchJob.dto.board.B_commentsDTO;
 import com.project.catchJob.dto.board.BoardDTO;
 import com.project.catchJob.dto.board.BoardEditDTO;
 import com.project.catchJob.dto.board.CommentResponse;
-//import com.project.catchJob.dto.board.TagDTO;
 import com.project.catchJob.exception.UnauthorizedException;
 import com.project.catchJob.repository.board.B_commentsRepository;
 import com.project.catchJob.repository.board.B_likeRepository;
@@ -43,13 +42,11 @@ public class BoardService {
 	
 	@Value("${file.path}") private String filePath;
 	private final CommonService commonService;
-//	private final List<TagDTO> tagDTOList;
 	@PersistenceContext private EntityManager entityManager;
 	
 	@Autowired
 	public BoardService(CommonService commonService) {
 		this.commonService = commonService;
-//		this.tagDTOList = new ArrayList<>();
 	}
 	
 	@Autowired private MemberRepository memberRepo;

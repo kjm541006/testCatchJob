@@ -18,4 +18,3 @@ public class WebConfig implements WebMvcConfigurer {
 //                .maxAge(3600); // 허용할 request header의 최대 시간을 설정합니다.
     }
 }
-
