@@ -2,7 +2,6 @@ package com.project.catchJob.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,24 +9,18 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.project.catchJob.domain.board.B_comments;
-import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.domain.project.P_comments;
 import com.project.catchJob.domain.project.P_like;
 import com.project.catchJob.domain.project.P_member;
 import com.project.catchJob.domain.project.Project;
-import com.project.catchJob.dto.board.B_commentsDTO;
 import com.project.catchJob.dto.board.CommentResponse;
-import com.project.catchJob.dto.member.BoardMemberDTO;
-import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.dto.member.MemberInfoDTO;
 import com.project.catchJob.dto.project.P_commentsDTO;
 import com.project.catchJob.dto.project.P_memberDTO;
@@ -369,6 +362,23 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 		pMemberRepo.deleteById(projectMemberId);
 		
+	}
+
+	// 직무 별 지원자 목록
+	@Override
+	public List<P_member> applyList(Long projectId, String job, String jwtToken) {
+
+		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+				.orElseThrow(UnauthorizedException::new);
+		List<P_member> findMembers = pMemberRepo.findByProjectIdAndJob(projectId, job);
+
+		List<P_member> filteredMembers = findMembers.stream()
+		        .filter(member -> optAuthenticatedMember.getEmail().equals(member.getMember().getEmail()))
+		        .collect(Collectors.toList());
+		if (filteredMembers.isEmpty()) {
+	        throw new EntityNotFoundException("해당 프로젝트의 직무에 일치한 내용 없음");
+	    }
+		return filteredMembers;
 	}
 
 }

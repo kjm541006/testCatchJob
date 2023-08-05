@@ -30,4 +30,5 @@ public interface ProjectService {
 	void end(Long projectId, String jwtToken);
 	P_member apply(Long projectId, String job, P_memberDTO memberDTO, String jwtToken);
 	void cancel(Long projectMemberId, String jwtToken);
+	List<P_member> applyList(Long projectId, String job, String jwtToken);
 }

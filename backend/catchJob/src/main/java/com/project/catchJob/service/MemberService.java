@@ -40,6 +40,9 @@ public class MemberService {
 	@Autowired
 	private CommonService commonService;
 	
+	@Autowired
+	private BoardService boardService;
+	
 	@Value("${file.path}") private String filePath;
 	
 	// 회원가입
@@ -154,6 +157,15 @@ public class MemberService {
 		
 		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 				.orElseThrow(UnauthorizedException::new);
+
+		String defaultProfile = "profile.png";
+		String originFile = optAuthenticatedMember.getMProfile().getMOriginalFileName();
+		String storedFile = optAuthenticatedMember.getMProfile().getMStoredFileName();
+		
+		if(!originFile.equals(defaultProfile) && !storedFile.equals(defaultProfile)) {
+			
+			boardService.deleteFile(storedFile);
+		}
 		
 		memberRepo.deleteById(optAuthenticatedMember.getMemberId());
 	}

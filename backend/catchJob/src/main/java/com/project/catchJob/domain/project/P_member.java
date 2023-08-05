@@ -34,7 +34,7 @@ public class P_member {
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "project_id", nullable = false, updatable = false)
+	@JoinColumn(name = "project_id", referencedColumnName = "project_id", nullable = false, updatable = false)
 	private Project project;
 	
 	public void setProject(Project project) {

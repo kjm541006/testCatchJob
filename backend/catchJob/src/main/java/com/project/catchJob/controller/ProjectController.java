@@ -183,7 +183,6 @@ public class ProjectController {
     @DeleteMapping("/studyDetail/cancel/{id}")
     public ResponseEntity<?> cancel(
 			@PathVariable("id") Long projectMemberId,
-			@RequestBody P_memberDTO memberDTO,
 	        @RequestHeader("Authorization") String jwtToken) 
 	        throws Exception { 
 		
@@ -191,6 +190,16 @@ public class ProjectController {
 	    return ResponseEntity.ok().build();
 	} 
     
-    
+    // 직무 별 지원자 목록
+    @GetMapping("/studyDetail/applyList/{id}")
+    public ResponseEntity<?> applyList(
+    		@PathVariable("id") Long projectId,
+			@RequestParam("job") String job,
+	        @RequestHeader("Authorization") String jwtToken) 
+	        throws Exception { 
+		
+    	List<P_member> member = projectService.applyList(projectId, job, jwtToken);
+	    return ResponseEntity.ok().body(member);
+	}
   
 }
