@@ -147,7 +147,7 @@ public class GoogleOAuth {
 	
 	// token 얻기 json -> 자바 객체
 	public GoogleOAuthTokenDTO getAccessToken(ResponseEntity<String> res) throws JsonProcessingException {
-		System.out.println("response.getBody() = " + res.getBody());
+		System.out.println("---------------response.getBody() = " + res.getBody());
 		GoogleOAuthTokenDTO googleOAuthTokenDTO = objectMapper.readValue(res.getBody(), GoogleOAuthTokenDTO.class);
 		return googleOAuthTokenDTO;
 		// GoogleOAuthTokenDTO : json형태를 자바 객체 형식으로 변경 후 저장해서 담을 곳

@@ -1,6 +1,8 @@
 package com.project.catchJob.domain.member;
 
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +25,7 @@ import com.project.catchJob.domain.board.B_like;
 import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.project.P_comments;
 import com.project.catchJob.domain.project.P_like;
-import com.project.catchJob.domain.project.P_reason;
+import com.project.catchJob.domain.project.P_member;
 import com.project.catchJob.domain.project.Project;
 import com.project.catchJob.domain.study.S_comments;
 import com.project.catchJob.domain.study.S_like;
@@ -91,6 +93,32 @@ public class Member {
 	@OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private M_profile mProfile;
 
+	public String getFileNameFromUrl(String urlString) {
+		try {
+	        URL url = new URL(urlString);
+	        String path = url.getPath();
+	        File file = new File(path);
+	        return file.getName();
+	    } catch (Exception e) {
+	    	System.out.println("----" + urlString + "에서 파일명 추출 실패----" + e);
+	        throw new RuntimeException("URL에서 파일명을 추출하는 중 오류가 발생했습니다.", e);
+	    }
+	}
+	
+	public M_profile createDefaultProfile(String defaultProfileUrl) {
+		// 기본 프로필 이미지 생성
+		String defaultProfileFileName = getFileNameFromUrl(defaultProfileUrl);
+		M_profile defaultProfile = M_profile.builder()
+	            .mOriginalFileName(defaultProfileFileName)
+	            .mStoredFileName(defaultProfileFileName)
+	            .member(this)
+	            .build();
+		
+		// 멤버에 프로필 이미지 설정
+		this.setMProfile(defaultProfile);
+		
+		return defaultProfile;
+	}
 	
 //	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 //	private List<Community> communityList = new ArrayList<>();
@@ -101,18 +129,18 @@ public class Member {
 //	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 //	private List<C_like> c_LikeList = new ArrayList<>();
 
-//	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	@OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+//	@OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<Board> boardList = new ArrayList<>();
 	
-//	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	@OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+//	@OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<B_comments> b_CommentsList = new ArrayList<>();
 	
-//	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	@OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+//	@OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<B_like> b_LikeList = new ArrayList<>();
 	
@@ -128,16 +156,20 @@ public class Member {
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<S_reason> s_ReasonList = new ArrayList<>();
 //	
-	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+//	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
 	private List<Project> projectList = new ArrayList<>();
 	
+//	@OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<P_comments> p_CommentsList = new ArrayList<>();
 	
+//	@OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<P_like> p_LikeList = new ArrayList<>();
 	
+//	@OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	private List<P_reason> p_ReasonList = new ArrayList<>();
+	private List<P_member> p_MemberList = new ArrayList<>();
 
 }
