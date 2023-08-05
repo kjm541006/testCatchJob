@@ -4,6 +4,8 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+
 
 const MyPage = () => {
   const [email, setEmail] = useState("");
@@ -13,8 +15,8 @@ const MyPage = () => {
   const [selectedCarrers, setSelectedCarrers] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imageFileName, setImageFileName] = useState("");
-  
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function fetchData() {
       const token = localStorage.getItem("token");
@@ -103,6 +105,31 @@ const MyPage = () => {
   const handleSelectedCarrersChange = (career) => {
     setSelectedCarrers(career);
   };
+
+  const DeleteMember =()=>{
+    const confirmDelete = window.confirm("정말로 탈퇴하시겠습니까?");
+    const token = localStorage.getItem("token");
+
+    if (confirmDelete) {
+      // axios를 사용하여 서버로 DELETE 요청을 보냅니다.
+      axios.delete('http://43.202.98.45:8089/deleteMember',{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(response => {
+        alert('회원 탈퇴가 완료되었습니다.')
+        localStorage.removeItem('token');
+        localStorage.removeItem('email');
+        localStorage.removeItem('name');
+        // 로그인 페이지 또는 메인 페이지 등으로 이동
+        window.location.href = '/login';
+      })
+      .catch(error => {
+        alert('회원 탈퇴에 실패했습니다.')        
+      });
+    }
+  }
   
   return (
     <div className={`${styles.body_edit}`}>
@@ -201,7 +228,7 @@ const MyPage = () => {
           </div>
           <div className={`${styles.quitIdbox}`}>
             <div className={`${styles.quitIdMent}`}>회원정보를 삭제하시겠어요?</div>
-            <div className={`${styles.quitIdButton}`}>회원 탈퇴하기</div>
+            <div className={`${styles.quitIdButton}`}  onClick={DeleteMember}>회원 탈퇴하기</div>
           </div>
         </div>
       </div>
