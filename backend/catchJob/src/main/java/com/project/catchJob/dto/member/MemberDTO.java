@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor // 기본생성자
 public class MemberDTO {
 	
-//	 private Long memberId;
+	// private Long memberId;
 	private String name;
 	private String email;
 	private String pwd;

@@ -6,17 +6,22 @@ import java.util.Map;
 import java.util.Set;
 
 import com.project.catchJob.domain.member.Member;
-import com.project.catchJob.dto.member.MemberDTO;
+import com.project.catchJob.domain.project.P_member;
+import com.project.catchJob.dto.board.B_commentsDTO;
+import com.project.catchJob.dto.member.BoardMemberDTO;
+import com.project.catchJob.dto.member.MemberInfoDTO;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@Builder
 @Getter
 @Setter
-@ToString(exclude = {"member", "projectCommentsList", "projectLikeList", "projectReasonList"})
+@ToString(exclude = {"member", "comments", "applicants"})
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectDTO {
@@ -28,28 +33,14 @@ public class ProjectDTO {
     private String loc;
     private String term;
     private String detail;
-//    private int webDesigner;
-//    private int webPublisher;
-//    private int frontend;
-//    private int backend;
-//    private int PM;
-//    private int others;
-    private Set<String> platforms;
+    private List<String> platforms;
     private int pCnt;
     private int pLike;
-    private Date pDate;
-    private Long memberId;
+    private boolean isLike;
     private Map<String, Integer> crew;
     private String email;
-    private MemberDTO member;
     
+	private MemberInfoDTO member;
+	private List<P_commentsDTO> comments;
+	private List<P_memberDTO> applicants;
 }
-	
-	// Assuming you have corresponding DTO classes for P_comments, P_like, P_reason, and P_member
-//	private List<P_commentsDTO> projectCommentsList;
-//	
-//	private List<P_likeDTO> projectLikeList;
-//	
-//	private List<P_reasonDTO> projectReasonList;
-//	
-//	private List<P_memberDTO> projectMemberList;	

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -52,6 +53,9 @@ public class Project {
 	
 	private String term; // 모집기간
 	
+	@Column(columnDefinition="BOOLEAN DEFAULT false")
+	private boolean end; // 완료여부
+	
 	@Lob
 	@Column(length=50000)
 	private String detail;
@@ -94,19 +98,16 @@ public class Project {
 		this.member = member;
 		member.getProjectList().add(this);
 	}
-	
-	@OneToMany(mappedBy = "member")
-	private List<Project> projectList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "project")
+	@JsonIgnore
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<P_comments> projectCommentsList = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "project")
+	@JsonIgnore
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<P_like> projectLikeList = new ArrayList<>();	
 	
-	@OneToMany(mappedBy = "project")
-	private List<P_reason> projectReasonList = new ArrayList<>();	
-	
-	@OneToMany(mappedBy = "project")
+	@JsonIgnore
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<P_member> projectMemberList = new ArrayList<>();	
 }

@@ -6,14 +6,21 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.catchJob.domain.member.Member;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Data
 @ToString(exclude = {"member", "project"})
 @Entity
 public class P_like {
@@ -21,6 +28,7 @@ public class P_like {
 	@Id @GeneratedValue
 	private Long pLikId; // 프로젝트좋아요 아이디
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member member;
@@ -30,6 +38,7 @@ public class P_like {
 		member.getP_LikeList().add(this);
 	}
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "project_id", nullable = false, updatable = false)
 	private Project project;

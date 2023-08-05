@@ -23,20 +23,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.catchJob.domain.board.B_comments;
 import com.project.catchJob.domain.board.B_like;
-//import com.project.catchJob.domain.board.B_tag;
 import com.project.catchJob.domain.board.Board;
-//import com.project.catchJob.domain.board.Tag;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.board.B_commentsDTO;
 import com.project.catchJob.dto.board.BoardDTO;
+import com.project.catchJob.dto.board.BoardEditDTO;
 import com.project.catchJob.dto.board.CommentResponse;
-import com.project.catchJob.dto.board.TagDTO;
 import com.project.catchJob.exception.UnauthorizedException;
 import com.project.catchJob.repository.board.B_commentsRepository;
 import com.project.catchJob.repository.board.B_likeRepository;
-//import com.project.catchJob.repository.board.B_tagRepository;
 import com.project.catchJob.repository.board.BoardRepository;
-//import com.project.catchJob.repository.board.TagRepository;
 import com.project.catchJob.repository.member.MemberRepository;
 import com.project.catchJob.security.TokenProvider;
 
@@ -46,13 +42,11 @@ public class BoardService {
 	
 	@Value("${file.path}") private String filePath;
 	private final CommonService commonService;
-	private final List<TagDTO> tagDTOList;
 	@PersistenceContext private EntityManager entityManager;
 	
 	@Autowired
 	public BoardService(CommonService commonService) {
 		this.commonService = commonService;
-		this.tagDTOList = new ArrayList<>();
 	}
 	
 	@Autowired private MemberRepository memberRepo;
@@ -60,18 +54,6 @@ public class BoardService {
 	@Autowired private B_commentsRepository bCommRepo; // 댓글
 	@Autowired private B_likeRepository bLikeRepo; // 좋아요
 	@Autowired private TokenProvider tokenProvider;
-	
-//	private String uploadFolderPath = "catchJob/upload/"; 
-	private String uploadFolderPath = "D:ding/";
-	// 서버 실제 디렉토리 구조
-//	private String fileUrlPath = "/upload/";
-	private String fileUrlPath = "D:ding/img/";
-	// 사용자가 파일에 액세스하는 경우 필요한 url 경로
-	// 경로를 구분해서 사용하면 서버와 클라이언트 간의 엑세스 권한 분리해서 관리 가능
-	
-	public String getFileUrlPath() {
-		return fileUrlPath;
-	}
 	
 	// 글 목록
 	public List<BoardDTO> getBoardList(String jwtToken) {
@@ -143,6 +125,33 @@ public class BoardService {
             return null;
         }
     }
+	
+	// 글 수정 전 조회
+	public BoardEditDTO getBoard(Long boardId, String jwtToken) {
+		
+		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+	    		.orElseThrow(UnauthorizedException::new);
+		
+		Board board = boardRepo.findById(boardId)
+    	    		.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
+	    
+		if(!optAuthenticatedMember.getEmail().equals(board.getMember().getEmail())) {
+	    	throw new UnauthorizedException();
+	    	
+	    }
+		
+		String url = "http://43.202.98.45:8089/upload/";
+		
+		BoardEditDTO boardDTO = BoardEditDTO.builder()
+				.bTitle(board.getBTitle())
+				.bContents(board.getBContents())
+				.tags(board.getTags())
+				.bFileName(url + board.getBFileName())
+				.bCoverFileName(url + board.getBCoverFileName())
+				.build();
+		
+		return boardDTO;
+	}
     
     // 글 수정
     public void edit(Long boardId, String bTitle, String bContents, List<String> tags, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
@@ -163,24 +172,6 @@ public class BoardService {
 	    board.setBFileName(board.getBFileName());
 	    board.setBCoverFileName(board.getBCoverFileName());
 
-	    // 작동가능
-//	    public void edit(BoardDTO boardDTO, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
-//	    	
-//	    	Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
-//	    			.orElseThrow(UnauthorizedException::new);
-//	    	
-//	    	Board board = boardRepo.findById(boardDTO.getBoardId())
-//	    			.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
-//	    	
-//	    	if(!optAuthenticatedMember.getEmail().equals(board.getMember().getEmail())) {
-//	    		throw new UnauthorizedException();
-//	    	}
-//	    	
-//	    	board.setBTitle(boardDTO.getBTitle());
-//	    	board.setBContents(boardDTO.getBContents());
-//	    	board.setTags(boardDTO.getTags());
-//	    	board.setBFileName(boardDTO.getBFileName());
-//	    	board.setBCoverFileName(boardDTO.getBCoverFileName());
     	// 파일 저장
 	    if(bFile != null && !bFile.isEmpty()) {
 	    	String fileName = saveFile(bFile);
@@ -201,7 +192,7 @@ public class BoardService {
     }
     
     // 글 삭제
-    public void delete(Long boardId, MultipartFile bFile, MultipartFile bCoverFile, String jwtToken) {
+    public void delete(Long boardId, String jwtToken) {
     	
 	    Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 	    		.orElseThrow(UnauthorizedException::new);
@@ -212,6 +203,8 @@ public class BoardService {
 	    if(!optAuthenticatedMember.getEmail().equals(board.getMember().getEmail())) {
 	    	throw new UnauthorizedException();
 	    }
+	    String bFile = board.getBFileName();
+	    String bCoverFile = board.getBCoverFileName();
 	    
 	    if(bFile != null && !bFile.isEmpty()) {
 	    	String fileName = board.getBFileName();
@@ -226,7 +219,7 @@ public class BoardService {
     
     // 파일 삭제
     public void deleteFile(String fileName) {
-    	File file = new File(filePath + fileName);
+    	File file = new File(filePath + "/" + fileName);
     	if(file.exists()) {
     		file.delete();
     	}
@@ -314,7 +307,7 @@ public class BoardService {
 	            .board(board)
 	            .member(member)
 	            .build();
-
+	    
 	    bLikeRepo.save(like);
 	}
 

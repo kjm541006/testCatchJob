@@ -1,5 +1,6 @@
 package com.project.catchJob.domain.project;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,14 +10,24 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.member.Member;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Data
 @ToString(exclude = {"member", "project"})
 @Entity
 public class P_comments {
@@ -26,9 +37,11 @@ public class P_comments {
 	
 	private String pComContent; // 댓글 내용
 	
-	@Column(insertable = false, updatable = false, columnDefinition = "date default now()")
-	private Date pComDate; // 댓글 작성날짜
+	@CreationTimestamp
+	@Column(insertable = false, updatable = false)
+	private LocalDateTime pComDate; // 댓글 작성날짜
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false, updatable = false)
 	private Member member;
@@ -38,6 +51,7 @@ public class P_comments {
 		member.getP_CommentsList().add(this);
 	}
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "project_id", nullable = false, updatable = false)
 	private Project project;
