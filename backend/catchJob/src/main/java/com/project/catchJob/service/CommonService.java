@@ -13,7 +13,7 @@ import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.domain.project.Project;
 import com.project.catchJob.dto.board.BoardDTO;
 import com.project.catchJob.repository.board.BoardRepository;
-import com.project.catchJob.repository.community.CommunityPostRepository;
+import com.project.catchJob.repository.community.CommunityRepository;
 import com.project.catchJob.repository.member.MemberRepository;
 import com.project.catchJob.repository.project.ProjectRepository;
 import com.project.catchJob.security.TokenProvider;
@@ -24,7 +24,7 @@ public class CommonService {
     private final MemberRepository memberRepo;
     private BoardRepository boardRepo;
     private ProjectRepository projectRepo;
-    private CommunityPostRepository commRepo;
+    private CommunityRepository commRepo;
     @Value("${file.path}") private String filePath;
 
     @Autowired
@@ -32,7 +32,7 @@ public class CommonService {
     					MemberRepository memberRepo,
     					BoardRepository boardRepo,
     					ProjectRepository projectRepo,
-    					CommunityPostRepository commRepo) {
+    					CommunityRepository commRepo) {
     	this.tokenProvider = tokenProvider;
         this.memberRepo = memberRepo;
         this.boardRepo = boardRepo;

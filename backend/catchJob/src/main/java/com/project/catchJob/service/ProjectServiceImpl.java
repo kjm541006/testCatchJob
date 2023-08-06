@@ -192,12 +192,12 @@ public class ProjectServiceImpl implements ProjectService {
 		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 				.orElseThrow(UnauthorizedException::new);
 
-		Member member = memberRepository.findByEmail(optAuthenticatedMember.getEmail());
+//		Member member = memberRepository.findByEmail(optAuthenticatedMember.getEmail());
 
 		Project project = projectRepository.findById(projectId)
 				.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
 
-		P_comments comments = P_comments.builder().pComContent(commentDTO.getCommentContent()).member(member)
+		P_comments comments = P_comments.builder().pComContent(commentDTO.getCommentContent()).member(optAuthenticatedMember)
 				.project(project).build();
 		P_comments saveComm = pCommRepo.save(comments);
 		pCommRepo.flush();

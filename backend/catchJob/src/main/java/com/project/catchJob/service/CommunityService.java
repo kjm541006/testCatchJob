@@ -1,45 +1,32 @@
 package com.project.catchJob.service;
 
-
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 
-import com.project.catchJob.domain.community.Comment;
-import com.project.catchJob.domain.community.CommunityPost;
-import com.project.catchJob.repository.community.CommunityPostRepository;
+import com.project.catchJob.domain.community.C_comments;
+import com.project.catchJob.domain.community.Community;
+import com.project.catchJob.dto.board.CommentResponse;
+import com.project.catchJob.dto.community.C_commentsDTO;
+import com.project.catchJob.dto.community.CommunityDTO;
 
-@Service
-public class CommunityService {
-    private final CommunityPostRepository postRepository;
+public interface CommunityService {
 
-    @Autowired
-    public CommunityService(CommunityPostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
+	Community createCommunity(CommunityDTO communityDTO, String jwtToken);
 
-    public List<CommunityPost> getAllPosts() {
-        return postRepository.findAll();
-    }
+	List<CommunityDTO> getAllCommunities(String jwtToken);
+//	List<Community> getAllCommunities();
+	CommentResponse edit(Long communityId, CommunityDTO communityDTO, String jwtToken);
+	void delete(Long communityId, String jwtToken);
 
-    public CommunityPost getPostById(Long postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
-    }
+	List<C_comments> getCommentsByCommunityId(Long community_id);
+	CommentResponse createComment(C_commentsDTO commentDTO, String jwtToken);
+    CommentResponse editComment(Long commentId, C_commentsDTO commentDTO, String jwtToken);
+	void deleteComment(Long commentId, String jwtToken);
 
-    public CommunityPost createPost(CommunityPost post) {
-        return postRepository.save(post);
-    }
+	boolean isUserLiked(String email, Long communityId);
+	void insert(String email, Long communityId) throws NotFoundException;
+	void delete(String email, Long communityId) throws NotFoundException;
+	Community updateLike(Long communityId, boolean liked) throws NotFoundException;
 
-    public Comment addCommentToPost(Long postId, Comment comment) {
-        CommunityPost post = getPostById(postId);
-        post.addComment(comment);
-        postRepository.save(post);
-        return post.getComments()              
-                .stream()
-                .filter(c -> c.equals(comment))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Failed to add comment to post"));
-    }
 }
