@@ -9,12 +9,8 @@
 
 .port_page {
   width: 1200px;
-  min-height: 100vh;
   position: relative;
-}
-
-.port_sort {
-  margin: 95px 0 20px 0;
+  margin-top: 100px;
 }
 
 .port_checkIcon {
@@ -125,3 +121,18 @@
   opacity: 1;
 }
 
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.showSelected {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  gap: 7px;
+}

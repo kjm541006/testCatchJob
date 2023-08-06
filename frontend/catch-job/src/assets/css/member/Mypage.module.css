@@ -137,6 +137,7 @@
   font-weight: bold;
   margin: 0px 30px 10px 30px;
   font-size: 14px;
+  cursor: pointer; 
 }
 
 .cancel_edit:active {
@@ -160,6 +161,7 @@
   color:#FFF;
   margin: 0px 30px 10px 30px;
   font-size: 14px;
+  cursor: pointer; 
 }
 
 .enroll_edit:active{
@@ -226,6 +228,11 @@
   font-size: 15px;
   color: #7c7c7c;
   width: 120px;
+}
+
+.quitIdButton:hover{
+  color: #b2b2b2;
+  cursor: pointer; 
 }
 
 .quitIdButton:active{

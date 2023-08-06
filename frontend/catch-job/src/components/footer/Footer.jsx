@@ -19,7 +19,7 @@ const Footer = () => {
               <Link to={"/"}>포트폴리오</Link>
             </li>
             <li>
-              <Link to={"/recruit"}>채용</Link>
+              <Link to={"news"}>뉴스</Link>
             </li>
             <li>
               <Link to={"/study"}>스터디</Link>

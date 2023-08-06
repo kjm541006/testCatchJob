@@ -13,9 +13,9 @@ const PortfolioModal = ({ item, onClose }) => {
   const writerEmail = localStorage.getItem("email");
 
   const contentCommentRef = useRef(null);
-  const [isLiked, setIsLiked] = useState(item.isLike);
+  const [isLiked, setIsLiked] = useState(item&&item.isLike);
   const [comment, setComment] = useState("");
-  const [commentList, setCommentList] = useState(item.comments || []);
+  const [commentList, setCommentList] = useState((item&&item.comments) || []);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
   const [firstModalUrl, setFirstModalUrl] = useState("");
@@ -38,6 +38,13 @@ const PortfolioModal = ({ item, onClose }) => {
 
   const handleLike = async (event) => {
     event.stopPropagation();
+
+    if (!token) {
+      alert("'좋아요'를 하기 위해서는 로그인이 필요합니다.");
+      navigate("/login"); // 로그인 페이지로 리디렉션 (적절한 경로로 변경해야 함)
+      return;
+      } 
+    else{ 
     try {
       const response = await axios.post(`http://43.202.98.45:8089/like/${item.boardId}`, {
         headers: {
@@ -54,6 +61,7 @@ const PortfolioModal = ({ item, onClose }) => {
     } catch (error) {
       console.log("좋아요 처리 중 오류 발생:", error);
     }
+  } 
   };
   
 
@@ -121,6 +129,14 @@ const PortfolioModal = ({ item, onClose }) => {
   };
 
   const submitComment = async () => { //새로운 댓글 전송 부분
+
+    if (!token) {
+      alert("댓글 작성을 위해 로그인이 필요합니다.");
+      navigate("/login"); // 로그인 페이지로 리디렉션 (적절한 경로로 변경해야 함)
+      return;
+      } 
+
+    else{
     if(comment){
     const response = await axios.post(
       `http://43.202.98.45:8089/portfolio/comment/${item.boardId}`,
@@ -162,6 +178,7 @@ const PortfolioModal = ({ item, onClose }) => {
     else{
       setErrorMessage("내용을 작성해야 댓글 등록이 가능합니다.")
     }
+  }
   };
 
   const handleSubmitEditedComment = async (commentId) => { //댓글 수정 전송 부분
