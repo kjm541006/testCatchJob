@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.catchJob.domain.member.M_profile;
 import com.project.catchJob.domain.member.Member;
+import com.project.catchJob.dto.member.GoogleUserInfoDTO;
 import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.dto.member.MemberInfoDTO;
 import com.project.catchJob.exception.UnauthorizedException;
@@ -69,12 +70,76 @@ public class MemberService {
 		member.createDefaultProfile(defaultProfile);
 		return memberRepo.save(member);
 	}
+	
+	// 구글 로그인
+	public Member signInOrSignUpWithGoogle(GoogleUserInfoDTO googleDTO) {
+	    String email = googleDTO.getEmail();
+
+	    if (email == null) {
+	        log.error("Email field in GoogleUserInfoDTO is null");
+	        throw new IllegalArgumentException("Email cannot be null");
+	    }
+
+	    if (memberRepo.existsByEmail(email)) {
+	        // 이미 존재하는 사용자인 경우 로그인 처리를 수행합니다.
+	        Member existingMember = memberRepo.findByEmail(email);
+	        log.info("Existing user with email {} logged in", email);
+	        return existingMember;
+	    } else {
+	        // 새로운 사용자인 경우 회원 가입 처리 및 데이터베이스에 저장합니다.
+	        Member newMember = createGoogleMember(googleDTO);
+	        Member savedMember = memberRepo.save(newMember);
+	        log.info("New user with email {} registered and logged in", email);
+	        return savedMember;
+	    }
+	}
+
+	
+	// 구글로그인 회원가입
+	public Member createGoogleMember(GoogleUserInfoDTO googleDTO) {
+	    if (googleDTO == null) {
+	        log.error("GoogleUserInfoDTO is null");
+	        throw new IllegalArgumentException("GoogleUserInfoDTO cannot be null");
+	    }
+	    
+	    final String email = googleDTO.getEmail();
+	    if (email == null) {
+	        log.error("Email field in GoogleUserInfoDTO is null");
+	        throw new IllegalArgumentException("Email cannot be null");
+	    }
+	    
+	    if (memberRepo.existsByEmail(email)) {
+	        log.warn("{} 해당 이메일은 이미 존재합니다!", email);
+	        throw new RuntimeException("이미 존재하는 이메일입니다!");
+	    }
+	    
+	    String id = googleDTO.getId();
+	    String picture = googleDTO.getPicture();
+	    
+	    M_profile profile = M_profile.builder()
+	            .mOriginalFileName(picture)
+	            .mStoredFileName(picture)
+	            .build();
+
+	    Member member = Member.builder()
+	            .email(googleDTO.getEmail())
+	            .name(googleDTO.getName())
+	            .pwd(pwdEncoder.encrypt(googleDTO.getEmail(), id))
+	            .job("기타")
+	            .hasCareer("신입")
+	            .type("구글")
+	            .fileAttached(1)
+	            .mProfile(profile)
+	            .build();
+	    
+	    return member;
+	}
 
 	// 로그인
 	public Member getByCredentials(final String email, final String pwd, final PasswordEncoder pwdEncoder) {
 		
 		final Member originMember = memberRepo.findByEmail(email);
-		log.info("데이터베이스에서 조회한 멤버: {}", originMember);
+		// log.info("데이터베이스에서 조회한 멤버: {}", originMember);
 		// matches 메서드를 이용해서 패스워드 같은지 확인
 		if(originMember != null && pwdEncoder.matches(pwdEncoder.encrypt(email, pwd), originMember.getPwd())) {
 			return originMember;

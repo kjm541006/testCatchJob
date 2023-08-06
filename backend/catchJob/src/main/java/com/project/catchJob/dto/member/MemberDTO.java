@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor // 기본생성자
 public class MemberDTO {
 	
-	// private Long memberId;
+	private Long memberId;
 	private String name;
 	private String email;
 	private String pwd;
@@ -41,7 +41,7 @@ public class MemberDTO {
 		}
 		
 		MemberDTO memberDTO = new MemberDTO();
-
+		memberDTO.setMemberId(member.getMemberId());
 		memberDTO.setName(member.getName());
 		memberDTO.setEmail(member.getEmail());
 //		memberDTO.setPwd(pwdEncoder.encrypt(memberDTO.getEmail(), memberDTO.getPwd()));
@@ -64,6 +64,7 @@ public class MemberDTO {
 	
 	public static MemberDTO fromMember(Member member) {
 		return MemberDTO.builder()
+				.memberId(member.getMemberId())
                 .email(member.getEmail())
                 .name(member.getName())
                 .pwd(member.getPwd())
