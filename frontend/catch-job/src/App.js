@@ -38,7 +38,7 @@ function App() {
   const savedTokenFromStore = useSelector(selectCurrentToken);
 
   // axios 요청 헤더 토큰 코드
-  // axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
+  // if (isLoggedIn) axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
   if (isLoggedIn) axios.defaults.headers.common["Authorization"] = `Bearer ${savedTokenFromStore}`;
 
   useEffect(() => {
