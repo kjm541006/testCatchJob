@@ -19,6 +19,22 @@ const PortfolioMainPage = () => {
   const [sortedOption, setSortedOption] = useState("all");
   const [searchParams, setSearchParams] = useSearchParams();
   const typeParam = searchParams.get("type") || "all"; 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [sortOption, setSortOption] = useState("popular");
+
+  const sortByLikes = (a, b) => {
+    return b.bLike - a.bLike;
+  };
+  
+  const sortByDate = (a, b) => {
+    return new Date(b.bDate) - new Date(a.bDate);
+  };
+  
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);  
 
   useEffect(() => {
     if (itemFromURL) {
@@ -50,24 +66,9 @@ useEffect(() => {
     });
 }, []);
 
-  
-  
-
   useEffect(() => {
     console.log(isModalOpen);
   }, [isModalOpen]);
-
-  useEffect(() => {
-    axios
-      .get("http://43.202.98.45:8089/")
-      .then((response) => {
-        setData(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("데이터 가져오기 에러:", error);
-      });
-  }, []);
 
   const handleElementClick = async (board_id) => {
     setSelectedItemId(board_id);
@@ -92,30 +93,61 @@ useEffect(() => {
     searchParams.set("type", option.value);
     setSearchParams(searchParams);
   };
+
+  useEffect(() => {
+    console.log(sortedOption);
+  }, [sortedOption]);
   
+  const getFilteredData = () => {
+    let filteredData;
+  
+    if (sortedOption && sortedOption === "heart") {
+      filteredData = data.filter((item) => item.isLike);
+    } else {
+      filteredData = data;
+    }
+  
+    if (sortOption === "popular") {
+      filteredData.sort(sortByLikes);
+    } else if (sortOption === "latest") {
+      filteredData.sort(sortByDate);
+    }
+  
+    return filteredData;
+  };
+
+  const getClassName = (option) => {
+    return sortOption === option ? styles.port_checkIcon : styles.port_invisible;
+  };
+
+  
+
   return (
     <div className={`${styles.port_wrapper}`}>
       <div className={styles.port_page}>
       <div className={styles.top}>
         <div className={`${styles.port_sort}`}>
-          <FontAwesomeIcon icon={faCheck} className={`${styles.port_checkIcon}`} />
-          <span className={`${styles.port_topRated} ${styles.port_btn}`}>인기순</span>
-          <FontAwesomeIcon icon={faCheck} className={`${styles.port_checkIcon} ${styles.port_invisible}`} />
-          <span className={`${styles.port_new}`}>최신순</span>
+          <FontAwesomeIcon icon={faCheck} className={`${getClassName("popular")}`} />
+          <span className={`${styles.port_topRated} ${styles.port_btn}`} onClick={() => setSortOption("popular")}>인기순</span>
+          <FontAwesomeIcon icon={faCheck} className={`${getClassName("latest")}`} />
+          <span className={`${styles.port_new} ${styles.port_btn}`}  onClick={() => setSortOption("latest")}>최신순</span>
         </div>
+        {isLoggedIn ? (
         <div className={styles.showSelected}>
-            <Select
-              onChange={(option) => handleOptionChange(option)}
-              defaultValue={options.filter((option) => option.value === typeParam)}
-              key={options.filter((option) => option.value === typeParam)}
-              isClearable={false}
-              isSearchable={false}
-              options={options}
-            />
-          </div>
+          <Select
+            onChange={(option) => handleOptionChange(option)}
+            defaultValue={options.filter((option) => option.value === typeParam)}
+            key={options.filter((option) => option.value === typeParam)}
+            isClearable={false}
+            isSearchable={false}
+            options={options}
+          />
+        </div>
+        ) : null}
+
         </div>
         <div className={`${styles.port_GridView}`}>
-          {data.map((item) => (
+          {getFilteredData().map((item) => (
             <div key={item.boardId} className={`${styles.element}`} onClick={() => handleElementClick(item.boardId)}>
               <img className={`${styles.img}`} src={item.bCoverFileName} alt="img" />
               <div className={`${styles.info}`}>
@@ -146,3 +178,4 @@ useEffect(() => {
 };
 
 export default PortfolioMainPage;
+
