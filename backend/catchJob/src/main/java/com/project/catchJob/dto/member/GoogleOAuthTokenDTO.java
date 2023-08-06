@@ -1,12 +1,14 @@
 package com.project.catchJob.dto.member;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class GoogleOAuthTokenDTO {
 
 	// 구글에서 얻은 token 담을 DTO
@@ -16,5 +18,6 @@ public class GoogleOAuthTokenDTO {
 	private String scope;
 	private String token_type;
 	private String id_token;
+	private String refresh_token;
 	
 }

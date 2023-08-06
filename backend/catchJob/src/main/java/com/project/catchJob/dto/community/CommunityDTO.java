@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.catchJob.domain.community.Community;
@@ -39,6 +40,7 @@ public class CommunityDTO {
 	@JsonProperty("cContents")
     private String cContents;
 	@JsonProperty("cDate")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime cDate;
 	@JsonProperty("cLike")
     private int cLike;

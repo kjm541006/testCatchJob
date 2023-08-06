@@ -47,6 +47,7 @@ public class Community {
     @Column(name = "c_title")
     private String title;
     
+    @Column(name = "c_date",nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime cDate;
 
