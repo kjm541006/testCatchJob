@@ -43,20 +43,11 @@ public class CommunityController {
 	private JwtUtils jwtUtils;
 
 	//글 작성
-//    @PostMapping
-//    public ResponseEntity<Long> createCommunity(@RequestBody CommunityDTO communityDTO, HttpServletRequest request) {       
-//       String userEmail = jwtUtils.getEmailFromRequest(request);
-//       Community savedCommunity = communityService.createCommunity(communityDTO, userEmail);       
-//        return ResponseEntity.ok(savedCommunity.getCommunityId());
-//    }
-
-	
 	@PostMapping
 	public ResponseEntity<Long> createCommunity(@RequestBody CommunityDTO communityDTO, @RequestHeader(value="Authorization") String jwtToken) {
 		Community savedCommunity = communityService.createCommunity(communityDTO, jwtToken);
 		return ResponseEntity.ok(savedCommunity.getCommunityId());
 	}
-
 
 	// 글 목록
 	@GetMapping
@@ -66,11 +57,6 @@ public class CommunityController {
 		List<CommunityDTO> communities = communityService.getAllCommunities(jwtToken);
 		return ResponseEntity.ok(communities);
 	}
-	// 가능
-//	public ResponseEntity<List<Community>> getAllCommunities() {
-//		List<Community> communities = communityService.getAllCommunities();
-//		return ResponseEntity.ok(communities);
-//	}
 	
 	// 글 수정
 	@PutMapping("/edit")
@@ -89,7 +75,6 @@ public class CommunityController {
 		return ResponseEntity.ok().build();
 	}
 	
-
 	// 댓글 등록
 	@PostMapping("/comment/insert")
 	public ResponseEntity<?> createComment(@RequestBody C_commentsDTO commentDTO,
@@ -117,9 +102,8 @@ public class CommunityController {
 	
 	// 댓글 리스트 조회
 	@GetMapping("/comment/list")
-	public ResponseEntity<List<C_comments>> getComments(@RequestParam("communityId") Long community_id) {
-//        List<C_comments> comments = communityService.getCommentsByCommunityId(commentDTO.getCommunityId());
-		List<C_comments> comments = communityService.getCommentsByCommunityId(community_id);
+	public ResponseEntity<List<C_commentsDTO>> getComments(@RequestParam("communityId") Long community_id) {
+		List<C_commentsDTO> comments = communityService.getCommentsByCommunityId(community_id);
 		return ResponseEntity.ok(comments);
 	}
 	

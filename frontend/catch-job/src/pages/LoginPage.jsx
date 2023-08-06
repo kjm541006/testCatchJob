@@ -103,7 +103,8 @@ const LoginPage = () => {
 
           <div className="social-buttons">
             <button className="kakao-button"></button>
-            <GoogleOAuthProvider clientId="226990065119-dh4qnntmuprddppr3hoi6umt9k99vkvb.apps.googleusercontent.com">
+            {/* <GoogleOAuthProvider clientId="226990065119-dh4qnntmuprddppr3hoi6umt9k99vkvb.apps.googleusercontent.com"> */}
+            <GoogleOAuthProvider clientId="349939229334-dlcph9tdiofv8g5blcq30l6qpms8r3te.apps.googleusercontent.com">
               <GoogleLoginButton />
             </GoogleOAuthProvider>
           </div>

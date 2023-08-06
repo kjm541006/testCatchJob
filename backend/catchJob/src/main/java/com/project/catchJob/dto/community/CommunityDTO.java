@@ -1,10 +1,12 @@
 package com.project.catchJob.dto.community;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -51,16 +53,27 @@ public class CommunityDTO {
 		
 		BoardMemberDTO memberDTO = null;
 		Member writer = community.getMember();
+		String fileUrl = "http://43.202.98.45:8089/upload/";
 		if(writer != null) {
-			
-			String fileUrl = "http://43.202.98.45:8089/upload/" + writer.getMProfile().getMStoredFileName();
 			
 			memberDTO = new BoardMemberDTO();
 			memberDTO.setEmail(writer.getEmail());
 			memberDTO.setName(writer.getName());
-			memberDTO.setMOriginalFileName(fileUrl);
+			memberDTO.setMOriginalFileName(fileUrl + writer.getMProfile().getMStoredFileName());
 		}
-			
+		
+		List<C_commentsDTO> comments = community.getCommunityCommentsList() != null ? community.getCommunityCommentsList()
+				.stream()
+				.map(comment -> C_commentsDTO.builder()
+						.commentId(comment.getCComId())
+						.ccommentContent(comment.getCComcontent())
+						.commentDate(comment.getCComDate())
+						.memberName(comment.getMember().getName())
+						.memberEmail(comment.getMember().getEmail())
+						.memberProfile(fileUrl + comment.getMember().getMProfile().getMStoredFileName())
+						.build())
+				.collect(Collectors.toList()) : new ArrayList<>();
+				
 		boolean isLike = communityService.isUserLiked(member.getEmail(), community.getCommunityId());
 		int cComment = community.getCommunityCommentsList().size();
 		
@@ -74,6 +87,7 @@ public class CommunityDTO {
 				.isLike(isLike)
 				.cComment(cComment)
 				.member(memberDTO)
+				.comments(comments)
 				.build();
 	}
 
@@ -81,15 +95,26 @@ public class CommunityDTO {
 		
 		BoardMemberDTO memberDTO = null;
 		Member writer = community.getMember();
+		String fileUrl = "http://43.202.98.45:8089/upload/";
 		if(writer != null) {
-			
-			String fileUrl = "http://43.202.98.45:8089/upload/" + writer.getMProfile().getMStoredFileName();
 			
 			memberDTO = new BoardMemberDTO();
 			memberDTO.setEmail(writer.getEmail());
 			memberDTO.setName(writer.getName());
-			memberDTO.setMOriginalFileName(fileUrl);
+			memberDTO.setMOriginalFileName(fileUrl + writer.getMProfile().getMStoredFileName());
 		}
+		
+		List<C_commentsDTO> comments = community.getCommunityCommentsList() != null ? community.getCommunityCommentsList()
+				.stream()
+				.map(comment -> C_commentsDTO.builder()
+						.commentId(comment.getCComId())
+						.ccommentContent(comment.getCComcontent())
+						.commentDate(comment.getCComDate())
+						.memberName(comment.getMember().getName())
+						.memberEmail(comment.getMember().getEmail())
+						.memberProfile(fileUrl + comment.getMember().getMProfile().getMStoredFileName())
+						.build())
+				.collect(Collectors.toList()) : new ArrayList<>();
 			
 		int cComment = community.getCommunityCommentsList().size();
 		
@@ -103,6 +128,7 @@ public class CommunityDTO {
 				.isLike(false)
 				.cComment(cComment)
 				.member(memberDTO)
+				.comments(comments)
 				.build();
 	}
 	

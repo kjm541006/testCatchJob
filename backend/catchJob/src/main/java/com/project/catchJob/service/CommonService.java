@@ -12,6 +12,7 @@ import com.project.catchJob.domain.board.Board;
 import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.domain.project.Project;
 import com.project.catchJob.dto.board.BoardDTO;
+import com.project.catchJob.exception.TokenExpiredException;
 import com.project.catchJob.repository.board.BoardRepository;
 import com.project.catchJob.repository.community.CommunityRepository;
 import com.project.catchJob.repository.member.MemberRepository;
@@ -49,7 +50,7 @@ public class CommonService {
 	    boolean isValidToken = tokenProvider.validateToken(token);
 
 	    if (!isValidToken) {
-	        return Optional.empty();
+	    	throw new TokenExpiredException("Token expired");
 	    }
 
 	    String userEmail = tokenProvider.getUserEmail(token);

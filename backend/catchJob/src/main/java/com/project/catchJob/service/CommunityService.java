@@ -19,7 +19,7 @@ public interface CommunityService {
 	CommentResponse edit(Long communityId, CommunityDTO communityDTO, String jwtToken);
 	void delete(Long communityId, String jwtToken);
 
-	List<C_comments> getCommentsByCommunityId(Long community_id);
+	List<C_commentsDTO> getCommentsByCommunityId(Long community_id);
 	CommentResponse createComment(C_commentsDTO commentDTO, String jwtToken);
     CommentResponse editComment(Long commentId, C_commentsDTO commentDTO, String jwtToken);
 	void deleteComment(Long commentId, String jwtToken);

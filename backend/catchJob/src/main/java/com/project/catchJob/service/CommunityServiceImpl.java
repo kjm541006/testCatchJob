@@ -176,9 +176,14 @@ public class CommunityServiceImpl implements CommunityService {
 
 	}
 
-	public List<C_comments> getCommentsByCommunityId(Long communityId) {
+	// 댓글 리스트 조회
+	public List<C_commentsDTO> getCommentsByCommunityId(Long communityId) {
 
-		return cCommRepo.findAllByCommunity_CommunityId(communityId);
+		List<C_comments> comments =  cCommRepo.findAllByCommunity_CommunityId(communityId);
+		
+		return comments.stream()
+				.map(C_commentsDTO::toDTO)
+				.collect(Collectors.toList());
 
 	}
 

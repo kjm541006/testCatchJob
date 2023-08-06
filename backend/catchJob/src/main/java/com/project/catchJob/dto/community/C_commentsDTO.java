@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.catchJob.domain.community.C_comments;
 import com.project.catchJob.domain.member.M_profile;
 
 import lombok.AllArgsConstructor;
@@ -39,5 +40,20 @@ public class C_commentsDTO {
 	private String memberName;
 	private String memberEmail;
 	private String memberProfile;
+	
+	public static C_commentsDTO toDTO(C_comments commentEntity) {
+		
+		String profileUrl = "http://43.202.98.45:8089/upload/" + commentEntity.getMember().getMProfile().getMStoredFileName();
+		
+	    return C_commentsDTO.builder()
+	            .commentId(commentEntity.getCComId())
+	            .ccommentContent(commentEntity.getCComcontent())
+	            .communityId(commentEntity.getCommunity().getCommunityId())
+	            .commentDate(commentEntity.getCComDate())
+	            .memberName(commentEntity.getMember().getName())
+	            .memberEmail(commentEntity.getMember().getEmail())
+	            .memberProfile(profileUrl)
+	            .build();
+	}
 
 }

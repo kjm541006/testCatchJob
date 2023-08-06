@@ -48,7 +48,6 @@ public class Community {
     private String title;
     
     @CreationTimestamp
-	@Column(insertable = false, updatable = false)
     private LocalDateTime cDate;
 
     @Column(name ="c_like",insertable = false, columnDefinition = "bigint default 0")

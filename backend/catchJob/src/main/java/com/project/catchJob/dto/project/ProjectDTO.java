@@ -53,7 +53,7 @@ public class ProjectDTO {
 	private List<P_commentsDTO> comments;
 	private List<P_memberDTO> applicants;
 	
-	public static ProjectDTO toDTO(Project project, Member member, ProjectService projectService) {
+	public static ProjectDTO loginDTO(Project project, Member member, ProjectService projectService) {
 		
 		Member writer = project.getMember();
 		String fileUrl = "http://43.202.98.45:8089/upload/";
@@ -89,22 +89,88 @@ public class ProjectDTO {
 						.build())
 				.collect(Collectors.toList()) : new ArrayList<>();
 		
-//		ProjectDTO projectDTO = ProjectDTO.builder()
-//				.projectId(project.getProjectId())
-//				.type(project.getType())
-//				.title(project.getTitle())
-//				.field(project.getField())
-//				.loc(project.getLoc())
-//				.term(project.getTerm())
-//				.end(project.isEnd())
-//				.detail(project.getDetail())
-//				.platforms()
-		// 아직 진행중
-				
+		boolean isLike = projectService.isUserLiked(member.getEmail(), project.getProjectId());
 		
-		return null;
-				
+		ProjectDTO projectDTO = ProjectDTO.builder()
+				.projectId(project.getProjectId())
+				.type(project.getType())
+				.title(project.getTitle())
+				.field(project.getField())
+				.loc(project.getLoc())
+				.term(project.getTerm())
+				.end(project.isEnd())
+				.detail(project.getDetail())
+				.platforms(project.getPlatforms() != null ? new ArrayList<>(project.getPlatforms()) : new ArrayList<>())
+				.crew(project.getCrew())
+				.pCnt(project.getPCnt())
+				.pLike(project.getPLike())
+				.isLike(isLike)
+				.email(member.getEmail())
+				.member(memberDTO)
+				.comments(comments)
+				.applicants(applicants)
+				.build();
 		
+		return projectDTO;
+		
+	}
+	public static ProjectDTO logoutDTO(Project project) {
+		
+		Member writer = project.getMember();
+		String fileUrl = "http://43.202.98.45:8089/upload/";
+		
+		MemberInfoDTO memberDTO = MemberInfoDTO.builder()
+				.email(writer.getEmail())
+				.name(writer.getName())
+				.job(writer.getJob())
+				.hasCareer(writer.getHasCareer())
+				.mOriginalFileName(fileUrl + writer.getMProfile().getMStoredFileName())
+				.build();
+		
+		List<P_commentsDTO> comments = project.getProjectCommentsList() != null ? project.getProjectCommentsList()
+				.stream()
+				.map(comment -> P_commentsDTO.builder()
+						.commentId(comment.getPComId())
+						.commentContent(comment.getPComContent())
+						.commentDate(comment.getPComDate())
+						.memberName(comment.getMember().getName())
+						.memberEmail(comment.getMember().getEmail())
+						.memberProfile(fileUrl + comment.getMember().getMProfile().getMStoredFileName())
+						.build())
+				.collect(Collectors.toList()) : new ArrayList<>();
+		
+		List<P_memberDTO> applicants = project.getProjectMemberList() != null ? project.getProjectMemberList()
+				.stream()
+				.map(applicant -> P_memberDTO.builder()
+						.projectMemberId(applicant.getPMemId())
+						.projectJob(applicant.getJob())
+						.projectReason(applicant.getReason())
+						.memberName(applicant.getMember().getName())
+						.memberEmail(applicant.getMember().getEmail())
+						.build())
+				.collect(Collectors.toList()) : new ArrayList<>();
+		
+		ProjectDTO projectDTO = ProjectDTO.builder()
+				.projectId(project.getProjectId())
+				.type(project.getType())
+				.title(project.getTitle())
+				.field(project.getField())
+				.loc(project.getLoc())
+				.term(project.getTerm())
+				.end(project.isEnd())
+				.detail(project.getDetail())
+				.platforms(project.getPlatforms() != null ? new ArrayList<>(project.getPlatforms()) : new ArrayList<>())
+				.crew(project.getCrew())
+				.pCnt(project.getPCnt())
+				.pLike(project.getPLike())
+				.isLike(false)
+				.email(memberDTO.getEmail())
+				.member(memberDTO)
+				.comments(comments)
+				.applicants(applicants)
+				.build();
+		
+		return projectDTO;
 		
 	}
 }
