@@ -1,9 +1,14 @@
 import axios from "axios";
 import React, { useRef } from "react";
 import styles from "../../assets/css/study/StudyModal.module.css";
+import { useLocation } from "react-router-dom";
 
-const StudyModal = ({ isOpen, onClose, buttonKey, modalType }) => {
+const useQuery = () => new URLSearchParams(useLocation().search);
+const StudyModal = ({ isOpen, onClose, applyType, modalType, data }) => {
   const modalRef = useRef(null);
+  const applyRef = useRef();
+  const query = useQuery();
+  const id = query.get("id");
 
   const handleClickOutside = (e) => {
     if (modalRef.current && modalRef.current.contains(e.target)) {
@@ -12,8 +17,11 @@ const StudyModal = ({ isOpen, onClose, buttonKey, modalType }) => {
     onClose();
   };
   const handleSubmit = async () => {
+    let applyData = {
+      projectReason: applyRef.current.value,
+    };
     try {
-      const response = await axios.post("http://localhost:8089/임시", { buttonKey });
+      const response = await axios.post(`http://43.202.98.45:8089/studyDetail/apply/${id}?job=${applyType}`, applyData);
       if (response.status === 200) {
         alert("신청되었습니다.");
         onClose();
@@ -36,7 +44,7 @@ const StudyModal = ({ isOpen, onClose, buttonKey, modalType }) => {
           </h2>
           {modalType === "participant" && (
             <>
-              <h3>프로젝트 지원하기 ({buttonKey})</h3>
+              <h3>프로젝트 지원하기 ({applyType})</h3>
               <textarea
                 name=""
                 id=""
@@ -45,6 +53,7 @@ const StudyModal = ({ isOpen, onClose, buttonKey, modalType }) => {
                 placeholder="지원 사유를 입력하세요. (최대 150자까지 작성 가능)"
                 maxLength={150}
                 className={styles.modalTextArea}
+                ref={applyRef}
               ></textarea>
               <div className={styles.modalBtnWrapper}>
                 <button onClick={onClose}>취소</button>
@@ -54,9 +63,24 @@ const StudyModal = ({ isOpen, onClose, buttonKey, modalType }) => {
           )}
           {modalType === "writer" && (
             <>
-              <h3>{buttonKey}</h3>
+              <h3>{applyType}</h3>
               <div className={styles.applyListWrapper}>
-                <div className={styles.applyList}>
+                {console.log(data.filter((x) => x.projectJob === applyType))}
+                {data &&
+                  data
+                    .filter((x) => x.projectJob === applyType)
+                    .map((x, i) => {
+                      return (
+                        <div className={styles.applyList}>
+                          <div className={styles.applyLeft}>
+                            <div className={styles.applyName}>{x.memberName}</div>
+                            <div className={styles.applyEmail}>{x.memberEmail}</div>
+                          </div>
+                          <div className={styles.applyReason}>{x.projectReason}</div>
+                        </div>
+                      );
+                    })}
+                {/* <div className={styles.applyList}>
                   <div className={styles.applyLeft}>
                     <div className={styles.applyName}>김주민</div>
                     <div className={styles.applyEmail}>kim@naver.com</div>
@@ -90,14 +114,7 @@ const StudyModal = ({ isOpen, onClose, buttonKey, modalType }) => {
                     <div className={styles.applyEmail}>kim@naver.com</div>
                   </div>
                   <div className={styles.applyReason}>지원 사유</div>
-                </div>
-                <div className={styles.applyList}>
-                  <div className={styles.applyLeft}>
-                    <div className={styles.applyName}>김주민</div>
-                    <div className={styles.applyEmail}>kim@naver.com</div>
-                  </div>
-                  <div className={styles.applyReason}>지원 사유</div>
-                </div>
+                </div> */}
               </div>
             </>
           )}

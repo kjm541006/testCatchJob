@@ -12,18 +12,21 @@ import { selectLoggedIn } from "../../redux/login";
 
 const useQuery = () => new URLSearchParams(useLocation().search);
 const StudyDetailPage = () => {
-  const [project, setProject] = useState(null);
   const [copied, setCopied] = useState(false);
   const [data, setData] = useState([]);
   const [modalType, setModalType] = useState(null);
+  const [isOpen, setIsOpen] = useState(null);
+  const [liked, setLiked] = useState(false);
+  const [viewCount, setViewCount] = useState(null);
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.loading.isLoading);
-  const [isOpen, setIsOpen] = useState(null);
   const commentRef = useRef();
   const isLoggedIn = useSelector(selectLoggedIn);
   const userEmail = localStorage.getItem("email");
+  const userId = localStorage.getItem("memId");
   const navigate = useNavigate();
   console.log(`로그인 여부: ${isLoggedIn}`);
+
   let commentData = {};
 
   const query = useQuery();
@@ -35,6 +38,18 @@ const StudyDetailPage = () => {
     window.location.href = "/login";
   };
 
+  const cancelApply = async (pMemId) => {
+    try {
+      const response = await axios.delete(`http://43.202.98.45:8089/studyDetail/cancel/${pMemId}`);
+      if (response.status === 200) {
+        alert("삭제되었습니다.");
+      }
+      fetchData();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const fetchComments = async () => {
     try {
       const response = await axios.get(`http://43.202.98.45:8089/studyDetail/${id}`);
@@ -44,40 +59,46 @@ const StudyDetailPage = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`http://43.202.98.45:8089/studyDetail/${id}`);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`http://43.202.98.45:8089/studyDetail/${id}`);
 
-        if (response.status === 500) {
-          window.location.href = "/study";
-        }
-
-        const comments = response.data.comments;
-        setData({
-          ...response.data,
-          comments: comments, // 응답에서 받은 댓글 데이터를 저장합니다.
-        });
-        console.log(response.data);
-      } catch (error) {
-        if (error.message.toLowerCase() === "Network Error".toLowerCase()) {
-          alert("네트워크 에러입니다. 서버가 꺼져있을 수 있습니다.");
-          return;
-        }
-
-        if (error.message.toLowerCase() === "Request failed with status code 500".toLocaleLowerCase()) {
-          console.log(error);
-          alert("글을 찾을 수 없습니다.");
-          window.location.href = "/study?type=all";
-          return;
-        }
-        alert("에러가 발생했습니다.");
-        dispatch(stopLoading());
-      } finally {
-        dispatch(stopLoading());
+      if (viewCount === null) {
+        setViewCount(response.data.pCnt);
       }
-    };
 
+      if (response.status === 500) {
+        window.location.href = "/study";
+      }
+
+      const comments = response.data.comments;
+      setData({
+        ...response.data,
+        viewCount,
+        comments: comments, // 응답에서 받은 댓글 데이터를 저장합니다.
+      });
+      console.log(response.data);
+      console.log(viewCount);
+    } catch (error) {
+      if (error.message.toLowerCase() === "Network Error".toLowerCase()) {
+        alert("네트워크 에러입니다. 서버가 꺼져있을 수 있습니다.");
+        return;
+      }
+
+      if (error.message.toLowerCase() === "Request failed with status code 500".toLocaleLowerCase()) {
+        console.log(error);
+        alert("글을 찾을 수 없습니다.");
+        window.location.href = "/study?type=all";
+        return;
+      }
+      alert("에러가 발생했습니다.");
+      dispatch(stopLoading());
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
+
+  useEffect(() => {
     fetchData().then(() => {
       dispatch(stopLoading());
     });
@@ -104,6 +125,7 @@ const StudyDetailPage = () => {
 
   const handleCloseModal = () => {
     setIsOpen(null);
+    fetchData();
   };
 
   const handleOpenModalForWriter = (key) => {
@@ -141,7 +163,17 @@ const StudyDetailPage = () => {
     }
   };
 
-  const handleLikeBtn = async () => {};
+  const handleLikeBtn = async () => {
+    try {
+      const response = await axios.post(`http://43.202.98.45:8089/studyDetail/like/${id}`);
+      if (response.status === 200) {
+        setLiked(!liked);
+      }
+      fetchData();
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const deleteProject = async () => {
     try {
@@ -248,9 +280,48 @@ const StudyDetailPage = () => {
                               </div>
                               {/* 1. 작성자가 아닐경우 */}
                               {data && data.member && data.member.email !== localStorage.getItem("email") && (
-                                <div className={styles.crewProgress} onClick={isLoggedIn ? () => handleOpenModal(x[0]) : loginAlert}>
-                                  지원
-                                </div>
+                                <>
+                                  {/* {let pMemIds =(
+                                    isLoggedIn &&
+                                      data &&
+                                      data.applicants
+                                        .filter((k) => k.projectJob === x[0])
+                                        .map((x) => {
+                                          return x.projectMemberId;
+                                        })
+                                        .join()
+                                  )} */}
+                                  {isLoggedIn &&
+                                  data &&
+                                  data.applicants
+                                    .filter((k) => k.projectJob === x[0])
+                                    .map((x) => {
+                                      return x.memberEmail;
+                                    })
+                                    .includes(userEmail) ? (
+                                    <div
+                                      className={styles.crewProgress}
+                                      onClick={() =>
+                                        cancelApply(
+                                          isLoggedIn &&
+                                            data &&
+                                            data.applicants
+                                              .filter((k) => k.projectJob === x[0])
+                                              .map((x) => {
+                                                return x.projectMemberId;
+                                              })
+                                              .join()
+                                        )
+                                      }
+                                    >
+                                      <span>지원취소</span>
+                                    </div>
+                                  ) : (
+                                    <div className={styles.crewProgress} onClick={isLoggedIn ? () => handleOpenModal(x[0]) : loginAlert}>
+                                      <span>지원</span>
+                                    </div>
+                                  )}
+                                </>
                               )}
 
                               {/* 2. 작성자일 경우 */}
@@ -262,7 +333,14 @@ const StudyDetailPage = () => {
                                   지원자 확인
                                 </div>
                               )}
-                              <StudyModal isOpen={isOpen === x[0]} onClose={handleCloseModal} buttonKey={x[0]} modalType={modalType} />
+                              {data ? <span>지원자 수: {data.applicants.filter((k) => k.projectJob === x[0]).length}</span> : 0}
+                              <StudyModal
+                                isOpen={isOpen === x[0]}
+                                onClose={handleCloseModal}
+                                applyType={x[0]}
+                                modalType={modalType}
+                                data={data.applicants}
+                              />
                             </div>
                           );
                         })}
@@ -279,8 +357,7 @@ const StudyDetailPage = () => {
                       </div>
                       <div className={styles.comment}>
                         <textarea
-                          name=""
-                          id=""
+                          spellCheck="false"
                           rows="4"
                           maxLength={200}
                           placeholder="댓글을 입력하세요."
@@ -355,7 +432,7 @@ const StudyDetailPage = () => {
                   <div className={styles.viewInfo}>
                     <div className={styles.view}>
                       <FontAwesomeIcon icon={faEye} />
-                      {data && <span className={styles.num}>{data.pCnt}</span>}
+                      <span className={styles.num}>{viewCount}</span>
                     </div>
                     <div className={styles.heart}>
                       <FontAwesomeIcon icon={faHeart} />
@@ -374,7 +451,7 @@ const StudyDetailPage = () => {
                     </div>
                   </div>
                   <div className={styles.likeBtnWrapper}>
-                    <div className={styles.likeBtn} onClick={isLoggedIn ? handleLikeBtn : loginAlert}>
+                    <div className={`${styles.likeBtn} ${liked && styles.likeActive}`} onClick={isLoggedIn ? handleLikeBtn : loginAlert}>
                       {/* <FontAwesomeIcon icon={faHeart} className={styles.likeProject} /> */}
                       <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" className={styles.likeProject}>
                         <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />

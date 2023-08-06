@@ -36,12 +36,14 @@ const LoginPage = () => {
       // const response = await axios.post("http://localhost:8089/login", userData);
       console.log(response.data);
       console.log(response.data.name);
+      const userId = response.data.memberId;
       const token = response.data.token;
       const name = response.data.name;
       const email = response.data.email;
       console.log(token);
       console.log(name);
       console.log(email);
+      localStorage.setItem("memId", userId);
       localStorage.setItem("token", token);
       localStorage.setItem("name", name);
       localStorage.setItem("email", email);

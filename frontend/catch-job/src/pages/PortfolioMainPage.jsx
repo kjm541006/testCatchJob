@@ -6,9 +6,6 @@ import axios from "axios";
 // import PortfolioModal from "../../components/PortfolioModal";
 import PortfolioModal from "../components/PortfolioModal";
 import { useLocation, Link, useSearchParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import Loading from "../components/Loading";
-import { stopLoading } from "../redux/store";
 import Select from "react-select";
 import { type } from "@testing-library/user-event/dist/type";
 
@@ -18,8 +15,6 @@ const PortfolioMainPage = () => {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const queryParam = new URLSearchParams(useLocation().search);
   const itemFromURL = queryParam.get("boardId");
-  const isLoading = useSelector((state) => state.loading.isLoading);
-  const dispatch = useDispatch();
   const [sortedOption, setSortedOption] = useState("all");
   const [searchParams, setSearchParams] = useSearchParams();
   const typeParam = searchParams.get("type") || "all";
@@ -58,17 +53,17 @@ const PortfolioMainPage = () => {
     console.log(isModalOpen);
   }, [isModalOpen]);
 
-  // useEffect(() => {
-  //   axios
-  //     .get("http://43.202.98.45:8089/")
-  //     .then((response) => {
-  //       setData(response.data);
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("데이터 가져오기 에러:", error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    axios
+      .get("http://43.202.98.45:8089/")
+      .then((response) => {
+        setData(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("데이터 가져오기 에러:", error);
+      });
+  }, []);
 
   const handleElementClick = async (board_id) => {
     setSelectedItemId(board_id);

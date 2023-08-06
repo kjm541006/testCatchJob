@@ -102,7 +102,7 @@ const StudyPage = () => {
             <div className={styles.gridViewWrapper}>
               <div className={styles.studyGridView}>
                 {/* key db id로 변경해야함 */}
-                {data.map((v, i) => {
+                {data.reverse().map((v, i) => {
                   return (
                     <div
                       key={i}
@@ -160,11 +160,11 @@ const StudyPage = () => {
                             stroke="white"
                           />
                         </svg>
-                        <span className={styles.heartRate}>10</span>
+                        <span className={styles.heartRate}>{v.pLike}</span>
                       </div>
                       <div className={styles.people}>
                         <span>조회수 </span>
-                        <span> {v.pcnt}</span>
+                        <span> {v.pCnt}</span>
                       </div>
                     </div>
                   );
