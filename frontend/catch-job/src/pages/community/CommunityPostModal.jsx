@@ -1,10 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { selectEmail } from "../../redux/login";
 
 function PostModal({ onPostSubmit, onCancel }) {
+  const [loading, setLoading] = useState(false);
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
   const [postCategory, setPostCategory] = useState("");
+
+  const userEmail = useSelector(selectEmail);
+
+  //  useEffect(() => {
+  //    console.log("postTitle:", postTitle);
+  //    console.log("postContent:", postContent);
+  //    console.log("postCategory:", postCategory);
+  //  }, [postTitle, postContent, postCategory]);
 
   const handlePostTitleChange = (event) => {
     setPostTitle(event.target.value);
@@ -18,42 +29,39 @@ function PostModal({ onPostSubmit, onCancel }) {
     setPostCategory(event.target.value);
   };
 
-  const handleSave = () => {
-    if (postTitle.trim() === "") {
-      alert("제목을 입력해주세요.");
+  const handleSave = async () => {
+    setLoading(true);
+    if (postTitle.trim() === "" || postContent.trim() === "" || postCategory === "") {
+      alert("모든 필드를 입력해주세요.");
+      setLoading(false);
       return;
     }
 
-    if (postContent.trim() === "") {
-      alert("내용을 입력해주세요.");
-      return;
+    const newPost = {
+      cContents: postContent,
+      cTitle: postTitle,
+      cType: postCategory,
+      email: userEmail,
+    };
+
+    try {
+      const response = await axios.post("http://43.202.98.45:8089/community", newPost);
+      // const response = await axios.post("http://localhost:8089/community", newPost);
+      setLoading(false);
+
+      setPostCategory("");
+      setPostTitle("");
+      setPostContent("");
+      onCancel();
+      window.location.reload();
+    } catch (error) {
+      setLoading(false);
+      console.error("Error submitting post:", error);
     }
-
-    if (postCategory === "") {
-      alert("카테고리를 선택해주세요.");
-      return;
-    }
-
-    const newPost = { title: postTitle, content: postContent, category: postCategory };
-
-    axios
-      .post("/api/post", newPost)
-      .then((response) => {
-        onPostSubmit(response.data);
-        setPostCategory("");
-        setPostTitle("");
-        setPostContent("");
-      })
-      .catch((error) => {
-        console.error("Error submittion post:", error);
-      });
   };
 
   const handleCancel = () => {
     onCancel();
-    setPostCategory("");
-    setPostTitle("");
-    setPostContent("");
   };
 
   return (
@@ -63,7 +71,7 @@ function PostModal({ onPostSubmit, onCancel }) {
           catch<span className="red-letter">J</span>ob
         </div>
         <div>
-          <select className="postcategory" value={postCategory} onChange={handlePostCategoryChange} required>
+          <select className="postcategory" value={postCategory} onChange={handlePostCategoryChange}>
             <option selected disabled hidden value="">
               카테고리
             </option>

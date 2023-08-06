@@ -76,70 +76,38 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public List<Project> getAllProjects() {
-		return projectRepository.findAll();
+	public List<ProjectDTO> getAllProjects(String jwtToken) {
+		List<Project> projects = projectRepository.findAll();
+		
+		if(jwtToken != null) {
+			Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+					.orElseThrow(UnauthorizedException::new);
+			return projects.stream()
+					.map(project -> ProjectDTO.loginDTO(project, optAuthenticatedMember, this))
+					.collect(Collectors.toList());
+		}
+		
+		return projects.stream()
+				.map(project -> ProjectDTO.logoutDTO(project))
+				.collect(Collectors.toList());
 	}
 
 	@Override
-	public ProjectDTO getProjectByProjectId(Long projectId) {
+	public ProjectDTO getProjectByProjectId(Long projectId, String jwtToken) {
 
 		Project project = projectRepository.findById(projectId)
 				.orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
 
-		Member writer = project.getMember();
-
-		if (writer != null) {
-
-			String fileUrl = "http://43.202.98.45:8089/upload/";
-
-			MemberInfoDTO memberDTO = MemberInfoDTO.builder().email(writer.getEmail()).name(writer.getName())
-					.job(writer.getJob()).hasCareer(writer.getHasCareer())
-					.mOriginalFileName(fileUrl + writer.getMProfile().getMStoredFileName()).build();
-
-			List<P_commentsDTO> comments = project.getProjectCommentsList() != null ? project.getProjectCommentsList()
-					.stream()
-					.map(comment -> P_commentsDTO.builder()
-							.commentId(comment.getPComId())
-							.commentContent(comment.getPComContent())
-							.commentDate(comment.getPComDate())
-							.memberName(comment.getMember().getName())
-							.memberEmail(comment.getMember().getEmail())
-							.memberProfile(fileUrl + comment.getMember().getMProfile().getMStoredFileName())
-							.build())
-					.collect(Collectors.toList()) : new ArrayList<>();
-			
-			List<P_memberDTO> applicants = project.getProjectMemberList() != null ? project.getProjectMemberList()
-					.stream()
-					.map(applicant -> P_memberDTO.builder()
-							.projectMemberId(applicant.getPMemId())
-							.projectJob(applicant.getJob())
-							.projectReason(applicant.getReason())
-							.memberEmail(applicant.getMember().getEmail())
-							.memberName(applicant.getMember().getName())
-							.build())
-					.collect(Collectors.toList()) : new ArrayList<>();
-							
-			ProjectDTO projectDTO = new ProjectDTO();
-			projectDTO.setPCnt(project.getPCnt());
-			projectDTO.setPLike(project.getPLike());
-			projectDTO.setProjectId(project.getProjectId());
-			projectDTO.setTitle(project.getTitle());
-			projectDTO.setField(project.getField());
-			projectDTO.setTerm(project.getTerm());
-			projectDTO.setPlatforms(
-					project.getPlatforms() != null ? new ArrayList<>(project.getPlatforms()) : new ArrayList<>());
-			projectDTO.setType(project.getType());
-			projectDTO.setLoc(project.getLoc());
-			projectDTO.setCrew(project.getCrew());
-			projectDTO.setDetail(project.getDetail());
-			projectDTO.setEmail(memberDTO.getEmail());
-			projectDTO.setMember(memberDTO);
-			projectDTO.setComments(comments);
-			projectDTO.setApplicants(applicants);
-
-			return projectDTO;
+		ProjectDTO projectDTO;
+		if(jwtToken != null) {
+			Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
+					.orElseThrow(UnauthorizedException::new);
+			projectDTO = ProjectDTO.loginDTO(project, optAuthenticatedMember, this);
+		} else {
+			projectDTO = ProjectDTO.logoutDTO(project);
 		}
-		return null;
+		return projectDTO;
+		
 	}
 
 	// 글 수정
@@ -192,12 +160,12 @@ public class ProjectServiceImpl implements ProjectService {
 		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 				.orElseThrow(UnauthorizedException::new);
 
-		Member member = memberRepository.findByEmail(optAuthenticatedMember.getEmail());
+//		Member member = memberRepository.findByEmail(optAuthenticatedMember.getEmail());
 
 		Project project = projectRepository.findById(projectId)
 				.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
 
-		P_comments comments = P_comments.builder().pComContent(commentDTO.getCommentContent()).member(member)
+		P_comments comments = P_comments.builder().pComContent(commentDTO.getCommentContent()).member(optAuthenticatedMember)
 				.project(project).build();
 		P_comments saveComm = pCommRepo.save(comments);
 		pCommRepo.flush();
@@ -380,5 +348,7 @@ public class ProjectServiceImpl implements ProjectService {
 	    }
 		return filteredMembers;
 	}
+
+
 
 }

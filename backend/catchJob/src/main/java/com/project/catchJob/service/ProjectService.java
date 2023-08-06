@@ -15,8 +15,8 @@ import com.project.catchJob.dto.project.P_memberDTO;
 public interface ProjectService {
 
 	Project addProject(ProjectDTO projectDTO, String userEmail);
-	List<Project> getAllProjects();
-	ProjectDTO getProjectByProjectId(Long projectId);
+	List<ProjectDTO> getAllProjects(String jwtToken);
+	ProjectDTO getProjectByProjectId(Long projectId, String jwtToken);
 	void edit(Long projectId, ProjectDTO projectDTO, String jwtToken);
 	void delete(Long projectId, String jwtToken);
 	CommentResponse createComment(P_commentsDTO commentDTO, Long projectId, String jwtToken);

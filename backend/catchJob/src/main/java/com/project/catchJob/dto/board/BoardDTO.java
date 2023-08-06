@@ -75,7 +75,7 @@ public class BoardDTO {
 		Member writer = board.getMember();
 		if (writer != null) {
 			
-			String fileUrl = "http://43.202.98.45:8089/upload/" + member.getMProfile().getMStoredFileName();
+			String fileUrl = "http://43.202.98.45:8089/upload/" + writer.getMProfile().getMStoredFileName();
 			
 		    memberDTO = new BoardMemberDTO();
 		    memberDTO.setEmail(writer.getEmail());
