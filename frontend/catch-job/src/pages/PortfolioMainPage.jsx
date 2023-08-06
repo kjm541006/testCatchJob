@@ -5,10 +5,12 @@ import { faEye, faCommentDots, faHeart, faCheck, faPencil } from "@fortawesome/f
 import axios from "axios";
 // import PortfolioModal from "../../components/PortfolioModal";
 import PortfolioModal from "../components/PortfolioModal";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import { stopLoading } from "../redux/store";
+import Select from "react-select";
+import { type } from "@testing-library/user-event/dist/type";
 
 const PortfolioMainPage = () => {
   const [data, setData] = useState([]);
@@ -18,6 +20,9 @@ const PortfolioMainPage = () => {
   const itemFromURL = queryParam.get("boardId");
   const isLoading = useSelector((state) => state.loading.isLoading);
   const dispatch = useDispatch();
+  const [sortedOption, setSortedOption] = useState("all");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const typeParam = searchParams.get("type") || "all";
 
   useEffect(() => {
     if (itemFromURL) {
@@ -29,12 +34,20 @@ const PortfolioMainPage = () => {
   }, [itemFromURL]);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    const headers = {};
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     axios
-      .get("http://43.202.98.45:8089/")
+      .get("http://43.202.98.45:8089/", {
+        headers: headers,
+      })
       .then((response) => {
         setData(response.data);
         console.log(response.data);
-        dispatch(stopLoading());
       })
       .catch((error) => {
         console.error("데이터 가져오기 에러:", error);
@@ -69,51 +82,66 @@ const PortfolioMainPage = () => {
   };
   //조회수 증가 코드
 
+  const options = [
+    { value: "all", label: "전체" },
+    { value: "heart", label: "좋아요" },
+  ];
+
+  const handleOptionChange = (option) => {
+    setSortedOption(option.value);
+    searchParams.set("type", option.value);
+    setSearchParams(searchParams);
+  };
+
   return (
-    <>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <div className={`${styles.port_wrapper}`}>
-          <div className={styles.port_page}>
-            <div className={`${styles.port_sort}`}>
-              <FontAwesomeIcon icon={faCheck} className={`${styles.port_checkIcon}`} />
-              <span className={`${styles.port_topRated} ${styles.port_btn}`}>인기순</span>
-              <FontAwesomeIcon icon={faCheck} className={`${styles.port_checkIcon} ${styles.port_invisible}`} />
-              <span className={`${styles.port_new}`}>최신순</span>
-            </div>
-            <div className={`${styles.port_GridView}`}>
-              {data.map((item) => (
-                <div key={item.boardId} className={`${styles.element}`} onClick={() => handleElementClick(item.boardId)}>
-                  <img className={`${styles.img}`} src={item.bCoverFileName} alt="img" />
-                  <div className={`${styles.info}`}>
-                    <img className={`${styles.user_img}`} src={item.member.mOriginalFileName} alt="img" />
-                    <div className={`${styles.info_left}`}>{item.member.name}</div>
-                    <div className={`${styles.info_right}`}>
-                      <FontAwesomeIcon icon={faCommentDots} className={`${styles.faIcon}`} />
-                      <span className={`${styles.num}`}>{item.bComment}</span>
-                      <FontAwesomeIcon icon={faEye} className={`${styles.faIcon}`} />
-                      <span className={`${styles.num}`}>{item.bCnt}</span>
-                      <FontAwesomeIcon icon={faHeart} className={`${styles.faIcon}`} />
-                      <span className={`${styles.num}`}>{item.bLike}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className={styles.makeProjectBtnWrapper}>
-              <Link to={"/portfolio/build"} className={styles.makeProject}>
-                <FontAwesomeIcon icon={faPencil} />
-                <div>글 쓰기</div>
-              </Link>
-            </div>
+    <div className={`${styles.port_wrapper}`}>
+      <div className={styles.port_page}>
+        <div className={styles.top}>
+          <div className={`${styles.port_sort}`}>
+            <FontAwesomeIcon icon={faCheck} className={`${styles.port_checkIcon}`} />
+            <span className={`${styles.port_topRated} ${styles.port_btn}`}>인기순</span>
+            <FontAwesomeIcon icon={faCheck} className={`${styles.port_checkIcon} ${styles.port_invisible}`} />
+            <span className={`${styles.port_new}`}>최신순</span>
           </div>
-          {isModalOpen && (
-            <PortfolioModal item={data.find((item) => item.boardId === selectedItemId)} onClose={() => setIsModalOpen(false)} />
-          )}
+          <div className={styles.showSelected}>
+            <Select
+              onChange={(option) => handleOptionChange(option)}
+              defaultValue={options.filter((option) => option.value === typeParam)}
+              key={options.filter((option) => option.value === typeParam)}
+              isClearable={false}
+              isSearchable={false}
+              options={options}
+            />
+          </div>
         </div>
-      )}
-    </>
+        <div className={`${styles.port_GridView}`}>
+          {data.map((item) => (
+            <div key={item.boardId} className={`${styles.element}`} onClick={() => handleElementClick(item.boardId)}>
+              <img className={`${styles.img}`} src={item.bCoverFileName} alt="img" />
+              <div className={`${styles.info}`}>
+                <img className={`${styles.user_img}`} src={item.member.mOriginalFileName} alt="img" />
+                <div className={`${styles.info_left}`}>{item.member.name}</div>
+                <div className={`${styles.info_right}`}>
+                  <FontAwesomeIcon icon={faCommentDots} className={`${styles.faIcon}`} />
+                  <span className={`${styles.num}`}>{item.bComment}</span>
+                  <FontAwesomeIcon icon={faEye} className={`${styles.faIcon}`} />
+                  <span className={`${styles.num}`}>{item.bCnt}</span>
+                  <FontAwesomeIcon icon={faHeart} className={`${styles.faIcon}`} />
+                  <span className={`${styles.num}`}>{item.bLike}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className={styles.makeProjectBtnWrapper}>
+          <Link to={"/portfolio/build"} className={styles.makeProject}>
+            <FontAwesomeIcon icon={faPencil} />
+            <div>글 쓰기</div>
+          </Link>
+        </div>
+      </div>
+      {isModalOpen && <PortfolioModal item={data.find((item) => item.boardId === selectedItemId)} onClose={() => setIsModalOpen(false)} />}
+    </div>
   );
 };
 

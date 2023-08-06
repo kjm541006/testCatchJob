@@ -46,7 +46,9 @@ const DetailModal = ({ setShowModal, onSave, prevCover, prevCoverURL, prevTags }
     <div className={`${styles.modalBackdrop}`} onClick={() => setShowModal(false)}>
       <div className={`${styles.modalContent}`} onClick={(e) => e.stopPropagation()}>
         <div className={`${styles.modalTitle}`}>커버</div>
-        <div className={`${styles.modalCover}`} style={{ backgroundImage: `url(${uploadedFile})` }}></div>
+        <div className={`${styles.modalCover}`} style={{ backgroundImage: `url(${prevCoverURL})` }}>
+  {uploadedFile && <img src={uploadedFile} alt=""  className={`${styles.modalCover}`}/>}
+</div>
         <div className={`${styles.modalCoverDiv}`}>
           <div className={`${styles.modalCoverMent}`}>화면 상의 커버 사이즈는 350X250입니다.</div>
           <input type="file" id="CoverUpload" style={{ display: "none" }} onChange={handleFileUpload} />
