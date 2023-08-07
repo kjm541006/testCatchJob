@@ -79,6 +79,8 @@ const BuildPortfolioPage = () => {
     setPrevCoverURL(coverURL);
   };
 
+  
+
   const handleSaveContent = async () => {
     const token = localStorage.getItem("token");
     
@@ -93,8 +95,14 @@ const BuildPortfolioPage = () => {
         Authorization: `Bearer ${token}`,
       },
     };
-    const bContents = value.replace(/<p>/g, "<br>").replace(/<\/p>/g, "");
-
+    const bContents = value
+    .replace(/<p>/g, "<br>")
+    .replace(/<\/p>/g, "<br>")
+    .replace(/<img/g, "<p><br><img")
+    .replace(/<\/img>/g, "</img></p></br>")
+    .replace(/<\/p>\s*<p>/g, "<br>")
+    .replace(/<img[^>]+?>/g, '<br>$&<br>')
+  
     const formData = new FormData();
     formData.append("bTitle", title);
     formData.append("bContents", bContents);
@@ -124,8 +132,7 @@ const BuildPortfolioPage = () => {
       [{ header: [1, 2, false] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
       ["image"],
-      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-      ['br']
+      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }]
     ],
     ImageResize: {
       parchment: Quill.import('parchment')
