@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.catchJob.domain.member.GoogleOAuth;
+import com.project.catchJob.domain.member.Member;
 import com.project.catchJob.dto.member.GoogleOAuthTokenDTO;
 import com.project.catchJob.dto.member.GoogleUserInfoDTO;
 
@@ -15,13 +16,17 @@ public class OAuthService {
 	@Autowired
 	private GoogleOAuth googleOauth;
 	
-	private GoogleUserInfoDTO getGoogleUserInfoDTO(String code) throws JsonProcessingException {
+	@Autowired
+	private MemberService memberService;
+	
+	private Member getGoogleUserInfoDTO(String code) throws JsonProcessingException {
 		
 		ResponseEntity<String> accessTokenResponse = googleOauth.requestAccessToken(code);
 		GoogleOAuthTokenDTO oAuthToken = googleOauth.getAccessToken(accessTokenResponse);
 		ResponseEntity<String> userInfoRes = googleOauth.requestUserInfo(oAuthToken);
 		GoogleUserInfoDTO googleUser = googleOauth.getUserInfo(userInfoRes);
-		return googleUser;
+		Member member = memberService.createGoogleMember(googleUser);
+		return member;
 	}
 	
 }
