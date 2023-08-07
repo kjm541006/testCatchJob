@@ -76,11 +76,11 @@
 }
 
 .login-button {
-  width: 333px;
+  width: 320px;
   height: 50px;
   border-radius: 4px;
   background: #e2432e;
-  margin: 20px 0px 50px 0px;
+  margin: 50px 0px 50px 0px;
   display: flex;
   justify-content: center;
   align-items: center;

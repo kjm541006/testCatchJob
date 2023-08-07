@@ -89,7 +89,13 @@ const BuildPortfolioPage = () => {
         Authorization: `Bearer ${token}`,
       },
     };
-    const bContents = value.replace(/<p>/g, "<br>").replace(/<\/p>/g, "");
+    const bContents = value
+      .replace(/<p>/g, "<br>")
+      .replace(/<\/p>/g, "<br>")
+      .replace(/<img/g, "<p><br><img")
+      .replace(/<\/img>/g, "</img></p></br>")
+      .replace(/<\/p>\s*<p>/g, "<br>")
+      .replace(/<img[^>]+?>/g, "<br>$&<br>");
 
     const formData = new FormData();
     formData.append("bTitle", title);
@@ -120,7 +126,6 @@ const BuildPortfolioPage = () => {
       ["bold", "italic", "underline", "strike", "blockquote"],
       ["image"],
       [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-      ["br"],
     ],
     ImageResize: {
       parchment: Quill.import("parchment"),
