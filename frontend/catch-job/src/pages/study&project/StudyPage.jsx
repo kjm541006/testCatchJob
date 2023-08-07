@@ -24,7 +24,7 @@ const StudyPage = () => {
 
     try {
       // const response = await axios.get("https://jsonplaceholder.typicode.com/posts/");
-      // const response = await axios.get("http://localhost:8089/project");
+      // const response = await axios.get("http://43.202.98.45:8089/project");
       const response = await axios.get("http://43.202.98.45:8089/project");
       console.log(response.data);
       if (typeParam === "all") {

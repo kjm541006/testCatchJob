@@ -123,7 +123,7 @@ const BuildStudyPage = () => {
       };
 
       try {
-        // const response = await axios.post(`http://localhost:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+        // const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
         const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
         console.log(response);
         if (response && response.status >= 200 && response.status < 300) {
@@ -151,7 +151,7 @@ const BuildStudyPage = () => {
       };
 
       try {
-        // const response = await axios.post(`http://localhost:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+        // const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
         const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
         console.log(response);
         if (response && response.status >= 200 && response.status < 300) {
@@ -167,7 +167,7 @@ const BuildStudyPage = () => {
 
   return (
     <div className={styles.buildPage}>
-      {/* <form method="post" action="http://localhost:8089/buildstudy" onSubmit={handleSubmit}> */}
+      {/* <form method="post" action="http://43.202.98.45:8089/buildstudy" onSubmit={handleSubmit}> */}
       <div className={styles.buildType}>
         <div className={`${styles.type} ${bType === "project" && styles.active}`} onClick={changeTypeToProject}>
           프로젝트

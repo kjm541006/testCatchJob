@@ -33,7 +33,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post("http://43.202.98.45:8089/login", userData);
-      // const response = await axios.post("http://localhost:8089/login", userData);
+      // const response = await axios.post("http://43.202.98.45:8089/login", userData);
       console.log(response.data);
       console.log(response.data.name);
       const userId = response.data.memberId;
