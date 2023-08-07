@@ -1,15 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { selectEmail } from "../../redux/login";
 
 const CommunityComment = (props) => {
   const [comments, setComments] = useState([]);
   const [commentVal, setCommentVal] = useState();
+  const userEmail = useSelector(selectEmail);
 
   const getComments = async () => {
     try {
       await axios
         .get("http://43.202.98.45:8089/community/comment/list", {
-        // .get("http://localhost:8089/community/comment/list", {
           params: {
             communityId: props.communityId,
           },
@@ -37,7 +39,6 @@ const CommunityComment = (props) => {
     };
     try {
       await axios.post(`http://43.202.98.45:8089/community/comment/insert`, newComment).then((response) => {
-      // await axios.post(`http://localhost:8089/community/comment/insert`, newComment).then((response) => {
         console.log(response.data);
 
         setCommentVal("");
@@ -52,6 +53,17 @@ const CommunityComment = (props) => {
     if (props.open) getComments();
   }, [props.open]);
 
+  const formatCommentDate = (dateString) => {
+    const date = new Date(dateString);
+    const formatDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(
+      2,
+      "0"
+    )} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}:${String(date.getSeconds()).padStart(
+      2,
+      "0"
+    )}`;
+    return formatDate;
+  };
   const handleCommentChange = (event, i) => {
     setCommentVal(event.target.value);
   };
@@ -61,9 +73,13 @@ const CommunityComment = (props) => {
     // commentId를 기반으로 해당 댓글을 수정하는 작업을 수행합니다.
   };
 
-  const handleDeleteComment = (commentId) => {
-    // 삭제 기능을 구현하는 로직을 작성합니다.
-    // commentId를 기반으로 해당 댓글을 삭제하는 작업을 수행합니다.
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await axios.delete(`http://43.202.98.45:8089/community/comment/delete?commentId=${commentId}`);
+      setComments((prevComments) => prevComments.filter((comment) => comment.commentId !== commentId));
+    } catch (error) {
+      console.error("Error deleting comment", error);
+    }
   };
   return (
     <>
@@ -82,7 +98,6 @@ const CommunityComment = (props) => {
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button
           style={{
-            fontFamily: "Inter",
             fontWeight: "700",
             fontSize: "11px",
             color: "white",
@@ -102,21 +117,25 @@ const CommunityComment = (props) => {
             <div key={comment.communityId} className="commentment">
               <div className="commentmentuser">
                 <div>
-                  <img src={comment.profileImg} alt="프로필" />
-                  {comment.memberId}
+                  <img className="commentmprofile" src={comment.memberProfile} alt="프로필" />
+                  {comment.memberName}({comment.memberEmail})<div className="datecomment">{formatCommentDate(comment.commentDate)}</div>
                 </div>
                 <div className="commenteditBtn">
-                  <span style={{ color: "#77BC1F" }} onClick={() => handleEditComment(comment.communityId)}>
-                    수정
-                  </span>
-                  <span style={{ color: "#E2432E" }} onClick={() => handleDeleteComment(comment.communityId)}>
-                    삭제
-                  </span>
+                  {comment.memberEmail === userEmail && (
+                    <>
+                      <span style={{ color: "#77BC1F" }} onClick={() => handleEditComment(comment.communityId)}>
+                        수정
+                      </span>
+                      <span style={{ color: "#E2432E" }} onClick={() => handleDeleteComment(comment.commentId)}>
+                        삭제
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
 
               <div className="commentmentment">
-                <p>{comment.ccomcontent}</p>
+                <p>{comment.cComcontent}</p>
               </div>
             </div>
           ))}
