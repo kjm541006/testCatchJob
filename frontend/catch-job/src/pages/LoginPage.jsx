@@ -40,6 +40,7 @@ const LoginPage = () => {
       const token = response.data.token;
       const name = response.data.name;
       const email = response.data.email;
+      const profileImg = response.data.moriginalFileName;
       console.log(token);
       console.log(name);
       console.log(email);
@@ -47,6 +48,7 @@ const LoginPage = () => {
       localStorage.setItem("token", token);
       localStorage.setItem("name", name);
       localStorage.setItem("email", email);
+      localStorage.setItem("profileImg", profileImg);
       console.log(`로그인여부 :${isLoggedIn}`);
       navigate("/");
       setTimeout(() => {

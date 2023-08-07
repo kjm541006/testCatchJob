@@ -19,39 +19,48 @@ const StudyPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log(typeParam);
+  const fetchData = async () => {
+    console.log(typeParam);
 
-      try {
-        // const response = await axios.get("https://jsonplaceholder.typicode.com/posts/");
-        // const response = await axios.get("http://localhost:8089/project");
-        const response = await axios.get("http://43.202.98.45:8089/project");
-        console.log(response.data);
-        if (typeParam === "all") {
-          setData(response.data);
-          return;
-        }
-        const newProducts = response.data.filter((list) => list.type === typeParam);
-        setData(newProducts);
-        console.log(response.data);
-      } catch (error) {
-        if (error.message.toLowerCase() === "Network Error".toLowerCase()) {
-          alert("네트워크 에러입니다. 서버가 꺼져있을 수 있습니다.");
-        }
-        alert("에러가 발생했습니다.");
-        dispatch(stopLoading());
-      } finally {
-        dispatch(stopLoading());
+    try {
+      // const response = await axios.get("https://jsonplaceholder.typicode.com/posts/");
+      // const response = await axios.get("http://localhost:8089/project");
+      const response = await axios.get("http://43.202.98.45:8089/project");
+      console.log(response.data);
+      if (typeParam === "all") {
+        setData(response.data.reverse());
+        return;
       }
-    };
+      const newProducts = response.data.filter((list) => list.type === typeParam);
+      setData(newProducts);
 
+      console.log(response.data);
+    } catch (error) {
+      if (error.message.toLowerCase() === "Network Error".toLowerCase()) {
+        alert("네트워크 에러입니다. 서버가 꺼져있을 수 있습니다.");
+      }
+      alert("에러가 발생했습니다.");
+      dispatch(stopLoading());
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
+
+  useEffect(() => {
     fetchData().then(() => {
       dispatch(stopLoading());
     });
   }, [dispatch, typeParam]);
 
-  const addHeart = () => {};
+  const addHeart = async (event, id) => {
+    event.stopPropagation();
+    try {
+      const response = await axios.post(`http://43.202.98.45:8089/studyDetail/like/${id}`);
+      fetchData();
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const options = [
     { value: "all", label: "전체" },
@@ -102,10 +111,10 @@ const StudyPage = () => {
             <div className={styles.gridViewWrapper}>
               <div className={styles.studyGridView}>
                 {/* key db id로 변경해야함 */}
-                {data.reverse().map((v, i) => {
+                {data.map((v) => {
                   return (
                     <div
-                      key={i}
+                      key={v.projectId}
                       className={styles.studyGridElement}
                       onClick={() =>
                         v.bType === "project" ? navigate(`/projectDetail?id=${v.projectId}`) : navigate(`/studyDetail?id=${v.projectId}`)
@@ -132,15 +141,34 @@ const StudyPage = () => {
                         )}
                       </div>
                       {true && (
-                        <div className={styles.heart} onClick={addHeart}>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                            <path
-                              d="M11.4081 1.47208C11.9976 1.16786 12.6398 1.00685 13.2911 1.00003C13.8378 0.997993 14.3792 1.1156 14.8839 1.34599C15.3891 1.57661 15.8474 1.91559 16.2318 2.34308C16.6163 2.77057 16.9191 3.27798 17.1226 3.83558C17.3262 4.39317 17.4263 4.98975 17.4171 5.59037L17.417 5.60167C17.417 7.19425 16.7779 8.69082 15.5313 10.3853C14.2776 12.0894 12.4729 13.9114 10.2387 16.1668L10.2378 16.1678L9.40592 17L8.57001 16.1547C6.33556 13.903 4.5297 12.0819 3.27586 10.3793C2.02923 8.68644 1.39031 7.19132 1.39031 5.60167L1.39022 5.59037C1.38109 4.98975 1.48122 4.39317 1.68475 3.83558C1.88828 3.27798 2.19112 2.77057 2.57553 2.34308C2.95994 1.91559 3.41819 1.57661 3.92344 1.34599C4.42817 1.1156 4.96968 0.997993 5.51629 1.00003C6.16756 1.00685 6.80981 1.16786 7.39923 1.47208C7.98913 1.77657 8.51219 2.21732 8.93262 2.7642L9.40368 3.37694L9.87476 2.7642C10.2952 2.21732 10.8182 1.77657 11.4081 1.47208Z"
-                              fill="#C4C4C4"
-                              fillOpacity="0.4"
-                              stroke="#B2B2B2"
-                            />
-                          </svg>
+                        <div className={styles.heart} onClick={(event) => addHeart(event, v.projectId)}>
+                          {console.log(v.isLike)}
+                          {v.isLike === true ? (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                              <path
+                                d="M11.4081 1.47208C11.9976 1.16786 12.6398 1.00685 13.2911 1.00003C13.8378 0.997993 14.3792 1.1156 14.8839 1.34599C15.3891 1.57661 15.8474 1.91559 16.2318 2.34308C16.6163 2.77057 16.9191 3.27798 17.1226 3.83558C17.3262 4.39317 17.4263 4.98975 17.4171 5.59037L17.417 5.60167C17.417 7.19425 16.7779 8.69082 15.5313 10.3853C14.2776 12.0894 12.4729 13.9114 10.2387 16.1668L10.2378 16.1678L9.40592 17L8.57001 16.1547C6.33556 13.903 4.5297 12.0819 3.27586 10.3793C2.02923 8.68644 1.39031 7.19132 1.39031 5.60167L1.39022 5.59037C1.38109 4.98975 1.48122 4.39317 1.68475 3.83558C1.88828 3.27798 2.19112 2.77057 2.57553 2.34308C2.95994 1.91559 3.41819 1.57661 3.92344 1.34599C4.42817 1.1156 4.96968 0.997993 5.51629 1.00003C6.16756 1.00685 6.80981 1.16786 7.39923 1.47208C7.98913 1.77657 8.51219 2.21732 8.93262 2.7642L9.40368 3.37694L9.87476 2.7642C10.2952 2.21732 10.8182 1.77657 11.4081 1.47208Z"
+                                fill="#C4C4C4"
+                                fillOpacity="0.4"
+                                stroke="#B2B2B2"
+                              />
+                            </svg>
+                          ) : (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="18"
+                              height="18"
+                              viewBox="0 0 18 18"
+                              fill="none"
+                              className={styles.heartActive}
+                            >
+                              <path
+                                d="M11.4081 1.47208C11.9976 1.16786 12.6398 1.00685 13.2911 1.00003C13.8378 0.997993 14.3792 1.1156 14.8839 1.34599C15.3891 1.57661 15.8474 1.91559 16.2318 2.34308C16.6163 2.77057 16.9191 3.27798 17.1226 3.83558C17.3262 4.39317 17.4263 4.98975 17.4171 5.59037L17.417 5.60167C17.417 7.19425 16.7779 8.69082 15.5313 10.3853C14.2776 12.0894 12.4729 13.9114 10.2387 16.1668L10.2378 16.1678L9.40592 17L8.57001 16.1547C6.33556 13.903 4.5297 12.0819 3.27586 10.3793C2.02923 8.68644 1.39031 7.19132 1.39031 5.60167L1.39022 5.59037C1.38109 4.98975 1.48122 4.39317 1.68475 3.83558C1.88828 3.27798 2.19112 2.77057 2.57553 2.34308C2.95994 1.91559 3.41819 1.57661 3.92344 1.34599C4.42817 1.1156 4.96968 0.997993 5.51629 1.00003C6.16756 1.00685 6.80981 1.16786 7.39923 1.47208C7.98913 1.77657 8.51219 2.21732 8.93262 2.7642L9.40368 3.37694L9.87476 2.7642C10.2952 2.21732 10.8182 1.77657 11.4081 1.47208Z"
+                                fill="#e2432e"
+                                fillOpacity="0.4"
+                                stroke="#B2B2B2"
+                              />
+                            </svg>
+                          )}
                         </div>
                       )}
                       <div className={styles.subject}>
@@ -163,8 +191,11 @@ const StudyPage = () => {
                         <span className={styles.heartRate}>{v.pLike}</span>
                       </div>
                       <div className={styles.people}>
-                        <span>조회수 </span>
-                        <span> {v.pCnt}</span>
+                        <div>{v.end ? <span>모집 완료</span> : <span>모집 중</span>}</div>
+                        <div>
+                          <span>조회수 </span>
+                          <span> {v.pCnt}</span>
+                        </div>
                       </div>
                     </div>
                   );

@@ -3,7 +3,7 @@ import "../../assets/css/CommunityPage.css";
 import PostModal from "./CommunityPostModal";
 import "../../assets/css/CommunityPostModal.css";
 import Heart from "../../assets/img/heart.svg";
-//import Noheart from "../../assets/img/noheart.svg";
+import Noheart from "../../assets/img/noheart.svg";
 import { useSelector } from "react-redux";
 import { selectEmail } from "../../redux/login";
 import axios from "axios";
@@ -13,11 +13,13 @@ function Card(props) {
   const [commentModalOpen, setCommentModalOpen] = useState([]);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
+  const [isLike, setIsLike] = useState(false);
 
   const [expanded, setExpanded] = useState([]);
 
   const [postModalOpen, setPostModalOpen] = useState(false);
   const [showComments, setShowComments] = useState([]);
+
   const [selectedCategory, setSelectedCategory] = useState("전체");
 
   const [communityData, setCommunityData] = useState([]);
@@ -25,16 +27,22 @@ function Card(props) {
 
   // Function to fetch community data from the server
   const fetchCommunityData = async () => {
+    const token = localStorage.getItem("token");
+    const headers = {};
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
     try {
-      const response = await axios.get("http://43.202.98.45:8089/community");
-      // const response = await axios.get("http://localhost:8089/community");
+      const response = await axios.get("http://43.202.98.45:8089/community", { headers });
+      const updatedData = response.data.map((post) => ({ ...post, isLike: false, likeCount: post.cLike || 0 }));
       console.log(response.data);
-      setCommunityData(response.data);
+      setCommunityData(updatedData);
     } catch (error) {
       console.error(error);
     }
   };
-
+  //글목록
   useEffect(() => {
     fetchCommunityData();
   }, []);
@@ -66,7 +74,7 @@ function Card(props) {
     setComments(newComments);
   };
 
-  const handleSubmitComment = async (newComment) => {};
+  const handleSubmitComment = async (newPost) => {};
 
   const togglePostModal = () => {
     setPostModalOpen(!postModalOpen);
@@ -78,7 +86,7 @@ function Card(props) {
     setSelectedCategory(category);
   };
 
-  const filteredData = selectedCategory === "전체" ? communityData : communityData.filter((post) => post.ctype === selectedCategory);
+  const filteredData = selectedCategory === "전체" ? communityData : communityData.filter((post) => post.cType === selectedCategory);
 
   const truncateContent = (content, maxLength) => {
     if (content.length > maxLength) {
@@ -87,88 +95,52 @@ function Card(props) {
     return content;
   };
 
-  const renderComments = (comments, showComments, communityId) => {
-    if (!showComments || !comments) {
-      // showComments가 false이거나 comments가 undefined인 경우, null 또는 빈 div를 반환합니다.
-      return null;
-    }
-
-    return (
-      <>
-        <div className="commentsContainer">
-          {comments.map((comment) => (
-            <div key={comment.community_id} className="commentment">
-              <div className="commentmentuser">
-                <div>
-                  <img src={comment.profileImg} alt="프로필" />
-                  {comment.member_id}
-                </div>
-                <div className="commenteditBtn">
-                  <span style={{ color: "#77BC1F" }} onClick={() => handleEditComment(comment.communityId)}>
-                    수정
-                  </span>
-                  <span style={{ color: "#E2432E" }} onClick={() => handleDeleteComment(comment.communityId)}>
-                    삭제
-                  </span>
-                </div>
-              </div>
-
-              <div className="commentmentment">
-                <p>{comment.c_com_content}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </>
-    );
-  };
   const handleLike = async (community_id) => {
     try {
-      const response = await axios.post(`http://localhost:8089/community/post/${community_id}/like`);
-      setCommunityData((prevData) => {
-        const newData = prevData.map((post) => (post.community_id === community_id ? { ...post, like: response.data.like } : post));
-        return newData;
-      });
-    } catch (error) {
-      console.error(error);
+      const response = await axios.post(`http://43.202.98.45:8089/community/like?communityId=${community_id}`);
+      if (response.status === 200) {
+        setCommunityData((prevData) =>
+          prevData.map((post) =>
+            post.communityId === community_id
+              ? { ...post, isLike: !post.isLike, cLike: post.isLike ? post.cLike - 1 : post.cLike + 1 }
+              : post
+          )
+        );
+      }
+    } catch (err) {
+      console.error(err);
     }
-  };
-
-  const handleEditComment = (commentId) => {
-    // 수정 기능을 구현하는 로직을 작성합니다.
-    // commentId를 기반으로 해당 댓글을 수정하는 작업을 수행합니다.
-  };
-
-  const handleDeleteComment = (commentId) => {
-    // 삭제 기능을 구현하는 로직을 작성합니다.
-    // commentId를 기반으로 해당 댓글을 삭제하는 작업을 수행합니다.
   };
 
   return (
     <div className="communityCenter">
       <div className="communitySection">
         {filteredData.map((post, i) => (
-          <div key={post.community_id} className="communityCard" style={{ borderBottom: "1px solid #E2E8F0" }}>
+          <div key={post.communityId} className="communityCard" style={{ borderBottom: "1px solid #E2E8F0" }}>
             <div className="userSection">
-              <div>
-                <img src={post.profileImg} alt="프로필" />
+              <div style={{ display: "flex", gap: "30px" }}>
+                <div>
+                  <img className="communitymprofile" src={post.member.mOriginalFileName} alt="프로필" />
+                </div>
+                <div>
+                  <div>{post.member.email}</div>
+                  <span>{post.cDate}</span>
+                </div>
               </div>
-              <div>유저닉네임: {post.member}</div>
-              <div>시간: {post.cdate}</div>
             </div>
 
             <div className="cardContentsComponents">
               <div className="cardContentsComponents_Title">
-                <span className="contentpostCategory">{post.ctype}</span>
-                <h3>{post.title}</h3>
+                <span className="contentpostCategory">{post.cType}</span>
+                <h3>{post.cTitle}</h3>
               </div>
 
               <div>
                 <div className={`cardContentsComponents_TextArea ${expanded[i] ? "expanded" : ""}`}>
                   <p>
-                    {post && post.ccontents // post 객체와 post.c_contents 속성 체크
+                    {post && post.cContents // post 객체와 post.c_contents 속성 체크
                       ? expanded[i]
-                        ? post.ccontents.split("\n").map((line) => {
+                        ? post.cContents.split("\n").map((line) => {
                             // 펼칠때
                             return (
                               <span>
@@ -178,7 +150,7 @@ function Card(props) {
                             );
                           })
                         : truncateContent(
-                            post.ccontents.split("\n").map((line) => {
+                            post.cContents.split("\n").map((line) => {
                               // 접힐때
                               return (
                                 <span>
@@ -193,7 +165,7 @@ function Card(props) {
                   </p>
                 </div>
 
-                {post.ccontents && post.ccontents.length > 100 && (
+                {post.cContents && post.cContents.length > 100 && (
                   <div className="cardContentsComponents_morebutton">
                     <span className="moreButton" onClick={() => toggleExpanded(i)}>
                       {expanded[i] ? "닫기" : "펼치기"}
@@ -204,8 +176,18 @@ function Card(props) {
             </div>
             <div>
               <div className="cardContentsComponents_bottom">
-                <div className="heart_img" onClick={() => handleLike(post.community_id)}>
-                  {post.like ? <img src={Heart} alt="하트" /> : null}
+                <div
+                  className="heart_img"
+                  style={{ display: "flex", gap: "10px", alignItems: "center", color: "#B2B2B2", fontSize: "13px" }}
+                  onClick={() => handleLike(post.communityId)}
+                >
+                  <div>
+                    {/*{post.isLike ? <img src={Heart} alt="하트" /> : <img src={Noheart} alt="빈하트" />}*/}
+                    {post.isLike ? <img src={Heart} alt="하트" /> : <img src={Noheart} alt="빈하트" />}
+                  </div>
+                  <div>
+                    <span>{post.cLike}</span>
+                  </div>
                 </div>
 
                 <span className="ment" onClick={() => toggleCommentModal(i)}>

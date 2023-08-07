@@ -48,7 +48,7 @@ section {
   color: #fff;
   line-height: 15px;
   background-color: #d3b4f2;
-  padding: 12px 25px 14px;
+  padding: 12px 10px;
   border-radius: 2px;
 }
 
@@ -161,9 +161,21 @@ section {
   margin-top: 20px;
   max-width: 50%;
   display: grid;
-  grid-template-columns: 1fr 0.5fr 1fr;
+  gap: 10px;
   justify-items: start;
   align-items: center;
+  grid-template-columns: 1fr 0.5fr 1fr 1fr;
+}
+
+.crewsStudy {
+  margin-top: 20px;
+  max-width: 50%;
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  align-items: center;
+  grid-template-columns: 1fr 0.5fr 1fr;
+  padding-left: 50px;
 }
 
 .crewNum {
@@ -388,7 +400,7 @@ section {
 }
 
 .likeActive {
-  background-color: #e2432e;
+  color: #e2432e;
 }
 
 .likeProject {
@@ -396,7 +408,10 @@ section {
   color: #e2432e;
   font-size: 18px;
   background-color: #fff;
-  /* fill: white; */
+}
+
+.likeActive path {
+  fill: #e2432e;
 }
 
 .likeBtn:hover {
@@ -439,4 +454,25 @@ section {
 
 .delete:hover {
   border: 2px solid #e2432e;
+}
+
+.finishedWrapper {
+  position: absolute;
+  margin: 0 auto;
+  margin-top: 35px;
+  border: 1px solid #e2432e;
+  padding: 10px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: -60px;
+  left: 0px;
+}
+
+.finished {
+  font-size: 14px;
+  font-weight: 700;
 }
