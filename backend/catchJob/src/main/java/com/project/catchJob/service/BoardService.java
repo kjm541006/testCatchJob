@@ -232,13 +232,11 @@ public class BoardService {
 	    
     	Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 	    		.orElseThrow(UnauthorizedException::new);
-	    
-    	Member member = memberRepo.findByEmail(optAuthenticatedMember.getEmail());
     	
     	Board board = boardRepo.findById(boardId).orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));
     	B_comments comments = B_comments.builder()
     			.bComContent(commentDTO.getCommentContent())
-    			.member(member)
+    			.member(optAuthenticatedMember)
     			.board(board)
     			.build();
     	B_comments saveComm = bCommRepo.save(comments);

@@ -36,12 +36,14 @@ const LoginPage = () => {
       // const response = await axios.post("http://localhost:8089/login", userData);
       console.log(response.data);
       console.log(response.data.name);
+      const userId = response.data.memberId;
       const token = response.data.token;
       const name = response.data.name;
       const email = response.data.email;
       console.log(token);
       console.log(name);
       console.log(email);
+      localStorage.setItem("memId", userId);
       localStorage.setItem("token", token);
       localStorage.setItem("name", name);
       localStorage.setItem("email", email);
@@ -53,12 +55,10 @@ const LoginPage = () => {
     } catch (error) {
       if (error.response.status === 400) {
         alert("회원을 찾지 못했습니다.");
-      }
-      else if (error.response.status === 500) {
+      } else if (error.response.status === 500) {
         // 서버 내부 에러 처리
         alert("로그인에 실패했습니다.(서버 에러) ");
-      }
-      else {
+      } else {
         // 기타 에러 처리
         alert("로그인에 실패했습니다. 다시 시도해주세요.");
       }
@@ -66,7 +66,7 @@ const LoginPage = () => {
   };
 
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleLogin();
     }
   };
@@ -103,7 +103,8 @@ const LoginPage = () => {
 
           <div className="social-buttons">
             <button className="kakao-button"></button>
-            <GoogleOAuthProvider clientId="226990065119-dh4qnntmuprddppr3hoi6umt9k99vkvb.apps.googleusercontent.com">
+            {/* <GoogleOAuthProvider clientId="226990065119-dh4qnntmuprddppr3hoi6umt9k99vkvb.apps.googleusercontent.com"> */}
+            <GoogleOAuthProvider clientId="349939229334-dlcph9tdiofv8g5blcq30l6qpms8r3te.apps.googleusercontent.com">
               <GoogleLoginButton />
             </GoogleOAuthProvider>
           </div>

@@ -46,28 +46,28 @@ public class ProjectController {
     @Autowired CommonService commonService;
     @Autowired private JwtUtils jwtUtils;
 
+    // 글 등록
     @PostMapping("/buildproject")
     public ResponseEntity<?> addProject(@RequestBody ProjectDTO projectDTO, HttpServletRequest request) {
-    	System.out.println("------------------------------------------");
-    	System.out.println(request);
     	String userEmail = jwtUtils.getEmailFromRequest(request);
-    	System.out.println(userEmail);
     	Project savedProject = projectService.addProject(projectDTO, userEmail);
     	return ResponseEntity.ok(savedProject.getProjectId());
     }
     
+    // 글 목록
     @GetMapping("/project")
-    public ResponseEntity<List<Project>> getAllProjects() {
-        List<Project> projects = projectService.getAllProjects();
+    public ResponseEntity<List<ProjectDTO>> getAllProjects(@RequestHeader(value = "Authorization", required = false) String  jwtToken) {
+        List<ProjectDTO> projects = projectService.getAllProjects(jwtToken);
         return ResponseEntity.ok(projects);
     }
     
     // 글 조회
     @GetMapping("/studyDetail/{id}")
-    public ResponseEntity<?> getProjectByProjectId(@PathVariable("id") Long projectId) throws NotFoundException {
-    	System.out.println(projectId);
+    public ResponseEntity<?> getProjectByProjectId(@PathVariable("id") Long projectId,
+    		@RequestHeader(value = "Authorization", required = false) String  jwtToken) throws NotFoundException {
+    	
     	projectService.updateCnt(projectId);
-        ProjectDTO project = projectService.getProjectByProjectId(projectId);
+        ProjectDTO project = projectService.getProjectByProjectId(projectId, jwtToken);
         
         return ResponseEntity.ok(project);
     }

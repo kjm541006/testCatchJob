@@ -92,36 +92,7 @@ public class GoogleOAuth {
 //		}
 //		return ResponseEntity.badRequest().body("fail");
 		
-		// 스프링부트에서 다른 서버의 api 엔드포인트 호출할 때 restTemplate사용
-	////////이거
-//		 //RestTemplate restTemplate = new RestTemplate();
-//		    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-//		    
-//		    params.add("code", accessCode);
-//		    params.add("client_id", googleClientId);
-//		    params.add("client_secret", googleClientSecret);
-//		    params.add("redirect_uri", googleRedirectUrl);
-//		    params.add("grant_type", "authorization_code");
-//
-//		    HttpHeaders headers = new HttpHeaders();
-//		    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-//		   HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
-//		    
-//		   ResponseEntity<String> responseEntity;
-//		   try {
-//			    responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_URL, requestEntity, String.class);
-//			} catch (HttpClientErrorException e) {
-//			    if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-//			        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired access code");
-//			    } else {
-//			        e.printStackTrace();
-//			        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while making API call");
-//			    }
-//			} catch (Exception e) {
-//			    e.printStackTrace();
-//			    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while making API call");
-//			}
-//	}
+
 	public ResponseEntity<String> requestAccessToken(String accessCode) {
 		System.out.println("=======3========" + accessCode);
 		RestTemplate restTemplate = new RestTemplate();
@@ -147,7 +118,6 @@ public class GoogleOAuth {
 	
 	// token 얻기 json -> 자바 객체
 	public GoogleOAuthTokenDTO getAccessToken(ResponseEntity<String> res) throws JsonProcessingException {
-		System.out.println("---------------response.getBody() = " + res.getBody());
 		GoogleOAuthTokenDTO googleOAuthTokenDTO = objectMapper.readValue(res.getBody(), GoogleOAuthTokenDTO.class);
 		return googleOAuthTokenDTO;
 		// GoogleOAuthTokenDTO : json형태를 자바 객체 형식으로 변경 후 저장해서 담을 곳
@@ -158,12 +128,10 @@ public class GoogleOAuth {
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", "Bearer " + oAuthToken.getAccess_token());
-		System.out.println("Authorization: " + "Bearer "+oAuthToken.getAccess_token());
 		
 		HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(headers);
 //		HttpEntity req = new HttpEntity(headers);
 		ResponseEntity<String> res = restTemplate.exchange(GOOGLE_USERINFO_REQUEST_URL, HttpMethod.GET, req, String.class);
-		System.out.println("response.getBody() = " + res.getBody());
 		return res;
 	}
 	
@@ -171,6 +139,7 @@ public class GoogleOAuth {
 	public GoogleUserInfoDTO getUserInfo(ResponseEntity<String> res) throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		GoogleUserInfoDTO googleUserInfoDTO = objectMapper.readValue(res.getBody(), GoogleUserInfoDTO.class);
+		System.out.println("================" + googleUserInfoDTO);
 		return googleUserInfoDTO;
 		// GoogleUserInfoDTO : json형태를 자바 객체 형식으로 변경 후 저장해서 담을 곳
 	}

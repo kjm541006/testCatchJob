@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.catchJob.domain.member.GoogleOAuth;
 import com.project.catchJob.domain.member.Member;
+import com.project.catchJob.dto.member.GoogleOAuthTokenDTO;
 import com.project.catchJob.dto.member.GoogleUserInfoDTO;
 import com.project.catchJob.dto.member.MemberDTO;
 import com.project.catchJob.dto.member.MemberInfoDTO;
@@ -82,6 +84,7 @@ public class MemberController {
 			String profile = "http://43.202.98.45:8089/upload/" + member.getMProfile().getMStoredFileName();
 			
 			final MemberDTO responseMemberDTO = MemberDTO.builder()
+					.memberId(member.getMemberId())
 					.name(member.getName())
 					.email(member.getEmail())
 					.pwd(pwdEncoder.encrypt(member.getEmail(), member.getPwd()))
@@ -103,7 +106,21 @@ public class MemberController {
 //	@PostMapping("/login/oauth2/code/google")
 	@PostMapping("/googlelogin")
 	public ResponseEntity<?> successGoogleLogin(@RequestParam("code") String code) {
-		return googleoauth.requestAccessToken(code);
+//		return googleoauth.requestAccessToken(code);
+		ResponseEntity<String> accessTokenResponse;
+	    try {
+	        accessTokenResponse = googleoauth.requestAccessToken(code);
+	        GoogleOAuthTokenDTO oAuthToken = googleoauth.getAccessToken(accessTokenResponse);
+	        ResponseEntity<String> userInfoRes = googleoauth.requestUserInfo(oAuthToken);
+	        GoogleUserInfoDTO googleUser = googleoauth.getUserInfo(userInfoRes);
+	        Member savedMember = memberService.createGoogleMember(googleUser);
+	        
+	        return ResponseEntity.ok().body("================" + savedMember);
+	        
+	    } catch (JsonProcessingException e) {
+	        e.printStackTrace();
+	        return ResponseEntity.badRequest().body("Google Login Failed");
+	    }
 	}
 
 	// 마이페이지 (회원조회)
