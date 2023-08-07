@@ -162,14 +162,15 @@ const PortfolioModal = ({ item, onClose }) => {
       console.log(comment);
 
       setCommentList([
-        ...commentList,
         {
           commentContent: comment,
           commentDate: commentDateFromServer,
           memberName: writerName,
           memberEmail: writerEmail,
         },
+        ...commentList,
       ]);
+      
 
       setComment("");
     } else {
