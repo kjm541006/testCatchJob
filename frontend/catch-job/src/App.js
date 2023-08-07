@@ -27,7 +27,6 @@ import NewsPage from "./pages/NewsPage";
 import SigninAlertPage from "./pages/SigninAlertPage";
 import StudyDetailPage from "./pages/study&project/StudyDetailPage";
 import PasswordCheck from "./pages/PasswordCheck";
-import SearchDataPage from "./pages/SearchDataPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -77,8 +76,6 @@ function App() {
         <Route path="/community/*" element={<CommunityRoutes />} />
         <Route path="/studyDetail/*" element={<StudyDetailPage />} />
         <Route path="/projectDetail/*" element={<StudyDetailPage />} />
-        <Route path="/search" element={<SearchDataPage />} />
-
       </Routes>
     </div>
   );

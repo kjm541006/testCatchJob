@@ -255,7 +255,7 @@ const PortfolioModal = ({ item, onClose }) => {
             {item.tags[1] && <div className={`${styles.tagElement}`}>{item.tags[1]}</div>}
             {item.tags[2] && <div className={`${styles.tagElement}`}>{item.tags[2]}</div>}
           </div>
-          {item.bFileName && (
+          {item.bFileName !== "http://43.202.98.45:8089/upload/null" &&(
           <div className={`${styles.contentFile}`}>
             첨부파일:{" "}
             <a href={item.bFileName} download target="_blank" rel="noopener noreferrer">
