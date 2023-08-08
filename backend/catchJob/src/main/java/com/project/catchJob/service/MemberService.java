@@ -83,6 +83,11 @@ public class MemberService {
 	    if (memberRepo.existsByEmail(email)) {
 	        // 이미 존재하는 사용자인 경우 로그인 처리를 수행합니다.
 	        Member existingMember = memberRepo.findByEmail(email);
+	        String existedEmail = existingMember.getEmail();
+	        String existedPwd = existingMember.getPwd();
+	        getByCredentials(existedEmail, existedPwd, pwdEncoder);
+	        
+	        
 	        log.info("Existing user with email {} logged in", email);
 	        return existingMember;
 	    } else {
