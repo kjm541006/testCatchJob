@@ -90,7 +90,7 @@ const MyPage = () => {
         alert("회원정보수정을 성공하였습니다.");
         localStorage.setItem('email', response.data.email);
         localStorage.setItem('name', response.data.name);
-
+        navigate("/");
       }
     } catch (error) {
       console.error(error);
