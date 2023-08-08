@@ -159,45 +159,46 @@ const BasicSigninPage = () => {
 
           <div className="input-text-basic">직무</div>
           <div className="choosejob" id="pick">
-            <label className="labelOne">
-              <div className="choosejobone">
-                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹디자이너")} />
-                <div className="choosejob-text-basic">웹디자이너</div>
-              </div>
-            </label>
-            <label className="labelOne">
-              <div className="choosejobone">
-                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹퍼블리셔")} />
-                <div className="choosejob-text-basic">웹퍼블리셔</div>
-              </div>
-            </label>
-            <label className="labelOne">
-              <div className="choosejobone">
-                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("프론트엔드")} />
-                <div className="choosejob-text-basic">프론트엔드</div>
-              </div>
-            </label>
-          </div>
-          <div className="choosejob">
-            <label className="labelOne">
-              <div className="choosejobone">
-                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("백엔드")} />
-                <div className="choosejob-text-basic">백엔드</div>
-              </div>
-            </label>
-            <label className="labelOne">
-              <div className="choosejobone">
-                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("PM")} />
-                <div className="choosejob-text-basic">PM</div>
-              </div>
-            </label>
-            <label className="labelOne">
-              <div className="choosejobone">
-                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("기타")} />
-                <div className="choosejob-text-basic">기타</div>
-              </div>
-            </label>
-          </div>
+  <label className="labelOne">
+    <label className="choosejobone">
+      <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹디자이너")} />
+      <div className="choosejob-text-basic">웹디자이너</div>
+    </label>
+  </label>
+  <label className="labelOne">
+    <label className="choosejobone">
+      <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹퍼블리셔")} />
+      <div className="choosejob-text-basic">웹퍼블리셔</div>
+    </label>
+  </label>
+  <label className="labelOne">
+    <label className="choosejobone">
+      <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("프론트엔드")} />
+      <div className="choosejob-text-basic">프론트엔드</div>
+    </label>
+  </label>
+</div>
+<div className="choosejob">
+  <label className="labelOne">
+    <label className="choosejobone">
+      <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("백엔드")} />
+      <div className="choosejob-text-basic">백엔드</div>
+    </label>
+  </label>
+  <label className="labelOne">
+    <label className="choosejobone">
+      <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("PM")} />
+      <div className="choosejob-text-basic">PM</div>
+    </label>
+  </label>
+  <label className="labelOne">
+    <label className="choosejobone">
+      <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("기타")} />
+      <div className="choosejob-text-basic">기타</div>
+    </label>
+  </label>
+</div>
+
 
           <div className="input-text-basic">경력 여부</div>
           <div className="choosejob" id="pick">
