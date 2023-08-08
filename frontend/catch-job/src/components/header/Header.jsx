@@ -4,8 +4,11 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import "./header.css";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut, selectEmail, selectLoggedIn, selectName } from "../../redux/login";
+import { useState } from "react";
+import axios from "axios";
 
 const Header = () => {
+  const [searchWord, setSearchWord] = useState("");
   const dispatch = useDispatch();
   const uName = useSelector(selectName);
   const uEmail = useSelector(selectEmail);
@@ -26,6 +29,15 @@ const Header = () => {
     localStorage.removeItem("email");
     dispatch(logOut());
     <Navigate to="/" />;
+  };
+
+  const handleSearch = async () => {
+    if (searchWord.length === 0) {
+      alert("검색어를 입력하세요");
+      return;
+    }
+    window.location.href = `/search?w=${searchWord}`;
+    setSearchWord("");
   };
 
   return (
@@ -55,15 +67,23 @@ const Header = () => {
           </div>
         </div>
         <div className="nav-right">
-          <form action="/search" method="post">
-            <div className="search-bar">
-              <input type="text" placeholder="검색어를 입력하세요." className="search-box" required name="search" />
-              {/* <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /> */}
-              <button type="submit" className="submit-btn">
-                <FontAwesomeIcon icon={faMagnifyingGlass} className="search-bar-icon" />
-              </button>
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="검색어를 입력하세요."
+              className="search-box"
+              required
+              name="search"
+              value={searchWord}
+              onChange={(e) => setSearchWord(e.target.value)}
+            />
+            {/* <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /> */}
+            {/* <Link to={`/search?w=${searchWord}`}> */}
+            <div className="submit-btn" onClick={handleSearch}>
+              <FontAwesomeIcon icon={faMagnifyingGlass} className="search-bar-icon" />
             </div>
-          </form>
+            {/* </Link> */}
+          </div>
           <div className="login-wrap">
             {/* 로그인 안했을 경우 */}
             {!isLoggedIn && (

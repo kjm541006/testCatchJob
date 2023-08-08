@@ -14,7 +14,7 @@ const StudyPage = () => {
   const [data, setData] = useState([]);
   const [sortedOption, setSortedOption] = useState("all");
   const [sortedLocOption, setSortedLocOption] = useState("all");
-  // const [sortOption, setSortOption] = useState("popular");
+  const [sortOption, setSortOption] = useState("popular");
   const [searchParams, setSearchParams] = useSearchParams();
   const isLoading = useSelector((state) => state.loading.isLoading);
   const typeParam = searchParams.get("type");
@@ -22,42 +22,47 @@ const StudyPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const sortByLikes = (a, b) => {
-  //   return b.bLike - a.bLike;
-  // };
+  const sortByLikes = (a, b) => {
+    return b.pLike - a.pLike;
+  };
 
-  // const sortByDate = (a, b) => {
-  //   return new Date(b.bDate) - new Date(a.bDate);
-  // };
+  const sortByDate = (a, b) => {
+    return new Date(b.pDate) - new Date(a.pDate);
+  };
 
-  // const getFilteredData = () => {
-  //   let filteredData = [...data];
+  const getFilteredData = () => {
+    let filteredData = [...data];
+    console.log(filteredData);
 
-  //   if (sortOption === "popular") {
-  //     filteredData.sort(sortByLikes);
-  //   } else if (sortOption === "latest") {
-  //     filteredData.sort(sortByDate);
-  //   }
+    if (sortOption === "popular") {
+      filteredData = filteredData.sort(sortByLikes);
+    } else if (sortOption === "latest") {
+      filteredData = filteredData.sort(sortByDate);
+    } else if (sortOption === "like") {
+      filteredData = filteredData.filter((v) => v.isLike === true);
+    } else if (sortOption === "online") {
+      filteredData = filteredData.filter((v) => v.loc === "online");
+    }
 
-  //   return filteredData;
-  // };
+    return filteredData;
+  };
 
-  const filterData = useCallback(
-    (responseData) => {
-      let filteredData = responseData;
+  // const filterData = useCallback(
+  //   (responseData) => {
+  //     let filteredData = responseData;
 
-      if (typeParam !== "all") {
-        filteredData = filteredData.filter((list) => list.type === typeParam);
-      }
+  //     if (typeParam !== "all") {
+  //       filteredData = filteredData.filter((list) => list.type === typeParam);
+  //     }
 
-      if (typeLocParam !== "all") {
-        filteredData = filteredData.filter((list) => list.loc === typeLocParam);
-      }
+  //     if (typeLocParam !== "all") {
+  //       filteredData = filteredData.filter((list) => list.loc === typeLocParam);
+  //     }
 
-      setData(filteredData.reverse());
-    },
-    [typeParam, typeLocParam]
-  );
+  //     setData(filteredData.reverse());
+  //   },
+  //   [typeParam, typeLocParam]
+  // );
 
   const fetchData = async () => {
     console.log(typeParam);
@@ -72,25 +77,37 @@ const StudyPage = () => {
       });
       console.log(response.data);
 
-      // let filteredData = response.data;
+      let filteredData = response.data;
 
-      // if (typeParam === "all") {
-      //   filteredData = filteredData.filter((list) => list.type === typeParam);
-      //   // setData(response.data.reverse());
-      //   return;
-      // }
+      if (typeParam === "all") {
+        filteredData = filteredData.filter((list) => list.type === typeParam);
+        setData(response.data.reverse());
+        return;
+      }
 
       // if (typeLocParam === "all") {
       //   filteredData = filteredData.filter((list) => list.loc === typeLocParam);
       // }
 
-      // setData(filteredData.reverse());
+      setData(filteredData.reverse());
 
       const newProducts = response.data.filter((list) => list.type === typeParam);
+      console.log(typeParam);
       setData(newProducts);
 
+      if (typeParam === "like") {
+        const likeProducts = response.data.filter((list) => list.isLike === true);
+        console.log(response.data.filter((list) => list.isLike === true));
+        likeProducts.length !== 0 && setData(likeProducts);
+      }
+
+      if (typeParam === "online") {
+        const onlineProducts = response.data.filter((list) => list.loc === "온라인");
+        setData(onlineProducts);
+      }
+
       console.log(response.data);
-      filterData(response.data);
+      // filterData(response.data);
     } catch (error) {
       if (error.message.toLowerCase() === "Network Error".toLowerCase()) {
         alert("네트워크 에러입니다. 서버가 꺼져있을 수 있습니다.");
@@ -119,27 +136,16 @@ const StudyPage = () => {
   };
 
   const options = [
-    { value: "all", label: "타입전체" },
+    { value: "all", label: "전체" },
     { value: "study", label: "스터디" },
     { value: "project", label: "프로젝트" },
-  ];
-
-  const locOptions = [
-    { value: "all", label: "지역전체" },
+    { value: "like", label: "좋아요" },
     { value: "online", label: "온라인" },
-    { value: "offline", label: "오프라인" },
   ];
 
   const handleOptionChange = (option) => {
     setSortedOption(option.value);
     searchParams.set("type", option.value);
-    setSearchParams(searchParams);
-    fetchData();
-  };
-
-  const handleLocOptionChange = (option) => {
-    setSortedLocOption(option.value);
-    searchParams.set("loc", option.value);
     setSearchParams(searchParams);
     fetchData();
   };
@@ -157,14 +163,14 @@ const StudyPage = () => {
           <div className={styles.studyPage}>
             <div className={styles.top}>
               <div className={styles.studySort}>
-                {/* <FontAwesomeIcon icon={faCheck} className={styles.checkIcon} />
+                <FontAwesomeIcon icon={faCheck} className={styles.checkIcon} />
                 <span className={`${styles.popular} ${styles.btn}`} onClick={() => setSortOption("popular")}>
                   인기순
                 </span>
                 <FontAwesomeIcon icon={faCheck} className={`${styles.checkIcon} ${styles.invisible}`} />
                 <span className={styles.new} onClick={() => setSortOption("latest")}>
                   최신순
-                </span> */}
+                </span>
               </div>
               <div className={styles.showSelected}>
                 {/* <select value={selectedOption} onChange={handleOptionSelect} className={styles.selected}>
@@ -194,7 +200,8 @@ const StudyPage = () => {
             <div className={styles.gridViewWrapper}>
               <div className={styles.studyGridView}>
                 {/* key db id로 변경해야함 */}
-                {data.map((v) => {
+                {console.log(getFilteredData())}
+                {getFilteredData().map((v) => {
                   return (
                     <div
                       key={v.projectId}
