@@ -39,7 +39,7 @@
   width: 350px;
   height: 250px;
   border-radius: 8px;
-  border: 1px solid #b2b2b2;
+  /* border: 1px solid #b2b2b2; */
   cursor: pointer;
 }
 

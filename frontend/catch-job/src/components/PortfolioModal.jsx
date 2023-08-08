@@ -251,13 +251,13 @@ const PortfolioModal = ({ item, onClose }) => {
             {item.tags[2] && <div className={`${styles.tagElement}`}>{item.tags[2]}</div>}
           </div>
           {item.bFileName && item.bFileName !== "http://43.202.98.45:8089/upload/null" &&(
-  <div className={`${styles.contentFile}`}>
-    첨부파일:{" "}
-    <a href={item.bFileName} download target="_blank" rel="noopener noreferrer">
-    <span className={`${styles.contentFileName}`}>{item.bFileName.split('/').pop()}</span>
-    </a>
-  </div>
-)}
+            <div className={`${styles.contentFile}`}>
+              첨부파일:{" "}
+              <a href={item.bFileName} download target="_blank" rel="noopener noreferrer">
+              <span className={`${styles.contentFileName}`}>{item.bFileName.split('/').pop()}</span>
+              </a>
+            </div>
+          )}
 
           <div className={`${styles.contentComment}`} ref={contentCommentRef}>
             <div className={`${styles.comments}`}>Comments</div>

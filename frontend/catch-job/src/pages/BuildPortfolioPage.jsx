@@ -152,13 +152,16 @@ const BuildPortfolioPage = () => {
           <ReactQuill value={value} onChange={handleChange} modules={modules} theme="snow" className={`${styles.customQuillEditor}`} />
         </div>
         <div className={`${styles.fileName}`}>
-          {uploadedFile ? <span>{uploadedFile.name.split("/").pop()}</span> : null}
-          {uploadedFile && (
-            <span className={`${styles.removeBtn}`} onClick={() => setUploadedFile("")}>
-              X
-            </span>
-          )}
-        </div>
+  {uploadedFile && uploadedFile.name !== "http://43.202.98.45:8089/upload/null" && (
+    <>
+      <span>{uploadedFile.name.split("/").pop()}</span>
+      <span className={`${styles.removeBtn}`} onClick={() => setUploadedFile("")}>
+        X
+      </span>
+    </>
+  )}
+</div>
+
       </div>
       <div className={`${styles.addThings}`}>
         <input type="file" id="fileUpload" style={{ display: "none" }} onChange={handleFileUpload} />
