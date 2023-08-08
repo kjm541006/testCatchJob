@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
+import he from "he";
 import axios from "axios";
 import styles from "../assets/css/NewsPage.module.css";
 function NewsPage() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({ items: [] });
   const [searchWord, setSearchWord] = useState("");
 
   useEffect(() => {}, []);
@@ -34,18 +35,64 @@ function NewsPage() {
     }
   };
 
+  const removeHTMLTags = (str) => {
+    return str.replace(/<\/?[^>]+(>|$)/g, "");
+  };
+
+  const moveToOriginalNews = (link) => {
+    const newWindow = window.open(link, "_blank", "noopener,noreferrer");
+    if (newWindow) {
+      newWindow.opener = null;
+    }
+  };
+
+  const areNewsSimilar = (news1, news2, threshold = 0.8) => {
+    const title1 = news1.title.toLowerCase();
+    const title2 = news2.title.toLowerCase();
+
+    const words1 = title1.split(" ");
+    const words2 = title2.split(" ");
+
+    const commonWordsCount = words1.filter((word) => words2.includes(word)).length;
+    const totalWordsCount = Math.max(words1.length, words2.length);
+
+    const similarity = commonWordsCount / totalWordsCount;
+
+    return similarity >= threshold;
+  };
+
+  const removeDuplicateNews = (newsList, similarityThreshold = 0.3) => {
+    return newsList.reduce((filteredNews, currentNews) => {
+      const isSimilarToAny = filteredNews.some((news) => areNewsSimilar(news, currentNews, similarityThreshold));
+      if (!isSimilarToAny) {
+        filteredNews.push(currentNews);
+      }
+      return filteredNews;
+    }, []);
+  };
+  const uniqueNewsList = removeDuplicateNews(data.items);
+
   return (
     <div className={styles.news}>
-      <div>
-        <h1>최신 IT 관련 뉴스 키워드를 검색해보세요.</h1>
-        <span>검색 : </span>
-        <input type="text" value={searchWord} onChange={handleSearch} onKeyDown={handleEnter} />
-        <button onClick={onClick}>검색</button>
+      <div className={styles.searchContainer}>
+        <h1>최신 뉴스 키워드를 검색해보세요.</h1>
+        <div className={styles.searchBar}>
+          <input type="text" value={searchWord} onChange={handleSearch} onKeyDown={handleEnter} />
+          <button onClick={onClick}>검색</button>
+        </div>
       </div>
       {/* {data && <textarea rows={10} value={JSON.stringify(data, null, 2)} readOnly={true} />} */}
       {data &&
-        data.items.map((v, i) => {
-          return <div id={i}>${v.title}</div>;
+        data.items &&
+        uniqueNewsList.map((v, i) => {
+          return (
+            <div className={styles.newsContainer} key={i}>
+              <h1 onClick={() => moveToOriginalNews(v.originallink ? v.originallink : v.link)}>{removeHTMLTags(he.decode(v.title))}</h1>
+              <div onClick={() => moveToOriginalNews(v.originallink ? v.originallink : v.link)}>
+                {removeHTMLTags(he.decode(v.description))}
+              </div>
+            </div>
+          );
         })}
     </div>
   );

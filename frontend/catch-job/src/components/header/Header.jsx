@@ -80,7 +80,8 @@ const Header = () => {
             {isLoggedIn && (
               <div className="header-user-info">
                 <Link to="/mypage" className="header-username">
-                  {username} 님
+                  <img src={localStorage.getItem("profileImg")} alt="프로필사진" className="header-profile-img" />
+                  <span>{username} 님</span>
                 </Link>
                 <div className="header-logout-btn" onClick={logOutBtn}>
                   로그아웃

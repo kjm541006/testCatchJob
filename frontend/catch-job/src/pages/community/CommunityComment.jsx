@@ -6,6 +6,9 @@ import { selectEmail } from "../../redux/login";
 const CommunityComment = (props) => {
   const [comments, setComments] = useState([]);
   const [commentVal, setCommentVal] = useState();
+  
+  const [editMode, setEditMode] = useState(false); // New state variable for edit mode
+  const [editedCommentVal, setEditedCommentVal] = useState("");
   const userEmail = useSelector(selectEmail);
 
   const getComments = async () => {
@@ -116,9 +119,13 @@ const CommunityComment = (props) => {
           comments.map((comment) => (
             <div key={comment.communityId} className="commentment">
               <div className="commentmentuser">
-                <div>
-                  <img className="commentmprofile" src={comment.memberProfile} alt="프로필" />
-                  {comment.memberName}({comment.memberEmail})<div className="datecomment">{formatCommentDate(comment.commentDate)}</div>
+              <div style={{ display: "flex", gap: "30px" }}>
+                  <div>
+                    <img className="commentmprofile" src={comment.memberProfile} alt="프로필" />
+                  </div>
+                  <div>
+                    {comment.memberName}({comment.memberEmail})<div className="datecomment">{formatCommentDate(comment.commentDate)}</div>
+                  </div>
                 </div>
                 <div className="commenteditBtn">
                   {comment.memberEmail === userEmail && (

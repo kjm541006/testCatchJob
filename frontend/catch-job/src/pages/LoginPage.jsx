@@ -33,13 +33,14 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post("http://43.202.98.45:8089/login", userData);
-      // const response = await axios.post("http://localhost:8089/login", userData);
+      // const response = await axios.post("http://43.202.98.45:8089/login", userData);
       console.log(response.data);
       console.log(response.data.name);
       const userId = response.data.memberId;
       const token = response.data.token;
       const name = response.data.name;
       const email = response.data.email;
+      const profileImg = response.data.moriginalFileName;
       console.log(token);
       console.log(name);
       console.log(email);
@@ -47,6 +48,7 @@ const LoginPage = () => {
       localStorage.setItem("token", token);
       localStorage.setItem("name", name);
       localStorage.setItem("email", email);
+      localStorage.setItem("profileImg", profileImg);
       console.log(`로그인여부 :${isLoggedIn}`);
       navigate("/");
       setTimeout(() => {

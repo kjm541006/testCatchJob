@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import ReactQuill,{ Quill } from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css"; // 테마 스타일 가져오기
 import styles from "../assets/css/BuildPortfolio.module.css";
 import DetailModal from "../components/DetailModal";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import ImageResize from 'quill-image-resize';
+import ImageResize from "quill-image-resize";
 Quill.register({
-  'modules/ImageResize': ImageResize
+  "modules/ImageResize": ImageResize,
 });
 const BuildPortfolioPage = () => {
   const [value, setValue] = useState("");
@@ -24,15 +24,14 @@ const BuildPortfolioPage = () => {
   const location = useLocation();
   const boardId = location.state?.boardId || "";
 
-
   useEffect(() => {
     const ifHaveId = async () => {
       try {
         const response = await axios.get(`http://43.202.98.45:8089/${boardId}`); // 수정 엔드포인트에 맞춰서 쓰기
-        
+
         setTitle(response.data.bTitle);
         setValue(response.data.bContents);
-        setUploadedFile(new File([], response.data.bFileName));        
+        setUploadedFile(new File([], response.data.bFileName));
         setPrevCoverURL(response.data.bCoverFileName);
         setPrevTags(response.data.tags);
         setPrevCover(response.data.bCoverFileName);
@@ -43,20 +42,17 @@ const BuildPortfolioPage = () => {
         console.log(response.data.bCoverFileName);
         console.log(response.data.tags);
         console.log("-------");
-
       } catch (error) {
         console.log(error);
       }
-    }
+    };
 
     if (boardId === "") {
       return;
-    }
-    else{
-      ifHaveId(); 
+    } else {
+      ifHaveId();
     }
   }, [boardId]);
-
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -79,11 +75,9 @@ const BuildPortfolioPage = () => {
     setPrevCoverURL(coverURL);
   };
 
-  
-
   const handleSaveContent = async () => {
     const token = localStorage.getItem("token");
-    
+
     if (!bCoverFileName) {
       alert("게시물을 저장하려면 커버 사진을 올려주세요.");
       return;
@@ -96,13 +90,13 @@ const BuildPortfolioPage = () => {
       },
     };
     const bContents = value
-    .replace(/<p>/g, "<br>")
-    .replace(/<\/p>/g, "<br>")
-    .replace(/<img/g, "<p><br><img")
-    .replace(/<\/img>/g, "</img></p></br>")
-    .replace(/<\/p>\s*<p>/g, "<br>")
-    .replace(/<img[^>]+?>/g, '<br>$&<br>')
-  
+      .replace(/<p>/g, "<br>")
+      .replace(/<\/p>/g, "<br>")
+      .replace(/<img/g, "<p><br><img")
+      .replace(/<\/img>/g, "</img></p></br>")
+      .replace(/<\/p>\s*<p>/g, "<br>")
+      .replace(/<img[^>]+?>/g, "<br>$&<br>");
+
     const formData = new FormData();
     formData.append("bTitle", title);
     formData.append("bContents", bContents);
@@ -111,12 +105,11 @@ const BuildPortfolioPage = () => {
     formData.append("bCoverFileName", bCoverFileName);
 
     try {
-      if (!boardId){
-      const response = await axios.post("http://43.202.98.45:8089/buildportfolio", formData, axiosConfig);
-      console.log(response.data);
-      console.log("새로운 게시글 작성 성공")
-      }
-      else{
+      if (!boardId) {
+        const response = await axios.post("http://43.202.98.45:8089/buildportfolio", formData, axiosConfig);
+        console.log(response.data);
+        console.log("새로운 게시글 작성 성공");
+      } else {
         const response = await axios.post(`http://43.202.98.45:8089/portfolio/edit/${boardId}`, formData, axiosConfig);
         console.log(response.data);
         console.log("게시글 수정 성공");
@@ -132,14 +125,14 @@ const BuildPortfolioPage = () => {
       [{ header: [1, 2, false] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
       ["image"],
-      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }]
+      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
     ],
     ImageResize: {
-      parchment: Quill.import('parchment')
+      parchment: Quill.import("parchment"),
     },
     clipboard: {
       matchVisual: false,
-    }
+    },
   };
 
   return (
@@ -159,7 +152,7 @@ const BuildPortfolioPage = () => {
           <ReactQuill value={value} onChange={handleChange} modules={modules} theme="snow" className={`${styles.customQuillEditor}`} />
         </div>
         <div className={`${styles.fileName}`}>
-        {uploadedFile ? <span>{uploadedFile.name.split('/').pop()}</span> : null}
+          {uploadedFile ? <span>{uploadedFile.name.split("/").pop()}</span> : null}
           {uploadedFile && (
             <span className={`${styles.removeBtn}`} onClick={() => setUploadedFile("")}>
               X

@@ -3,7 +3,7 @@ import "../../assets/css/CommunityPage.css";
 import PostModal from "./CommunityPostModal";
 import "../../assets/css/CommunityPostModal.css";
 import Heart from "../../assets/img/heart.svg";
-//import Noheart from "../../assets/img/noheart.svg";
+import Noheart from "../../assets/img/noheart.svg";
 import { useSelector } from "react-redux";
 import { selectEmail } from "../../redux/login";
 import axios from "axios";
@@ -13,6 +13,7 @@ function Card(props) {
   const [commentModalOpen, setCommentModalOpen] = useState([]);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
+  const [isLike, setIsLike] = useState(false);
 
   const [expanded, setExpanded] = useState([]);
 
@@ -26,15 +27,22 @@ function Card(props) {
 
   // Function to fetch community data from the server
   const fetchCommunityData = async () => {
+    const token = localStorage.getItem("token");
+    const headers = {};
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
     try {
-      const response = await axios.get("http://43.202.98.45:8089/community");
+      const response = await axios.get("http://43.202.98.45:8089/community", { headers });
+      const updatedData = response.data.map((post) => ({ ...post, isLike: false, likeCount: post.cLike || 0 }));
       console.log(response.data);
-      setCommunityData(response.data);
+      setCommunityData(updatedData);
     } catch (error) {
       console.error(error);
     }
   };
-
+  //글목록
   useEffect(() => {
     fetchCommunityData();
   }, []);
@@ -88,15 +96,20 @@ function Card(props) {
   };
 
   const handleLike = async (community_id) => {
-    // try {
-    //   const response = await axios.post("http://43.202.98.45:8089/community/like");
-    //   setCommunityData((prevData) => {
-    //     const newData = prevData.map((post) => (post.community_id === community_id ? { ...post, like: response.data.like } : post));
-    //     return newData;
-    //   });
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    try {
+      const response = await axios.post(`http://43.202.98.45:8089/community/like?communityId=${community_id}`);
+      if (response.status === 200) {
+        setCommunityData((prevData) =>
+          prevData.map((post) =>
+            post.communityId === community_id
+              ? { ...post, isLike: !post.isLike, cLike: post.isLike ? post.cLike - 1 : post.cLike + 1 }
+              : post
+          )
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -163,8 +176,18 @@ function Card(props) {
             </div>
             <div>
               <div className="cardContentsComponents_bottom">
-                <div className="heart_img" onClick={() => handleLike(post.communityId)}>
-                  {post.like ? <img src={Heart} alt="하트" /> : null}
+                <div
+                  className="heart_img"
+                  style={{ display: "flex", gap: "10px", alignItems: "center", color: "#B2B2B2", fontSize: "13px" }}
+                  onClick={() => handleLike(post.communityId)}
+                >
+                  <div>
+                    {/*{post.isLike ? <img src={Heart} alt="하트" /> : <img src={Noheart} alt="빈하트" />}*/}
+                    {post.isLike ? <img src={Heart} alt="하트" /> : <img src={Noheart} alt="빈하트" />}
+                  </div>
+                  <div>
+                    <span>{post.cLike}</span>
+                  </div>
                 </div>
 
                 <span className="ment" onClick={() => toggleCommentModal(i)}>
