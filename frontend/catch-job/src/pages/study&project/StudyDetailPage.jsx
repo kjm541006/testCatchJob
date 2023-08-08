@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "../../assets/css/study/StudyDetail.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faClipboard, faClipboardCheck, faEye, faHeart, faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faClipboard, faClipboardCheck, faEye, faHeart, faShareNodes, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { stopLoading } from "../../redux/store";
@@ -26,6 +26,11 @@ const StudyDetailPage = () => {
   const userId = localStorage.getItem("memId");
   const navigate = useNavigate();
   console.log(`로그인 여부: ${isLoggedIn}`);
+  const token = localStorage.getItem("token");
+  const headers = {};
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
 
   let commentData = {};
 
@@ -52,7 +57,9 @@ const StudyDetailPage = () => {
 
   const fetchComments = async () => {
     try {
-      const response = await axios.get(`http://43.202.98.45:8089/studyDetail/${id}`);
+      const response = await axios.get(`http://43.202.98.45:8089/studyDetail/${id}`, {
+        headers,
+      });
       setData({ ...data, comments: response.data.comments });
     } catch (err) {
       console.error(err);
@@ -60,11 +67,6 @@ const StudyDetailPage = () => {
   };
 
   const fetchData = async () => {
-    const token = localStorage.getItem("token");
-    const headers = {};
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
     try {
       const response = await axios.get(`http://43.202.98.45:8089/studyDetail/${id}`, {
         headers,
@@ -214,6 +216,18 @@ const StudyDetailPage = () => {
     }
   };
 
+  const deleteComment = async (commentId) => {
+    try {
+      const response = await axios.delete(`http://43.202.98.45:8089/studyDetail/comment/delete/${commentId}`);
+      if (response.status === 200) {
+        console.log("댓글 삭제 성공");
+      }
+      fetchData();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     // <div className={styles.studyDetailWrapper}>
     <main>
@@ -347,7 +361,12 @@ const StudyDetailPage = () => {
                                       <span>지원취소</span>
                                     </div>
                                   ) : (
-                                    <div className={styles.crewProgress} onClick={isLoggedIn ? () => handleOpenModal(x[0]) : loginAlert}>
+                                    <div
+                                      className={styles.crewProgress}
+                                      onClick={
+                                        data.end ? () => alert("모집이 끝났습니다.") : isLoggedIn ? () => handleOpenModal(x[0]) : loginAlert
+                                      }
+                                    >
                                       <span>지원</span>
                                     </div>
                                   )}
@@ -402,23 +421,30 @@ const StudyDetailPage = () => {
                     </div>
                     {data &&
                       data.comments &&
-                      data.comments.reverse().map((x, i) => {
+                      data.comments.reverse().map((commentData, i) => {
                         return (
-                          <div className={styles.commentArea} key={i}>
+                          <div className={styles.commentArea} key={commentData.commentId}>
                             <div className={styles.commentUserInfo}>
                               <div className={styles.registerCommentProfileImg}>
-                                <img src={x.memberProfile} alt="프로필사진" />
+                                <img src={commentData.memberProfile} alt="프로필사진" />
                               </div>
                               <div className={styles.commentUserDetail}>
                                 <div>
-                                  <span className={styles.userName}>{x.memberName}</span>
-                                  {data.email === x.memberEmail && <span>(작성자)</span>}
+                                  <span className={styles.userName}>{commentData.memberName}</span>
+                                  {data.member.email === commentData.memberEmail && <span>(작성자)</span>}
                                 </div>
-                                <span className={styles.time}>{x.commentDate}</span>
+                                <span className={styles.time}>{commentData.commentDate.replace("T", " ")}</span>
                               </div>
                             </div>
                             <div className={styles.commentListComment}>
-                              <span style={{ whiteSpace: "pre-wrap" }}>{x.commentContent}</span>
+                              <span style={{ whiteSpace: "pre-wrap" }}>{commentData.commentContent}</span>
+                              {commentData.memberEmail === userEmail && (
+                                <FontAwesomeIcon
+                                  icon={faTrash}
+                                  className={styles.deleteCommentBtn}
+                                  onClick={() => deleteComment(commentData.commentId)}
+                                />
+                              )}
                             </div>
                           </div>
                         );

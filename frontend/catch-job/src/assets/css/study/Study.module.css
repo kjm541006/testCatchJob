@@ -59,8 +59,13 @@
   display: none;
 }
 
-.topRated {
+.popular {
   margin-right: 30px;
+  cursor: pointer;
+}
+
+.new {
+  cursor: pointer;
 }
 
 .showSelected {
