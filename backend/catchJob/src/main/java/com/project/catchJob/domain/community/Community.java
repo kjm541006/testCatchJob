@@ -41,6 +41,7 @@ public class Community {
     @Column(name = "c_type")
     private String cType;
     
+    @Lob
     @Column(name = "c_contents")
     private String cContents;
     
