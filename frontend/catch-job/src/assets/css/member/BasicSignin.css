@@ -188,4 +188,5 @@
 .labelOne{
   display:flex;
   width:115px;
+  flex: 1;
 }
