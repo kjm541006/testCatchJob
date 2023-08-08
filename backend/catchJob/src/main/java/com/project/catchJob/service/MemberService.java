@@ -71,7 +71,7 @@ public class MemberService {
 		return memberRepo.save(member);
 	}
 	
-	// 구글 로그인
+	// 구글 로그인 (구현 중)
 	public Member signInOrSignUpWithGoogle(GoogleUserInfoDTO googleDTO) {
 	    String email = googleDTO.getEmail();
 
@@ -100,7 +100,7 @@ public class MemberService {
 	}
 
 	
-	// 구글로그인 회원가입
+	// 구글로그인 회원가입 (구현 중)
 	public Member createGoogleMember(GoogleUserInfoDTO googleDTO) {
 	    if (googleDTO == null) {
 	        log.error("GoogleUserInfoDTO is null");

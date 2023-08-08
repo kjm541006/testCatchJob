@@ -292,6 +292,13 @@ section {
 .commentListComment {
   margin-top: 50px;
   margin-left: 60px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.deleteCommentBtn path {
+  fill: red;
+  cursor: pointer;
 }
 
 /* ==================== 오른쪽 ===================== */
