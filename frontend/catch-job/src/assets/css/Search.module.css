@@ -5,6 +5,13 @@
   min-height: 66vh;
 }
 
+.searchResultMsg {
+  font-size: 30px;
+  padding-bottom: 30px;
+  margin-bottom: 50px;
+  border-bottom: 1px solid #ebebeb;
+}
+
 .portfolioWrapper {
   min-height: 35vh;
   margin-bottom: 50px;

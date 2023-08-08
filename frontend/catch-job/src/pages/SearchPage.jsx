@@ -67,6 +67,9 @@ const SearchPage = () => {
 
   return (
     <div className={styles.searchContainer}>
+      <div className={styles.searchResultMsg}>
+        <h1>검색 결과</h1>
+      </div>
       {portData.length !== 0 && (
         <div className={styles.portfolioWrapper}>
           <div className={styles.portfolioTitle}>
