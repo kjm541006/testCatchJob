@@ -185,8 +185,8 @@
   color: #ffffff;
 }
 
-.labelOne {
-  /* display:flex; */
-  /* width: 115px; */
-  /* padding: 1px; */
+.labelOne{
+  display:flex;
+  width:115px;
+  flex: 1;
 }
