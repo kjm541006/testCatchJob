@@ -9,34 +9,14 @@
 
 .signIn {
   width: 640px;
-  height: 750px;
+  height: 550px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 100px;
+  gap: 80px;
   background: #fff;
   border-radius: 32px;
 }
-
-/* .section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #ffffff;
-  width: 640px;
-  height: 890px;
-}
-
-.entire-box-social {
-  display: flex;
-  padding: 0px 2px 80px 2px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 332px;
-  height: 740px;
-  background-color: #999999;
-} */
 
 .catchJob-social {
   color: #000;

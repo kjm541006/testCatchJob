@@ -60,8 +60,15 @@ const StudyDetailPage = () => {
   };
 
   const fetchData = async () => {
+    const token = localStorage.getItem("token");
+    const headers = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
     try {
-      const response = await axios.get(`http://43.202.98.45:8089/studyDetail/${id}`);
+      const response = await axios.get(`http://43.202.98.45:8089/studyDetail/${id}`, {
+        headers,
+      });
 
       if (viewCount === null) {
         setViewCount(response.data.pCnt);
@@ -77,6 +84,12 @@ const StudyDetailPage = () => {
         viewCount,
         comments: comments, // 응답에서 받은 댓글 데이터를 저장합니다.
       });
+
+      if (response.data.isLike === true) {
+        setLiked(true);
+      } else {
+        setLiked(false);
+      }
       console.log(response.data);
       console.log(viewCount);
     } catch (error) {
@@ -166,9 +179,10 @@ const StudyDetailPage = () => {
   const handleLikeBtn = async () => {
     try {
       const response = await axios.post(`http://43.202.98.45:8089/studyDetail/like/${id}`);
-      if (response.status === 200) {
-        setLiked(!liked);
-      }
+      // if (response.data.isLike === true) {
+      //   console.log(response.data.isLike);
+      //   setLiked(() => true);
+      // }
       fetchData();
     } catch (err) {
       console.error(err);
@@ -183,6 +197,18 @@ const StudyDetailPage = () => {
       }
       alert("삭제가 완료되었습니다.");
       navigate(-1);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const finishProject = async () => {
+    try {
+      const response = await axios.put(`http://43.202.98.45:8089/studyDetail/done/${id}`);
+      if (response.status === 200) {
+        console.log("모집 전송 성공");
+      }
+      fetchData();
     } catch (err) {
       console.error(err);
     }
@@ -220,7 +246,11 @@ const StudyDetailPage = () => {
             </div>
 
             <div className={styles.studyDetailTags}>
-              <span className={styles.studyDetailTag}>모집 중</span>
+              {data.end === true ? (
+                <span className={styles.studyDetailTag}>모집 완료</span>
+              ) : (
+                <span className={styles.studyDetailTag}>모집 중</span>
+              )}
               {/* <span className={styles.studyDetailTag}>1 / 3</span> */}
             </div>
           </div>
@@ -273,7 +303,7 @@ const StudyDetailPage = () => {
                         .filter(([, memNum]) => memNum > 0)
                         .map((x) => {
                           return (
-                            <div className={styles.crews} key={x[0]}>
+                            <div className={data.type === "study" ? `${styles.crewsStudy}` : `${styles.crews}`} key={x[0]}>
                               {x[0] !== "studyCrew" ? <div>{x[0]}</div> : null}
                               <div>
                                 <span className={styles.crewNum}>{x[1]}</span> 명
@@ -353,7 +383,7 @@ const StudyDetailPage = () => {
                   <div className={styles.commentsWrapper}>
                     <div className={styles.registerComment}>
                       <div className={styles.registerCommentProfileImg}>
-                        <img src="/profile.png" alt="프로필사진" />
+                        <img src={localStorage.getItem("profileImg")} alt="프로필사진" />
                       </div>
                       <div className={styles.comment}>
                         <textarea
@@ -453,22 +483,36 @@ const StudyDetailPage = () => {
                   <div className={styles.likeBtnWrapper}>
                     <div className={`${styles.likeBtn} ${liked && styles.likeActive}`} onClick={isLoggedIn ? handleLikeBtn : loginAlert}>
                       {/* <FontAwesomeIcon icon={faHeart} className={styles.likeProject} /> */}
-                      <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" className={styles.likeProject}>
-                        <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />
-                      </svg>
-                      <span>게시물 좋아요</span>
+                      {liked && (
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" className={styles.likeProject}>
+                          <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />
+                        </svg>
+                      )}
+
+                      {liked ? <span>좋아요!!</span> : <span>좋아요 누르기</span>}
                     </div>
                   </div>
                   {/* 작성자가 접근했을 경우 보이는 레이아웃 */}
                   {data && data.member && userEmail === data.member.email && (
-                    <div className={styles.updateDeleteWrapper}>
-                      <div className={styles.update} onClick={isLoggedIn ? null : loginAlert}>
-                        수정
+                    <>
+                      <div className={styles.updateDeleteWrapper}>
+                        <div className={styles.update} onClick={isLoggedIn ? null : loginAlert}>
+                          수정
+                        </div>
+                        <div className={styles.delete} onClick={isLoggedIn ? deleteProject : loginAlert}>
+                          삭제
+                        </div>
                       </div>
-                      <div className={styles.delete} onClick={isLoggedIn ? deleteProject : loginAlert}>
-                        삭제
-                      </div>
-                    </div>
+                      {!data.end ? (
+                        <div className={styles.finishedWrapper} onClick={finishProject}>
+                          <span className={styles.finished}>모집 완료하기</span>
+                        </div>
+                      ) : (
+                        <div className={styles.finishedWrapper} onClick={finishProject}>
+                          <span className={styles.finished}>다시 모집하기</span>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               </div>

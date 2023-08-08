@@ -1,20 +1,15 @@
-import { useState } from 'react';
 import { Link, Navigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import "./header.css";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut, selectEmail, selectLoggedIn, selectName } from "../../redux/login";
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const dispatch = useDispatch();
   const uName = useSelector(selectName);
   const uEmail = useSelector(selectEmail);
   const isLoggedIn = useSelector(selectLoggedIn);
-  const navigate = useNavigate();
-  const [searchResults, setSearchResults] = useState([]);
   let username = "";
 
   console.log(uName);
@@ -32,22 +27,6 @@ const Header = () => {
     dispatch(logOut());
     <Navigate to="/" />;
   };
-
-  const handleSearchSubmit = async (e) => {
-    e.preventDefault();
-    const searchTerm = e.target.search.value;
-  
-    try {
-      const response = await axios.post('YOUR_SERVER_API_URL', { search: searchTerm });
-      const results = response.data;
-      setSearchResults(results); // 결과를 상태에 저장
-      navigate("/search", { state: { searchResults: results } });
-  
-    } catch (error) {
-      console.error('Error', error);
-    }
-  };
-  
 
   return (
     <>
@@ -76,7 +55,7 @@ const Header = () => {
           </div>
         </div>
         <div className="nav-right">
-          <form action="/search" method="post"  onSubmit={handleSearchSubmit}>
+          <form action="/search" method="post">
             <div className="search-bar">
               <input type="text" placeholder="검색어를 입력하세요." className="search-box" required name="search" />
               {/* <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /> */}
@@ -101,7 +80,8 @@ const Header = () => {
             {isLoggedIn && (
               <div className="header-user-info">
                 <Link to="/mypage" className="header-username">
-                  {username} 님
+                  <img src={localStorage.getItem("profileImg")} alt="프로필사진" className="header-profile-img" />
+                  <span>{username} 님</span>
                 </Link>
                 <div className="header-logout-btn" onClick={logOutBtn}>
                   로그아웃

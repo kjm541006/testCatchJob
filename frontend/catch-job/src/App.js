@@ -27,7 +27,6 @@ import NewsPage from "./pages/NewsPage";
 import SigninAlertPage from "./pages/SigninAlertPage";
 import StudyDetailPage from "./pages/study&project/StudyDetailPage";
 import PasswordCheck from "./pages/PasswordCheck";
-import SearchDataPage from "./pages/SearchDataPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -60,7 +59,6 @@ function App() {
           <Route path="/study" element={<StudyPage />} />
           <Route path="/study/build" element={savedToken != null ? <BuildStudyPage /> : <LoginAlertPage />} />
           <Route path="/portfolio/build" element={savedToken != null ? <BuildPortfolioPage /> : <LoginAlertPage />} />
-          {/* <Route path="/community/*" element={<CommunityRoutes />} /> */}
           <Route path="/news" element={<NewsPage />} />
         </Route>
         <Route path="/join" element={<SocialSigninPage />} />
@@ -74,11 +72,9 @@ function App() {
         <Route path="/" element={<PortfolioMainPage />} />
         {/* <Route path="/recruit" element={<Recruit />} /> */}
         {/* <Route path="/study/*" element={<StudyRoutes />} /> */}
-        <Route path="/community/*" element={<CommunityRoutes />} />
+        <Route path="/community" element={<CommunityRoutes />} />
         <Route path="/studyDetail/*" element={<StudyDetailPage />} />
         <Route path="/projectDetail/*" element={<StudyDetailPage />} />
-        <Route path="/search" element={<SearchDataPage />} />
-
       </Routes>
     </div>
   );
