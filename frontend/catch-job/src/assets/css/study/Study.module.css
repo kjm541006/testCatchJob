@@ -59,8 +59,13 @@
   display: none;
 }
 
-.topRated {
+.popular {
   margin-right: 30px;
+  cursor: pointer;
+}
+
+.new {
+  cursor: pointer;
 }
 
 .showSelected {
@@ -116,7 +121,7 @@
 }
 
 .heart path:hover {
-  fill: rgba(237, 62, 62, 1);
+  /* fill: rgba(237, 62, 62, 1); */
   stroke: rgba(237, 62, 62, 1);
 }
 

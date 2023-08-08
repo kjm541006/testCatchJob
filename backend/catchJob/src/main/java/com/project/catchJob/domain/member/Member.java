@@ -28,10 +28,6 @@ import com.project.catchJob.domain.project.P_comments;
 import com.project.catchJob.domain.project.P_like;
 import com.project.catchJob.domain.project.P_member;
 import com.project.catchJob.domain.project.Project;
-import com.project.catchJob.domain.study.S_comments;
-import com.project.catchJob.domain.study.S_like;
-import com.project.catchJob.domain.study.S_reason;
-import com.project.catchJob.domain.study.Study;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -145,18 +141,6 @@ public class Member {
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<B_like> b_LikeList = new ArrayList<>();
-	
-	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	private List<Study> studyList = new ArrayList<>();
-	
-	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	private List<S_comments> s_CommentsList = new ArrayList<>();
-	
-	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	private List<S_like> s_LikeList = new ArrayList<>();
-	
-	@OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	private List<S_reason> s_ReasonList = new ArrayList<>();
 //	
 //	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
 	@OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)

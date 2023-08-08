@@ -292,6 +292,13 @@ section {
 .commentListComment {
   margin-top: 50px;
   margin-left: 60px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.deleteCommentBtn path {
+  fill: red;
+  cursor: pointer;
 }
 
 /* ==================== 오른쪽 ===================== */
@@ -383,7 +390,7 @@ section {
 }
 
 .likeBtn {
-  border: 1px solid #e2432e;
+  border: 1px solid black;
   cursor: pointer;
   text-align: center;
   width: 225px;
@@ -400,7 +407,7 @@ section {
 }
 
 .likeActive {
-  color: #e2432e;
+  color: blue;
 }
 
 .likeProject {
@@ -416,7 +423,8 @@ section {
 
 .likeBtn:hover {
   /* background-color: #f52307; */
-  border: 2px solid #e2432e;
+  /* border: 2px solid #e2432e; */
+  border: 2px solid blue;
 }
 
 .updateDeleteWrapper {
@@ -429,7 +437,8 @@ section {
 .update,
 .delete {
   cursor: pointer;
-  width: 105px;
+  /* width: 105px; */
+  width: 225px;
   height: 40px;
   border: 1px solid black;
   border-radius: 4px;
