@@ -22,7 +22,7 @@
   height: 800px;
   border: 1px solid #b2b2b2;
   border-radius: 8px;
-  position: relative; /* 추가 */
+  position: absolute; /* 추가 */
 }
 
 .modalTitle{
@@ -67,6 +67,8 @@
   border-radius: 3px;
   background-color: #ffffff;
   color:#444444;
+  position: absolute;
+  left:290px;
 }
 
 .modalCoverFile:active{
