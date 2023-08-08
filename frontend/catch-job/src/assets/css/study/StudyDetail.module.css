@@ -185,11 +185,12 @@ section {
 .crewProgress {
   font-size: 15px;
   font-weight: 700;
-  padding: 5px 10px;
+  padding: 5px 0;
   background-color: #e2432e;
   color: white;
   border-radius: 4px;
-  min-width: 60px;
+  width: 80px;
+  max-width: 100px;
   min-height: 30px;
   display: flex;
   justify-content: center;
@@ -390,7 +391,7 @@ section {
 }
 
 .likeBtn {
-  border: 1px solid black;
+  border: 1px solid #e2432e;
   cursor: pointer;
   text-align: center;
   width: 225px;
@@ -400,6 +401,7 @@ section {
   font-size: 14px;
   height: 40px;
   /* color: #e2432e; */
+  color: #444;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -407,7 +409,7 @@ section {
 }
 
 .likeActive {
-  color: blue;
+  color: #e2432e;
 }
 
 .likeProject {
@@ -423,8 +425,8 @@ section {
 
 .likeBtn:hover {
   /* background-color: #f52307; */
-  /* border: 2px solid #e2432e; */
-  border: 2px solid blue;
+  border: 2px solid #e2432e;
+  /* border: 2px solid blue; */
 }
 
 .updateDeleteWrapper {
@@ -437,8 +439,8 @@ section {
 .update,
 .delete {
   cursor: pointer;
-  /* width: 105px; */
-  width: 225px;
+  width: 105px;
+  /* width: 225px; */
   height: 40px;
   border: 1px solid black;
   border-radius: 4px;

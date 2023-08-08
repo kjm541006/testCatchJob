@@ -232,6 +232,16 @@ const StudyDetailPage = () => {
     }
   };
 
+  const updateProject = async () => {
+    // try {
+    //   const response = await axios.put(`http://43.202.98.45:8089/studyDetail/edit/${id}`);
+
+    // } catch (err) {
+    //   console.error(err);
+    // }
+    window.location.href = `/study/build?id=${id}`;
+  };
+
   return (
     // <div className={styles.studyDetailWrapper}>
     <main>
@@ -293,14 +303,15 @@ const StudyDetailPage = () => {
                     {data.detail}
                   </div>
                 </div>
-                {data && data.bType === "project" && (
+                {data && data.type === "project" && (
                   <div className={styles.leftContainer}>
                     <div className={styles.leftTitle}>
                       <h3>출시 플랫폼</h3>
                     </div>
                     <div className={styles.languages}>
-                      {data.platforms &&
+                      {data &&
                         data.platforms.map((v, i) => {
+                          console.log(v[0]);
                           return (
                             <div className={styles.language} key={i}>
                               {v}
@@ -324,21 +335,13 @@ const StudyDetailPage = () => {
                             <div className={data.type === "study" ? `${styles.crewsStudy}` : `${styles.crews}`} key={x[0]}>
                               {x[0] !== "studyCrew" ? <div>{x[0]}</div> : null}
                               <div>
-                                <span className={styles.crewNum}>{x[1]}</span> 명
+                                <span className={styles.crewNum}>
+                                  {data.applicants.filter((k) => k.projectJob === x[0]).length} / {x[1]}
+                                </span>{" "}
                               </div>
                               {/* 1. 작성자가 아닐경우 */}
                               {data && data.member && data.member.email !== localStorage.getItem("email") && (
                                 <>
-                                  {/* {let pMemIds =(
-                                    isLoggedIn &&
-                                      data &&
-                                      data.applicants
-                                        .filter((k) => k.projectJob === x[0])
-                                        .map((x) => {
-                                          return x.projectMemberId;
-                                        })
-                                        .join()
-                                  )} */}
                                   {isLoggedIn &&
                                   data &&
                                   data.applicants
@@ -386,7 +389,7 @@ const StudyDetailPage = () => {
                                   지원자 확인
                                 </div>
                               )}
-                              {data ? <span>지원자 수: {data.applicants.filter((k) => k.projectJob === x[0]).length}</span> : 0}
+                              {/* {data ? <span>지원자 수: {data.applicants.filter((k) => k.projectJob === x[0]).length}</span> : 0} */}
                               <StudyModal
                                 isOpen={isOpen === x[0]}
                                 onClose={handleCloseModal}
@@ -526,9 +529,9 @@ const StudyDetailPage = () => {
                   {data && data.member && userEmail === data.member.email && (
                     <>
                       <div className={styles.updateDeleteWrapper}>
-                        {/* <div className={styles.update} onClick={isLoggedIn ? null : loginAlert}>
+                        <div className={styles.update} onClick={isLoggedIn ? updateProject : loginAlert}>
                           수정
-                        </div> */}
+                        </div>
                         <div className={styles.delete} onClick={isLoggedIn ? deleteProject : loginAlert}>
                           삭제
                         </div>

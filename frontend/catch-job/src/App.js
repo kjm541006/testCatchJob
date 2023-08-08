@@ -27,6 +27,7 @@ import NewsPage from "./pages/NewsPage";
 import SigninAlertPage from "./pages/SigninAlertPage";
 import StudyDetailPage from "./pages/study&project/StudyDetailPage";
 import PasswordCheck from "./pages/PasswordCheck";
+import SearchPage from "./pages/SearchPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -60,6 +61,7 @@ function App() {
           <Route path="/study/build" element={savedToken != null ? <BuildStudyPage /> : <LoginAlertPage />} />
           <Route path="/portfolio/build" element={savedToken != null ? <BuildPortfolioPage /> : <LoginAlertPage />} />
           <Route path="/news" element={<NewsPage />} />
+          <Route path="/search" element={<SearchPage />} />
         </Route>
         <Route path="/join" element={<SocialSigninPage />} />
         <Route path="/signin" element={!isLoggedIn ? <BasicSigninPage /> : <SigninAlertPage />} />

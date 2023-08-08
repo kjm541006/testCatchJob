@@ -94,23 +94,22 @@ const PortfolioMainPage = () => {
   useEffect(() => {
     console.log(sortedOption);
   }, [sortedOption]);
-  
+
   const getFilteredData = () => {
     let filteredData = [...data];
-  
+
     if (sortedOption === "heart") {
       filteredData = filteredData.filter((item) => item.isLike);
     }
-  
+
     if (sortOption === "popular") {
       filteredData.sort(sortByLikes);
     } else if (sortOption === "latest") {
       filteredData.sort(sortByDate);
     }
-  
+
     return filteredData;
   };
-  
 
   const getClassName = (option) => {
     return sortOption === option ? styles.port_checkIcon : styles.port_invisible;

@@ -1,11 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "../../assets/css/study/BuildStudy.module.css";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectEmail } from "../../redux/login";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { stopLoading } from "../../redux/store";
 
-const BuildStudyPage = () => {
+const useQuery = () => new URLSearchParams(useLocation().search);
+const BuildStudyPage = (title) => {
+  const [isFetched, setIsFetched] = useState(false);
+  const [titleState, setTitleState] = useState("");
+  const [detailState, setDetailState] = useState("");
+  const [data, setData] = useState([]);
   const [bType, setBType] = useState("project");
   const [selectedField, setSelectedField] = useState(null);
   const [selectedTerm, setSelectedTerm] = useState(null);
@@ -23,12 +29,85 @@ const BuildStudyPage = () => {
   const [crewCount, setCrewCount] = useState(0);
   const titleRef = useRef();
   const detail = useRef();
+  const dispatch = useDispatch();
+  const query = useQuery();
+  const id = query.get("id");
+
   let buildData = {};
 
   const navigate = useNavigate();
 
   // const userEmail = localStorage.getItem("email");
   const userEmail = useSelector(selectEmail);
+
+  const token = localStorage.getItem("token");
+  const headers = {};
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`http://43.202.98.45:8089/studyDetail/${id}`, {
+        headers,
+      });
+      console.log(response.data);
+      setData(response.data);
+
+      if (response.data.type === "project") {
+        setBType("project");
+      } else if (response.data.type === "study") {
+        setBType("study");
+      }
+
+      if (response.data.title) {
+        setTitleState(response.data.title);
+      }
+
+      if (response.data.field) {
+        setSelectedField(response.data.field);
+      }
+
+      if (response.data.term) {
+        setSelectedTerm(response.data.term);
+      }
+
+      if (response.data.loc) {
+        console.log(response.data.loc);
+        setSelectedLoc(response.data.loc);
+      }
+
+      if (response.data.platforms) {
+        for (let i = 0; i < response.data.platforms.length; i++) {
+          setSelectedPlatforms([...selectedPlatforms, response.data.platforms[i]]);
+        }
+      }
+
+      if (response.data.detail) {
+        setDetailState(response.data.detail);
+      }
+
+      setIsFetched(true);
+    } catch (error) {
+      if (error.message.toLowerCase() === "Network Error".toLowerCase()) {
+        alert("네트워크 에러입니다. 서버가 꺼져있을 수 있습니다.");
+        console.error(error);
+        return;
+      } else {
+        alert("에러가 발생했습니다.");
+        console.error(error);
+      }
+      dispatch(stopLoading());
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
+
+  useEffect(() => {
+    if (id !== null) {
+      fetchData();
+    }
+  }, []);
 
   useEffect(() => {
     console.log(bType);
@@ -39,6 +118,11 @@ const BuildStudyPage = () => {
     if (e.target.value.length === 30) {
       alert("제목의 최대 글자 수는 30자 입니다.");
     }
+    setTitleState(e.target.value);
+  };
+
+  const detailChange = (e) => {
+    setDetailState(e.target.value);
   };
 
   const changeTypeToProject = () => {
@@ -67,6 +151,7 @@ const BuildStudyPage = () => {
 
   const handleLocChange = (event) => {
     const { value } = event.target;
+    console.log(value);
     setSelectedLoc(value);
   };
 
@@ -122,17 +207,30 @@ const BuildStudyPage = () => {
         email: userEmail,
       };
 
-      try {
-        // const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
-        const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
-        console.log(response);
-        if (response && response.status >= 200 && response.status < 300) {
-          alert("성공적으로 등록되었습니다.");
-          navigate(-1);
+      if (isFetched) {
+        try {
+          const response = await axios.put(`http://43.202.98.45:8089/studyDetail/edit/${id}`, buildData);
+          if (response && response.status >= 200 && response.status < 300) {
+            alert("성공적으로 수정되었습니다.");
+            navigate(-1);
+          }
+        } catch (error) {
+          // 에러가 발생한 경우
+          console.error("에러가 발생했습니다.", error);
         }
-      } catch (error) {
-        // 에러가 발생한 경우
-        console.error("에러가 발생했습니다.", error);
+      } else {
+        try {
+          // const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+          const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+          console.log(response);
+          if (response && response.status >= 200 && response.status < 300) {
+            alert("성공적으로 등록되었습니다.");
+            navigate(-1);
+          }
+        } catch (error) {
+          // 에러가 발생한 경우
+          console.error("에러가 발생했습니다.", error);
+        }
       }
     } else {
       if (!titleValue || !selectedField || !selectedTerm || !selectedLoc || crewCounts.studyCrew === 0 || !detailValue) {
@@ -150,17 +248,30 @@ const BuildStudyPage = () => {
         email: userEmail,
       };
 
-      try {
-        // const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
-        const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
-        console.log(response);
-        if (response && response.status >= 200 && response.status < 300) {
-          alert("성공적으로 등록되었습니다.");
-          navigate(-1);
+      if (isFetched) {
+        try {
+          const response = await axios.put(`http://43.202.98.45:8089/studyDetail/edit/${id}`, buildData);
+          if (response && response.status >= 200 && response.status < 300) {
+            alert("성공적으로 수정되었습니다.");
+            navigate(-1);
+          }
+        } catch (error) {
+          // 에러가 발생한 경우
+          console.error("에러가 발생했습니다.", error);
         }
-      } catch (error) {
-        // 에러가 발생한 경우
-        console.error("에러가 발생했습니다.", error);
+      } else {
+        try {
+          // const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+          const response = await axios.post(`http://43.202.98.45:8089/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+          console.log(response);
+          if (response && response.status >= 200 && response.status < 300) {
+            alert("성공적으로 등록되었습니다.");
+            navigate(-1);
+          }
+        } catch (error) {
+          // 에러가 발생한 경우
+          console.error("에러가 발생했습니다.", error);
+        }
       }
     }
   };
@@ -183,11 +294,12 @@ const BuildStudyPage = () => {
         <input
           type="text"
           name="title"
-          placeholder="제목"
+          placeholder={data ? data.title : "제목"}
           className={styles.titleInput}
           ref={titleRef}
           maxLength="30"
           onChange={alertMaxTitleLength}
+          value={titleState}
         />
       </div>
 
@@ -439,7 +551,7 @@ const BuildStudyPage = () => {
             </label>
           </li>
           {selectedLoc !== "온라인" && (
-            <select name="loc" className={styles.selects} onChange={handleLocChange}>
+            <select name="loc" className={styles.selects} onChange={handleLocChange} value={selectedLoc}>
               <option value="서울">서울특별시</option>
               <option value="경기">경기도</option>
               <option value="부산">부산광역시</option>
@@ -606,6 +718,8 @@ const BuildStudyPage = () => {
           placeholder="내용을 입력하세요."
           className={styles.projectTextarea}
           ref={detail}
+          value={detailState}
+          onChange={detailChange}
         ></textarea>
       </div>
 
@@ -615,7 +729,7 @@ const BuildStudyPage = () => {
             뒤로 가기
           </button>
           <button className={styles.submit} onClick={handleSubmit}>
-            등록
+            {isFetched ? <span>수정</span> : <span>등록</span>}
           </button>
         </div>
       </div>

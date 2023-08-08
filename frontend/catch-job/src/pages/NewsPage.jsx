@@ -2,16 +2,25 @@ import React, { useEffect, useState } from "react";
 import he from "he";
 import axios from "axios";
 import styles from "../assets/css/NewsPage.module.css";
+import Loading from "../components/Loading";
+import { useDispatch, useSelector } from "react-redux";
+import { stopLoading } from "../redux/store";
 function NewsPage() {
   const [data, setData] = useState({ items: [] });
-  const [searchWord, setSearchWord] = useState("");
+  const [searchWord, setSearchWord] = useState("it");
+  const isLoading = useSelector((state) => state.loading.isLoading);
+  const dispatch = useDispatch();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    fetchData().then(() => dispatch(stopLoading()));
+    setSearchWord("");
+  }, [dispatch]);
+
   const handleSearch = (e) => {
     setSearchWord(e.target.value);
   };
 
-  const onClick = async () => {
+  const fetchData = async () => {
     try {
       const ID_KEY = "Nr8FKE9N4Eqe8gY5XxvD";
       const SECRET_KEY = "Q7YFNvGmGv";
@@ -24,9 +33,17 @@ function NewsPage() {
 
       console.log(response.data);
       setData(response.data);
+      dispatch(stopLoading);
     } catch (e) {
       console.log(e);
+      dispatch(stopLoading);
+    } finally {
+      dispatch(stopLoading);
     }
+  };
+
+  const onClick = async () => {
+    fetchData();
   };
 
   const handleEnter = (e) => {
@@ -73,28 +90,34 @@ function NewsPage() {
   const uniqueNewsList = removeDuplicateNews(data.items);
 
   return (
-    <div className={styles.news}>
-      <div className={styles.searchContainer}>
-        <h1>최신 뉴스 키워드를 검색해보세요.</h1>
-        <div className={styles.searchBar}>
-          <input type="text" value={searchWord} onChange={handleSearch} onKeyDown={handleEnter} />
-          <button onClick={onClick}>검색</button>
-        </div>
-      </div>
-      {/* {data && <textarea rows={10} value={JSON.stringify(data, null, 2)} readOnly={true} />} */}
-      {data &&
-        data.items &&
-        uniqueNewsList.map((v, i) => {
-          return (
-            <div className={styles.newsContainer} key={i}>
-              <h1 onClick={() => moveToOriginalNews(v.originallink ? v.originallink : v.link)}>{removeHTMLTags(he.decode(v.title))}</h1>
-              <div onClick={() => moveToOriginalNews(v.originallink ? v.originallink : v.link)}>
-                {removeHTMLTags(he.decode(v.description))}
-              </div>
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className={styles.news}>
+          <div className={styles.searchContainer}>
+            <h1>최신 뉴스 키워드를 검색해보세요.</h1>
+            <div className={styles.searchBar}>
+              <input type="text" value={searchWord} onChange={handleSearch} onKeyDown={handleEnter} placeholder="IT" />
+              <button onClick={onClick}>검색</button>
             </div>
-          );
-        })}
-    </div>
+          </div>
+          {/* {data && <textarea rows={10} value={JSON.stringify(data, null, 2)} readOnly={true} />} */}
+          {data &&
+            data.items &&
+            uniqueNewsList.map((v, i) => {
+              return (
+                <div className={styles.newsContainer} key={i}>
+                  <h1 onClick={() => moveToOriginalNews(v.originallink ? v.originallink : v.link)}>{removeHTMLTags(he.decode(v.title))}</h1>
+                  <div onClick={() => moveToOriginalNews(v.originallink ? v.originallink : v.link)}>
+                    {removeHTMLTags(he.decode(v.description))}
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+      )}
+    </>
   );
 }
 
