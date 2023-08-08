@@ -193,12 +193,16 @@ const StudyDetailPage = () => {
 
   const deleteProject = async () => {
     try {
-      const response = await axios.delete(`http://43.202.98.45:8089/studyDetail/delete/${id}`, id);
-      if (response.status === 200) {
-        console.log("삭제완료");
+      if (window.confirm("정말로 삭제하시겠습니까?")) {
+        const response = await axios.delete(`http://43.202.98.45:8089/studyDetail/delete/${id}`, id);
+        if (response.status === 200) {
+          console.log("삭제완료");
+        }
+        alert("삭제가 완료되었습니다.");
+        navigate(-1);
+      } else {
+        console.log("삭제 취소");
       }
-      alert("삭제가 완료되었습니다.");
-      navigate(-1);
     } catch (err) {
       console.error(err);
     }
@@ -522,9 +526,9 @@ const StudyDetailPage = () => {
                   {data && data.member && userEmail === data.member.email && (
                     <>
                       <div className={styles.updateDeleteWrapper}>
-                        <div className={styles.update} onClick={isLoggedIn ? null : loginAlert}>
+                        {/* <div className={styles.update} onClick={isLoggedIn ? null : loginAlert}>
                           수정
-                        </div>
+                        </div> */}
                         <div className={styles.delete} onClick={isLoggedIn ? deleteProject : loginAlert}>
                           삭제
                         </div>

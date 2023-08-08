@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPencil } from "@fortawesome/free-solid-svg-icons";
 import styles from "../../assets/css/study/Study.module.css";
@@ -13,10 +13,12 @@ import { type } from "@testing-library/user-event/dist/type";
 const StudyPage = () => {
   const [data, setData] = useState([]);
   const [sortedOption, setSortedOption] = useState("all");
+  const [sortedLocOption, setSortedLocOption] = useState("all");
   // const [sortOption, setSortOption] = useState("popular");
   const [searchParams, setSearchParams] = useSearchParams();
   const isLoading = useSelector((state) => state.loading.isLoading);
   const typeParam = searchParams.get("type");
+  const typeLocParam = searchParams.get("loc");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -40,6 +42,23 @@ const StudyPage = () => {
   //   return filteredData;
   // };
 
+  const filterData = useCallback(
+    (responseData) => {
+      let filteredData = responseData;
+
+      if (typeParam !== "all") {
+        filteredData = filteredData.filter((list) => list.type === typeParam);
+      }
+
+      if (typeLocParam !== "all") {
+        filteredData = filteredData.filter((list) => list.loc === typeLocParam);
+      }
+
+      setData(filteredData.reverse());
+    },
+    [typeParam, typeLocParam]
+  );
+
   const fetchData = async () => {
     console.log(typeParam);
     const token = localStorage.getItem("token");
@@ -52,14 +71,26 @@ const StudyPage = () => {
         headers,
       });
       console.log(response.data);
-      if (typeParam === "all") {
-        setData(response.data.reverse());
-        return;
-      }
+
+      // let filteredData = response.data;
+
+      // if (typeParam === "all") {
+      //   filteredData = filteredData.filter((list) => list.type === typeParam);
+      //   // setData(response.data.reverse());
+      //   return;
+      // }
+
+      // if (typeLocParam === "all") {
+      //   filteredData = filteredData.filter((list) => list.loc === typeLocParam);
+      // }
+
+      // setData(filteredData.reverse());
+
       const newProducts = response.data.filter((list) => list.type === typeParam);
       setData(newProducts);
 
       console.log(response.data);
+      filterData(response.data);
     } catch (error) {
       if (error.message.toLowerCase() === "Network Error".toLowerCase()) {
         alert("네트워크 에러입니다. 서버가 꺼져있을 수 있습니다.");
@@ -88,16 +119,31 @@ const StudyPage = () => {
   };
 
   const options = [
-    { value: "all", label: "전체" },
+    { value: "all", label: "타입전체" },
     { value: "study", label: "스터디" },
     { value: "project", label: "프로젝트" },
+  ];
+
+  const locOptions = [
+    { value: "all", label: "지역전체" },
+    { value: "online", label: "온라인" },
+    { value: "offline", label: "오프라인" },
   ];
 
   const handleOptionChange = (option) => {
     setSortedOption(option.value);
     searchParams.set("type", option.value);
     setSearchParams(searchParams);
+    fetchData();
   };
+
+  const handleLocOptionChange = (option) => {
+    setSortedLocOption(option.value);
+    searchParams.set("loc", option.value);
+    setSearchParams(searchParams);
+    fetchData();
+  };
+
   useEffect(() => {
     console.log(sortedOption);
   }, [sortedOption]);
@@ -127,10 +173,18 @@ const StudyPage = () => {
                   <option value="project">프로젝트</option>
                   <option value="like">좋아요</option>
                 </select> */}
+                {/* <Select
+                  onChange={(option) => handleLocOptionChange(option)}
+                  defaultValue={locOptions.filter((option) => option.value === typeLocParam)}
+                  key={locOptions.filter((option) => option.value === typeLocParam)}
+                  isClearable={false}
+                  isSearchable={false}
+                  options={locOptions}
+                /> */}
                 <Select
                   onChange={(option) => handleOptionChange(option)}
                   defaultValue={options.filter((option) => option.value === typeParam)}
-                  key={options.filter((option) => option.value === typeParam)}
+                  key={options.filter((option) => option.value === typeParam).label}
                   isClearable={false}
                   isSearchable={false}
                   options={options}
@@ -146,7 +200,7 @@ const StudyPage = () => {
                       key={v.projectId}
                       className={styles.studyGridElement}
                       onClick={() =>
-                        v.bType === "project" ? navigate(`/projectDetail?id=${v.projectId}`) : navigate(`/studyDetail?id=${v.projectId}`)
+                        v.type === "project" ? navigate(`/projectDetail?id=${v.projectId}`) : navigate(`/studyDetail?id=${v.projectId}`)
                       }
                     >
                       <div className={styles.type}>
