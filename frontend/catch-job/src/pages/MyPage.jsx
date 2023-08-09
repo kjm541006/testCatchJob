@@ -90,8 +90,7 @@ const MyPage = () => {
         alert("회원정보수정을 성공하였습니다.");
         localStorage.setItem('name', response.data.name);
         localStorage.setItem('profileImg',response.data.mOriginalFileName);
-        navigate("/");
-        window.location.reload();
+        window.location.href = '/';
       }
     } catch (error) {
       console.error(error);
@@ -171,7 +170,7 @@ const MyPage = () => {
             style={{ color: "#444444" }}
             onChange={handleInputChange}
           />
-          <div className={`${styles.input_text_edit}`}>비밀번호</div>
+          <div className={`${styles.input_text_edit}`}>비밀번호 변경</div>
           <input
             type="password"
             className={`${styles.input_box_edit}`}

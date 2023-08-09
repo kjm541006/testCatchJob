@@ -145,10 +145,11 @@ section {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
+  width: 120px;
   height: 40px;
   border: 1px solid #d0d1d4;
   border-radius: 18px;
+  font-size: 14px;
 }
 
 .detail {

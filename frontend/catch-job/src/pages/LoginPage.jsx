@@ -40,7 +40,7 @@ const LoginPage = () => {
       const token = response.data.token;
       const name = response.data.name;
       const email = response.data.email;
-      const profileImg = response.data.moriginalFileName;
+      const profileImg = response.data.mOriginalFileName;
       console.log(token);
       console.log(name);
       console.log(email);
