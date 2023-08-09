@@ -87,26 +87,4 @@ public class CommonService {
     private void addProjectsToResults(List<Object> results, List<Project> projectResults) {
         results.addAll(projectResults);
     }
-
-	
-	// board빼고 가능
-//	public List<Object> search(String keyword) {
-//		List<Object> results = new ArrayList<>();
-//		
-//		// 제목
-//		results.addAll(boardRepo.findByBTitleContaining(keyword));
-//		results.addAll(projectRepo.findByTitleContaining(keyword));
-//		results.addAll(commRepo.findByTitleContaining(keyword));
-//		
-//		// 사용자가 작성한 글
-//		results.addAll(boardRepo.findByMemberNameContaining(keyword));
-//		results.addAll(projectRepo.findByMemberNameContaining(keyword));
-////		results.addAll(commRepo.findByMemberContaining(keyword));
-//		
-//		// 태그
-//		results.addAll(boardRepo.findByTagsContaining(keyword));
-//		
-//		return results;
-//		
-//	}
 }
