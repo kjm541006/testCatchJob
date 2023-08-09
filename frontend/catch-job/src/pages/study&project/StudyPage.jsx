@@ -72,7 +72,7 @@ const StudyPage = () => {
       headers.Authorization = `Bearer ${token}`;
     }
     try {
-      const response = await axios.get(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/project`, {
+      const response = await axios.get(`/.netlify/functions/proxy/project`, {
         headers,
       });
       console.log(response.data);
