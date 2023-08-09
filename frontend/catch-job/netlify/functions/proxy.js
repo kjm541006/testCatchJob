@@ -34,7 +34,7 @@ exports.handler = async (event, context) => {
   try {
     const response = await axios({
       method: event.httpMethod,
-      url: `http://example.com${event.path.replace("/.netlify/functions/proxy", "")}`,
+      url: `http://43.202.98.45:8089${event.path.replace("/.netlify/functions/proxy", "")}`,
       headers: { ...event.headers, "Content-Type": "application/json" },
       data: event.body,
     });
