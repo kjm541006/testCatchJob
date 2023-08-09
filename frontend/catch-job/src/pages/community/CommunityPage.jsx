@@ -5,9 +5,10 @@ import "../../assets/css/CommunityPostModal.css";
 import Heart from "../../assets/img/heart.svg";
 import Noheart from "../../assets/img/noheart.svg";
 import { useSelector } from "react-redux";
-import { selectEmail } from "../../redux/login";
+import { selectEmail, selectLoggedIn } from "../../redux/login";
 import axios from "axios";
 import CommunityComment from "./CommunityComment";
+import { useNavigate } from "react-router-dom";
 
 function Card(props) {
   const [commentModalOpen, setCommentModalOpen] = useState([]);
@@ -27,6 +28,10 @@ function Card(props) {
 
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editPost, setEditPost] = useState(null);
+
+  const isLoggedIn = useSelector(selectLoggedIn);
+
+  const navigate = useNavigate();
 
   const toggleEditModal = (post) => {
     setEditModalOpen(!editModalOpen);
@@ -105,6 +110,10 @@ function Card(props) {
   const handleSubmitComment = async (newPost) => {};
 
   const togglePostModal = () => {
+    if (!isLoggedIn) {
+      alert("로그인 해야 글 작성이 가능합니다.");
+      navigate("/login");
+    }
     setPostModalOpen(!postModalOpen);
   };
 

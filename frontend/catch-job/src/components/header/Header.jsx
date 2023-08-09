@@ -36,6 +36,12 @@ const Header = () => {
     };
   }, []);
 
+  const handleSearchEnter = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   const logOutBtn = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("name");
@@ -44,7 +50,7 @@ const Header = () => {
     <Navigate to="/" />;
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (e) => {
     if (searchWord.length === 0) {
       alert("검색어를 입력하세요");
       return;
@@ -89,6 +95,7 @@ const Header = () => {
               name="search"
               value={searchWord}
               onChange={(e) => setSearchWord(e.target.value)}
+              onKeyDown={handleSearchEnter}
             />
             {/* <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /> */}
             {/* <Link to={`/search?w=${searchWord}`}> */}

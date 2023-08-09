@@ -251,7 +251,7 @@ const StudyDetailPage = () => {
         <>
           <div className={styles.studyDetailHeader}>
             <div className={styles.studyDetailTypeWrapper}>
-              <div className={styles.studyDetailType}>
+              <div className={styles.studyDetailType} style={data.type === "study" ? { backgroundColor: "#F9DBA1" } : {}}>
                 <h2>{data.type === "project" ? "프로젝트" : "스터디"}</h2>
               </div>
             </div>
@@ -428,7 +428,7 @@ const StudyDetailPage = () => {
                     </div>
                     {data &&
                       data.comments &&
-                      data.comments.reverse().map((commentData, i) => {
+                      data.comments.map((commentData, i) => {
                         return (
                           <div className={styles.commentArea} key={commentData.commentId}>
                             <div className={styles.commentUserInfo}>
