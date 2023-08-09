@@ -3,6 +3,7 @@ package com.project.catchJob.dto.member;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.catchJob.domain.member.Member;
 
 import lombok.AllArgsConstructor;
@@ -26,7 +27,9 @@ public class MemberDTO {
 	private String type;
 	
 	private MultipartFile mProfile;
+	@JsonProperty("mOriginalFileName")
 	private String mOriginalFileName;
+	@JsonProperty("mStoredFileName")
 	private String mStoredFileName;
 	private int fileAttached;
 	
@@ -40,6 +43,8 @@ public class MemberDTO {
 			throw new IllegalArgumentException("member가 null값");
 		}
 		
+		String url = "http://43.202.98.45:8089/upload/";
+		
 		MemberDTO memberDTO = new MemberDTO();
 		memberDTO.setMemberId(member.getMemberId());
 		memberDTO.setName(member.getName());
@@ -49,6 +54,7 @@ public class MemberDTO {
 		memberDTO.setJob(member.getJob());
 		memberDTO.setHasCareer(member.getHasCareer());
 		memberDTO.setType("일반");
+		memberDTO.setMOriginalFileName(url + member.getMProfile().getMStoredFileName());
 		if(member.getFileAttached() == 0) {
 			// 프로필 사진 없는 경우
 			memberDTO.setFileAttached(member.getFileAttached());
@@ -56,8 +62,9 @@ public class MemberDTO {
 			// 프로필 사진 있는 경우
 			memberDTO.setFileAttached(member.getFileAttached());
 			// select * from member m, m_profile mp where m.member_id=mp.member_id where m.member_id=?
-			memberDTO.setMOriginalFileName(member.getMProfile().getMOriginalFileName());
-			memberDTO.setMStoredFileName(member.getMProfile().getMStoredFileName());
+//			memberDTO.setMOriginalFileName(url + member.getMProfile().getMOriginalFileName());
+//			memberDTO.setMOriginalFileName(url + member.getMProfile().getMStoredFileName());
+//			memberDTO.setMStoredFileName(url + member.getMProfile().getMStoredFileName());
 		}
 		return memberDTO;
 	}
