@@ -7,7 +7,7 @@ const GoogleLoginButton = () => {
     onSuccess: (codeResponse) => {
       console.log("-----------", codeResponse.code);
       axios
-        .post("https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/googlelogin", null, {
+        .post("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/googlelogin", null, {
           params: {
             code: codeResponse.code,
             grant_type: "authorization_code",

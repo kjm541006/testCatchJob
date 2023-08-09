@@ -25,7 +25,10 @@ const MyPage = () => {
         },
       };
       try {
-        const response = await axios.get("https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/memberInfo", axiosConfig);
+        const response = await axios.get(
+          "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/memberInfo",
+          axiosConfig
+        );
         setImageFile(response.data.mOriginalFileName);
         setEmail(response.data.email);
         setName(response.data.name);
@@ -85,7 +88,7 @@ const MyPage = () => {
 
     try {
       const response = await axios.post(
-        "https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/memberUpdate",
+        "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/memberUpdate",
         formData,
         config
       );
@@ -117,7 +120,7 @@ const MyPage = () => {
     if (confirmDelete) {
       // axios를 사용하여 서버로 DELETE 요청을 보냅니다.
       axios
-        .delete("https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/deleteMember", {
+        .delete("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/deleteMember", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

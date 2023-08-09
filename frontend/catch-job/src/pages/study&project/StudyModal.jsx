@@ -33,7 +33,7 @@ const StudyModal = ({ isOpen, onClose, applyType, modalType, data }) => {
     };
     try {
       const response = await axios.post(
-        `https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/apply/${id}?job=${applyType}`,
+        `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/apply/${id}?job=${applyType}`,
         applyData
       );
       if (response.status === 200) {

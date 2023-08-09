@@ -52,8 +52,8 @@ const PortfolioMainPage = () => {
     }
 
     axios
-      // .get("https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/", {
-      .get("https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/", {
+      // .get("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/", {
+      .get("http://https://64d37ee6b7dcfc0008ead550--classy-kleicha-484f07/.netlify/functions/proxy/", {
         headers: headers,
       })
       .then((response) => {
@@ -73,7 +73,7 @@ const PortfolioMainPage = () => {
     setSelectedItemId(board_id);
     setIsModalOpen(true);
     try {
-      await axios.post(`https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/portfolio/${board_id}`, { board_id });
+      await axios.post(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/portfolio/${board_id}`, { board_id });
       console.log("조회수 증가 성공");
     } catch (error) {
       console.error("error", error);

@@ -45,7 +45,7 @@ function Card(props) {
       headers.Authorization = `Bearer ${token}`;
     }
     try {
-      const response = await axios.get("https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community", { headers });
+      const response = await axios.get("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community", { headers });
       const updatedData = response.data.map((post) => ({ ...post, likeCount: post.cLike || 0 }));
       console.log(response.data);
       setCommunityData(updatedData);
@@ -151,7 +151,7 @@ function Card(props) {
   const handleLike = async (community_id) => {
     try {
       const response = await axios.post(
-        `https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community/like?communityId=${community_id}`
+        `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community/like?communityId=${community_id}`
       );
       if (response.status === 200) {
         fetchCommunityData();
@@ -171,7 +171,7 @@ function Card(props) {
     }
     try {
       await axios.delete(
-        `https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community/delete?communityId=${community_id}`,
+        `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community/delete?communityId=${community_id}`,
         { headers }
       );
       setCommunityData((prevData) => prevData.filter((post) => post.communityId !== community_id));

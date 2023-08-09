@@ -42,7 +42,9 @@ const SearchPage = () => {
       return;
     }
     try {
-      const response = await axios.get(`https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/search?keyword=${searchWord}`);
+      const response = await axios.get(
+        `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/search?keyword=${searchWord}`
+      );
       console.log(response.data);
       const resData = response.data;
 

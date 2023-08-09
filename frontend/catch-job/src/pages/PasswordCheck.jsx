@@ -22,7 +22,7 @@ const PasswordCheck = () => {
       };
       try {
         const response = await axios.post(
-          "https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/memberPwd",
+          "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/memberPwd",
           { pwd: password },
           config
         );
