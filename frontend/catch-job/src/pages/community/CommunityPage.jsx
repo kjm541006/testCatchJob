@@ -13,8 +13,6 @@ import { useNavigate } from "react-router-dom";
 function Card(props) {
   const [commentModalOpen, setCommentModalOpen] = useState([]);
   const [comments, setComments] = useState([]);
-  const [comment, setComment] = useState("");
-  const [isLike, setIsLike] = useState(false);
 
   const [expanded, setExpanded] = useState([]);
 
@@ -100,14 +98,6 @@ function Card(props) {
       return newExpanded;
     });
   };
-
-  const handleCommentChange = (event, i) => {
-    const newComments = [...comments];
-    newComments[i] = event.target.value;
-    setComments(newComments);
-  };
-
-  const handleSubmitComment = async (newPost) => {};
 
   const togglePostModal = () => {
     if (!isLoggedIn) {
