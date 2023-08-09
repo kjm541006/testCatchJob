@@ -1,14 +1,25 @@
 import axios from "axios";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import styles from "../../assets/css/study/StudyModal.module.css";
 import { useLocation } from "react-router-dom";
 
 const useQuery = () => new URLSearchParams(useLocation().search);
 const StudyModal = ({ isOpen, onClose, applyType, modalType, data }) => {
+  const [expanded, setExpanded] = useState([]);
   const modalRef = useRef(null);
   const applyRef = useRef();
   const query = useQuery();
   const id = query.get("id");
+
+  const toggleExpanded = (index, event) => {
+    event.stopPropagation();
+    console.log("click");
+    if (expanded.includes(index)) {
+      setExpanded(expanded.filter((i) => i !== index));
+    } else {
+      setExpanded([...expanded, index]);
+    }
+  };
 
   const handleClickOutside = (e) => {
     if (modalRef.current && modalRef.current.contains(e.target)) {
@@ -70,51 +81,19 @@ const StudyModal = ({ isOpen, onClose, applyType, modalType, data }) => {
                   data
                     .filter((x) => x.projectJob === applyType)
                     .map((x, i) => {
+                      const isExpanded = expanded.includes(i);
                       return (
-                        <div className={styles.applyList}>
+                        <div className={styles.applyList} key={i}>
                           <div className={styles.applyLeft}>
-                            <div className={styles.applyName}>{x.memberName}</div>
-                            <div className={styles.applyEmail}>{x.memberEmail}</div>
+                            <div className={styles.applyName}>지원자: {x.memberName}</div>
+                            <div className={styles.applyEmail}>이메일: {x.memberEmail}</div>
                           </div>
-                          <div className={styles.applyReason}>{x.projectReason}</div>
+                          <div className={styles.reasonWrapper}>
+                            <p className={`${styles.applyReason} ${isExpanded ? styles.applyReasonExpanded : ""}`}>{x.projectReason}</p>
+                          </div>
                         </div>
                       );
                     })}
-                {/* <div className={styles.applyList}>
-                  <div className={styles.applyLeft}>
-                    <div className={styles.applyName}>김주민</div>
-                    <div className={styles.applyEmail}>kim@naver.com</div>
-                  </div>
-                  <div className={styles.applyReason}>지원 사유</div>
-                </div>
-                <div className={styles.applyList}>
-                  <div className={styles.applyLeft}>
-                    <div className={styles.applyName}>김주민</div>
-                    <div className={styles.applyEmail}>kim@naver.com</div>
-                  </div>
-                  <div className={styles.applyReason}>지원 사유</div>
-                </div>
-                <div className={styles.applyList}>
-                  <div className={styles.applyLeft}>
-                    <div className={styles.applyName}>김주민</div>
-                    <div className={styles.applyEmail}>kim@naver.com</div>
-                  </div>
-                  <div className={styles.applyReason}>지원 사유</div>
-                </div>
-                <div className={styles.applyList}>
-                  <div className={styles.applyLeft}>
-                    <div className={styles.applyName}>김주민</div>
-                    <div className={styles.applyEmail}>kim@naver.com</div>
-                  </div>
-                  <div className={styles.applyReason}>지원 사유</div>
-                </div>
-                <div className={styles.applyList}>
-                  <div className={styles.applyLeft}>
-                    <div className={styles.applyName}>김주민</div>
-                    <div className={styles.applyEmail}>kim@naver.com</div>
-                  </div>
-                  <div className={styles.applyReason}>지원 사유</div>
-                </div> */}
               </div>
             </>
           )}

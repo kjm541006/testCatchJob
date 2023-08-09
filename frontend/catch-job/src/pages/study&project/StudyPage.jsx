@@ -163,11 +163,11 @@ const StudyPage = () => {
           <div className={styles.studyPage}>
             <div className={styles.top}>
               <div className={styles.studySort}>
-                <FontAwesomeIcon icon={faCheck} className={styles.checkIcon} />
+                <FontAwesomeIcon icon={faCheck} className={`${styles.checkIcon} ${sortOption === "latest" && styles.invisible}`} />
                 <span className={`${styles.popular} ${styles.btn}`} onClick={() => setSortOption("popular")}>
                   인기순
                 </span>
-                <FontAwesomeIcon icon={faCheck} className={`${styles.checkIcon} ${styles.invisible}`} />
+                <FontAwesomeIcon icon={faCheck} className={`${styles.checkIcon} ${sortOption === "popular" && styles.invisible}`} />
                 <span className={styles.new} onClick={() => setSortOption("latest")}>
                   최신순
                 </span>

@@ -46,6 +46,8 @@ const SearchPage = () => {
       console.log(response.data);
       const resData = response.data;
 
+      setData(resData);
+
       const uniqueData = removeDuplicates(resData);
 
       setPortData(uniqueData.filter((x) => x.hasOwnProperty("boardId")));
@@ -70,54 +72,64 @@ const SearchPage = () => {
       <div className={styles.searchResultMsg}>
         <h1>검색 결과</h1>
       </div>
-      {portData.length !== 0 && (
-        <div className={styles.portfolioWrapper}>
-          <div className={styles.portfolioTitle}>
-            <h3>
-              포트폴리오 <span className={styles.searchNum}>{data && portData.length}</span> 건
-            </h3>
-          </div>
-          <div className={styles.portfolioSearchResults}>
-            {data &&
-              portData.map((x) => (
-                <div className={styles.boardItem} key={x.boardId} onClick={() => navigate(`/?boardId=${x.boardId}`)}>
-                  <div className={styles.coverImg}>
-                    <img src={x.bCoverFileName} alt="커버이미지" />
-                  </div>
-                  <div className={styles.boardElement}>
-                    <h2>{x.bTitle}</h2>
-                    <p>{stripHTMLTags(he.decode(x.bContents))}</p>
-                  </div>
-                </div>
-              ))}
-          </div>
+      {data.length === 0 ? (
+        <div className={styles.none}>
+          <h1>검색 결과가 없습니다</h1>
         </div>
-      )}
-      {studyData.length !== 0 && (
-        <div className={styles.portfolioWrapper}>
-          <div className={styles.portfolioTitle}>
-            <h3>
-              스터디 <span className={styles.searchNum}>{data && studyData.length}</span> 건
-            </h3>
-          </div>
-          <div className={styles.portfolioSearchResults}>
-            {data &&
-              studyData.map((x) => (
-                <div
-                  className={styles.studyItem}
-                  key={x.studyId ? x.studyId : x.projectId}
-                  onClick={() => (x.studyId ? navigate(`/studyDetail?id=${x.projectId}`) : navigate(`/projectDetail?id=${x.projectId}`))}
-                >
-                  <div className={styles.itemElement}>
-                    <div className={styles.itemEleTitle}>
-                      <h2>{x.title}</h2>
+      ) : (
+        <>
+          {portData.length !== 0 && (
+            <div className={styles.portfolioWrapper}>
+              <div className={styles.portfolioTitle}>
+                <h3>
+                  포트폴리오 <span className={styles.searchNum}>{data && portData.length}</span> 건
+                </h3>
+              </div>
+              <div className={styles.portfolioSearchResults}>
+                {data &&
+                  portData.map((x) => (
+                    <div className={styles.boardItem} key={x.boardId} onClick={() => navigate(`/?boardId=${x.boardId}`)}>
+                      <div className={styles.coverImg}>
+                        <img src={x.bCoverFileName} alt="커버이미지" />
+                      </div>
+                      <div className={styles.boardElement}>
+                        <h2>{x.bTitle}</h2>
+                        <p>{stripHTMLTags(he.decode(x.bContents))}</p>
+                      </div>
                     </div>
-                    <p>{stripHTMLTags(he.decode(x.detail))}</p>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
+                  ))}
+              </div>
+            </div>
+          )}
+          {studyData.length !== 0 && (
+            <div className={styles.portfolioWrapper}>
+              <div className={styles.portfolioTitle}>
+                <h3>
+                  스터디 <span className={styles.searchNum}>{data && studyData.length}</span> 건
+                </h3>
+              </div>
+              <div className={styles.portfolioSearchResults}>
+                {data &&
+                  studyData.map((x) => (
+                    <div
+                      className={styles.studyItem}
+                      key={x.studyId ? x.studyId : x.projectId}
+                      onClick={() =>
+                        x.studyId ? navigate(`/studyDetail?id=${x.projectId}`) : navigate(`/projectDetail?id=${x.projectId}`)
+                      }
+                    >
+                      <div className={styles.itemElement}>
+                        <div className={styles.itemEleTitle}>
+                          <h2>{x.title}</h2>
+                        </div>
+                        <p>{stripHTMLTags(he.decode(x.detail))}</p>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

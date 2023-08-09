@@ -3,11 +3,14 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { selectEmail } from "../../redux/login";
 
-function PostModal({ onPostSubmit, onCancel, initialPostData }) {
+function PostModal({ onPostSubmit, onCancel, post }) {
   const [loading, setLoading] = useState(false);
-  const [postTitle, setPostTitle] = useState("");
-  const [postContent, setPostContent] = useState("");
-  const [postCategory, setPostCategory] = useState("");
+  // const [postTitle, setPostTitle] = useState("");
+  // const [postContent, setPostContent] = useState("");
+  // const [postCategory, setPostCategory] = useState("");
+  const [postTitle, setPostTitle] = useState(post ? post.cTitle : "");
+  const [postContent, setPostContent] = useState(post ? post.cContents : "");
+  const [postCategory, setPostCategory] = useState(post ? post.cType : "");
 
   const userEmail = useSelector(selectEmail);
 
@@ -29,7 +32,7 @@ function PostModal({ onPostSubmit, onCancel, initialPostData }) {
     setPostCategory(event.target.value);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (communityId) => {
     setLoading(true);
     if (postTitle.trim() === "" || postContent.trim() === "" || postCategory === "") {
       alert("모든 필드를 입력해주세요.");
@@ -37,23 +40,57 @@ function PostModal({ onPostSubmit, onCancel, initialPostData }) {
       return;
     }
 
-    const newPost = {
+    // const newPost = {
+    //   cContents: postContent,
+    //   cTitle: postTitle,
+    //   cType: postCategory,
+    //   email: userEmail,
+    // };
+    const editedPost = {
       cContents: postContent,
       cTitle: postTitle,
       cType: postCategory,
       email: userEmail,
     };
 
-    try {
-      const response = await axios.post("http://43.202.98.45:8089/community", newPost);
-      // const response = await axios.post("http://localhost:8089/community", newPost);
-      setLoading(false);
+    //   try {
+    //     const response = await axios.post("http://43.202.98.45:8089/community", newPost);
+    //     // const response = await axios.post("http://localhost:8089/community", newPost);
+    //     setLoading(false);
 
-      setPostCategory("");
-      setPostTitle("");
-      setPostContent("");
-      onCancel();
-      window.location.reload();
+    //     setPostCategory("");
+    //     setPostTitle("");
+    //     setPostContent("");
+    //     onCancel();
+    //     window.location.reload();
+    //   } catch (error) {
+    //     setLoading(false);
+    //     console.error("Error submitting post:", error);
+    //   }
+    // };
+    try {
+      if (post) {
+        // Editing an existing post
+        const response = await axios.put(`http://43.202.98.45:8089/community/edit?communityId=${post.communityId}`, editedPost);
+        if (response.status === 200) {
+          // Update the post data in the parent component's state or other logic as needed
+          onPostSubmit(editedPost);
+          setLoading(false);
+          onCancel();
+          window.location.reload();
+        }
+      } else {
+        // Creating a new post
+        const response = await axios.post("http://43.202.98.45:8089/community", editedPost);
+        if (response.status === 200) {
+          setLoading(false);
+          setPostCategory("");
+          setPostTitle("");
+          setPostContent("");
+          onCancel();
+          window.location.reload();
+        }
+      }
     } catch (error) {
       setLoading(false);
       console.error("Error submitting post:", error);
@@ -88,8 +125,11 @@ function PostModal({ onPostSubmit, onCancel, initialPostData }) {
           <button className="postButton1" onClick={handleCancel}>
             취소
           </button>
-          <button className="postButton2" onClick={handleSave}>
+          {/* <button className="postButton2" onClick={handleSave}>
             등록
+          </button> */}
+          <button className="postButton2" onClick={handleSave}>
+            {post ? "수정" : "등록"}
           </button>
         </div>
       </div>

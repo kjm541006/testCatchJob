@@ -25,6 +25,14 @@ function Card(props) {
   const [communityData, setCommunityData] = useState([]);
   const userEmail = useSelector(selectEmail);
 
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editPost, setEditPost] = useState(null);
+
+  const toggleEditModal = (post) => {
+    setEditModalOpen(!editModalOpen);
+    setEditPost(post);
+  };
+
   // Function to fetch community data from the server
   const fetchCommunityData = async () => {
     const token = localStorage.getItem("token");
@@ -35,7 +43,7 @@ function Card(props) {
     }
     try {
       const response = await axios.get("http://43.202.98.45:8089/community", { headers });
-      const updatedData = response.data.map((post) => ({ ...post, isLike: false, likeCount: post.cLike || 0 }));
+      const updatedData = response.data.map((post) => ({ ...post, likeCount: post.cLike || 0 }));
       console.log(response.data);
       setCommunityData(updatedData);
     } catch (error) {
@@ -48,19 +56,23 @@ function Card(props) {
   }, []);
 
   // Effect to fetch community data on component mount
-  useEffect(() => {
-    // Check if communityData is stored in local storage
-    const storedCommunityData = localStorage.getItem("communityData");
-    if (storedCommunityData) {
-      setCommunityData(JSON.parse(storedCommunityData));
-    } else {
-      fetchCommunityData();
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Check if communityData is stored in local storage
+  //   const storedCommunityData = localStorage.getItem("communityData");
+  //   if (storedCommunityData) {
+  //     setCommunityData(JSON.parse(storedCommunityData));
+  //   } else {
+  //     fetchCommunityData();
+  //   }
+  // }, []);
 
   // Function to save community data to local storage
   const saveCommunityDataToLocalStorage = () => {
-    localStorage.setItem("communityData", JSON.stringify(communityData));
+    // localStorage.setItem("communityData", JSON.stringify(communityData));
+  };
+
+  const handleChangeLike = () => {
+    fetchCommunityData();
   };
 
   const toggleCommentModal = (communityId) => {
@@ -141,20 +153,14 @@ function Card(props) {
     try {
       const response = await axios.post(`http://43.202.98.45:8089/community/like?communityId=${community_id}`);
       if (response.status === 200) {
-        setCommunityData((prevData) =>
-          prevData.map((post) =>
-            post.communityId === community_id
-              ? { ...post, isLike: !post.isLike, cLike: post.isLike ? post.cLike - 1 : post.cLike + 1 }
-              : post
-          )
-        );
-        // After updating communityData, save it to local storage
+        fetchCommunityData();
         saveCommunityDataToLocalStorage();
       }
     } catch (err) {
       console.error(err);
     }
   };
+  const handlePostEdit = async (editedPost) => {};
 
   const handleDeletePost = async (community_id) => {
     const token = localStorage.getItem("token");
@@ -174,30 +180,33 @@ function Card(props) {
   return (
     <div className="communityCenter">
       <div className="communitySection">
+        {console.log(filteredData)}
         {filteredData.map((post, i) => (
-          <div key={post.communityId} className="communityCard" style={{ borderBottom: "1px solid #E2E8F0" }}>
+          <div key={post.communityId} className="communityCard">
             <div className="userSection">
-              <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+              <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
                 <div>
                   <img className="communitymprofile" src={post.member.mOriginalFileName} alt="프로필" />
                 </div>
                 <div>
-                  <div style={{ alignItems: "center", display: "flex" }}>
+                  <div style={{ alignItems: "center", display: "flex", gap: "4px" }}>
                     <div style={{ fontWeight: "700" }}>{post.member.name}</div>
                     <span>({post.member.email})</span>
                   </div>
 
-                  <div>
-                    <span className="postcdate">{post.cDate}</span>
+                  <div className="postcdate">
+                    <span>{post.cDate}</span>
                   </div>
                 </div>
                 {userEmail === post.member.email && (
-                  <>
-                    <button className="cpostedit">수정</button>
-                    <button className="cpostdelete" onClick={() => handleDeletePost(post.communityId)}>
+                  <div className="cpostedit">
+                    <button className="cposteditupdate" onClick={() => toggleEditModal(post)}>
+                      수정
+                    </button>
+                    <button className="cposteditdelete" onClick={() => handleDeletePost(post.communityId)}>
                       삭제
                     </button>
-                  </>
+                  </div>
                 )}
               </div>
             </div>
@@ -229,7 +238,7 @@ function Card(props) {
                   style={{ display: "flex", gap: "10px", alignItems: "center", color: "#B2B2B2", fontSize: "13px" }}
                   onClick={() => handleLike(post.communityId)}
                 >
-                  <div>
+                  <div onClick={handleChangeLike}>
                     {/*{post.isLike ? <img src={Heart} alt="하트" /> : <img src={Noheart} alt="빈하트" />}*/}
                     {post.isLike ? <img src={Heart} alt="하트" /> : <img src={Noheart} alt="빈하트" />}
                   </div>
@@ -340,6 +349,7 @@ function Card(props) {
       </div>
 
       {postModalOpen && <PostModal onPostSubmit={handlePostSubmit} onCancel={togglePostModal} />}
+      {editModalOpen && <PostModal onPostSubmit={handlePostEdit} onCancel={toggleEditModal} post={editPost} />}
     </div>
   );
 }

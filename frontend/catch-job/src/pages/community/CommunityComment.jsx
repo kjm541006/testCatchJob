@@ -105,6 +105,7 @@ const CommunityComment = (props) => {
               backgroundColor: "#555",
               border: 0,
               borderRadius: "4px",
+              cursor: "pointer",
             }}
             onClick={handleSubmit}
           >
@@ -123,7 +124,7 @@ const CommunityComment = (props) => {
                     <img className="commentmprofile" src={comment.memberProfile} alt="프로필" />
                   </div>
                   <div>
-                    <div style={{ alignItems: "center", display: "flex" }}>
+                    <div style={{ alignItems: "center", display: "flex", gap: "4px" }}>
                       <div style={{ fontWeight: "550" }}>{comment.memberName}</div>
                       <span>({comment.memberEmail})</span>
                     </div>
@@ -136,9 +137,6 @@ const CommunityComment = (props) => {
                 <div className="commenteditBtn">
                   {comment.memberEmail === userEmail && (
                     <>
-                      {/* <span style={{ color: "#77BC1F" }} onClick={() => handleEditComment(comment.communityId)}>
-                        수정
-                      </span> */}
                       <span style={{ color: "#E2432E" }} onClick={() => handleDeleteComment(comment.commentId)}>
                         삭제
                       </span>

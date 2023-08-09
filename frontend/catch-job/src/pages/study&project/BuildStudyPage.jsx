@@ -720,6 +720,7 @@ const BuildStudyPage = (title) => {
           ref={detail}
           value={detailState}
           onChange={detailChange}
+          spellcheck="false"
         ></textarea>
       </div>
 

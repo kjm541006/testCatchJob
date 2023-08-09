@@ -12,6 +12,14 @@
   border-bottom: 1px solid #ebebeb;
 }
 
+.none {
+  min-height: 53vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+}
+
 .portfolioWrapper {
   min-height: 35vh;
   margin-bottom: 50px;

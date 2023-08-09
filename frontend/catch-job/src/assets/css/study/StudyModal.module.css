@@ -9,7 +9,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  height: 100%;
+  /* height: 100%; */
 }
 
 .modalContent {
@@ -22,7 +22,7 @@
   display: flex;
   flex-direction: column;
   width: 670px;
-  height: 500px;
+  min-height: 500px;
 }
 
 .modalContentWrapper {
@@ -88,7 +88,58 @@
   border: 2px solid #e2432e;
   border-radius: 8px;
   width: 600px;
-  height: 50px;
-  padding: 5px 30px;
+  padding: 20px;
   margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.applyName {
+  font-weight: 600;
+}
+.applyEmail {
+  font-weight: 600;
+}
+
+.reasonBtn {
+  max-height: 2rem;
+  line-height: 2rem;
+  &.hide {
+    display: none;
+  }
+}
+.applyReasonExpanded {
+  max-height: none;
+}
+
+.applyReason {
+  max-width: 200px;
+  /* overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1; */
+  font-size: 12px;
+  line-height: 16px;
+  color: #333;
+  /* display: -webkit-box; */
+  /* -webkit-box-orient: vertical; */
+  font-weight: 400;
+  word-break: break-all;
+}
+
+.reasonWrapper {
+  position: relative;
+  max-width: 200px;
+  overflow: auto;
+}
+
+.reasonWrapper .reasonBtn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  max-height: 2rem;
+  line-height: 2rem;
+  display: none;
+}
+
+.reasonWrapper:hover .reasonBtn {
+  display: inline-block;
 }
