@@ -4,7 +4,7 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import "./header.css";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut, selectEmail, selectLoggedIn, selectName } from "../../redux/login";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const Header = () => {
@@ -13,15 +13,28 @@ const Header = () => {
   const uName = useSelector(selectName);
   const uEmail = useSelector(selectEmail);
   const isLoggedIn = useSelector(selectLoggedIn);
-  let username = "";
+  const [username, setUsername] = useState("");
 
   console.log(uName);
   console.log(uEmail);
   console.log(isLoggedIn);
 
-  if (isLoggedIn) {
-    username = localStorage.getItem("name");
-  }
+  useEffect(() => {
+    if (isLoggedIn) {
+      setUsername(localStorage.getItem("name"));
+    }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    const handleUpdateProfile = () => {
+      setUsername(localStorage.getItem("name"));
+    };
+
+    window.addEventListener("updateProfile", handleUpdateProfile);
+    return () => {
+      window.removeEventListener("updateProfile", handleUpdateProfile);
+    };
+  }, []);
 
   const logOutBtn = () => {
     localStorage.removeItem("token");
@@ -101,7 +114,7 @@ const Header = () => {
               <div className="header-user-info">
                 <Link to="/mypage" className="header-username">
                   <img src={localStorage.getItem("profileImg")} alt="프로필사진" className="header-profile-img" />
-                  <span>{username} 님</span>
+                  <div className="header-usernameName">{username} 님</div>
                 </Link>
                 <div className="header-logout-btn" onClick={logOutBtn}>
                   로그아웃
