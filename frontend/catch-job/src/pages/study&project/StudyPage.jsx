@@ -72,7 +72,8 @@ const StudyPage = () => {
       headers.Authorization = `Bearer ${token}`;
     }
     try {
-      const response = await axios.get(`/.netlify/functions/proxy/project`, {
+      // const response = await axios.get(`/.netlify/functions/proxy/project`, {
+      const response = await axios.get(`https://43.202.98.45:8089/`, {
         headers,
       });
       console.log(response.data);
