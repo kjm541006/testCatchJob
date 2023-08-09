@@ -4,7 +4,7 @@ exports.handler = async (event, context) => {
   try {
     const response = await axios({
       method: event.httpMethod,
-      url: "http://ttp://43.202.98.45:8089", // 여기에 실제 요청할 API 주소를 입력하세요.
+      url: "http://43.202.98.45:8089", // 여기에 실제 요청할 API 주소를 입력하세요.
       headers: event.headers,
       data: event.body,
     });
