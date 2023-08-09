@@ -88,9 +88,9 @@ const MyPage = () => {
       if (response.status >= 200 && response.status < 300) {
         console.log(response.data);
         alert("회원정보수정을 성공하였습니다.");
-        localStorage.setItem('email', response.data.email);
         localStorage.setItem('name', response.data.name);
-        navigate("/");
+        localStorage.setItem('profileImg',response.data.mOriginalFileName);
+        window.location.href = '/';
       }
     } catch (error) {
       console.error(error);
@@ -170,7 +170,7 @@ const MyPage = () => {
             style={{ color: "#444444" }}
             onChange={handleInputChange}
           />
-          <div className={`${styles.input_text_edit}`}>비밀번호</div>
+          <div className={`${styles.input_text_edit}`}>비밀번호 변경</div>
           <input
             type="password"
             className={`${styles.input_box_edit}`}

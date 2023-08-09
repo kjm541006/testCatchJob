@@ -6,7 +6,6 @@ import { selectEmail } from "../../redux/login";
 const CommunityComment = (props) => {
   const [comments, setComments] = useState([]);
   const [commentVal, setCommentVal] = useState();
-  
   const [editMode, setEditMode] = useState(false); // New state variable for edit mode
   const [editedCommentVal, setEditedCommentVal] = useState("");
   const userEmail = useSelector(selectEmail);
@@ -97,21 +96,21 @@ const CommunityComment = (props) => {
             onChange={handleCommentChange}
           />
         </div>
-      </div>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <button
-          style={{
-            fontWeight: "700",
-            fontSize: "11px",
-            color: "white",
-            backgroundColor: "#555",
-            border: 0,
-            borderRadius: "4px",
-          }}
-          onClick={handleSubmit}
-        >
-          댓글 등록
-        </button>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <button
+            style={{
+              fontWeight: "700",
+              fontSize: "11px",
+              color: "white",
+              backgroundColor: "#555",
+              border: 0,
+              borderRadius: "4px",
+            }}
+            onClick={handleSubmit}
+          >
+            댓글 등록
+          </button>
+        </div>
       </div>
 
       <div className="commentsContainer">
@@ -119,20 +118,27 @@ const CommunityComment = (props) => {
           comments.map((comment) => (
             <div key={comment.communityId} className="commentment">
               <div className="commentmentuser">
-              <div style={{ display: "flex", gap: "30px" }}>
+                <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
                   <div>
                     <img className="commentmprofile" src={comment.memberProfile} alt="프로필" />
                   </div>
                   <div>
-                    {comment.memberName}({comment.memberEmail})<div className="datecomment">{formatCommentDate(comment.commentDate)}</div>
+                    <div style={{ alignItems: "center", display: "flex" }}>
+                      <div style={{ fontWeight: "550" }}>{comment.memberName}</div>
+                      <span>({comment.memberEmail})</span>
+                    </div>
+
+                    <div>
+                      <span className="datecomment">{formatCommentDate(comment.commentDate)}</span>
+                    </div>
                   </div>
                 </div>
                 <div className="commenteditBtn">
                   {comment.memberEmail === userEmail && (
                     <>
-                      <span style={{ color: "#77BC1F" }} onClick={() => handleEditComment(comment.communityId)}>
+                      {/* <span style={{ color: "#77BC1F" }} onClick={() => handleEditComment(comment.communityId)}>
                         수정
-                      </span>
+                      </span> */}
                       <span style={{ color: "#E2432E" }} onClick={() => handleDeleteComment(comment.commentId)}>
                         삭제
                       </span>
