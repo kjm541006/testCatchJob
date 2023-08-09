@@ -148,6 +148,7 @@ public class MemberService {
 		// matches 메서드를 이용해서 패스워드 같은지 확인
 		if(originMember != null && pwdEncoder.matches(pwdEncoder.encrypt(email, pwd), originMember.getPwd())) {
 			return originMember;
+//			return MemberDTO.toMemberDTO(originMember);
 		}
 		return null;
 	}
@@ -185,7 +186,7 @@ public class MemberService {
 	}
 	
 	// 마이페이지(3. 회원수정)
-	public Member updateMember(String jwtToken, String name, String pwd, String job, String hasCareer, MultipartFile mFile) throws Exception {
+	public MemberDTO updateMember(String jwtToken, String name, String pwd, String job, String hasCareer, MultipartFile mFile) throws Exception {
 		
 		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 				.orElseThrow(UnauthorizedException::new);
@@ -210,7 +211,8 @@ public class MemberService {
 				currentProfile.setMStoredFileName(storedFileName);
 				mProfileRepo.save(currentProfile);
 			}
-			return memberRepo.save(optAuthenticatedMember);
+			Member updateMember = memberRepo.save(optAuthenticatedMember);
+			return MemberDTO.toMemberDTO(updateMember);
 		} else {
 			throw new RuntimeException("다시 로그인 해주세요");
 		}

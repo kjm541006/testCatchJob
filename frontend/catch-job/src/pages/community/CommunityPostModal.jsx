@@ -3,7 +3,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { selectEmail } from "../../redux/login";
 
-function PostModal({ onPostSubmit, onCancel }) {
+function PostModal({ onPostSubmit, onCancel, initialPostData }) {
   const [loading, setLoading] = useState(false);
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
@@ -46,7 +46,7 @@ function PostModal({ onPostSubmit, onCancel }) {
 
     try {
       const response = await axios.post("http://43.202.98.45:8089/community", newPost);
-      // const response = await axios.post("http://43.202.98.45:8089/community", newPost);
+      // const response = await axios.post("http://localhost:8089/community", newPost);
       setLoading(false);
 
       setPostCategory("");
