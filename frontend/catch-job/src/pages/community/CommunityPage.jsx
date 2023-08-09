@@ -47,6 +47,22 @@ function Card(props) {
     fetchCommunityData();
   }, []);
 
+  // Effect to fetch community data on component mount
+  useEffect(() => {
+    // Check if communityData is stored in local storage
+    const storedCommunityData = localStorage.getItem("communityData");
+    if (storedCommunityData) {
+      setCommunityData(JSON.parse(storedCommunityData));
+    } else {
+      fetchCommunityData();
+    }
+  }, []);
+
+  // Function to save community data to local storage
+  const saveCommunityDataToLocalStorage = () => {
+    localStorage.setItem("communityData", JSON.stringify(communityData));
+  };
+
   const toggleCommentModal = (communityId) => {
     setCommentModalOpen((prevCommentModalOpen) => {
       const newCommentModalOpen = [...prevCommentModalOpen];
@@ -88,11 +104,37 @@ function Card(props) {
 
   const filteredData = selectedCategory === "전체" ? communityData : communityData.filter((post) => post.cType === selectedCategory);
 
-  const truncateContent = (content, maxLength) => {
-    if (content.length > maxLength) {
-      return content.slice(0, maxLength) + "...";
+  const truncateContent = (content, maxLines) => {
+    const lines = content.split("\n");
+
+    if (lines.length <= maxLines) {
+      return content;
     }
-    return content;
+
+    return lines.slice(0, maxLines).join("\n") + "\n...";
+  };
+
+  const renderContent = (content, expanded, i) => {
+    if (!content) return null;
+
+    const lines = content.split("\n");
+    const truncatedContent = truncateContent(content, 3);
+
+    if (expanded[i] || lines.length <= 3) {
+      return lines.map((line, index) => (
+        <span key={index}>
+          {line}
+          <br />
+        </span>
+      ));
+    } else {
+      return truncatedContent.split("\n").map((line, index) => (
+        <span key={index}>
+          {line}
+          <br />
+        </span>
+      ));
+    }
   };
 
   const handleLike = async (community_id) => {
@@ -106,9 +148,26 @@ function Card(props) {
               : post
           )
         );
+        // After updating communityData, save it to local storage
+        saveCommunityDataToLocalStorage();
       }
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleDeletePost = async (community_id) => {
+    const token = localStorage.getItem("token");
+    const headers = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    try {
+      await axios.delete(`http://43.202.98.45:8089/community/delete?communityId=${community_id}`, { headers });
+      setCommunityData((prevData) => prevData.filter((post) => post.communityId !== community_id));
+      saveCommunityDataToLocalStorage();
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -118,14 +177,25 @@ function Card(props) {
         {filteredData.map((post, i) => (
           <div key={post.communityId} className="communityCard" style={{ borderBottom: "1px solid #E2E8F0" }}>
             <div className="userSection">
-              <div style={{ display: "flex", gap: "30px" }}>
+              <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
                 <div>
                   <img className="communitymprofile" src={post.member.mOriginalFileName} alt="프로필" />
                 </div>
                 <div>
-                  <div>{post.member.email}</div>
-                  <span>{post.cDate}</span>
+                  <div style={{ alignItems: "center", display: "flex" }}>
+                    <div style={{ fontWeight: "700" }}>{post.member.name}</div>
+                    <span>({post.member.email})</span>
+                  </div>
+
+                  <div>
+                    <span className="postcdate">{post.cDate}</span>
+                  </div>
                 </div>
+                {userEmail === post.member.email && (
+                  <button className="cpostdelete" onClick={() => handleDeletePost(post.communityId)}>
+                    삭제
+                  </button>
+                )}
               </div>
             </div>
 
@@ -137,35 +207,10 @@ function Card(props) {
 
               <div>
                 <div className={`cardContentsComponents_TextArea ${expanded[i] ? "expanded" : ""}`}>
-                  <p>
-                    {post && post.cContents // post 객체와 post.c_contents 속성 체크
-                      ? expanded[i]
-                        ? post.cContents.split("\n").map((line) => {
-                            // 펼칠때
-                            return (
-                              <span>
-                                {line}
-                                <br />
-                              </span>
-                            );
-                          })
-                        : truncateContent(
-                            post.cContents.split("\n").map((line) => {
-                              // 접힐때
-                              return (
-                                <span>
-                                  {line}
-                                  <br />
-                                </span>
-                              );
-                            }),
-                            100
-                          )
-                      : null}
-                  </p>
+                  <p style={{ lineHeight: 1.6 }}>{post && post.cContents ? renderContent(post.cContents, expanded, i) : null}</p>
                 </div>
 
-                {post.cContents && post.cContents.length > 100 && (
+                {post.cContents && post.cContents.split("\n").length > 3 && (
                   <div className="cardContentsComponents_morebutton">
                     <span className="moreButton" onClick={() => toggleExpanded(i)}>
                       {expanded[i] ? "닫기" : "펼치기"}
@@ -177,7 +222,7 @@ function Card(props) {
             <div>
               <div className="cardContentsComponents_bottom">
                 <div
-                  className="heart_img"
+                  className="heart_img "
                   style={{ display: "flex", gap: "10px", alignItems: "center", color: "#B2B2B2", fontSize: "13px" }}
                   onClick={() => handleLike(post.communityId)}
                 >
@@ -196,15 +241,6 @@ function Card(props) {
               </div>
               {commentModalOpen[i] && (
                 <>
-                  {/* 
-                  <Modal
-                    community_id={post.communityId}
-                    onCommentSubmit={() => handleSubmitComment(i)}
-                    onCancel={toggleCommentModal}
-                    comment={comment[i]}
-                    onCommentChange={(event) => handleCommentChange(event, i)}
-                  />*/}
-                  {/* <div className="commentContainer">{renderComments(comments[post.community_id], showComments[i], post.community_id)}</div> */}
                   <div className="commentContainer">
                     <CommunityComment communityId={post.communityId} open={commentModalOpen[i]} />
                   </div>
