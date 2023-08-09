@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useState } from "react";
 import styles from "../assets/css/Search.module.css";
 import axios from "axios";
 import he from "he";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const useQuery = () => new URLSearchParams(useLocation().search);
 

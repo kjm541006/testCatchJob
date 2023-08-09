@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "../../assets/css/study/StudyDetail.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faClipboard, faClipboardCheck, faEye, faHeart, faShareNodes, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { faCheck, faClipboard, faEye, faHeart, faShareNodes, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { stopLoading } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +23,7 @@ const StudyDetailPage = () => {
   const commentRef = useRef();
   const isLoggedIn = useSelector(selectLoggedIn);
   const userEmail = localStorage.getItem("email");
-  const userId = localStorage.getItem("memId");
+  // const userId = localStorage.getItem("memId");
   const navigate = useNavigate();
   console.log(`로그인 여부: ${isLoggedIn}`);
   const token = localStorage.getItem("token");

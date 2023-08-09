@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { stopLoading } from "../../redux/store";
 
 const useQuery = () => new URLSearchParams(useLocation().search);
-const BuildStudyPage = (title) => {
+const BuildStudyPage = () => {
   const [isFetched, setIsFetched] = useState(false);
   const [titleState, setTitleState] = useState("");
   const [detailState, setDetailState] = useState("");
@@ -172,10 +172,10 @@ const BuildStudyPage = (title) => {
     window.location.href = "/study";
   };
 
-  const handleStudyCrewCount = (e) => {
-    setCrewCount(e.target.value);
-    console.log(e.target.value);
-  };
+  // const handleStudyCrewCount = (e) => {
+  //   setCrewCount(e.target.value);
+  //   console.log(e.target.value);
+  // };
 
   useEffect(() => {
     console.log(crewCount);

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPencil } from "@fortawesome/free-solid-svg-icons";
 import styles from "../../assets/css/study/Study.module.css";
@@ -6,19 +6,19 @@ import axios from "axios";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
-import { startLoading, stopLoading } from "../../redux/store";
+import { stopLoading } from "../../redux/store";
 import Select from "react-select";
-import { type } from "@testing-library/user-event/dist/type";
+// import { type } from "@testing-library/user-event/dist/type";
 
 const StudyPage = () => {
   const [data, setData] = useState([]);
   const [sortedOption, setSortedOption] = useState("all");
-  const [sortedLocOption, setSortedLocOption] = useState("all");
+  // const [sortedLocOption, setSortedLocOption] = useState("all");
   const [sortOption, setSortOption] = useState("popular");
   const [searchParams, setSearchParams] = useSearchParams();
   const isLoading = useSelector((state) => state.loading.isLoading);
   const typeParam = searchParams.get("type");
-  const typeLocParam = searchParams.get("loc");
+  // const typeLocParam = searchParams.get("loc");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

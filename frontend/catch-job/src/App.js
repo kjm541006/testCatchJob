@@ -1,7 +1,7 @@
 import "./App.css";
 import "./reset.css";
 import Header from "./components/header/Header";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Footer from "./components/footer/Footer";
 import LoginPage from "./pages/LoginPage";
 import SocialSigninPage from "./pages/SocialSigninPage";
@@ -17,9 +17,9 @@ import BuildPortfolioPage from "./pages/BuildPortfolioPage";
 // import GoogleLoginButton_long from "./components/GoogleLoginButton_long";
 import { useDispatch, useSelector } from "react-redux";
 import MyPage from "./pages/MyPage";
-import { selectCurrentToken, selectUserLoggedOut, setCredentials, setTokenFromLocalStorage, userLoggedOut } from "./redux/login";
-import { logOut, selectEmail, selectLoggedIn, selectName } from "./redux/login";
-import LoginRoute from "./components/LoginRoute";
+import { selectCurrentToken, selectUserLoggedOut, setTokenFromLocalStorage } from "./redux/login";
+import { selectLoggedIn } from "./redux/login";
+// import LoginRoute from "./components/LoginRoute";
 import { useEffect } from "react";
 import LoginAlertPage from "./pages/LoginAlertPage";
 import axios from "axios";
@@ -35,7 +35,7 @@ function App() {
   const email = localStorage.getItem("email");
   const savedToken = localStorage.getItem("token");
   const isLoggedIn = useSelector(selectLoggedIn);
-  const userLoggedOut = useSelector(selectUserLoggedOut);
+  // const userLoggedOut = useSelector(selectUserLoggedOut);
   const savedTokenFromStore = useSelector(selectCurrentToken);
 
   // axios 요청 헤더 토큰 코드
