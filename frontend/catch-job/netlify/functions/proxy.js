@@ -5,18 +5,24 @@ exports.handler = async (event, context) => {
     const response = await axios({
       method: event.httpMethod,
       url: "http://43.202.98.45:8089", // 여기에 실제 요청할 API 주소를 입력하세요.
-      headers: event.headers,
+      headers: { ...event.headers },
       data: event.body,
     });
 
     return {
       statusCode: response.status,
-      headers: response.headers,
+      headers: {
+        ...response.headers,
+        "Content-Type": "application/json", //응답 타입을 명시적으로 지정합니다.
+      },
       body: JSON.stringify(response.data),
     };
   } catch (error) {
     return {
       statusCode: 500,
+      headers: {
+        "Content-Type": "application/json", //응답타입을 명시적으로 지정합니다.
+      },
       body: JSON.stringify({ error: error.message }),
     };
   }
