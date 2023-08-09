@@ -52,8 +52,8 @@ const PortfolioMainPage = () => {
     }
 
     axios
-      // .get("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/", {
-      .get("https://main--classy-kleicha-484f07/.netlify/functions/proxy/", {
+      .get("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/", {
+        // .get("https://main--classy-kleicha-484f07/.netlify/functions/proxy/", {
         headers: headers,
       })
       .then((response) => {
