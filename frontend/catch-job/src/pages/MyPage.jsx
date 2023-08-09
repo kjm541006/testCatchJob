@@ -88,9 +88,10 @@ const MyPage = () => {
       if (response.status >= 200 && response.status < 300) {
         console.log(response.data);
         alert("회원정보수정을 성공하였습니다.");
-        localStorage.setItem('email', response.data.email);
         localStorage.setItem('name', response.data.name);
+        localStorage.setItem('profileImg',response.data.mOriginalFileName);
         navigate("/");
+        window.location.reload();
       }
     } catch (error) {
       console.error(error);
