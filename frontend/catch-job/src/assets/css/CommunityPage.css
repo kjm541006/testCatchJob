@@ -24,10 +24,8 @@
 }
 
 .userSection {
-  width: 205px;
   height: 60px;
   margin-top: 29px;
-  margin-left: 19px;
   margin-bottom: 24px;
 }
 
@@ -145,6 +143,7 @@
   box-sizing: border-box;
   resize: none;
   border: 0;
+  overflow: hidden;
 }
 
 .jacksung {
@@ -238,6 +237,7 @@
   gap: 10px; /* 버튼 사이의 간격 조정 */
   font-size: 13px;
   align-items: center;
+  font-weight: 700;
 }
 
 /* 각 버튼에 cursor를 추가하여 마우스가 올라갈 때 포인터를 표시합니다. */
@@ -258,7 +258,20 @@
   border-radius: 50px;
 }
 .commentmprofile {
-  width: 40px;
-  height: 40px;
+  width: 52px;
+  height: 52px;
   border-radius: 26px;
+}
+.postcdate {
+  color: #9f9f9f;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 17.64px; /* 126% */
+  letter-spacing: -0.07px;
+}
+
+.cpostdelete {
+  margin-left: auto;
+  font-weight: 700;
 }

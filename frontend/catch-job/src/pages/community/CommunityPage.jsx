@@ -192,9 +192,12 @@ function Card(props) {
                   </div>
                 </div>
                 {userEmail === post.member.email && (
-                  <button className="cpostdelete" onClick={() => handleDeletePost(post.communityId)}>
-                    삭제
-                  </button>
+                  <>
+                    <button className="cpostedit">수정</button>
+                    <button className="cpostdelete" onClick={() => handleDeletePost(post.communityId)}>
+                      삭제
+                    </button>
+                  </>
                 )}
               </div>
             </div>
