@@ -154,10 +154,10 @@ public class MemberController {
 			@RequestParam(value = "hasCareer") String hasCareer,
 			@RequestPart(value = "mOriginalFileName", required = false) MultipartFile mFile) throws Exception {
 		
-		Member updateMember = memberService.updateMember(jwtToken, name, pwd, job, hasCareer, mFile);
+		MemberDTO updateMemberDTO = memberService.updateMember(jwtToken, name, pwd, job, hasCareer, mFile);
 		
-		if(updateMember != null) {
-			return ResponseEntity.ok().body(updateMember);
+		if(updateMemberDTO != null) {
+			return ResponseEntity.ok().body(updateMemberDTO);
 		} 
 		return ResponseEntity.badRequest().body("회원 수정 실패");
 	}
