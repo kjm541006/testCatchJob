@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../assets/css/CommunityPage.css";
 import PostModal from "./CommunityPostModal";
 import "../../assets/css/CommunityPostModal.css";

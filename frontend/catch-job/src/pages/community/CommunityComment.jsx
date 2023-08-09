@@ -7,7 +7,7 @@ const CommunityComment = (props) => {
   const [comments, setComments] = useState([]);
   const [commentVal, setCommentVal] = useState();
   const [editMode, setEditMode] = useState(false); // New state variable for edit mode
-  const [editedCommentVal, setEditedCommentVal] = useState("");
+  // const [editedCommentVal, setEditedCommentVal] = useState("");
   const userEmail = useSelector(selectEmail);
 
   const getComments = async () => {
