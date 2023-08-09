@@ -4,7 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const MyPage = () => {
   const [email, setEmail] = useState("");
@@ -14,7 +14,7 @@ const MyPage = () => {
   const [selectedCarrers, setSelectedCarrers] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imageFileName, setImageFileName] = useState("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {

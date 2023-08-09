@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../assets/css/member/Login.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
-import { Link, useLocation } from "react-router-dom";
-import GoogleLoginButton from "../components/GoogleLoginButton";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+// import GoogleLoginButton from "../components/GoogleLoginButton";
+// import { GoogleOAuthProvider } from "@react-oauth/google";
+import {  useSelector } from "react-redux";
 import { selectLoggedIn } from "../redux/login";
 import { useNavigate } from "react-router-dom";
 // import { userLoginMutation } from "../redux/authApi";
@@ -19,7 +19,7 @@ const LoginPage = () => {
   const isLoggedIn = useSelector(selectLoggedIn);
 
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
