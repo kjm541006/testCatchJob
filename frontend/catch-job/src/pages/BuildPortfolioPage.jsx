@@ -27,7 +27,7 @@ const BuildPortfolioPage = () => {
   useEffect(() => {
     const ifHaveId = async () => {
       try {
-        const response = await axios.get(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/${boardId}`); // 수정 엔드포인트에 맞춰서 쓰기
+        const response = await axios.get(`https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/${boardId}`); // 수정 엔드포인트에 맞춰서 쓰기
 
         setTitle(response.data.bTitle);
         setValue(response.data.bContents);
@@ -107,7 +107,7 @@ const BuildPortfolioPage = () => {
     try {
       if (!boardId) {
         const response = await axios.post(
-          "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/buildportfolio",
+          "https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/buildportfolio",
           formData,
           axiosConfig
         );
@@ -115,7 +115,7 @@ const BuildPortfolioPage = () => {
         console.log("새로운 게시글 작성 성공");
       } else {
         const response = await axios.post(
-          `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/portfolio/edit/${boardId}`,
+          `https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/portfolio/edit/${boardId}`,
           formData,
           axiosConfig
         );
@@ -160,7 +160,7 @@ const BuildPortfolioPage = () => {
           <ReactQuill value={value} onChange={handleChange} modules={modules} theme="snow" className={`${styles.customQuillEditor}`} />
         </div>
         <div className={`${styles.fileName}`}>
-          {uploadedFile && uploadedFile.name !== "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/upload/null" && (
+          {uploadedFile && uploadedFile.name !== "https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/upload/null" && (
             <>
               <span>{uploadedFile.name.split("/").pop()}</span>
               <span className={`${styles.removeBtn}`} onClick={() => setUploadedFile("")}>

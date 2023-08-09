@@ -4,7 +4,7 @@ exports.handler = async (event, context) => {
   try {
     const response = await axios({
       method: event.httpMethod,
-      url: "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy", // 여기에 실제 요청할 API 주소를 입력하세요.
+      url: "https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy", // 여기에 실제 요청할 API 주소를 입력하세요.
       headers: { ...event.headers },
       data: event.body,
     });

@@ -32,8 +32,8 @@ const LoginPage = () => {
     };
 
     try {
-      const response = await axios.post("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/login", userData);
-      // const response = await axios.post("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/login", userData);
+      const response = await axios.post("https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/login", userData);
+      // const response = await axios.post("https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/login", userData);
       console.log(response.data);
       console.log(response.data.name);
       const userId = response.data.memberId;

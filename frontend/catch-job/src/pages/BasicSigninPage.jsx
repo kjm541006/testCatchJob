@@ -69,9 +69,9 @@ const BasicSigninPage = () => {
     console.log(userData);
 
     // axios
-    //   .post("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/register", userData, {
+    //   .post("https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/register", userData, {
     axios
-      .post("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/register", userData, {
+      .post("https://classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/register", userData, {
         headers: {
           "Content-Type": "application/json",
         },
