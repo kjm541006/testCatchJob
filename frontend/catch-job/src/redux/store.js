@@ -1,4 +1,4 @@
-import { configureStore, createSlice, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore, createSlice } from "@reduxjs/toolkit";
 import { apiSlice } from "./api";
 import loginReducer from "./login";
 // import userReducer from "./login";
