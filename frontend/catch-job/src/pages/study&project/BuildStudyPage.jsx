@@ -48,7 +48,7 @@ const BuildStudyPage = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/${id}`, {
+      const response = await axios.get(`/.netlify/functions/proxy/studyDetail/${id}`, {
         headers,
       });
       console.log(response.data);
@@ -209,10 +209,7 @@ const BuildStudyPage = () => {
 
       if (isFetched) {
         try {
-          const response = await axios.put(
-            `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/edit/${id}`,
-            buildData
-          );
+          const response = await axios.put(`/.netlify/functions/proxy/studyDetail/edit/${id}`, buildData);
           if (response && response.status >= 200 && response.status < 300) {
             alert("성공적으로 수정되었습니다.");
             navigate(-1);
@@ -223,11 +220,8 @@ const BuildStudyPage = () => {
         }
       } else {
         try {
-          // const response = await axios.post(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
-          const response = await axios.post(
-            `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/buildproject`,
-            buildData
-          ); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+          // const response = await axios.post(`/.netlify/functions/proxy/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+          const response = await axios.post(`/.netlify/functions/proxy/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
           console.log(response);
           if (response && response.status >= 200 && response.status < 300) {
             alert("성공적으로 등록되었습니다.");
@@ -256,10 +250,7 @@ const BuildStudyPage = () => {
 
       if (isFetched) {
         try {
-          const response = await axios.put(
-            `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/edit/${id}`,
-            buildData
-          );
+          const response = await axios.put(`/.netlify/functions/proxy/studyDetail/edit/${id}`, buildData);
           if (response && response.status >= 200 && response.status < 300) {
             alert("성공적으로 수정되었습니다.");
             navigate(-1);
@@ -270,11 +261,8 @@ const BuildStudyPage = () => {
         }
       } else {
         try {
-          // const response = await axios.post(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
-          const response = await axios.post(
-            `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/buildproject`,
-            buildData
-          ); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+          // const response = await axios.post(`/.netlify/functions/proxy/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
+          const response = await axios.post(`/.netlify/functions/proxy/buildproject`, buildData); // JSON 데이터를 보내는 경우 'Content-Type': 'application/json' 헤더를 추가해야 합니다.
           console.log(response);
           if (response && response.status >= 200 && response.status < 300) {
             alert("성공적으로 등록되었습니다.");
@@ -290,7 +278,7 @@ const BuildStudyPage = () => {
 
   return (
     <div className={styles.buildPage}>
-      {/* <form method="post" action="https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/buildstudy" onSubmit={handleSubmit}> */}
+      {/* <form method="post" action="/.netlify/functions/proxy/buildstudy" onSubmit={handleSubmit}> */}
       <div className={styles.buildType}>
         <div className={`${styles.type} ${bType === "project" && styles.active}`} onClick={changeTypeToProject}>
           프로젝트

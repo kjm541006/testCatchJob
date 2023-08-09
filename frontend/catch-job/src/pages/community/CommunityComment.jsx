@@ -13,7 +13,7 @@ const CommunityComment = (props) => {
   const getComments = async () => {
     try {
       await axios
-        .get("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community/comment/list", {
+        .get("/.netlify/functions/proxy/community/comment/list", {
           params: {
             communityId: props.communityId,
           },
@@ -40,14 +40,12 @@ const CommunityComment = (props) => {
       //email: userEmail,
     };
     try {
-      await axios
-        .post(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community/comment/insert`, newComment)
-        .then((response) => {
-          console.log(response.data);
+      await axios.post(`/.netlify/functions/proxy/community/comment/insert`, newComment).then((response) => {
+        console.log(response.data);
 
-          setCommentVal("");
-          getComments();
-        });
+        setCommentVal("");
+        getComments();
+      });
     } catch (error) {
       console.error("Error submitting comment", error);
     }
@@ -79,9 +77,7 @@ const CommunityComment = (props) => {
 
   const handleDeleteComment = async (commentId) => {
     try {
-      await axios.delete(
-        `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community/comment/delete?commentId=${commentId}`
-      );
+      await axios.delete(`/.netlify/functions/proxy/community/comment/delete?commentId=${commentId}`);
       setComments((prevComments) => prevComments.filter((comment) => comment.commentId !== commentId));
     } catch (error) {
       console.error("Error deleting comment", error);

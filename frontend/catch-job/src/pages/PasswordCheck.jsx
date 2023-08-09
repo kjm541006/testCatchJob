@@ -21,11 +21,7 @@ const PasswordCheck = () => {
         },
       };
       try {
-        const response = await axios.post(
-          "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/memberPwd",
-          { pwd: password },
-          config
-        );
+        const response = await axios.post("/.netlify/functions/proxy/memberPwd", { pwd: password }, config);
         console.log(response.data);
 
         if (response.data === "비밀번호 일치") {

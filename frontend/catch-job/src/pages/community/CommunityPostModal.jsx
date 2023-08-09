@@ -54,7 +54,7 @@ function PostModal({ onPostSubmit, onCancel, post }) {
     };
 
     //   try {
-    //     const response = await axios.post("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community", newPost);
+    //     const response = await axios.post("/.netlify/functions/proxy/community", newPost);
     //     // const response = await axios.post("http://localhost:8089/community", newPost);
     //     setLoading(false);
 
@@ -71,10 +71,7 @@ function PostModal({ onPostSubmit, onCancel, post }) {
     try {
       if (post) {
         // Editing an existing post
-        const response = await axios.put(
-          `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community/edit?communityId=${post.communityId}`,
-          editedPost
-        );
+        const response = await axios.put(`/.netlify/functions/proxy/community/edit?communityId=${post.communityId}`, editedPost);
         if (response.status === 200) {
           // Update the post data in the parent component's state or other logic as needed
           onPostSubmit(editedPost);
@@ -84,7 +81,7 @@ function PostModal({ onPostSubmit, onCancel, post }) {
         }
       } else {
         // Creating a new post
-        const response = await axios.post("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community", editedPost);
+        const response = await axios.post("/.netlify/functions/proxy/community", editedPost);
         if (response.status === 200) {
           setLoading(false);
           setPostCategory("");
