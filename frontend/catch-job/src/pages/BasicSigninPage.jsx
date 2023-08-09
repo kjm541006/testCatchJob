@@ -69,9 +69,9 @@ const BasicSigninPage = () => {
     console.log(userData);
 
     // axios
-    //   .post("http://43.202.98.45:8089/register", userData, {
+    //   .post("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/register", userData, {
     axios
-      .post("http://43.202.98.45:8089/register", userData, {
+      .post("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/register", userData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -159,46 +159,45 @@ const BasicSigninPage = () => {
 
           <div className="input-text-basic">직무</div>
           <div className="choosejob" id="pick">
-  <label className="labelOne">
-    <label className="choosejobone">
-      <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹디자이너")} />
-      <div className="choosejob-text-basic">웹디자이너</div>
-    </label>
-  </label>
-  <label className="labelOne">
-    <label className="choosejobone">
-      <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹퍼블리셔")} />
-      <div className="choosejob-text-basic">웹퍼블리셔</div>
-    </label>
-  </label>
-  <label className="labelOne">
-    <label className="choosejobone">
-      <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("프론트엔드")} />
-      <div className="choosejob-text-basic">프론트엔드</div>
-    </label>
-  </label>
-</div>
-<div className="choosejob">
-  <label className="labelOne">
-    <label className="choosejobone">
-      <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("백엔드")} />
-      <div className="choosejob-text-basic">백엔드</div>
-    </label>
-  </label>
-  <label className="labelOne">
-    <label className="choosejobone">
-      <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("PM")} />
-      <div className="choosejob-text-basic">PM</div>
-    </label>
-  </label>
-  <label className="labelOne">
-    <label className="choosejobone">
-      <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("기타")} />
-      <div className="choosejob-text-basic">기타</div>
-    </label>
-  </label>
-</div>
-
+            <label className="labelOne">
+              <label className="choosejobone">
+                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹디자이너")} />
+                <div className="choosejob-text-basic">웹디자이너</div>
+              </label>
+            </label>
+            <label className="labelOne">
+              <label className="choosejobone">
+                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("웹퍼블리셔")} />
+                <div className="choosejob-text-basic">웹퍼블리셔</div>
+              </label>
+            </label>
+            <label className="labelOne">
+              <label className="choosejobone">
+                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("프론트엔드")} />
+                <div className="choosejob-text-basic">프론트엔드</div>
+              </label>
+            </label>
+          </div>
+          <div className="choosejob">
+            <label className="labelOne">
+              <label className="choosejobone">
+                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("백엔드")} />
+                <div className="choosejob-text-basic">백엔드</div>
+              </label>
+            </label>
+            <label className="labelOne">
+              <label className="choosejobone">
+                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("PM")} />
+                <div className="choosejob-text-basic">PM</div>
+              </label>
+            </label>
+            <label className="labelOne">
+              <label className="choosejobone">
+                <input type="radio" className="custom-checkbox" name="job" onChange={() => handleJobCheckboxChange("기타")} />
+                <div className="choosejob-text-basic">기타</div>
+              </label>
+            </label>
+          </div>
 
           <div className="input-text-basic">경력 여부</div>
           <div className="choosejob" id="pick">

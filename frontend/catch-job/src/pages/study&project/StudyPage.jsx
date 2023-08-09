@@ -72,7 +72,7 @@ const StudyPage = () => {
       headers.Authorization = `Bearer ${token}`;
     }
     try {
-      const response = await axios.get(`http://43.202.98.45:8089/project`, {
+      const response = await axios.get(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/project`, {
         headers,
       });
       console.log(response.data);
@@ -128,7 +128,7 @@ const StudyPage = () => {
   const addHeart = async (event, id) => {
     event.stopPropagation();
     try {
-      const response = await axios.post(`http://43.202.98.45:8089/studyDetail/like/${id}`);
+      const response = await axios.post(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/like/${id}`);
       fetchData();
     } catch (err) {
       console.error(err);

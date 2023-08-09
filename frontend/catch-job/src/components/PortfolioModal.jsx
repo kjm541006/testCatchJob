@@ -44,7 +44,7 @@ const PortfolioModal = ({ item, onClose }) => {
       return;
     } else {
       try {
-        const response = await axios.post(`http://43.202.98.45:8089/like/${item.boardId}`, {
+        const response = await axios.post(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/like/${item.boardId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -79,11 +79,14 @@ const PortfolioModal = ({ item, onClose }) => {
 
   const handleDelete = async (event) => {
     event.stopPropagation();
-    const response = await axios.delete(`http://43.202.98.45:8089/portfolio/delete/${item.boardId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.delete(
+      `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/portfolio/delete/${item.boardId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (response.status === 200) {
       console.log("게시물이 삭제되었습니다.");
@@ -134,7 +137,7 @@ const PortfolioModal = ({ item, onClose }) => {
     } else {
       if (comment) {
         const response = await axios.post(
-          `http://43.202.98.45:8089/portfolio/comment/${item.boardId}`,
+          `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/portfolio/comment/${item.boardId}`,
           {
             memberName: writerName,
             memberEmail: writerEmail,
@@ -185,7 +188,7 @@ const PortfolioModal = ({ item, onClose }) => {
     }
 
     const response = await axios.put(
-      `http://43.202.98.45:8089/portfolio/comment/edit/${commentId}`,
+      `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/portfolio/comment/edit/${commentId}`,
       {
         commentContent: editComment,
       },
@@ -216,11 +219,14 @@ const PortfolioModal = ({ item, onClose }) => {
   };
 
   const handleDeleteEditedComment = async (commentId) => {
-    const response = await axios.delete(`http://43.202.98.45:8089/portfolio/comment/delete/${commentId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.delete(
+      `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/portfolio/comment/delete/${commentId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (response.status === 200) {
       console.log("댓글이 삭제되었습니다.");
@@ -250,11 +256,11 @@ const PortfolioModal = ({ item, onClose }) => {
             {item.tags[1] && <div className={`${styles.tagElement}`}>{item.tags[1]}</div>}
             {item.tags[2] && <div className={`${styles.tagElement}`}>{item.tags[2]}</div>}
           </div>
-          {item.bFileName && item.bFileName !== "http://43.202.98.45:8089/upload/null" &&(
+          {item.bFileName && item.bFileName !== "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/upload/null" && (
             <div className={`${styles.contentFile}`}>
               첨부파일:{" "}
               <a href={item.bFileName} download target="_blank" rel="noopener noreferrer">
-              <span className={`${styles.contentFileName}`}>{item.bFileName.split('/').pop()}</span>
+                <span className={`${styles.contentFileName}`}>{item.bFileName.split("/").pop()}</span>
               </a>
             </div>
           )}

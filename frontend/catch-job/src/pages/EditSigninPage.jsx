@@ -25,7 +25,10 @@ const EditSigninPage = () => {
         },
       };
       try {
-        const response = await axios.get("http://43.202.98.45:8089/memberInfo", axiosConfig);
+        const response = await axios.get(
+          "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/memberInfo",
+          axiosConfig
+        );
         setImageFile(response.data.mOriginalFileName);
         setEmail(response.data.email);
         setName(response.data.name);

@@ -45,7 +45,9 @@ const StudyDetailPage = () => {
 
   const cancelApply = async (pMemId) => {
     try {
-      const response = await axios.delete(`http://43.202.98.45:8089/studyDetail/cancel/${pMemId}`);
+      const response = await axios.delete(
+        `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/cancel/${pMemId}`
+      );
       if (response.status === 200) {
         alert("삭제되었습니다.");
       }
@@ -57,7 +59,7 @@ const StudyDetailPage = () => {
 
   const fetchComments = async () => {
     try {
-      const response = await axios.get(`http://43.202.98.45:8089/studyDetail/${id}`, {
+      const response = await axios.get(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/${id}`, {
         headers,
       });
       setData({ ...data, comments: response.data.comments });
@@ -68,7 +70,7 @@ const StudyDetailPage = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://43.202.98.45:8089/studyDetail/${id}`, {
+      const response = await axios.get(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/${id}`, {
         headers,
       });
 
@@ -160,7 +162,10 @@ const StudyDetailPage = () => {
     };
 
     try {
-      const response = await axios.post(`http://43.202.98.45:8089/studyDetail/comment/${id}`, commentData);
+      const response = await axios.post(
+        `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/comment/${id}`,
+        commentData
+      );
       if (response.status === 200) {
         console.log("등록완료");
       }
@@ -180,7 +185,7 @@ const StudyDetailPage = () => {
 
   const handleLikeBtn = async () => {
     try {
-      const response = await axios.post(`http://43.202.98.45:8089/studyDetail/like/${id}`);
+      const response = await axios.post(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/like/${id}`);
       // if (response.data.isLike === true) {
       //   console.log(response.data.isLike);
       //   setLiked(() => true);
@@ -194,7 +199,10 @@ const StudyDetailPage = () => {
   const deleteProject = async () => {
     try {
       if (window.confirm("정말로 삭제하시겠습니까?")) {
-        const response = await axios.delete(`http://43.202.98.45:8089/studyDetail/delete/${id}`, id);
+        const response = await axios.delete(
+          `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/delete/${id}`,
+          id
+        );
         if (response.status === 200) {
           console.log("삭제완료");
         }
@@ -210,7 +218,7 @@ const StudyDetailPage = () => {
 
   const finishProject = async () => {
     try {
-      const response = await axios.put(`http://43.202.98.45:8089/studyDetail/done/${id}`);
+      const response = await axios.put(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/done/${id}`);
       if (response.status === 200) {
         console.log("모집 전송 성공");
       }
@@ -222,7 +230,9 @@ const StudyDetailPage = () => {
 
   const deleteComment = async (commentId) => {
     try {
-      const response = await axios.delete(`http://43.202.98.45:8089/studyDetail/comment/delete/${commentId}`);
+      const response = await axios.delete(
+        `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/comment/delete/${commentId}`
+      );
       if (response.status === 200) {
         console.log("댓글 삭제 성공");
       }
@@ -234,7 +244,7 @@ const StudyDetailPage = () => {
 
   const updateProject = async () => {
     // try {
-    //   const response = await axios.put(`http://43.202.98.45:8089/studyDetail/edit/${id}`);
+    //   const response = await axios.put(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/edit/${id}`);
 
     // } catch (err) {
     //   console.error(err);

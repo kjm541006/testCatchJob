@@ -45,7 +45,7 @@ function Card(props) {
       headers.Authorization = `Bearer ${token}`;
     }
     try {
-      const response = await axios.get("http://43.202.98.45:8089/community", { headers });
+      const response = await axios.get("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community", { headers });
       const updatedData = response.data.map((post) => ({ ...post, likeCount: post.cLike || 0 }));
       console.log(response.data);
       setCommunityData(updatedData);
@@ -150,7 +150,9 @@ function Card(props) {
 
   const handleLike = async (community_id) => {
     try {
-      const response = await axios.post(`http://43.202.98.45:8089/community/like?communityId=${community_id}`);
+      const response = await axios.post(
+        `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community/like?communityId=${community_id}`
+      );
       if (response.status === 200) {
         fetchCommunityData();
         saveCommunityDataToLocalStorage();
@@ -168,7 +170,10 @@ function Card(props) {
       headers.Authorization = `Bearer ${token}`;
     }
     try {
-      await axios.delete(`http://43.202.98.45:8089/community/delete?communityId=${community_id}`, { headers });
+      await axios.delete(
+        `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/community/delete?communityId=${community_id}`,
+        { headers }
+      );
       setCommunityData((prevData) => prevData.filter((post) => post.communityId !== community_id));
       saveCommunityDataToLocalStorage();
     } catch (error) {

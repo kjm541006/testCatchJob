@@ -32,7 +32,10 @@ const StudyModal = ({ isOpen, onClose, applyType, modalType, data }) => {
       projectReason: applyRef.current.value,
     };
     try {
-      const response = await axios.post(`http://43.202.98.45:8089/studyDetail/apply/${id}?job=${applyType}`, applyData);
+      const response = await axios.post(
+        `https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/studyDetail/apply/${id}?job=${applyType}`,
+        applyData
+      );
       if (response.status === 200) {
         alert("신청되었습니다.");
         onClose();

@@ -25,7 +25,10 @@ const MyPage = () => {
         },
       };
       try {
-        const response = await axios.get("http://43.202.98.45:8089/memberInfo", axiosConfig);
+        const response = await axios.get(
+          "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/memberInfo",
+          axiosConfig
+        );
         setImageFile(response.data.mOriginalFileName);
         setEmail(response.data.email);
         setName(response.data.name);
@@ -84,13 +87,17 @@ const MyPage = () => {
     console.log(formData);
 
     try {
-      const response = await axios.post("http://43.202.98.45:8089/memberUpdate", formData, config);
+      const response = await axios.post(
+        "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/memberUpdate",
+        formData,
+        config
+      );
       if (response.status >= 200 && response.status < 300) {
         console.log(response.data);
         alert("회원정보수정을 성공하였습니다.");
-        localStorage.setItem('name', response.data.name);
-        localStorage.setItem('profileImg',response.data.mOriginalFileName);
-        window.location.href = '/';
+        localStorage.setItem("name", response.data.name);
+        localStorage.setItem("profileImg", response.data.mOriginalFileName);
+        window.location.href = "/";
       }
     } catch (error) {
       console.error(error);
@@ -113,7 +120,7 @@ const MyPage = () => {
     if (confirmDelete) {
       // axios를 사용하여 서버로 DELETE 요청을 보냅니다.
       axios
-        .delete("http://43.202.98.45:8089/deleteMember", {
+        .delete("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/deleteMember", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

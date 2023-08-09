@@ -7,7 +7,7 @@ const GoogleLoginButton_long = () => {
     onSuccess: (codeResponse) => {
       console.log("=========codeResponse=============", codeResponse);
       axios
-        .post("http://43.202.98.45:8089/googlelogin", { code: codeResponse.code })
+        .post("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/googlelogin", { code: codeResponse.code })
         .then((response) => {
           // 서버 응답 처리
           console.log("============data==========", response.data);

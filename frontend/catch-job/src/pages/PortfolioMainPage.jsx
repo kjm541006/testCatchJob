@@ -52,7 +52,7 @@ const PortfolioMainPage = () => {
     }
 
     axios
-      // .get("http://43.202.98.45:8089/", {
+      // .get("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/", {
       .get("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/", {
         headers: headers,
       })
@@ -73,7 +73,7 @@ const PortfolioMainPage = () => {
     setSelectedItemId(board_id);
     setIsModalOpen(true);
     try {
-      await axios.post(`http://43.202.98.45:8089/portfolio/${board_id}`, { board_id });
+      await axios.post(`https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/portfolio/${board_id}`, { board_id });
       console.log("조회수 증가 성공");
     } catch (error) {
       console.error("error", error);
