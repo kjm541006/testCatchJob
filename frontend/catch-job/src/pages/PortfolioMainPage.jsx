@@ -52,7 +52,8 @@ const PortfolioMainPage = () => {
     }
 
     axios
-      .get("http://43.202.98.45:8089/", {
+      // .get("http://43.202.98.45:8089/", {
+      .get("https://your-site.netlify.app/.netlify/functions/proxy/", {
         headers: headers,
       })
       .then((response) => {
