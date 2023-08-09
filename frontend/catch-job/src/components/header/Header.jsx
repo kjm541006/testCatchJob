@@ -5,7 +5,6 @@ import "./header.css";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut, selectEmail, selectLoggedIn, selectName } from "../../redux/login";
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 const Header = () => {
   const [searchWord, setSearchWord] = useState("");

@@ -11,15 +11,15 @@ const StudyModal = ({ isOpen, onClose, applyType, modalType, data }) => {
   const query = useQuery();
   const id = query.get("id");
 
-  const toggleExpanded = (index, event) => {
-    event.stopPropagation();
-    console.log("click");
-    if (expanded.includes(index)) {
-      setExpanded(expanded.filter((i) => i !== index));
-    } else {
-      setExpanded([...expanded, index]);
-    }
-  };
+  // const toggleExpanded = (index, event) => {
+  //   event.stopPropagation();
+  //   console.log("click");
+  //   if (expanded.includes(index)) {
+  //     setExpanded(expanded.filter((i) => i !== index));
+  //   } else {
+  //     setExpanded([...expanded, index]);
+  //   }
+  // };
 
   const handleClickOutside = (e) => {
     if (modalRef.current && modalRef.current.contains(e.target)) {
