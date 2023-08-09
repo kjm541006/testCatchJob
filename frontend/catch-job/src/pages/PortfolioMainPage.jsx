@@ -53,7 +53,7 @@ const PortfolioMainPage = () => {
 
     axios
       // .get("http://43.202.98.45:8089/", {
-      .get("https://your-site.netlify.app/.netlify/functions/proxy/", {
+      .get("https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/", {
         headers: headers,
       })
       .then((response) => {
