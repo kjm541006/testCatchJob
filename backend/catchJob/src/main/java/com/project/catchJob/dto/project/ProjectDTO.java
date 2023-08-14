@@ -53,17 +53,19 @@ public class ProjectDTO {
 	private List<P_commentsDTO> comments;
 	private List<P_memberDTO> applicants;
 	
-	public static ProjectDTO loginDTO(Project project, Member member, ProjectService projectService) {
+	public static ProjectDTO loginDTO(Project project, Member member, ProjectService projectService, String frontFilePath) {
 		
 		Member writer = project.getMember();
-		String fileUrl = "http://43.202.98.45:8089/upload/";
+//		String fileUrl = "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/upload/";
+//		String fileUrl = "http://43.202.98.45:8089/upload/";
+//		String fileUrl = "https://43.202.98.45:8089/upload/";
 		
 		MemberInfoDTO memberDTO = MemberInfoDTO.builder()
 				.email(writer.getEmail())
 				.name(writer.getName())
 				.job(writer.getJob())
 				.hasCareer(writer.getHasCareer())
-				.mOriginalFileName(fileUrl + writer.getMProfile().getMStoredFileName())
+				.mOriginalFileName(frontFilePath + writer.getMProfile().getMStoredFileName())
 				.build();
 		
 		List<P_commentsDTO> comments = project.getProjectCommentsList() != null ? project.getProjectCommentsList()
@@ -74,7 +76,7 @@ public class ProjectDTO {
 						.commentDate(comment.getPComDate())
 						.memberName(comment.getMember().getName())
 						.memberEmail(comment.getMember().getEmail())
-						.memberProfile(fileUrl + comment.getMember().getMProfile().getMStoredFileName())
+						.memberProfile(frontFilePath + comment.getMember().getMProfile().getMStoredFileName())
 						.build())
 				.collect(Collectors.toList()) : new ArrayList<>();
 		
@@ -114,17 +116,19 @@ public class ProjectDTO {
 		return projectDTO;
 		
 	}
-	public static ProjectDTO logoutDTO(Project project) {
+	public static ProjectDTO logoutDTO(Project project, String frontFilePath) {
 		
 		Member writer = project.getMember();
-		String fileUrl = "http://43.202.98.45:8089/upload/";
+//		String fileUrl = "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/upload/";
+//		String fileUrl = "http://43.202.98.45:8089/upload/";
+//		String fileUrl = "https://43.202.98.45:8089/upload/";
 		
 		MemberInfoDTO memberDTO = MemberInfoDTO.builder()
 				.email(writer.getEmail())
 				.name(writer.getName())
 				.job(writer.getJob())
 				.hasCareer(writer.getHasCareer())
-				.mOriginalFileName(fileUrl + writer.getMProfile().getMStoredFileName())
+				.mOriginalFileName(frontFilePath + writer.getMProfile().getMStoredFileName())
 				.build();
 		
 		List<P_commentsDTO> comments = project.getProjectCommentsList() != null ? project.getProjectCommentsList()
@@ -135,7 +139,7 @@ public class ProjectDTO {
 						.commentDate(comment.getPComDate())
 						.memberName(comment.getMember().getName())
 						.memberEmail(comment.getMember().getEmail())
-						.memberProfile(fileUrl + comment.getMember().getMProfile().getMStoredFileName())
+						.memberProfile(frontFilePath + comment.getMember().getMProfile().getMStoredFileName())
 						.build())
 				.collect(Collectors.toList()) : new ArrayList<>();
 		

@@ -34,13 +34,13 @@ import com.project.catchJob.repository.board.B_commentsRepository;
 import com.project.catchJob.repository.board.B_likeRepository;
 import com.project.catchJob.repository.board.BoardRepository;
 import com.project.catchJob.repository.member.MemberRepository;
-import com.project.catchJob.security.TokenProvider;
 
 
 @Service
 public class BoardService {
 	
 	@Value("${file.path}") private String filePath;
+	@Value("${front.file.path}") private String frontFilePath;
 	private final CommonService commonService;
 	@PersistenceContext private EntityManager entityManager;
 	
@@ -53,7 +53,6 @@ public class BoardService {
 	@Autowired private BoardRepository boardRepo;
 	@Autowired private B_commentsRepository bCommRepo; // 댓글
 	@Autowired private B_likeRepository bLikeRepo; // 좋아요
-	@Autowired private TokenProvider tokenProvider;
 	
 	// 글 목록
 	public List<BoardDTO> getBoardList(String jwtToken) {
@@ -65,14 +64,13 @@ public class BoardService {
 			Member member = commonService.getAuthenticatedMember(jwtToken)
 					.orElseThrow(UnauthorizedException::new);
 			return boards.stream()
-//					.map(board -> BoardDTO.toDTO(board, member, bLikeRepo, fileUrlPath)) // member, bLikeRepo 전달
-					.map(board -> BoardDTO.toDTO(board, member, this, filePath)) // member, bLikeRepo 전달
+					.map(board -> BoardDTO.toDTO(board, member, this, frontFilePath)) // member, bLikeRepo 전달
 					.collect(Collectors.toList());
 		}
 		
 		// 로그인하지 않은 사용자
 		return boards.stream()
-				.map(board -> BoardDTO.toDTOWithoutMember(board, filePath))
+				.map(board -> BoardDTO.toDTOWithoutMember(board, frontFilePath))
 				.collect(Collectors.toList());
 	}
 
@@ -140,14 +138,12 @@ public class BoardService {
 	    	
 	    }
 		
-		String url = "http://43.202.98.45:8089/upload/";
-		
 		BoardEditDTO boardDTO = BoardEditDTO.builder()
 				.bTitle(board.getBTitle())
 				.bContents(board.getBContents())
 				.tags(board.getTags())
-				.bFileName(url + board.getBFileName())
-				.bCoverFileName(url + board.getBCoverFileName())
+				.bFileName(frontFilePath + board.getBFileName())
+				.bCoverFileName(frontFilePath + board.getBCoverFileName())
 				.build();
 		
 		return boardDTO;
@@ -219,7 +215,7 @@ public class BoardService {
     
     // 파일 삭제
     public void deleteFile(String fileName) {
-    	File file = new File(filePath + "/" + fileName);
+    	File file = new File(filePath + fileName);
     	if(file.exists()) {
     		file.delete();
     	}

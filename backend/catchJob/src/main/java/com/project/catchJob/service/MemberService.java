@@ -45,6 +45,7 @@ public class MemberService {
 	private BoardService boardService;
 	
 	@Value("${file.path}") private String filePath;
+	@Value("${front.file.path}") private String frontFilePath;
 	
 	// 회원가입
 	public Member createMember(MemberDTO memberDTO) throws Exception {
@@ -55,7 +56,7 @@ public class MemberService {
 			throw new RuntimeException("이미 존재하는 이메일입니다!");
 		}
 
-		String defaultProfile = "http://43.202.98.45:8089/upload/profile.png";
+		String defaultProfile = frontFilePath + "profile.png";
 		
 		Member member = Member.builder()
 				.email(memberDTO.getEmail())
@@ -148,7 +149,6 @@ public class MemberService {
 		// matches 메서드를 이용해서 패스워드 같은지 확인
 		if(originMember != null && pwdEncoder.matches(pwdEncoder.encrypt(email, pwd), originMember.getPwd())) {
 			return originMember;
-//			return MemberDTO.toMemberDTO(originMember);
 		}
 		return null;
 	}
@@ -161,13 +161,12 @@ public class MemberService {
 		
 		Member findMember = memberRepo.findByEmail(optAuthenticatedMember.getEmail());
 		String mOriginalFileName = findMember.getMProfile().getMStoredFileName();
-		String defaultUrl = "http://43.202.98.45:8089/upload/";
 		MemberInfoDTO memberInfo = MemberInfoDTO.builder()
 				.email(findMember.getEmail())
 				.name(findMember.getName())
 				.job(findMember.getJob())
 				.hasCareer(findMember.getHasCareer())
-				.mOriginalFileName(defaultUrl + mOriginalFileName)
+				.mOriginalFileName(frontFilePath + mOriginalFileName)
 				.build();
 		return memberInfo;
 	}
@@ -202,11 +201,22 @@ public class MemberService {
 				
 				String originalFileName = mFile.getOriginalFilename();
 				String storedFileName = UUID.randomUUID() + originalFileName;
-				String savePath = filePath + "/" + storedFileName;
+				String savePath = filePath + storedFileName;
+				
+				// 기존 프로필 사진 삭제
+				M_profile currentProfile = optAuthenticatedMember.getMProfile();
+				String exOriginProfile = currentProfile.getMOriginalFileName();
+				String exStoredProfile = currentProfile.getMStoredFileName();
+				if(!exOriginProfile.equals("profile.png") && !exStoredProfile.equals("profile.png")) {
+					File exProfileFile = new File(filePath + currentProfile.getMStoredFileName());
+					if(exProfileFile.exists()) {
+						exProfileFile.delete();
+					}
+				}
+				
 				mFile.transferTo(new File(savePath));
 				
 				// 기존 M_profile 객체 수정
-				M_profile currentProfile = optAuthenticatedMember.getMProfile();
 				currentProfile.setMOriginalFileName(originalFileName);
 				currentProfile.setMStoredFileName(storedFileName);
 				mProfileRepo.save(currentProfile);

@@ -3,6 +3,7 @@ package com.project.catchJob.controller;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,6 +52,9 @@ public class MemberController {
 	@Autowired
 	private OAuthService oAuthService;
 	
+	@Value("${front.file.path}")
+	private String frontFilePath;
+	
 	
 	// 회원등록
 	@PostMapping("/register")
@@ -81,7 +85,9 @@ public class MemberController {
 			final String token = tokenProvider.createToken(member);
 			log.info("token 생성 성공", token);
 			
-			String profile = "http://43.202.98.45:8089/upload/" + member.getMProfile().getMStoredFileName();
+//			String profile = "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/upload/" + member.getMProfile().getMStoredFileName();
+			String profile = frontFilePath + member.getMProfile().getMStoredFileName();
+//			String profile = "https://43.202.98.45:8089/upload/" + member.getMProfile().getMStoredFileName();
 			
 			final MemberDTO responseMemberDTO = MemberDTO.builder()
 					.memberId(member.getMemberId())

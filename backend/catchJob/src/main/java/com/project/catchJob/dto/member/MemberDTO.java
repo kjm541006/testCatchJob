@@ -43,7 +43,9 @@ public class MemberDTO {
 			throw new IllegalArgumentException("member가 null값");
 		}
 		
+//		String url = "https://main--classy-kleicha-484f07.netlify.app/.netlify/functions/proxy/upload/";
 		String url = "http://43.202.98.45:8089/upload/";
+//		String url = "https://43.202.98.45:8089/upload/";
 		
 		MemberDTO memberDTO = new MemberDTO();
 		memberDTO.setMemberId(member.getMemberId());

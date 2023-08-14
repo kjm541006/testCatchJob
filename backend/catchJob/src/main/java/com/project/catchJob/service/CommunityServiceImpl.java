@@ -2,6 +2,7 @@ package com.project.catchJob.service;
 
 import org.hibernate.annotations.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,8 @@ public class CommunityServiceImpl implements CommunityService {
 	private C_likeRepository cLikeRepo;
 	@PersistenceContext private EntityManager entityManager;
 	@Autowired private CommonService commonService;
+	@Value("${front.file.path}")
+	private String frontFilePath;
 
 	// 글 등록
 	@Override
@@ -77,12 +80,12 @@ public class CommunityServiceImpl implements CommunityService {
 			Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 					.orElseThrow(UnauthorizedException::new);
 			return communities.stream()
-					.map(community -> CommunityDTO.loginListDTO(community, optAuthenticatedMember, this))
+					.map(community -> CommunityDTO.loginListDTO(community, optAuthenticatedMember, this, frontFilePath))
 					.collect(Collectors.toList());
 		}
 		
 		return communities.stream()
-				.map(community -> CommunityDTO.logoutListDTO(community))
+				.map(community -> CommunityDTO.logoutListDTO(community, frontFilePath))
 				.collect(Collectors.toList());
 	}
 	
@@ -128,8 +131,6 @@ public class CommunityServiceImpl implements CommunityService {
 
 		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 				.orElseThrow(UnauthorizedException::new);
-
-//		Member member = memberRepository.findByEmail(optAuthenticatedMember.getEmail());
 
 		Community community = communityRepository.findById(commentDTO.getCommunityId())
 				.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));

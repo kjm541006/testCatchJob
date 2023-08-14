@@ -47,14 +47,8 @@ public class BoardDTO {
 	@JsonProperty("bFileName")
 	private String bFileName;
 	
-//	@JsonProperty("bFileUrl")
-//	private String bFileUrl;
-	
 	@JsonProperty("bCoverFileName")
 	private String bCoverFileName;
-	
-//	@JsonProperty("bCoverFileUrl")
-//	private String bCoverFileUrl;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	@JsonProperty("bDate")
@@ -62,20 +56,17 @@ public class BoardDTO {
 	
 	private List<String> tags;
 	
-//	private boolean removeBFile;
-//	private boolean removeBCoverFile;
-	
 	private BoardMemberDTO member;
 	private List<B_commentsDTO> comments;
 	
 	// board에서 BoardDTO로 변환하는 메서드
-	public static BoardDTO toDTO(Board board, Member member, BoardService boardService, String filePath) {
+	public static BoardDTO toDTO(Board board, Member member, BoardService boardService, String frontFilePath) {
 		
 		BoardMemberDTO memberDTO = null;
 		Member writer = board.getMember();
 		if (writer != null) {
 			
-			String fileUrl = "http://43.202.98.45:8089/upload/" + writer.getMProfile().getMStoredFileName();
+			String fileUrl = frontFilePath + writer.getMProfile().getMStoredFileName();
 			
 		    memberDTO = new BoardMemberDTO();
 		    memberDTO.setEmail(writer.getEmail());
@@ -84,15 +75,13 @@ public class BoardDTO {
 		}
 		
 		// 내가 좋아요했는지 여부 확인
-//		boolean isLike = bLikeRepo.findByMemberAndBoard(member, board).isPresent();
 		boolean isLike = boardService.isUserLiked(member.getEmail(), board.getBoardId());
 		
 		List<String> tagList = board.getTags();
 		String[] tags = tagList.toArray(new String[0]);
 		
 		int bComment = board.getBoardCommentsList().size(); // 게시글에 작성된 댓글 수를 구함
-		String url = "http://43.202.98.45:8089/upload/";
-		
+
 		List<B_commentsDTO> commentDTOList = board.getBoardCommentsList().stream()
 				.map(comment -> B_commentsDTO.builder()
 						.commentId(comment.getBComId())
@@ -100,13 +89,10 @@ public class BoardDTO {
 						.commentDate(comment.getBComDate())
 						.memberName(comment.getMember().getName())
 						.memberEmail(comment.getMember().getEmail())
-						.memberProfile(url + comment.getMember().getMProfile().getMStoredFileName())
+						.memberProfile(frontFilePath + comment.getMember().getMProfile().getMStoredFileName())
 						.build())
 				.collect(Collectors.toList());
 		
-//		String bFileUrl = "http://43.202.98.45:8089/upload/" + board.getBFileName();
-//		String bCoverFileUrl = "http://43.202.98.45:8089/upload/" + board.getBCoverFileName();
-
 		return BoardDTO.builder()
 				.boardId(board.getBoardId())
 				.bTitle(board.getBTitle())
@@ -115,8 +101,8 @@ public class BoardDTO {
 				.bLike(board.getBLike())
 				.isLike(isLike) // isLike 설정
 				.bComment(bComment)
-				.bFileName(url + board.getBFileName()) // 경로+파일명
-				.bCoverFileName(url + board.getBCoverFileName()) // 경로+파일명
+				.bFileName(frontFilePath + board.getBFileName()) // 경로+파일명
+				.bCoverFileName(frontFilePath + board.getBCoverFileName()) // 경로+파일명
 				.bDate(board.getBDate())
 				.member(memberDTO) // 멤버 정보 설정
 				.tags(board.getTags()) // 태그
@@ -125,13 +111,13 @@ public class BoardDTO {
 	}
 
 	// 로그인하지 않은 사용자
-	public static BoardDTO toDTOWithoutMember(Board board, String filePath) {
+	public static BoardDTO toDTOWithoutMember(Board board, String frontFilePath) {
 		// 필요한 사용자 정보를 memberDTO에 저장
 		BoardMemberDTO memberDTO = null;
 		Member member = board.getMember();
 		if (member != null) {
 			
-			String fileUrl = "http://43.202.98.45:8089/upload/" + member.getMProfile().getMStoredFileName();
+			String fileUrl = frontFilePath + member.getMProfile().getMStoredFileName();
 			
 		    memberDTO = new BoardMemberDTO();
 		    memberDTO.setEmail(member.getEmail());
@@ -143,8 +129,6 @@ public class BoardDTO {
 
 		List<String> tags = board.getTags() != null ? board.getTags() : new ArrayList<>();
 		
-		String url = "http://43.202.98.45:8089/upload/";
-		
 		List<B_commentsDTO> comments = board.getBoardCommentsList() != null ? board.getBoardCommentsList().stream()
 		        .map(comment -> B_commentsDTO.builder()
 		        	.commentId(comment.getBComId())	
@@ -152,20 +136,18 @@ public class BoardDTO {
 		            .commentDate(comment.getBComDate())
 		            .memberName(comment.getMember().getName())
 		            .memberEmail(comment.getMember().getEmail())
-		            .memberProfile(url + comment.getMember().getMProfile().getMStoredFileName())
+		            .memberProfile(frontFilePath + comment.getMember().getMProfile().getMStoredFileName())
 		            .build())
 		        .collect(Collectors.toList()) : new ArrayList<>();
 		String bFileUrl = "";
 	    String bCoverFileUrl = "";
 
 	    if (board.getBFileName() != null) {
-//	        bFileUrl = filePath + "/" + board.getBFileName();
-	    	bFileUrl = url + board.getBFileName();
+	    	bFileUrl = frontFilePath + board.getBFileName();
 	    }
 
 	    if (board.getBCoverFileName() != null) {
-//	        bCoverFileUrl = filePath + "/" + board.getBCoverFileName();
-	        bCoverFileUrl = url + board.getBCoverFileName();
+	        bCoverFileUrl = frontFilePath + board.getBCoverFileName();
 	    }
 
 		return BoardDTO.builder()

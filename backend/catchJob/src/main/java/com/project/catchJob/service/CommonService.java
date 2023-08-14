@@ -26,7 +26,7 @@ public class CommonService {
     private BoardRepository boardRepo;
     private ProjectRepository projectRepo;
     private CommunityRepository commRepo;
-    @Value("${file.path}") private String filePath;
+    @Value("${front.file.path}") private String frontFilePath;
 
     @Autowired
     public CommonService(TokenProvider tokenProvider, 
@@ -62,15 +62,15 @@ public class CommonService {
         List<Object> results = new ArrayList<>();
 
         // 제목
-        addBoardsToResults(results, boardRepo.findByBTitleContaining(keyword), filePath);
+        addBoardsToResults(results, boardRepo.findByBTitleContaining(keyword), frontFilePath);
         addProjectsToResults(results, projectRepo.findByTitleContaining(keyword));
 
         // 멤버 이름
-        addBoardsToResults(results, boardRepo.findByMemberNameContaining(keyword), filePath);
+        addBoardsToResults(results, boardRepo.findByMemberNameContaining(keyword), frontFilePath);
         addProjectsToResults(results, projectRepo.findByMemberNameContaining(keyword));
 
         // 태그
-        addBoardsToResults(results, boardRepo.findByTagsContaining(keyword), filePath);
+        addBoardsToResults(results, boardRepo.findByTagsContaining(keyword), frontFilePath);
 
         return results;
     }

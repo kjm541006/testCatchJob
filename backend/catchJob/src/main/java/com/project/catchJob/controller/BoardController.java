@@ -44,7 +44,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/")
 public class BoardController {
 	
-	@Value("${file.path}") private String filePath;
 	@Autowired MemberService memberService;
 	@Autowired BoardService boardService;
 	@Autowired B_likeRepository bLikeRepo;
@@ -92,8 +91,6 @@ public class BoardController {
 	@GetMapping("/{board_id}")
 	public ResponseEntity<?> getBoard(@PathVariable("board_id") Long boardId,@RequestHeader("Authorization") String jwtToken) {
 		BoardEditDTO board = boardService.getBoard(boardId, jwtToken);
-		System.out.println("-----getBFileName------" + board.getBFileName());
-		System.out.println("-----getBCoverFileName------" + board.getBCoverFileName());
 		return ResponseEntity.ok().body(board);
 	}
 	

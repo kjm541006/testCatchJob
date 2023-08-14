@@ -51,17 +51,16 @@ public class CommunityDTO {
     private BoardMemberDTO member;
 	private List<C_commentsDTO> comments;
 	
-	public static CommunityDTO loginListDTO(Community community, Member member, CommunityService communityService) {
+	public static CommunityDTO loginListDTO(Community community, Member member, CommunityService communityService, String frontFilePath) {
 		
 		BoardMemberDTO memberDTO = null;
 		Member writer = community.getMember();
-		String fileUrl = "http://43.202.98.45:8089/upload/";
 		if(writer != null) {
 			
 			memberDTO = new BoardMemberDTO();
 			memberDTO.setEmail(writer.getEmail());
 			memberDTO.setName(writer.getName());
-			memberDTO.setMOriginalFileName(fileUrl + writer.getMProfile().getMStoredFileName());
+			memberDTO.setMOriginalFileName(frontFilePath + writer.getMProfile().getMStoredFileName());
 		}
 		
 		List<C_commentsDTO> comments = community.getCommunityCommentsList() != null ? community.getCommunityCommentsList()
@@ -72,7 +71,7 @@ public class CommunityDTO {
 						.commentDate(comment.getCComDate())
 						.memberName(comment.getMember().getName())
 						.memberEmail(comment.getMember().getEmail())
-						.memberProfile(fileUrl + comment.getMember().getMProfile().getMStoredFileName())
+						.memberProfile(frontFilePath + comment.getMember().getMProfile().getMStoredFileName())
 						.build())
 				.collect(Collectors.toList()) : new ArrayList<>();
 				
@@ -93,17 +92,16 @@ public class CommunityDTO {
 				.build();
 	}
 
-	public static CommunityDTO logoutListDTO(Community community) {
+	public static CommunityDTO logoutListDTO(Community community, String frontFilePath) {
 		
 		BoardMemberDTO memberDTO = null;
 		Member writer = community.getMember();
-		String fileUrl = "http://43.202.98.45:8089/upload/";
 		if(writer != null) {
 			
 			memberDTO = new BoardMemberDTO();
 			memberDTO.setEmail(writer.getEmail());
 			memberDTO.setName(writer.getName());
-			memberDTO.setMOriginalFileName(fileUrl + writer.getMProfile().getMStoredFileName());
+			memberDTO.setMOriginalFileName(frontFilePath + writer.getMProfile().getMStoredFileName());
 		}
 		
 		List<C_commentsDTO> comments = community.getCommunityCommentsList() != null ? community.getCommunityCommentsList()
@@ -114,7 +112,7 @@ public class CommunityDTO {
 						.commentDate(comment.getCComDate())
 						.memberName(comment.getMember().getName())
 						.memberEmail(comment.getMember().getEmail())
-						.memberProfile(fileUrl + comment.getMember().getMProfile().getMStoredFileName())
+						.memberProfile(frontFilePath + comment.getMember().getMProfile().getMStoredFileName())
 						.build())
 				.collect(Collectors.toList()) : new ArrayList<>();
 			

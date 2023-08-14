@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,8 @@ public class ProjectServiceImpl implements ProjectService {
 	private P_memberRepository pMemberRepo;
 	@PersistenceContext
 	private EntityManager entityManager;
+	@Value("${front.file.path}")
+	private String frontFilePath;
 
 	@Override
 	public Project addProject(ProjectDTO projectDTO, String userEmail) {
@@ -83,12 +86,12 @@ public class ProjectServiceImpl implements ProjectService {
 			Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 					.orElseThrow(UnauthorizedException::new);
 			return projects.stream()
-					.map(project -> ProjectDTO.loginDTO(project, optAuthenticatedMember, this))
+					.map(project -> ProjectDTO.loginDTO(project, optAuthenticatedMember, this, frontFilePath))
 					.collect(Collectors.toList());
 		}
 		
 		return projects.stream()
-				.map(project -> ProjectDTO.logoutDTO(project))
+				.map(project -> ProjectDTO.logoutDTO(project, frontFilePath))
 				.collect(Collectors.toList());
 	}
 
@@ -102,9 +105,9 @@ public class ProjectServiceImpl implements ProjectService {
 		if(jwtToken != null) {
 			Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 					.orElseThrow(UnauthorizedException::new);
-			projectDTO = ProjectDTO.loginDTO(project, optAuthenticatedMember, this);
+			projectDTO = ProjectDTO.loginDTO(project, optAuthenticatedMember, this, frontFilePath);
 		} else {
-			projectDTO = ProjectDTO.logoutDTO(project);
+			projectDTO = ProjectDTO.logoutDTO(project, frontFilePath);
 		}
 		return projectDTO;
 		
@@ -159,8 +162,6 @@ public class ProjectServiceImpl implements ProjectService {
 
 		Member optAuthenticatedMember = commonService.getAuthenticatedMember(jwtToken)
 				.orElseThrow(UnauthorizedException::new);
-
-//		Member member = memberRepository.findByEmail(optAuthenticatedMember.getEmail());
 
 		Project project = projectRepository.findById(projectId)
 				.orElseThrow(() -> new EntityNotFoundException("게시글이 없음"));

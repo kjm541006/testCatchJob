@@ -15,7 +15,6 @@ public interface CommunityService {
 	Community createCommunity(CommunityDTO communityDTO, String jwtToken);
 
 	List<CommunityDTO> getAllCommunities(String jwtToken);
-//	List<Community> getAllCommunities();
 	CommentResponse edit(Long communityId, CommunityDTO communityDTO, String jwtToken);
 	void delete(Long communityId, String jwtToken);
 

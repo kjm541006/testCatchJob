@@ -16,7 +16,7 @@ public class MvcConfing implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/upload/**")
-		.addResourceLocations("file:/home/ubuntu/catchJob/backend/upload/");
+		.addResourceLocations("file:" + filePath);
 	}
 
 }

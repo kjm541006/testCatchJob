@@ -43,6 +43,7 @@ public class C_commentsDTO {
 	
 	public static C_commentsDTO toDTO(C_comments commentEntity) {
 		
+//		String profileUrl = "https://43.202.98.45:8089/upload/" + commentEntity.getMember().getMProfile().getMStoredFileName();
 		String profileUrl = "http://43.202.98.45:8089/upload/" + commentEntity.getMember().getMProfile().getMStoredFileName();
 		
 	    return C_commentsDTO.builder()
